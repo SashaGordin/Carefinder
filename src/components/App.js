@@ -4,6 +4,7 @@ import Signup from './Signup';
 import Login from "./Login";
 import Dashboard from './Dashboard';
 import ForgotPassword from './ForgotPassword';
+import Survey from './Survey';
 import { Container } from "react-bootstrap";
 import { AuthProvider } from "../contexts/AuthContext"
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom"
@@ -19,6 +20,7 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/survey" element={<Survey />} />
             </Routes>
           </AuthProvider>
         </div>

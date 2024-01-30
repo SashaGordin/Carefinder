@@ -2,6 +2,8 @@ import React, { useRef, useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from "../contexts/AuthContext"
 import { Link, useNavigate } from 'react-router-dom';
+import { firestore } from '../firebase'; // Import your Firestore instance
+import { serverTimestamp, collection, setDoc, doc } from 'firebase/firestore';
 
 
 
@@ -14,6 +16,7 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+
   async function handleSubmit(e) {
     e.preventDefault()
 
@@ -24,12 +27,32 @@ export default function Signup() {
     try {
       setError('');
       setLoading(true);
-      await signup(emailRef.current.value, passwordRef.current.value);
+      const { user } = await signup(emailRef.current.value, passwordRef.current.value);
+      const { displayName, email, uid } = user;
+
+      const usersCollection = collection(firestore, 'users');
+
+      const userDocRef = doc(usersCollection, uid);
+
+      const userData = {
+        displayName: displayName || '',
+        email: email,
+        createdAt: serverTimestamp(),
+      }
+
+      await setDoc(userDocRef, userData);
       navigate('/login');
-    } catch {
-      setError('Failed to create an account');
+    } catch (error) {
+      if (error.code === 'auth/weak-password') {
+        setError('Password should be at least 6 characters');
+      } else if (error.code === 'auth/email-already-in-use') {
+        setError('Email address is already in use');
+      } else {
+        setError('Failed to create an account');
+      }
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   return (

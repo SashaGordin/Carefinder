@@ -3,6 +3,7 @@ import SurveyQuestion from './SurveyQuestion';
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from "../contexts/AuthContext"
 import { firestore } from '../firebase'
+import { serverTimestamp } from 'firebase/firestore';
 
 
 const Survey = () => {
@@ -33,7 +34,7 @@ const Survey = () => {
         await firestore.collection('surveyResponses').add({
           userId,
           surveyData: answers,
-          //timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          timestamp: serverTimestamp(),
         })
 
         setAnswers([])

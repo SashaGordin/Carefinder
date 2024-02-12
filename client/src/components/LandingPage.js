@@ -6,9 +6,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Group.png';
 // import background from '../assets/Rectangle_7.png';
 
-export default function Dashboard() {
+export default function LandingPage() {
   const [error, setError] = useState('')
-  const { logout } = useAuth();
+  const { logout, currentUser } = useAuth();
   const navigate = useNavigate();
 
 
@@ -47,9 +47,19 @@ export default function Dashboard() {
         </Card.Body>
       </Card>
       <div className="w-100 text-center mt-2">
-        <Button variant="link" onClick={handleLogout}>
-          Log Out
-        </Button>
+        {currentUser ?
+          <>
+            <Button variant="link" onClick={handleLogout}>
+              Log Out
+            </Button>
+          </>
+          :
+          <>
+            <Button variant="link" onClick={() => navigate('/login')}>
+              Log In
+            </Button>
+          </>
+        }
         <Link to="/survey">Take Survey</Link>
       </div>
     </>

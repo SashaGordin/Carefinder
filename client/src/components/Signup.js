@@ -38,6 +38,7 @@ export default function Signup() {
         displayName: displayName || '',
         email: email,
         createdAt: serverTimestamp(),
+        role: 'client'
       }
 
       await setDoc(userDocRef, userData);

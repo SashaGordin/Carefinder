@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from "../contexts/AuthContext"
 import { firestore } from '../firebase'
 import { serverTimestamp } from 'firebase/firestore';
+import axios from 'axios';
 
 
 const Survey = () => {
@@ -36,6 +37,14 @@ const Survey = () => {
           surveyData: answers,
           timestamp: serverTimestamp(),
         })
+
+        axios.post('http://localhost:3001/matchUserWithHouses', answers)
+        .then(response => {
+          console.log('Matched houses:', response.data.matchedHouses);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
 
         setAnswers([])
         setCurrentQuestionIndex(0)

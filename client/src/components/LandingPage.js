@@ -35,7 +35,7 @@ export default function LandingPage() {
           }}> */}
           <Image src={logo} alt="Logo Icon" style={{ width: '50px', marginRight: '15px', marginLeft: '5px' }} />
         {/* </div> */}
-        <Navbar.Brand style={{ color: 'white'}}>
+        <Navbar.Brand style={{ color: 'black'}}>
           Carefinder
         </Navbar.Brand>
       </Navbar>

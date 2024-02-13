@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { Form, Button, Card, Alert } from 'react-bootstrap';
+import { Form, Button, Card, Alert, Navbar, Image } from 'react-bootstrap';
 import { useAuth } from "../contexts/AuthContext"
 import { Link, useNavigate } from 'react-router-dom';
 import { firestore } from '../firebase'; // Import your Firestore instance
@@ -58,6 +58,13 @@ export default function Signup() {
 
   return (
     <>
+      <Navbar bg="dark" fixed="top">
+          <Image src="cflogo.png" alt="Carefinder" />
+        <Navbar.Brand>
+          Carefinder
+        </Navbar.Brand>
+      </Navbar>
+    
       <Card>
         <Card.Body>
           <h2 className ="text-center mb-4">Sign Up</h2>

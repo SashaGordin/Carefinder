@@ -1,13 +1,12 @@
-const dotenv = require('dotenv');
-dotenv.config();
+require('dotenv').config({ path: '.env.local' });
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios'); // Import axios
 const cors = require('cors'); // Import the cors package
 const path = require('path');
 
-const accountSid = 'ACac5ca0e57bd851c108a97d7e17b438cc';
-const authToken = '513600730c7dd262e28d726e4c26b634';
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 
 const client = require('twilio')(accountSid, authToken);
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import axios from 'axios';
 
-export default function Step1({ onNext }) {
+export default function Step1({ onNext, setProviderInfo }) {
   const [providerNumber, setProviderNumber] = useState('');
   //const [providerInfo, setProviderInfo] = useState(null);
 
@@ -14,7 +14,17 @@ export default function Step1({ onNext }) {
     }
     axios.post('http://localhost:3001/findProvider', providerObject)
         .then(response => {
-          console.log('provider info:', response.data.providerInfo);
+          setProviderInfo(response.data.providerInfo[0])
+          console.log('provider info:', response.data.providerInfo[0].TelephoneNmbr);
+
+          axios.post('http://localhost:3001/sendConfirmationText', { phone: response.data.providerInfo[0].TelephoneNmbr })
+            .then(response => {
+              console.log('Confirmation text sent successfully.');
+            })
+            .catch(error => {
+              console.error('Error sending confirmation text:', error);
+            });
+
           onNext();
         })
         .catch(error => {

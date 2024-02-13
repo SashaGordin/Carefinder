@@ -24,7 +24,8 @@ export default function CPLandingPage() {
           }}> */}
           <Image src={logo} alt="Logo Icon" style={{ width: '50px', marginRight: '15px', marginLeft: '5px' }} />
         {/* </div> */}
-        <Navbar.Brand style={{ color: 'white'}}>
+        <Navbar.Brand>
+
           Carefinder
         </Navbar.Brand>
       </Navbar>

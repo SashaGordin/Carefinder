@@ -28,6 +28,7 @@ export default function LandingPage() {
       <Navbar bg="dark" fixed="top">
           <Image src={logo} alt="Carefinder"  />
         <Navbar.Brand>
+
           Carefinder
         </Navbar.Brand>
       </Navbar>

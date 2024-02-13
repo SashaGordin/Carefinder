@@ -10,6 +10,7 @@ import ClaimProfile from './ClaimProfile';
 import { Container } from "react-bootstrap";
 import { AuthProvider } from "../contexts/AuthContext"
 import { BrowserRouter as Router, Routes, Route} from "react-router-dom"
+import '../css/carefinder.css';
 
 function App() {
   return (

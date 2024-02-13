@@ -1,0 +1,59 @@
+/* CAREFINDER CSS ... */
+
+.CFpink { color:#ff6699; }
+.CFgray { color:#333333; }
+.CFblack { color:black; }
+.CFwhite { color:white; }
+
+/* NAVBAR */
+#CF .navbar { padding:10px; }
+#CF .navbar-brand { color:white; font-weight: 700; }
+#CF .navbar img { width:50px; margin:0px 10px 0px 0px; }
+
+/* BODY */
+body#CF {  
+    background: black;
+    color: white;
+}
+
+body#CF a { color:#ff6699; text-decoration: none; }
+
+body#CF button { 
+    background:#ff6699; 
+    color:white;
+    text-decoration: none;
+    border:none;
+    border-radius: 10px;
+    filter: drop-shadow(2px 3px 0px #000000);
+}
+
+#CF .card-body button { 
+    text-align:center; 
+    margin-left:auto; 
+    margin-right:auto; 
+}
+
+#CF .card { 
+    background:#333333; 
+    color:white; 
+    border-radius: 10px;
+}
+
+
+body#CF input { 
+    border-radius: 10px; 
+    font-size:120%;
+    padding: 5px 10px;
+    color:blue;  
+    border:none;
+    filter: drop-shadow(2px 3px 0px #000000);
+    margin-bottom:10px; 
+}
+
+/* LANDINGPAGE.JS */
+.CFdashboard { text-align:center; } 
+body#CF .CFdashboard input { margin-left:10px; } 
+
+
+
+

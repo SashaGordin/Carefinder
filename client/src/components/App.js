@@ -7,10 +7,16 @@ import ForgotPassword from './ForgotPassword';
 import Survey from './Survey';
 import CPLandingPage from './CPLandingPage';
 import ClaimProfile from './ClaimProfile';
+import CPDashboard from './CPDashboard';
+import ClientDashboard from './ClientDashboard';
 import { Container } from "react-bootstrap";
 import { AuthProvider } from "../contexts/AuthContext"
-import { BrowserRouter as Router, Routes, Route} from "react-router-dom"
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
+import PrivateRoute from './PrivateRoute';
 import '../css/carefinder.css';
+
+
+
 
 function App() {
   return (
@@ -26,6 +32,30 @@ function App() {
               <Route path="/survey" element={<Survey />} />
               <Route path="/care-provider" element={<CPLandingPage />} />
               <Route path="/claim-profile" element={<ClaimProfile />} />
+              <Route
+                path="/client-dashboard"
+                element={
+                  <PrivateRoute
+                  redirectPath="/signup"
+                    allowedRoles={
+                       'client'
+                    }>
+                      <ClientDashboard />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/care-provider-dashboard"
+                element={
+                  <PrivateRoute
+                    redirectPath="/signup"
+                    allowedRoles={
+                      'provider'
+                    }>
+                      <CPDashboard />
+                  </PrivateRoute>
+                }
+              />
             </Routes>
           </AuthProvider>
         </div>

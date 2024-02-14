@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { Form, Button, Card, Alert, Navbar, Image } from 'react-bootstrap';
 import { useAuth } from "../contexts/AuthContext"
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { firestore } from '../firebase'; // Import your Firestore instance
 import { serverTimestamp, collection, setDoc, doc } from 'firebase/firestore';
 
@@ -15,6 +15,9 @@ export default function Signup() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const { state } = location;
+  const { providerInfo, fromClaimProfile } = state || {}
 
 
   async function handleSubmit(e) {
@@ -23,7 +26,6 @@ export default function Signup() {
     if(passwordRef.current.value !== passwordConfirmRef.current.value) {
       return setError('Passwords do not match')
     }
-
     try {
       setError('');
       setLoading(true);
@@ -33,12 +35,22 @@ export default function Signup() {
       const usersCollection = collection(firestore, 'users');
 
       const userDocRef = doc(usersCollection, uid);
+      let userData;
 
-      const userData = {
-        displayName: displayName || '',
-        email: email,
-        createdAt: serverTimestamp(),
-        role: 'client'
+      if (fromClaimProfile) {
+        userData = {
+          displayName: displayName || '',
+          email: email,
+          createdAt: serverTimestamp(),
+          role: 'provider'
+        }
+      } else {
+        userData = {
+          displayName: displayName || '',
+          email: email,
+          createdAt: serverTimestamp(),
+          role: 'client'
+        }
       }
 
       await setDoc(userDocRef, userData);
@@ -64,7 +76,7 @@ export default function Signup() {
           Carefinder
         </Navbar.Brand>
       </Navbar>
-    
+
       <Card>
         <Card.Body>
           <h2 className ="text-center mb-4">Sign Up</h2>
@@ -86,9 +98,11 @@ export default function Signup() {
           </Form>
         </Card.Body>
       </Card>
-      <div className="w-100 text-center mt-2">
-        Already have an account? <Link to="/login">Log In</Link>
-      </div>
+      {fromClaimProfile ? null :
+        <div className="w-100 text-center mt-2">
+          Already have an account? <Link to="/login">Log In</Link>
+        </div>
+      }
     </>
   )
 }

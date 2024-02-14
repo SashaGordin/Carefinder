@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Card, Button, Alert, Navbar, Image } from 'react-bootstrap'
-import { useAuth } from '../contexts/AuthContext'
 import { Link, useNavigate } from 'react-router-dom';
 
 import logo from '../assets/Group.png';
@@ -8,7 +7,6 @@ import logo from '../assets/Group.png';
 
 export default function CPLandingPage() {
   const [error] = useState('')
-  const { currentUser } = useAuth();
   const navigate = useNavigate();
 
 

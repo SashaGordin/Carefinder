@@ -5,6 +5,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { firestore } from '../firebase'; // Import your Firestore instance
 import { serverTimestamp, collection, setDoc, doc } from 'firebase/firestore';
 
+import TopNav from "./TopNav";
+import Footer from "./Footer";
 
 
 export default function Signup() {
@@ -70,12 +72,8 @@ export default function Signup() {
 
   return (
     <>
-      <Navbar bg="dark" fixed="top">
-          <Image src="cflogo.png" alt="Carefinder" />
-        <Navbar.Brand>
-          Carefinder
-        </Navbar.Brand>
-      </Navbar>
+    <TopNav />
+    <div className="contentContainer utilityPage">
 
       <Card>
         <Card.Body>
@@ -103,6 +101,10 @@ export default function Signup() {
           Already have an account? <Link to="/login">Log In</Link>
         </div>
       }
+
+    </div>
+    <Footer />
+
     </>
   )
 }

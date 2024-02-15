@@ -15,8 +15,12 @@ import '../css/carefinder.css';
 function App() {
   return (
     <Router>
+
+      {/*
       <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh' }}>
         <div className="w-100" style={{ maxWidth: '400px' }}>
+      */}
+
           <AuthProvider>
             <Routes>
               <Route exact path="/" element={<LandingPage />} />
@@ -28,8 +32,12 @@ function App() {
               <Route path="/claim-profile" element={<ClaimProfile />} />
             </Routes>
           </AuthProvider>
+          
+      {/*  
         </div>
       </Container>
+      */}
+
     </Router>
   );
 }

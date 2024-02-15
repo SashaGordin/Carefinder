@@ -4,17 +4,29 @@
 .CFgray { color:#333333; }
 .CFblack { color:black; }
 .CFwhite { color:white; }
+.CForange { color:#ff9900; }
+
+span.CFpink, span.CForange { padding-left: 10px; padding-right:10px; }
+
+.CFpinkBackground { background:#ff6699; }
+.CFgrayBackground { background:#333333; }
+.CFblackBackground { background:black; }
+.CFwhiteBackground { background:white; }
+.CForangeBackground { background:#ff9900; }
 
 /* NAVBAR */
 #CF .navbar { padding:10px; }
 #CF .navbar-brand { color:white; font-weight: 700; }
 #CF .navbar img { width:50px; margin:0px 10px 0px 0px; }
+#CF .navbar p { width:50%; float:right;}
 
 /* BODY */
 body#CF {  
     background: black;
     color: white;
 }
+
+body#CF .fixed-top {position:initial; }
 
 body#CF a { color:#ff6699; text-decoration: none; }
 
@@ -26,6 +38,13 @@ body#CF button {
     border-radius: 10px;
     filter: drop-shadow(2px 3px 0px #000000);
 }
+
+body#CF button.btn-dark { background:black;}
+body#CF button.btn-dark:hover { background:#333333;}
+
+body#CF button.btn-secondary { background:#333333;}
+body#CF button.btn-secondary:hover { background:#181515;}
+
 
 #CF .card-body button { 
     text-align:center; 
@@ -55,5 +74,132 @@ body#CF input {
 body#CF .CFdashboard input { margin-left:10px; } 
 
 
+/* CARE PROVIDER */
+.CProw1 h1 { font-size: 400%; font-weight: 700; }
+.CProw1 p, .CProw2 p, .CProw3 p, .CProw4 p, .CProw5 p { font-size: 175%; line-height: 125%; }
+.CProw1 .left60 { padding:30px; }
 
+.CProw2 .left40 { padding-top:10%; text-align:center; }
+.CProw2 .right60 { padding:60px; text-align:center; }
+
+.CProw3 .contentContainer { font-size:250%; font-weight:700; text-align:center;     padding-top: 2%; padding-bottom: 10%; }
+
+.CPchoiceBox { width:30%; float:left; border-radius:20px; padding:20px; margin-right: 3%;
+    text-align: center;    display: inline-block;  vertical-align: top; margin-bottom:40px; position:relative; top: -80px;     min-height: 650px; }
+    
+.CProw5 { margin-bottom:80px; }
+.mostPopular { float:right; margin-bottom:20px; }
+p.CPchoiceLevel{font-weight:700;font-size: 200%;}
+p.CPchoicePrice{font-weight:700;font-size: 300%;}
+p.CPchoiceSubhead{font-weight:700;font-size: 225%;}
+p.CPchoiceTerms{ font-size:70%; font-weight:normal; }
+.allGrayText p {color:#8a8888;}
+p.CPboxText { text-align:left;}
+
+
+.CProw5 h2 { text-align:center; margin-bottom:20px; }
+body#CF .CProw5 button { background: black;
+    font-weight: normal;
+    font-size: 100%;margin-bottom: 3px;}
+.CProw5 .accordion-item {    background: black;
+    border: initial;
+    color: white;}
+body#CF .CProw5 button { border:initial; border-top: 2px white solid;
+    border-radius: initial; }
+body#CF .CProw5 .accordion-button:not(.collapsed) {
+    background-color: initial; 
+    box-shadow: initial;
+}
+body#CF .CProw5 h2.accordion-header { margin-bottom:0; }
+
+
+/* GLOBAL */ 
+.left60, .left40, .right60, .right40 {float:left;}
+.left60, .right60  { width:60%; }
+.left40, .right40 { width:40%; }
+
+.contentContainer{ max-width:1200px; margin-left:auto; margin-right:auto; }
+
+.contentContainer img { max-width:100%; }
+
+div.clear {
+    background: none;
+    border: 0;
+    clear: both;
+    display: block;
+    float: none;
+    font-size: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    visibility: hidden;
+    width: 0;
+    height: 0;
+}
+
+
+/* YOUTUBE */
+.video-responsive {
+    overflow: hidden;
+    padding-bottom: 56.25%;
+    position: relative;
+    height: 0;
+  }
+  
+  .video-responsive iframe {
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+  }
+
+
+  /* FOOTER*/
+.CFfooter .contentContainer {text-align:center;}
+.footerColumn{ float:left; width:30%; margin-left:1%; margin-right:1%; font-size:125%; }
+.footerHead { font-weight:700; font-size:150%; margin-bottom:20px; }
+body#CF .CFfooter a { color:white; }
+body#CF .CFfooter .contentContainer { padding:60px 20px 10px 20px; }
+body#CF .CFfooter .footerLink  {margin-bottom:20px; }
+p.copyright { margin-top:40px; font-size:70%;}
+/**
+   RESPONSIVE MEDIA QUERIES:
+   --allows us to tailor above rules for specific-width-range screens   
+*/
+
+/* Large Display */
+@media (min-width: 1200px) { 
+
+
+ }
+
+
+/* Desktop */
+@media (min-width: 960px) and (max-width: 1199px) { 
+
+
+}
+
+
+/* Tablets */
+@media (min-width: 768px) and (max-width: 959px) { 
+
+
+}
+
+
+/* Smartphones to Tablets */
+@media (min-width: 481px) and (max-width: 767px) { 
+
+
+ }
+
+
+  /* Smartphones */
+@media (max-width: 480px) {
+
+
+ }
 

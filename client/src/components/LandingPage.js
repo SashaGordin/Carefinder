@@ -3,7 +3,7 @@ import { Card, Button, Alert, Navbar, Image } from 'react-bootstrap'
 import { useAuth } from '../contexts/AuthContext'
 import { Link, useNavigate } from 'react-router-dom';
 
-import logo from '../assets/Group.png';
+// import logo from '../assets/Group.png';
 // import background from '../assets/Rectangle_7.png';
 
 export default function LandingPage() {
@@ -26,9 +26,8 @@ export default function LandingPage() {
   return (
     <>
       <Navbar bg="dark" fixed="top">
-          <Image src={logo} alt="Carefinder"  />
+          <Image src='cflogo.png' alt="Carefinder" />
         <Navbar.Brand>
-
           Carefinder
         </Navbar.Brand>
       </Navbar>

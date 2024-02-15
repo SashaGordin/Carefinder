@@ -7,6 +7,8 @@ import Step5 from './ClaimProfile/Step5';
 import { useNavigate } from 'react-router-dom';
 
 
+import TopNav from "./TopNav";
+import Footer from "./Footer";
 
 
 export default function ClaimProfile() {
@@ -29,11 +31,17 @@ export default function ClaimProfile() {
 
   return(
     <>
+    <TopNav />
+    <div className="contentContainer utilityPage">
+
       {currentStep === 1 && <Step1 onNext={handleNext} setProviderInfo={setProviderInfo} />}
       {currentStep === 2 && <Step2 onNext={handleNext} onBack={handleBack} providerInfo={providerInfo}/>}
       {currentStep === 3 && <Step3 onNext={handleNext} onBack={handleBack} providerInfo={providerInfo}/>}
       {currentStep === 4 && <Step4 onNext={handleNext} onBack={handleBack} providerInfo={providerInfo}/>}
       {currentStep === 5 && <Step5 onFinish={handleFinish} onBack={handleBack} providerInfo={providerInfo}/>}
+
+    </div>
+    <Footer />
     </>
   )
 };

@@ -15,10 +15,11 @@ span.CFpink, span.CForange { padding-left: 10px; padding-right:10px; }
 .CForangeBackground { background:#ff9900; }
 
 /* NAVBAR */
-#CF .navbar { padding:10px; }
-#CF .navbar-brand { color:white; font-weight: 700; }
-#CF .navbar img { width:50px; margin:0px 10px 0px 0px; }
-#CF .navbar p { width:50%; float:right;}
+#CF .topnavigation { padding:10px; width:100%; background:#272727; }
+#CF .topnavigation { color:white; font-weight: 700; }
+#CF .topnavigation img { width:50px; margin:0px 10px 0px 0px; }
+
+.utilityPage {padding:60px; }
 
 /* BODY */
 body#CF {  

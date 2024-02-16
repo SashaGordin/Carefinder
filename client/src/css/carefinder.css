@@ -19,7 +19,7 @@ span.CFpink, span.CForange { padding-left: 10px; padding-right:10px; }
 #CF .topnavigation { color:white; font-weight: 700; }
 #CF .topnavigation img { width:50px; margin:0px 10px 0px 0px; }
 
-.utilityPage {padding:60px; }
+.utilityPage { padding:60px; }
 
 /* BODY */
 body#CF {  
@@ -74,6 +74,22 @@ body#CF input {
 .CFdashboard { text-align:center; } 
 body#CF .CFdashboard input { margin-left:10px; } 
 
+.clientLProw1{ width:100%; background:#333333; }
+
+.clientLProw2left { width:40%; float:left; padding:15px; }
+.clientLProw2right { width:60%; float:left; padding:15px; }
+
+.clientDashboard{}
+
+.clientSearchBar { text-align:center; padding:20px; }
+body#CF input#clientSearch { font-size: 100%;
+    position: relative;
+    top: 2px;
+    margin-right: 30px;    width: 40%; }
+
+button#findMatches { margin-right:30px; }
+
+body#CF button#takeSurvey { background:orange; }
 
 /* CARE PROVIDER */
 .CProw1 h1 { font-size: 400%; font-weight: 700; }

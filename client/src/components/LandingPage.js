@@ -26,35 +26,73 @@ export default function LandingPage() {
   return (
     <>
     <TopNav />
+
+    <div className="CFgrayBackground">
+
+        <div className="contentContainer clientSearchBar">
+
+            <input id="clientSearch" name="yyy" placeholder="Search city, zip code, etc." />
+
+            <button id="findMatches" type="button" className='btn'>Find Matches</button>
+
+            <button id="takeSurvey" type="button" className='btn'>Take Survey</button>
+
+        </div>
+
+    </div>
+
+    <div className="CFgrayBackground">
+
+        <div className='contentContainer'>
+
+            <div className='clientLProw2left CFgrayBackground'>
+                [google map]
+            </div>
+
+            <div className='clientLProw2right CFblackBackground'>
+                [map results area]
+            </div>
+
+            <div class="clear"></div>
+
+        </div>    
+
+    </div>
+
     <div className="contentContainer utilityPage">
 
-        <Card>
-          <Card.Body>
-            <h2 className="text-center mb-4">Dashboard</h2>
-            {error && <Alert variant="danger">{error}</Alert>}
-            <div className='CFdashboard'>
-              <strong>Email:</strong>
-              <input type="text"></input>
-            </div>
-          </Card.Body>
-        </Card>
-        <div className="w-100 text-center mt-2">
-          {currentUser ?
-            <>
-              <Button variant="link" onClick={handleLogout}>
+        <div className='clientDashboard'>
+
+          <Card>
+            <Card.Body>
+              <h2 className="text-center mb-4">Dashboard</h2>
+              {error && <Alert variant="danger">{error}</Alert>}
+              <div className='CFdashboard'>
+                <strong>Email:</strong>
+                <input type="text"></input>
+              </div>
+            </Card.Body>
+          </Card>
+
+          <div className="w-100 text-center mt-2">
+
+            {currentUser ?
+              <>
+                <Button variant="link" onClick={handleLogout}>
                 Log Out
-              </Button>
-            </>
+                </Button>
+              </> 
             :
-            <>
-              <Button variant="link" onClick={() => navigate('/login')}>
-                Log In
-              </Button>
-            </>
-          }
-          <Link to="/survey">Take Survey</Link>
+              <>
+                <Button variant="link" onClick={() => navigate('/login')}>Log In</Button>
+              </>
+            }
+
+            <Link to="/survey">Take Survey</Link>
+
+          </div>
         </div>
-      
+
       </div>
       <Footer />
     </>

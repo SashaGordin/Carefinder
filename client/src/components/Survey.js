@@ -6,6 +6,8 @@ import { firestore } from '../firebase'
 import { serverTimestamp } from 'firebase/firestore';
 import axios from 'axios';
 
+import TopNav from "./TopNav";
+import Footer from "./Footer";
 
 const Survey = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -57,19 +59,25 @@ const Survey = () => {
   };
 
   return (
-    <div>
-      <h1>Survey</h1>
+    <>
+    <TopNav />
+    <div className="contentContainer utilityPage">
       <div>
-        <p>Question {currentQuestionIndex + 1} of {questions.length}</p>
-        <SurveyQuestion
-          question={questions[currentQuestionIndex].question}
-          options={questions[currentQuestionIndex].options}
-          onSelect={handleAnswerSelect}
-          onNext={handleNextQuestion}
-          isLastQuestion={currentQuestionIndex === questions.length - 1}
-        />
+        <h1>Survey</h1>
+        <div>
+          <p>Question {currentQuestionIndex + 1} of {questions.length}</p>
+          <SurveyQuestion
+            question={questions[currentQuestionIndex].question}
+            options={questions[currentQuestionIndex].options}
+            onSelect={handleAnswerSelect}
+            onNext={handleNextQuestion}
+            isLastQuestion={currentQuestionIndex === questions.length - 1}
+          />
+        </div>
       </div>
     </div>
+    <Footer />
+    </>
   );
 };
 

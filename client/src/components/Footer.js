@@ -18,6 +18,8 @@ const Footer = () => (
         <div className='footerHead'><a href="###">Carefinder</a></div>
         <div className='footerLink'><a href="###">Join our team</a></div>
         <div className='footerLink'><a href="###">Contact us</a></div>
+        <div className='footerLink'><a href="###">[Support chat?]</a></div>
+
       </div>
       <div className="clear"></div>
       <p className="copyright">Copyright © 2024, Carefinder.  |  <a href="###">Sitemap</a>  |  <a href="###">Privacy Policy</a> | <a href="###">Terms of Service</a></p>

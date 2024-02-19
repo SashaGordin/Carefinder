@@ -1,9 +1,12 @@
+const admin = require("./config/firebase-config");
 require('dotenv').config({ path: '.env.local' });
 const express = require('express');
 const bodyParser = require('body-parser');
 const axios = require('axios'); // Import axios
 const cors = require('cors'); // Import the cors package
 const path = require('path');
+//const db = admin.firestore();
+
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -16,17 +19,50 @@ const port = 3001; // Choose a port for your server
 app.use(bodyParser.json());
 app.use(cors());
 
-let serviceSid;
-client.verify.v2.services
-  .create({ friendlyName: 'My First Verify Service' })
-  .then(service => {
-    console.log('Verify service SID:', service.sid);
-    serviceSid = service.sid;
-    // Now you can use service.sid to perform verification requests and checks
-  })
-  .catch(error => {
-    console.error('Error creating Verify service:', error);
-  });
+async function getServiceSid() {
+  try {
+    const docRef = admin.firestore().collection('twilio').doc('serviceSid');
+    const doc = await docRef.get();
+    if (doc.exists) {
+      const serviceSid = doc.data().sid;
+      // Check if the service SID is still valid by attempting to use it
+      try {
+        await client.verify.v2.services(serviceSid).fetch();
+        return serviceSid; // Service SID is still valid
+      } catch (error) {
+        console.error('Error using stored service SID:', error);
+        // If service SID is expired or invalid, create a new one
+        const newService = await client.verify.v2.services.create({ friendlyName: 'My First Verify Service' });
+        const newServiceSid = newService.sid;
+        // Store new service SID in Firestore
+        await docRef.set({ sid: newServiceSid });
+        return newServiceSid;
+      }
+    } else {
+      // If service SID doesn't exist, create a new one
+      const service = await client.verify.v2.services.create({ friendlyName: 'My First Verify Service' });
+      const serviceSid = service.sid;
+      // Store service SID in Firestore
+      await docRef.set({ sid: serviceSid });
+      return serviceSid;
+    }
+  } catch (error) {
+    console.error('Error getting service SID:', error);
+    throw error;
+  }
+}
+
+// let serviceSid;
+// client.verify.v2.services
+//   .create({ friendlyName: 'My First Verify Service' })
+//   .then(service => {
+//     console.log('Verify service SID:', service.sid);
+//     serviceSid = service.sid;
+//     // Now you can use service.sid to perform verification requests and checks
+//   })
+//   .catch(error => {
+//     console.error('Error creating Verify service:', error);
+//   });
 
 
 app.post('/matchUserWithHouses', async (req, res) => { // Async handler
@@ -81,7 +117,7 @@ app.post('/findProvider', async (req, res) => { // Async handler
   }
 });
 
-  app.post('/sendConfirmationText', (req, res) => {
+  app.post('/sendConfirmationText', async (req, res) => {
     const { phone } = req.body;
     console.log(phone);
     const numericPhoneNumber = phone.replace(/\D/g, '');
@@ -89,6 +125,7 @@ app.post('/findProvider', async (req, res) => { // Async handler
 // Prepend +1 to the numeric phone number
     const formattedPhoneNumber = '+1' + numericPhoneNumber;
     const phoneNumber = "+12066186280";
+    const serviceSid = await getServiceSid();
 
     // Create a verification request
     client.verify.v2.services(serviceSid)
@@ -104,13 +141,15 @@ app.post('/findProvider', async (req, res) => { // Async handler
       });
   });
 
-  app.post('/verifyConfirmationCode', (req, res) => {
+  app.post('/verifyConfirmationCode', async(req, res) => {
     const { phoneNumber, code } = req.body;
     const numericPhoneNumber = phoneNumber.replace(/\D/g, '');
 
 // Prepend +1 to the numeric phone number
     const formattedPhoneNumber = '+1' + numericPhoneNumber;
     const phone = "+12066186280";
+
+    const serviceSid = await getServiceSid();
 
     // Verify the code provided by the user
     client.verify.v2.services(serviceSid)

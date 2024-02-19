@@ -98,28 +98,36 @@ export default function CPLandingPage() {
           <h2>Frequently asked questions</h2>
           <Accordion>
             <Accordion.Item eventKey="0">
-              <Accordion.Header>How does it work?</Accordion.Header>
-              <Accordion.Body>[Micah needs to write this answer.]</Accordion.Body>
+              <Accordion.Header>Why Carefinder?</Accordion.Header>
+              <Accordion.Body>Carefinder addresses the shortcomings of traditional senior referral and placement agencies, offering transparency and unbiased guidance. We empower families to make informed decisions while providing a cost-effective solution for care providers.</Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="1">
-              <Accordion.Header>What is the difference between <span className="CForange">nonmember</span> & <span className="CFpink">members?</span></Accordion.Header>
-              <Accordion.Body>[Micah needs to write this answer.]</Accordion.Body>
+              <Accordion.Header>What is Carefinder?</Accordion.Header>
+              <Accordion.Body>Carefinder is an online marketplace connecting families with pre-qualified care providers, such as senior living facilities and adult family homes. We're not a referral agency but a listing service facilitating personalized matches, quotes, tours scheduling, and unbiased guidance.</Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="2">
-              <Accordion.Header>How is Carefinder unbiased?</Accordion.Header>
-              <Accordion.Body>[Micah needs to write this answer.]</Accordion.Body>
+              <Accordion.Header>How does it work?</Accordion.Header>
+              <Accordion.Body>CareFinder connects care providers with families seeking care in Adult Family Home settings. Simply create an account, list your AFH, and receive messages, quote requests, and tour scheduling from interested families.</Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="3">
-              <Accordion.Header>Why is Carefinder better for the industry?</Accordion.Header>
-              <Accordion.Body>[Micah needs to write this answer.]</Accordion.Body>
+              <Accordion.Header>What is the difference between non-members and members?</Accordion.Header>
+              <Accordion.Body>Non-members secure a new resident at no upfront cost. After 30 days, if the resident stays, we charge an annual membership fee of $1,800, offering unlimited access for 12 months.</Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="4">
-              <Accordion.Header>What if I change my mind?</Accordion.Header>
-              <Accordion.Body>[Micah needs to write this answer.]</Accordion.Body>
+              <Accordion.Header>How is Carefinder unbiased?</Accordion.Header>
+              <Accordion.Body>Matches are based on a proprietary algorithm, and our advisors are not paid on commission, ensuring 100% unbiased guidance.</Accordion.Body>
             </Accordion.Item>
             <Accordion.Item eventKey="5">
-              <Accordion.Header>What if the family wants their senior moved?</Accordion.Header>
-              <Accordion.Body>[Micah needs to write this answer.]</Accordion.Body>
+              <Accordion.Header>Why is Carefinder better for the industry?</Accordion.Header>
+              <Accordion.Body>We prioritize seniors' well-being by providing unbiased guidance. For care providers, it's a low-cost, annual flat fee to access a lead generation powerhouse.</Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="6">
+              <Accordion.Header>What if I change my mind about a resident?</Accordion.Header>
+              <Accordion.Body>While we encourage communication, ultimately, your home operates by your rules. Families can find a new home, and our support team can assist.</Accordion.Body>
+            </Accordion.Item>
+            <Accordion.Item eventKey="7">
+              <Accordion.Header>What if the family wants to move their senior?</Accordion.Header>
+              <Accordion.Body>No charge within 30 days, after which there's a fee. However, with our model, you can always land your next resident at no extra cost.</Accordion.Body>
             </Accordion.Item>
           </Accordion>
 

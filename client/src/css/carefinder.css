@@ -19,6 +19,17 @@ span.CFpink, span.CForange { padding-left: 10px; padding-right:10px; }
 #CF .topnavigation { color:white; font-weight: 700; }
 #CF .topnavigation img { width:50px; margin:0px 10px 0px 0px; }
 
+.topNavLeft { float:left; width:30%; }
+.topNavRight { float:left; width:70%; padding-top: 10px; }
+body#CF .topnavigation a { color:white; }
+body#CF .topnavigation a:hover {  color:#ff9900; }
+body#CF .topnavigation .dropdown a:hover {  color:whte; }
+
+body#CF .topnavigation .nav-pills .nav-link.active, body#CF .topnavigation .nav-pills .show>.nav-link {
+    background-color: #ff6699 !important;
+}
+body#CF .topnavigation .dropdown-menu a { color:#ff9900; }
+
 .utilityPage { padding:60px; }
 
 /* BODY */
@@ -40,6 +51,10 @@ body#CF button {
     filter: drop-shadow(2px 3px 0px #000000);
 }
 
+body#CF button:hover { 
+    background:#000000; 
+}
+
 body#CF button.btn-dark { background:black;}
 body#CF button.btn-dark:hover { background:#333333;}
 
@@ -57,6 +72,9 @@ body#CF button.btn-secondary:hover { background:#181515;}
     background:#333333; 
     color:white; 
     border-radius: 10px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 
@@ -80,6 +98,7 @@ body#CF .CFdashboard input { margin-left:10px; }
 .clientLProw2right { width:60%; float:left; padding:15px; }
 
 .clientDashboard{}
+.clientDashboard button, #CF .claimProfileCard button { margin-right:10px; }
 
 .clientSearchBar { text-align:center; padding:20px; }
 body#CF input#clientSearch { font-size: 100%;
@@ -90,6 +109,8 @@ body#CF input#clientSearch { font-size: 100%;
 button#findMatches { margin-right:30px; }
 
 body#CF button#takeSurvey { background:orange; }
+
+#CF .claimProfileCard{ text-align:center; }
 
 /* CARE PROVIDER */
 .CProw1 h1 { font-size: 400%; font-weight: 700; }
@@ -181,6 +202,8 @@ body#CF .CFfooter a { color:white; }
 body#CF .CFfooter .contentContainer { padding:60px 20px 10px 20px; }
 body#CF .CFfooter .footerLink  {margin-bottom:20px; }
 p.copyright { margin-top:40px; font-size:70%;}
+#CF .footerLink a:hover { color:#ff9900;}
+
 /**
    RESPONSIVE MEDIA QUERIES:
    --allows us to tailor above rules for specific-width-range screens   

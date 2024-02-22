@@ -1,13 +1,27 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 
 export default function Step4({ providerInfo, onNext, onBack }) {
   return (
-    <div className="container">
-      <h2>Terms and Conditions</h2>
+    <>
+      <Card className="claimProfileCard">
 
-      <Button onClick={onBack}>Back</Button>
-      <Button onClick={onNext} variant="primary">Confirm</Button>
-    </div>
+        <Card.Body>
+
+          <Card.Title>Terms and Conditions</Card.Title>
+
+          <Card.Text>
+            <p>[Terms and conditions text coming from Micah.]</p>
+          </Card.Text>
+
+          <Button onClick={onNext} variant="primary">Confirm</Button>
+          <Button onClick={onBack}>Back</Button> 
+
+        </Card.Body>
+        
+      </Card>
+
+    </>
+
   );
 };

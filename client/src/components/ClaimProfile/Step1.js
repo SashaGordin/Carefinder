@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 import axios from 'axios';
 
 export default function Step1({ onNext, setProviderInfo }) {
@@ -33,10 +33,18 @@ export default function Step1({ onNext, setProviderInfo }) {
   };
 
   return (
-    <div>
-      <h2>Step 1: Enter Provider Number</h2>
-      <input type="text" value={providerNumber} onChange={e => setProviderNumber(e.target.value)} />
-      <Button onClick={handleFetchProviderInfo}>Next</Button>
-    </div>
+
+    <>
+      <Card className="claimProfileCard">
+      <Card.Body>
+        <Card.Title>Step 1: Enter Provider Number</Card.Title>
+        <Card.Text>
+        <input type="text" value={providerNumber} onChange={e => setProviderNumber(e.target.value)} />
+        </Card.Text>
+        <Button onClick={handleFetchProviderInfo}>Next</Button>
+      </Card.Body>
+      </Card>
+    </>
+
   );
 }

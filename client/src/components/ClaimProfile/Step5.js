@@ -1,13 +1,27 @@
 import React from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Card } from 'react-bootstrap';
 
 export default function Step5({ providerInfo, onFinish, onBack }) {
   return (
-    <div className="container">
-      <h2>Discolsure of Service </h2>
 
-      <Button onClick={onBack}>Back</Button>
-      <Button onClick={onFinish} variant="primary">Confirm</Button>
-    </div>
+    <>
+      <Card className="claimProfileCard">
+
+        <Card.Body>
+
+          <Card.Title>Discolsure of Service</Card.Title>
+
+          <Card.Text>
+            <p>[text coming from Micah?]</p>
+          </Card.Text>
+
+          <Button onClick={onFinish} variant="primary">Confirm</Button>
+          <Button onClick={onBack}>Back</Button> 
+
+        </Card.Body>
+        
+      </Card>
+    </>
+    
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Card } from 'react-bootstrap';
 import axios from 'axios';
 
 
@@ -23,29 +23,28 @@ export default function Step2({ onNext, onBack, providerInfo }) {
   };
 
   return (
-    <div>
-      <h2>Step 2: Confirm Phone Number</h2>
-      <p>Please confirm your phone number by entering the confirmation code received via SMS.</p>
 
-      {/* Button to send confirmation text */}
+    <>
+      <Card className="claimProfileCard">
 
-      {/* Form to enter confirmation code */}
-      <Form>
-        <Form.Group controlId="confirmationCode">
-          <Form.Label>Confirmation Code</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder="Enter confirmation code"
-            value={confirmationCode}
-            onChange={(e) => setConfirmationCode(e.target.value)}
-          />
-          <Form.Text className="text-danger">{verificationError}</Form.Text>
-        </Form.Group>
-        <Button onClick={verifyConfirmationCode}>Verify Code</Button>
-      </Form>
+        <Card.Body>
 
-      {/* Button to go back to previous step */}
-      <Button onClick={onBack}>Back</Button>
-    </div>
+          <Card.Title>Step 2: Confirm Phone Number</Card.Title>
+
+          <Card.Text>Please confirm your phone number by entering the confirmation code received via SMS.</Card.Text>
+          <Form>
+            <Form.Group controlId="confirmationCode">
+              <Form.Control type="text" placeholder="Enter confirmation code" value={confirmationCode} onChange={(e) => setConfirmationCode(e.target.value)} />
+              <Form.Text className="text-danger">{verificationError}</Form.Text>
+            </Form.Group>
+            <Button onClick={verifyConfirmationCode}>Verify Code</Button>
+            <Button onClick={onBack}>Back</Button> 
+          </Form>
+
+          {/* Button to go back to previous step */}
+        </Card.Body>
+      </Card>
+    </>
+
   );
 }

@@ -14,8 +14,14 @@ import { AuthProvider } from "../contexts/AuthContext"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import PrivateRoute from './PrivateRoute';
 import '../css/carefinder.css';
-
-
+import SupportReportIssue from './SupportReportIssue';
+import SupportConnectAdvisor from './SupportConnectAdvisor';
+import SupportSuggestion from './SupportSuggestion';
+import CareFinderJoinTeam from './CareFinderJoinTeam';
+import CareFinderContactUs from './CareFinderContactUs';
+import CareFinderSitemap from './CareFinderSitemap';
+import CareFinderPrivacy from './CareFinderPrivacy';
+import CareFinderTerms from './CareFinderTerms';
 
 
 function App() {
@@ -36,6 +42,14 @@ function App() {
               <Route path="/survey" element={<Survey />} />
               <Route path="/care-provider" element={<CPLandingPage />} />
               <Route path="/claim-profile" element={<ClaimProfile />} />
+              <Route path="/support-report-issue" element={<SupportReportIssue />} />
+              <Route path="/support-advisor" element={<SupportConnectAdvisor />} />
+              <Route path="/support-suggestion" element={<SupportSuggestion />} />
+              <Route path="/join-team" element={<CareFinderJoinTeam />} />
+              <Route path="/contact-us" element={<CareFinderContactUs />} />
+              <Route path="/sitemap" element={<CareFinderSitemap />} />
+              <Route path="/privacy-policy" element={<CareFinderPrivacy />} />
+              <Route path="/terms-of-service" element={<CareFinderTerms />} />
               <Route
                 path="/client-dashboard"
                 element={

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const SurveyQuestion = ({ question, options, onSelect, onNext, isLastQuestion }) => {
+const SurveyQuestionCheckboxes = ({ question, options, onSelect, onNext, isLastQuestion }) => {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const handleOptionSelect = (option) => {
@@ -13,15 +13,17 @@ const SurveyQuestion = ({ question, options, onSelect, onNext, isLastQuestion })
     setSelectedOption(null);
   };
 
+  console.log('CHECKBOX HANDLING!');
+
   return (
-    <div>
+    <>
       <h2>{question}</h2>
-      <ul>
+      <ul className="surveyUL">
         {options.map((option) => (
           <li key={option}>
             <label>
               <input
-                type="radio"
+                type="checkbox"
                 value={option}
                 checked={selectedOption === option}
                 onChange={() => handleOptionSelect(option)}
@@ -31,9 +33,9 @@ const SurveyQuestion = ({ question, options, onSelect, onNext, isLastQuestion })
           </li>
         ))}
       </ul>
-      <button onClick={handleNext}>{isLastQuestion ? 'Submit' : 'Next'}</button>
-    </div>
+      <button className="btn" onClick={handleNext}>{isLastQuestion ? 'Submit' : 'Next'}</button>
+    </>
   );
 };
 
-export default SurveyQuestion;
+export default SurveyQuestionCheckboxes;

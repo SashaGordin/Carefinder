@@ -97,7 +97,6 @@ body#CF .CFdashboard input { margin-left:10px; }
 .clientLProw2left { width:40%; float:left; padding:15px; }
 .clientLProw2right { width:60%; float:left; padding:15px; }
 
-.clientDashboard{}
 .clientDashboard button, #CF .claimProfileCard button { margin-right:10px; }
 
 .clientSearchBar { text-align:center; padding:20px; }
@@ -203,6 +202,9 @@ body#CF .CFfooter .contentContainer { padding:60px 20px 10px 20px; }
 body#CF .CFfooter .footerLink  {margin-bottom:20px; }
 p.copyright { margin-top:40px; font-size:70%;}
 #CF .footerLink a:hover { color:#ff9900;}
+
+.surveyUL li { list-style-type: none; }
+.surveyUL input { margin-right:10px; }
 
 /**
    RESPONSIVE MEDIA QUERIES:

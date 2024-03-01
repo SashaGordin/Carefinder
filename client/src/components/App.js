@@ -8,6 +8,7 @@ import Survey from './Survey';
 import CPLandingPage from './CPLandingPage';
 import ClaimProfile from './ClaimProfile';
 import CPDashboard from './CPDashboard';
+import CPListings from './CPListings';
 import ClientDashboard from './ClientDashboard';
 import { Container } from "react-bootstrap";
 import { AuthProvider } from "../contexts/AuthContext"
@@ -71,6 +72,18 @@ function App() {
                       'provider'
                     }>
                       <CPDashboard />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/your-listings"
+                element={
+                  <PrivateRoute
+                    redirectPath="/signup"
+                    allowedRoles={
+                      'provider'
+                    }>
+                      <CPListings />
                   </PrivateRoute>
                 }
               />

@@ -20,15 +20,19 @@ const TopNav = () => (
                     <Nav variant="pills">
 
                         <Nav.Item>
-                            <Nav.Link href="/" title="Item">HOME</Nav.Link>
+                            <Nav.Link href="/" title="Item">Browse</Nav.Link>
                         </Nav.Item>
 
                         <Nav.Item>
-                            <Nav.Link href="##" title="Item">LINK2</Nav.Link>
+                            <Nav.Link href="##" title="Item">Hub</Nav.Link>
                         </Nav.Item>
-                        
+
                         <Nav.Item>
-                            <Nav.Link href="###" title="Item">LINK3</Nav.Link>
+                            <Nav.Link href="###" title="Item">Inbox</Nav.Link>
+                        </Nav.Item>
+
+                        <Nav.Item>
+                            <Nav.Link href="/client-menu" title="Item">Menu</Nav.Link>
                         </Nav.Item>
 
                         <NavDropdown title="Dropdown" id="nav-dropdown">
@@ -41,9 +45,9 @@ const TopNav = () => (
 
                     </Nav>
 
-                </div>  
+                </div>
 
-                <div className="clear"></div>   
+                <div className="clear"></div>
 
             </div>
 

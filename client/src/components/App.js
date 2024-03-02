@@ -22,6 +22,9 @@ import CareFinderContactUs from './CareFinderContactUs';
 import CareFinderSitemap from './CareFinderSitemap';
 import CareFinderPrivacy from './CareFinderPrivacy';
 import CareFinderTerms from './CareFinderTerms';
+import ClientMenu from './ClientMenu';
+import ProviderMenu from './ProviderMenu';
+import PersonalInfoPage from './menu/PersonalInfo'
 
 
 function App() {
@@ -54,7 +57,7 @@ function App() {
                 path="/client-dashboard"
                 element={
                   <PrivateRoute
-                  redirectPath="/signup"
+                  redirectPath="/login"
                     allowedRoles={
                        'client'
                     }>
@@ -66,7 +69,7 @@ function App() {
                 path="/care-provider-dashboard"
                 element={
                   <PrivateRoute
-                    redirectPath="/signup"
+                    redirectPath="/login"
                     allowedRoles={
                       'provider'
                     }>
@@ -74,10 +77,46 @@ function App() {
                   </PrivateRoute>
                 }
               />
+              <Route
+                path="/client-menu"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      'client'
+                    }>
+                      <ClientMenu />
+                  </PrivateRoute>
+                }
+              />
+               <Route
+                path="/provider-menu"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      'provider'
+                    }>
+                      <ProviderMenu />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/personal-info"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      'provider'
+                    }>
+                      <PersonalInfoPage />
+                  </PrivateRoute>
+                }
+              />
             </Routes>
           </AuthProvider>
-          
-      {/*  
+
+      {/*
         </div>
       </Container>
       */}

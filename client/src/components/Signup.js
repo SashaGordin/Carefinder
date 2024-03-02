@@ -41,9 +41,10 @@ export default function Signup() {
 
       if (fromClaimProfile) {
         userData = {
+          ...providerInfo,
           displayName: displayName || '',
-          email: email,
           createdAt: serverTimestamp(),
+          email: email,
           role: 'provider'
         }
       } else {

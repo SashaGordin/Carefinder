@@ -22,6 +22,7 @@ import CareFinderContactUs from './CareFinderContactUs';
 import CareFinderSitemap from './CareFinderSitemap';
 import CareFinderPrivacy from './CareFinderPrivacy';
 import CareFinderTerms from './CareFinderTerms';
+import MsgInbox from './MsgInbox';
 
 
 function App() {
@@ -45,6 +46,11 @@ function App() {
               <Route path="/support-report-issue" element={<SupportReportIssue />} />
               <Route path="/support-advisor" element={<SupportConnectAdvisor />} />
               <Route path="/support-suggestion" element={<SupportSuggestion />} />
+              <Route path="/msg-inbox" element={
+                  <PrivateRoute redirectPath="/login" allowedRoles={['admin','client']}>
+                      <MsgInbox />
+                  </PrivateRoute>
+                } />              
               <Route path="/join-team" element={<CareFinderJoinTeam />} />
               <Route path="/contact-us" element={<CareFinderContactUs />} />
               <Route path="/sitemap" element={<CareFinderSitemap />} />

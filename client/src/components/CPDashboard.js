@@ -12,7 +12,7 @@ export default function CPDashboard() {
   
   return (
     <>
-    <TopNav />
+    <TopNav userRole="provider"/>
     <div className="contentContainer utilityPage">
 
         <WelcomeMsg providerName={providerName}/>

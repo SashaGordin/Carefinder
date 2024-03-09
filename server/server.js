@@ -166,16 +166,20 @@ app.post('/findProvider', async (req, res) => { // Async handler
     res.status(500).send('Internal Server Error');
   }
 });
+//debug
+const debugNumber = process.env.DEBUG_PHONE_NUMBER;
+const debugMode = process.env.DEBUG_MODE;
 
 app.post('/sendConfirmationText', async (req, res) => {
   const { phone } = req.body;
   console.log(phone);
   const numericPhoneNumber = phone.replace(/\D/g, '');
 
-  // Prepend +1 to the numeric phone number
-  const formattedPhoneNumber = '+1' + numericPhoneNumber;
-  const phoneNumber = "+12066186280";
-  const serviceSid = await getServiceSid();
+// Prepend +1 to the numeric phone number
+    const formattedPhoneNumber = '+1' + numericPhoneNumber;
+    let phoneNumber = debugMode ? debugNumber : formattedPhoneNumber;
+    
+    const serviceSid = await getServiceSid();
 
   // Create a verification request
   client.verify.v2.services(serviceSid)
@@ -197,7 +201,7 @@ app.post('/sendConfirmationText', async (req, res) => {
 
     // Prepend +1 to the numeric phone number
     const formattedPhoneNumber = '+1' + numericPhoneNumber;
-    const phone = "+12066186280";
+    let phone = debugMode ? debugNumber : formattedPhoneNumber;
 
     const serviceSid = await getServiceSid();
 

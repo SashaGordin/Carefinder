@@ -176,6 +176,39 @@ div.clear {
 }
 
 
+/* MESASAGING*/
+.messageWrapper { 
+    width:100%;
+    background: #333333;
+    padding: 10px 20px;
+    margin-bottom:30px;
+    border-radius:10px; 
+}
+.messageWrapper p.msgFrom {
+float:left;
+}
+.messageWrapper p.msgDate {
+float:right
+}
+.messageWrapper p.msgActions {
+    margin-bottom: 0;
+    text-align:center;
+}
+
+.msgReplyArea { background:black; padding:15px; margin-bottom:10px; border-radius:10px; }
+.msgReplyArea button { margin-bottom:15px;  }
+.messageWrapper textarea{ height:200px;width:100%; margin-right:1%; font-size:16px; padding:10px; line-height:20px; border-radius:10px; }
+
+.messageWrapper.messageRead {
+    color: #636363;
+    background: #171718;
+    text-decoration: line-through;
+    font-size: 80%;
+}
+.messageWrapper.messageArchived {
+    display:none;
+}
+
 /* YOUTUBE */
 .video-responsive {
     overflow: hidden;

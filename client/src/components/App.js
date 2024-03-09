@@ -8,6 +8,7 @@ import Survey from './Survey';
 import CPLandingPage from './CPLandingPage';
 import ClaimProfile from './ClaimProfile';
 import CPDashboard from './CPDashboard';
+import CPListings from './CPListings';
 import ClientDashboard from './ClientDashboard';
 import { Container } from "react-bootstrap";
 import { AuthProvider } from "../contexts/AuthContext"
@@ -25,6 +26,7 @@ import CareFinderTerms from './CareFinderTerms';
 import ClientMenu from './ClientMenu';
 import ProviderMenu from './ProviderMenu';
 import PersonalInfoPage from './menu/PersonalInfo'
+import MsgInbox from './MsgInbox';
 
 
 function App() {
@@ -48,6 +50,11 @@ function App() {
               <Route path="/support-report-issue" element={<SupportReportIssue />} />
               <Route path="/support-advisor" element={<SupportConnectAdvisor />} />
               <Route path="/support-suggestion" element={<SupportSuggestion />} />
+              <Route path="/msg-inbox" element={
+                  <PrivateRoute redirectPath="/login" allowedRoles={['admin','client']}>
+                      <MsgInbox />
+                  </PrivateRoute>
+                } />
               <Route path="/join-team" element={<CareFinderJoinTeam />} />
               <Route path="/contact-us" element={<CareFinderContactUs />} />
               <Route path="/sitemap" element={<CareFinderSitemap />} />
@@ -110,6 +117,18 @@ function App() {
                       'provider'
                     }>
                       <PersonalInfoPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/your-listings"
+                element={
+                  <PrivateRoute
+                    redirectPath="/signup"
+                    allowedRoles={
+                      'provider'
+                    }>
+                      <CPListings />
                   </PrivateRoute>
                 }
               />

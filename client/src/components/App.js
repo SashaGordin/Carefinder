@@ -48,7 +48,7 @@ function App() {
               <Route path="/support-advisor" element={<SupportConnectAdvisor />} />
               <Route path="/support-suggestion" element={<SupportSuggestion />} />
               <Route path="/msg-inbox" element={
-                  <PrivateRoute redirectPath="/login" allowedRoles={['admin','client']}>
+                  <PrivateRoute redirectPath="/login" allowedRoles={['admin','client', 'provider']}>
                       <MsgInbox />
                   </PrivateRoute>
                 } />              

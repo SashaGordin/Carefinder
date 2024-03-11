@@ -15,7 +15,7 @@ export default function CPListings() {
 
   return (
     <>
-    <TopNav />
+    <TopNav userRole="provider" />
     <h2>Your listings</h2>
     <div className="contentContainer utilityPage">
         <Listings listingName={listingName} listingStatus={listingStatus} listingImg={listingImg}/>

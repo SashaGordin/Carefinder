@@ -82,40 +82,38 @@ const TopNav = () => {
                                     </Nav.Link>
                                 </Nav.Item>
 
-                                <Nav.Item>
-                                    <Nav.Link href="##" title="Item">
-                                        My Listing
-                                    </Nav.Link>
-                                </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link href="/" title="Item">HOME</Nav.Link>
+                        </Nav.Item>
 
-                                <Nav.Item>
-                                    <Nav.Link href="###" title="Item">
-                                        Inbox
-                                    </Nav.Link>
-                                </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link href="##" title="Item">LINK2</Nav.Link>
+                        </Nav.Item>
 
-                                <Nav.Item>
-                                    <Nav.Link href="/provider-menu" title="Item">
-                                        Menu
-                                    </Nav.Link>
-                                </Nav.Item>
+                        <Nav.Item>
+                            <Nav.Link href="###" title="Item">LINK3</Nav.Link>
+                        </Nav.Item>
 
-                                <NavDropdown title="Dropdown" id="nav-dropdown">
-                                    <NavDropdown.Item>Action</NavDropdown.Item>
-                                    <NavDropdown.Item>Another action</NavDropdown.Item>
-                                    <NavDropdown.Item>Something else here</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item>Separated link</NavDropdown.Item>
-                                </NavDropdown>
-                            </Nav>
-                        )}
-					</div>
+                        <NavDropdown title="Dropdown" id="nav-dropdown">
+                            <NavDropdown.Item>Action</NavDropdown.Item>
+                            <NavDropdown.Item>Another action</NavDropdown.Item>
+                            <NavDropdown.Item>Something else here</NavDropdown.Item>
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item>Separated link</NavDropdown.Item>
+                        </NavDropdown>
 
-					<div className="clear"></div>
-				</div>
-			</div>
-		</>
-	);
-};
+                    </Nav>
+
+                </div>
+
+                <div className="clear"></div>
+
+            </div>
+
+        </div>
+
+    </>
+
+);
 
 export default TopNav;

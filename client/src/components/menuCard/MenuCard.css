@@ -1,0 +1,37 @@
+#CF .menu-card-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+  margin: 10px; /* Add spacing around each card */
+}
+
+#CF .menu-card-content {
+  height: calc(100% - 20px); /* Set height for card content */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+#CF .menu-card-title {
+  text-align: left; /* Left-align the title */
+}
+
+#CF .menu-card-text {
+  text-align: left;
+}
+
+#CF .menu-card-icon {
+  width: 30px; /* Set a fixed width for the icon */
+  height: auto; /* Allow the height to adjust proportionally */
+  margin: 8px; /* Add padding around the icon */
+}
+
+@media screen and (max-width: 768px) {
+  /* Adjust icon size for smaller screens */
+  #CF .menu-card-icon {
+    width: 20px;
+  }
+}

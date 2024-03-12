@@ -23,6 +23,10 @@ import CareFinderContactUs from './CareFinderContactUs';
 import CareFinderSitemap from './CareFinderSitemap';
 import CareFinderPrivacy from './CareFinderPrivacy';
 import CareFinderTerms from './CareFinderTerms';
+import ClientMenu from './ClientMenu';
+import ProviderMenu from './ProviderMenu';
+import PersonalInfoPage from './menu/PersonalInfo'
+import PrivacyPage from './menu/Privacy'
 import MsgInbox from './MsgInbox';
 
 
@@ -51,7 +55,7 @@ function App() {
                   <PrivateRoute redirectPath="/login" allowedRoles={['admin','client', 'provider']}>
                       <MsgInbox />
                   </PrivateRoute>
-                } />              
+                } />
               <Route path="/join-team" element={<CareFinderJoinTeam />} />
               <Route path="/contact-us" element={<CareFinderContactUs />} />
               <Route path="/sitemap" element={<CareFinderSitemap />} />
@@ -61,7 +65,7 @@ function App() {
                 path="/client-dashboard"
                 element={
                   <PrivateRoute
-                  redirectPath="/signup"
+                  redirectPath="/login"
                     allowedRoles={
                        'client'
                     }>
@@ -73,11 +77,59 @@ function App() {
                 path="/care-provider-dashboard"
                 element={
                   <PrivateRoute
-                    redirectPath="/signup"
+                    redirectPath="/login"
                     allowedRoles={
                       'provider'
                     }>
                       <CPDashboard />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/client-menu"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      'client'
+                    }>
+                      <ClientMenu />
+                  </PrivateRoute>
+                }
+              />
+               <Route
+                path="/provider-menu"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      'provider'
+                    }>
+                      <ProviderMenu />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/personal-info"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      'provider'
+                    }>
+                      <PersonalInfoPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/privacy"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      'provider'
+                    }>
+                      <PrivacyPage />
                   </PrivateRoute>
                 }
               />
@@ -95,8 +147,8 @@ function App() {
               />
             </Routes>
           </AuthProvider>
-          
-      {/*  
+
+      {/*
         </div>
       </Container>
       */}

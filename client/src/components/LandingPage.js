@@ -255,7 +255,7 @@ export default function LandingPage() {
                   ))}
             </div>
 
-            <div class="clear"></div>
+            <div className="clear"></div>
 
         </div>
 

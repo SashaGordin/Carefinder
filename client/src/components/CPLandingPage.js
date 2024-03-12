@@ -20,7 +20,7 @@ export default function CPLandingPage() {
 
   return (
     <>
-    
+
       <TopNav />
 
       <div className="CProw1 CFgrayBackground">
@@ -28,7 +28,7 @@ export default function CPLandingPage() {
           <div className="left60">
             <h1 className='CFpink'>Don't overpay for senior referrals</h1>
             <p>No commission, no absurd placement fees. Built by care providers for care providers.</p>
-            <button type="button" class="btn btn-dark">Claim Profile</button>
+            <button type="button" className="btn btn-dark">Claim Profile</button>
           </div>
           <div className="right40">
             <Image src='cooking.jpg' alt="Welcome to CareFinder" />
@@ -46,7 +46,7 @@ export default function CPLandingPage() {
             <p>Thanks to modern technology, families don't need senior advisors to determine cost of care, search for homes, or find comparable options.</p>
             <p>Yet traditional senior advisors still want you to pay 100% of the first month's rent like you did before the internet.</p>
             <p>At Carefinder, we want you to keep what you've earned, have a better experience, and get all the benefits that come with an advisor -- all for a low flar annual membership fee.</p>
-            <button type="button" class="btn btn-secondary">Claim Profile</button>
+            <button type="button" className="btn btn-secondary">Claim Profile</button>
           </div>
           <div className="clear"></div>
         </div>
@@ -62,13 +62,13 @@ export default function CPLandingPage() {
         <div className="contentContainer">
 
           <div className="CPchoiceBox CFgrayBackground">
-            <button type="button" class="btn mostPopular">Most popular</button>
+            <button type="button" className="btn mostPopular">Most popular</button>
             <div className="clear"></div>
             <p className="CPchoiceLevel">Try us out</p>
             <p className="CPchoicePrice">List your AFH</p>
             <p className="CPchoiceSubhead">Risk-free</p>
             <p className="CPboxText">By listing your AFH, make it visible to all seniors seeking care at no cost. Once you've welcomed your first private pay resident, your premium membership will be activated.</p>
-            <button type="button" class="btn btn btn-dark">Review agreement</button>
+            <button type="button" className="btn btn btn-dark">Review agreement</button>
           </div>
 
           <div className="CPchoiceBox CFgrayBackground">

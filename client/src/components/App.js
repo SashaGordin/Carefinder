@@ -26,6 +26,7 @@ import CareFinderTerms from './CareFinderTerms';
 import ClientMenu from './ClientMenu';
 import ProviderMenu from './ProviderMenu';
 import PersonalInfoPage from './menu/PersonalInfo'
+import PrivacyPage from './menu/Privacy'
 import MsgInbox from './MsgInbox';
 
 
@@ -117,6 +118,18 @@ function App() {
                       'provider'
                     }>
                       <PersonalInfoPage />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/privacy"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      'provider'
+                    }>
+                      <PrivacyPage />
                   </PrivateRoute>
                 }
               />

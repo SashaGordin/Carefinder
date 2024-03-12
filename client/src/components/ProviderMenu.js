@@ -9,12 +9,12 @@ import TopNav from "./TopNav";
 export default function ProviderMenu() {
 
   const menuItems = [
-    { title: 'Personal Info', icon: '/path/to/icon1.png', description: 'Provide personal info so we can reach you', link: "/personal-info"},
-    { title: 'Login & Security', icon: '/path/to/icon2.png', description: 'Update password and secure account' },
-    { title: 'Payment and Payout', icon: '/path/to/icon3.png' },
-    { title: 'Policies', icon: '/path/to/icon2.png', description: 'Update password and secure account' },
-    { title: 'Privacy', icon: '/path/to/icon3.png', description: 'Provide personal info so we can reach you' },
-    { title: 'My Profile', icon: '/path/to/icon2.png', description: 'Provide personal info so we can reach you' },
+    { title: 'Personal Info', icon: 'personal_info.png', description: 'Provide personal info so we can reach you', link: "/personal-info"},
+    { title: 'Login & Security', icon: 'login.png', description: 'Update password and secure account' },
+    { title: 'Payment and Payout', icon: 'payment.png' },
+    { title: 'Policies', icon: 'policies.png', description: 'Update password and secure account' },
+    { title: 'Privacy', icon: 'privacy.png', description: 'Provide personal info so we can reach you', link: "/privacy"},
+    { title: 'My Profile', icon: 'profile.png', description: 'Provide personal info so we can reach you' },
     { title: 'Delete Account'},
 
 

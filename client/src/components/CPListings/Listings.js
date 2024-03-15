@@ -12,14 +12,14 @@ export default function Listings({ listingStatus, listingName, listingImg}) {
   return (
 
     <>
-      <Card className="listingCard">
+      <Card className="CFListingCard">
       <Card.Body>
-        <div className='d-flex'>
-          <div className="listingStatus alert">{listingStatus}</div>
+        <div className='CFListingCardHeader'>
+          <div className="CFListingStatus">{listingStatus}</div>
           <div className="ml-auto"><img src={toggleImg}/></div>
         </div>
-        <Card.Title>{listingName}</Card.Title>
-        <div className="p-5 bg-dark"><img src={listingImg ?? defaultListingImg}/></div>
+        <Card.Title><h2>{listingName}</h2></Card.Title>
+        <div className="CFListingImgContainer"><div className="CFPlaceholderImg"><img src={listingImg ?? defaultListingImg}/></div></div>
         <Button>{btnText}</Button>
       </Card.Body>
       </Card>

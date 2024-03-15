@@ -15,10 +15,11 @@ export default function CPListings() {
 
   return (
     <>
-    <TopNav userRole="provider" />
-    <h2>Your listings</h2>
-    <div className="contentContainer utilityPage">
-        <Listings listingName={listingName} listingStatus={listingStatus} listingImg={listingImg}/>
+      <TopNav userRole="provider" />
+
+      <div className="contentContainer utilityPage">
+        <h1>Your listings</h1>
+        <Listings listingName={listingName} listingStatus={listingStatus} listingImg={listingImg} />
       </div>
       <Footer />
     </>

@@ -78,7 +78,7 @@ body#CF button.btn-secondary:hover { background:#181515;}
 }
 
 
-body#CF input { 
+body#CF input, textarea { 
     border-radius: 10px; 
     font-size:120%;
     padding: 5px 10px;

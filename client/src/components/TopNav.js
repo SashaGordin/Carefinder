@@ -40,25 +40,25 @@ export default function TopNav() {
 						{role === "client" && (
 							<Nav variant="pills">
 								<Nav.Item>
-									<Nav.Link href="/" title="Item">
+									<Nav.Link href="/" title="Browse">
 										Browse
 									</Nav.Link>
 								</Nav.Item>
 
 								<Nav.Item>
-									<Nav.Link href="##" title="Item">
+									<Nav.Link href="##" title="Hub">
 										Hub
 									</Nav.Link>
 								</Nav.Item>
 
 								<Nav.Item>
-									<Nav.Link href="###" title="Item">
+									<Nav.Link href="/msg-inbox" title="Inbox">
 										Inbox
 									</Nav.Link>
 								</Nav.Item>
 
 								<Nav.Item>
-									<Nav.Link href="/client-menu" title="Item">
+									<Nav.Link href="/client-menu" title="Menu">
 										Menu
 									</Nav.Link>
 								</Nav.Item>
@@ -75,25 +75,25 @@ export default function TopNav() {
 						{role === "provider" && (
 							<Nav variant="pills">
 								<Nav.Item>
-									<Nav.Link href="/care-provider-dashboard" title="Item">
+									<Nav.Link href="/care-provider-dashboard" title="Home">
 										Home
 									</Nav.Link>
 								</Nav.Item>
 
 								<Nav.Item>
-									<Nav.Link href="##" title="Item">
+									<Nav.Link href="/your-listings" title="Your listings">
 										My Listings
 									</Nav.Link>
 								</Nav.Item>
 
 								<Nav.Item>
-									<Nav.Link href="##" title="Item">
+									<Nav.Link href="/msg-inbox" title="Inbox">
 										Inbox
 									</Nav.Link>
 								</Nav.Item>
 
 								<Nav.Item>
-									<Nav.Link href="/provider-menu" title="Item">
+									<Nav.Link href="/provider-menu" title="Menu">
 										Menu
 									</Nav.Link>
 								</Nav.Item>

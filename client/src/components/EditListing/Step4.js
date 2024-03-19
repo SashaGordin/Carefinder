@@ -1,26 +1,20 @@
-import React from 'react';
-import { Button, Card } from 'react-bootstrap';
+import React, { useState } from 'react';
+import { Button, Card, Form } from 'react-bootstrap';
 
-export default function Step4({  onNext, onBack, listingInfo, setListingInfo}) {
-  const setProviderCredentials = () => {
-    let credentials;
-    document.querySelectorAll("[name='providerCredentials']").forEach((t) => {
-      if (t.checked)
-        credentials += "," + t.value;
+export default function Step4({ listingInfo, setListingInfo}) {
+  const handleCredentialsChange = () => {
+    let credentials = [];
+    document.querySelectorAll("[type='checkbox']:checked").forEach((t) => {
+        credentials.push(t.id);
     });
-    listingInfo.providerCredentials = credentials;
-    setListingInfo(listingInfo);
+    setListingInfo({
+      ...listingInfo, 
+      providerCredentials: credentials});
   }
+
   
   const options = ["MD", "DO", "PA-C", "ARNP", "RN, BSN", "RN", "LPN", "EMT", "Other"]
   
-  let checkboxOptions = [];
-  for (let i = 0; i < options.length; i++)
-  {
-    const option = options[i];
-    console.log(option);
-    checkboxOptions.push(<><input name="providerCredentials" type="checkbox" id={option} value={option}/><label htmlFor={option}>{option}</label></>);
-  }
   return (
     <>
       <Card className="claimProfileCard">
@@ -33,9 +27,18 @@ export default function Step4({  onNext, onBack, listingInfo, setListingInfo}) {
            Select all that apply
             
           </Card.Text>
-          <div onChange={setProviderCredentials}>
-              {checkboxOptions}
-          </div>
+          <Form>
+              {options.map((option) => (
+                  <Form.Check 
+                    key={option}
+                    type='checkbox'
+                    id={option}
+                    label={option}
+                    checked={listingInfo.providerCredentials?.includes(option)}
+                    onChange={handleCredentialsChange}
+                  />
+              ))}
+          </Form>
         </Card.Body>
         
       </Card>

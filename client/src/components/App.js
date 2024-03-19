@@ -24,6 +24,7 @@ import CareFinderSitemap from './CareFinderSitemap';
 import CareFinderPrivacy from './CareFinderPrivacy';
 import CareFinderTerms from './CareFinderTerms';
 import MsgInbox from './MsgInbox';
+import FileUpload from './FileUpload';
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
               <Route path="/support-report-issue" element={<SupportReportIssue />} />
               <Route path="/support-advisor" element={<SupportConnectAdvisor />} />
               <Route path="/support-suggestion" element={<SupportSuggestion />} />
+              <Route path="/temp-file-upload" element={<FileUpload />} />
               <Route path="/msg-inbox" element={
                   <PrivateRoute redirectPath="/login" allowedRoles={['admin','client']}>
                       <MsgInbox />

@@ -9,12 +9,9 @@ const db = admin.firestore();
 const geohash = require('geohash');
 const geofire = require('geofire-common');
 
-
-
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
-
 
 const client = require('twilio')(accountSid, authToken);
 
@@ -374,10 +371,10 @@ app.post('/sendConfirmationText', async (req, res) => {
     snapshot.forEach(doc => {
         console.log('House data:', doc.data());
     });
-}
+  }
 
 
-
+ 
 
 
 

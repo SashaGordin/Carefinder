@@ -4,9 +4,10 @@ import axios from 'axios';
 
 
 export default function Step2({ listingInfo, setListingInfo }) {
-  const setLicenseYear = (year) => {
-    listingInfo.licenseYear = year;
-    setListingInfo(listingInfo);
+  const handleYearChange = (e) => {
+    setListingInfo({
+      ...listingInfo, 
+      licenseYear: e.target.value});
   }
 
   return (
@@ -18,7 +19,7 @@ export default function Step2({ listingInfo, setListingInfo }) {
 
           <Card.Title>About the home</Card.Title>
           <Card.Text>Enter the year this home was licensed.</Card.Text>
-            <input type="text" placeholder="Enter the year" onChange={e => setLicenseYear(e.target.value)} />
+            <input type="text" placeholder="Enter the year" value={listingInfo.licenseYear ?? ""} onChange={handleYearChange} />
            {/* Button to go back to previous step */}
         </Card.Body>
       </Card>

@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Label, Card } from 'react-bootstrap';
 
 
 export default function Step3({ listingInfo, setListingInfo}) {
-  const setProviderStatement = (msg) => {
-    listingInfo.providerStatement = msg;
-    setListingInfo(listingInfo);
+  const handleStatementChange = (e) => {
+    setListingInfo({
+      ...listingInfo, 
+      providerStatement: e.target.value});
   }
+
   
   return (
 
@@ -19,7 +21,7 @@ export default function Step3({ listingInfo, setListingInfo}) {
 
           <Card.Text>
               Provider statement
-              <textarea className="small" rows="5" cols="50" onChange={e => setProviderStatement(e.target.value)}></textarea>
+              <textarea className="small" rows="5" cols="50" value={listingInfo.providerStatement ?? ""} onChange={handleStatementChange}></textarea>
           </Card.Text>
         </Card.Body>
       </Card>

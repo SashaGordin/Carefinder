@@ -35,7 +35,7 @@ export default function CPListings() {
 
       <div className="contentContainer utilityPage">
         <h1>Your listings</h1>
-        <Listings licenseNumber={userData.LicenseNumber} listingName={userData.FacilityName} listingStatus={userData.listingStatus} listingImg={userData.listingImg} />
+        <Listings userData={userData} />
       </div>
       <Footer />
     </>

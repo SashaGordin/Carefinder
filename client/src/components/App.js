@@ -28,6 +28,7 @@ import ProviderMenu from './ProviderMenu';
 import PersonalInfoPage from './menu/PersonalInfo'
 import PrivacyPage from './menu/Privacy'
 import MsgInbox from './MsgInbox';
+import EditListing from './EditListing';
 
 
 function App() {
@@ -142,6 +143,18 @@ function App() {
                       'provider'
                     }>
                       <CPListings />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/edit-listing"
+                element={
+                  <PrivateRoute
+                    redirectPath="/signup"
+                    allowedRoles={
+                      'provider'
+                    }>
+                      <EditListing />
                   </PrivateRoute>
                 }
               />

@@ -177,6 +177,8 @@ div.clear {
 
 
 /* MESASAGING*/
+.msgTopControls{ text-align: right; margin-bottom: 10px; color: #ff6699; font-size: 80%; }
+
 .messageWrapper { 
     width:100%;
     background: #333333;
@@ -195,6 +197,10 @@ float:right
     text-align:center;
 }
 
+.msgResponseInfo { font-size:60%; margin:0;  text-align: right;    padding-right: 5px; margin-bottom: 2px;}
+.messageWrapper.messageArchived .msgResponseInfo { font-size: 90%;    padding-right: 0;}
+.messageWrapper.messageArchived .msgActions { background:initial; }
+
 .msgReplyArea { background:black; padding:15px; margin-bottom:10px; border-radius:10px; }
 .msgReplyArea button { margin-bottom:15px;  }
 .messageWrapper textarea{ height:200px;width:100%; margin-right:1%; font-size:16px; padding:10px; line-height:20px; border-radius:10px; }
@@ -202,12 +208,29 @@ float:right
 .messageWrapper.messageRead {
     color: #636363;
     background: #171718;
-    text-decoration: line-through;
     font-size: 80%;
 }
-.messageWrapper.messageArchived {
-    display:none;
+#CF .messageWrapper.messageRead p.msgText,#CF .messageWrapper.messageArchived p.msgText {
+    text-decoration: line-through;
 }
+.messageWrapper.messageArchived {
+    color: #343434;
+    background: #0a0a0a;
+    font-size: 60%;
+}
+
+.messageArchived p.msgFrom, .messageArchived p.msgDate , .messageArchived p.msgBrief, .messageArchived p.msgText.msgFull { margin:0; }
+.messageArchived .CForange {color:#6a4002;}
+.messageArchived p.msgActions { text-align:right;}
+.messageWrapper.messageArchived {margin-bottom:10px;}
+.msgActions{    background: #ffffff1c;    border-radius: 9px;    font-size: 90%;}
+
+body#CF .msgReplyArea input.btn.btn-primary { font-size: 100%;  margin-right: 10px; color:white; }
+body#CF .msgReplyArea button.btn.btn-info {    font-size: 90%;
+    padding: 7px 15px 5px 15px;
+    margin-bottom: 11px;
+    border-radius: 8px;background: gray;}
+    body#CF .msgReplyArea button.btn.btn-info:hover {  background: red;}
 
 /* YOUTUBE */
 .video-responsive {

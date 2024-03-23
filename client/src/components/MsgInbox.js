@@ -14,6 +14,8 @@ export default function MsgInbox() {
     const { login, currentUser } = useAuth()
     const [userMessages, setUserMessages] = useState([]); 
     const [loading, setLoading] = useState(false);
+    const [containsArchives, setContainsArchives] = useState(0);
+    useEffect(() => { return; }, [containsArchives]);
 
     useEffect(() => { fetchMessages(); }, []);
 
@@ -22,10 +24,7 @@ export default function MsgInbox() {
         let configs_msgTruncateLimit = 100;
 
         const dbCollection = firestore.collection('messages');
-        const response = await dbCollection.where('msgTo', '==', currentUser.uid).get(); 
-        // Note, I think we can order the queries, like so:
-        // .orderBy('msgStatus').orderBy('msgDate', 'desc')
-        // but it requires we do an index. We can add this later, as Google kicked me out when I tried.
+        const response = await dbCollection.orderBy('msgStatus', 'asc').orderBy('msgDate', 'desc').where('msgTo', '==', currentUser.uid).get(); 
 
         let messageAreaHTML ='';
 
@@ -62,7 +61,14 @@ export default function MsgInbox() {
 
                 localResponseArray[localResponseIndex]["m_NO"] = thisMsg.data()['msgNotified'];
                 localResponseArray[localResponseIndex]["m_ST"] = thisMsg.data()['msgStatus'];
+                if ( (localResponseArray[localResponseIndex]["m_ST"] == 2) && (containsArchives==0) ) {
+                    setContainsArchives(1);
+                    console.log('SET ARCHIVE TO 1');
+                }
+
                 localResponseArray[localResponseIndex]["m_TH"] = thisMsg.data()['msgThreadID'];
+                localResponseArray[localResponseIndex]["m_PI"] = thisMsg.data()['msgParentID'];
+                localResponseArray[localResponseIndex]["m_RS"] = thisMsg.data()['msgResponseSent'];
                 localResponseIndex++;
 
             });
@@ -122,32 +128,16 @@ export default function MsgInbox() {
         <TopNav />
         <div className="contentContainer utilityPage">
 
-            <h2>Messaging Center</h2>
+            <h2>Inbox</h2>
 
             <p>for CareFinder Member with the email {currentUser.email}</p> 
 
             <hr></hr>
 
-            <MsgTemplate passData={userMessages} />
+            <MsgTemplate passData={userMessages} hasArchives={containsArchives} />
 
             <div className="clear"></div>
             <hr></hr>
-
-            {/* 
-            {userMessages.map((thisMsg) => (
-                <>
-                <li>MSGID: {thisMsg['m_ID']}</li>
-                <li>MSGTO: {thisMsg['m_TO']}</li>
-                <li>MSGFR: {thisMsg['m_FR']}</li>
-                <li>MSGTX: {thisMsg['m_TX']}</li>
-                <li>MSGDS: {thisMsg['m_DS']}</li>
-                <li>MSGDA: {thisMsg['m_DA']}</li>
-                <li>MSGNO: {thisMsg['m_NO']}</li>
-                <li>MSGST: {thisMsg['m_ST']}</li>
-                <li>MSGTH: {thisMsg['m_TH']}</li>                
-                </>
-            ))}
-            */}
 
         </div>
         <Footer />

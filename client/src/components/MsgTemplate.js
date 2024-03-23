@@ -3,11 +3,43 @@ import { useAuth } from "../contexts/AuthContext";
 import { getDoc, setDoc, doc, Timestamp } from 'firebase/firestore';
 import { firestore } from '../firebase'; 
 
-export default function MsgTemplate({passData}) {  
+
+/**
+ * FIREBASE 'messages' collection FIELDS:
+ * ================================================================================
+ * msgDate          Timestamp of message - import Timestamp from firebase/firestore
+ *                  -- use Timestamp.now()
+ * msgTo            userID of the recipient
+ * msgFrom          userID of the sender
+ * msgText          text of the message (cannot be empty)
+ * msgNotified      0 (default) == user has NOT been notified (via text/whatever)
+ *                  1 == user HAS been notified -- note, this is fo future development.
+ * msgStatus        0 (default) == UNREAD message
+ *                  1 == message marked as READ
+ *                  2 == message marked as ARCHIVED
+ * msgThreadID      initial value == millisecond timestamp via "new Date().getTime();"
+ *                  then send this on all responses in the thread
+ * msgParentID      default is blank
+ *                  on responses, make this the ID of the msg being responded to
+ * msgResponseSent  0 (default) == message was NOT responded to
+ *                  1 == message WAS responded to
+ */
+
+// TESTING NOTES:
+// JIM USER:      LXxo4pjrsSYgb3xmOfC4Loco8L03
+// OTHER USERS:   LV6IbCIwMdbs5rMAp5Hb, EEQWegKrxbVQDZ4Ns0qEHDBar8J2, 0CFJRjjE8IcFmyJ11tT9cFq3UIV2
+// M1: new Date('March 6, 2024 05:05:31').getTime() -- 1709730331000.
+// M2: new Date('March 5, 2024 07:31:22').getTime() -- 1709652682000.
+// M3: new Date('March 4, 2024 09:37:11').getTime() -- 1709573831000.
+// M4: new Date('March 3, 2024 12:23:08').getTime() -- 1709497388000.
+// M5: new Date('March 2, 2024 10:32:44').getTime() -- 1709404364000.
+
+export default function MsgTemplate({passData, hasArchives}) {  
     
     console.log(passData);
+    console.log('Archives?: '+hasArchives);
 
-    function toggleHide(targetID) {
+    function toggleHideByID(targetID) {
         var toggleTarget = document.getElementById(targetID); 
         if (toggleTarget.style.display === "none") {
             toggleTarget.style.display = "block"; 
@@ -15,6 +47,18 @@ export default function MsgTemplate({passData}) {
             toggleTarget.style.display = "none"; 
         }
         //return;
+    }
+
+    function toggleHideByClass(targetClass) {
+        var elementArray = document.getElementsByClassName(targetClass); 
+        // returns array, so...
+        for (let i=0; i<elementArray.length; i++) {
+            if (elementArray[i].style.display === "none") {
+                elementArray[i].style.display = "block"; 
+            } else {
+                elementArray[i].style.display = "none"; 
+            }
+        }
     }
 
     function toggleMessages(targetID){
@@ -59,11 +103,23 @@ export default function MsgTemplate({passData}) {
 
         const dbCollection = firestore.collection('messages').doc(targetMessageID);
         
-        const response3 = await dbCollection.update( {'msgStatus':targetFieldValue} );
+        const response = await dbCollection.update( {'msgStatus':targetFieldValue} );
         
-        console.log(response3);
+        console.log(response);
         
         window.location.reload();
+    }
+
+    const changeMessageResponseSentStatus = async(targetMessageID, targetFieldValue) => {
+
+        console.log('Set `messages` (id '+ targetMessageID + ') `msgResponseSent` to: ' + targetFieldValue ); 
+
+        const dbCollection = firestore.collection('messages').doc(targetMessageID);
+        
+        const response = await dbCollection.update( {'msgResponseSent':targetFieldValue} );
+        
+        console.log(response);
+        
     }
 
     const sendReply = async(sendingTo, sendingFrom, originalMessageID, messageThreadID) => {
@@ -71,23 +127,32 @@ export default function MsgTemplate({passData}) {
         // text field is marked w/ a reply ID using "reply" and the Msg ID...
         let replyID = 'reply' + originalMessageID;
         let replyText = document.getElementById(replyID).value;
+        if (!replyText) {
+            alert('We cannot send this message, as no text was present. Please make sure to write a message. Thanks! :-)');
+            return;
+        }
 
         console.log('SENDING REPLY:  TO: ' + sendingTo + ', FROM: ' + sendingFrom + ', TXT: ' + replyText + ', THREAD: ' + messageThreadID + ')'); 
 
         const dbCollection = firestore.collection('messages');
-        const response3 = await dbCollection.add({ 
+        const response = await dbCollection.add({ 
             msgDate : Timestamp.now(),
             msgTo : sendingTo,
             msgFrom : sendingFrom,
             msgText : replyText,
             msgThreadID : messageThreadID,
             msgNotified : 0,
-            msgStatus : 0
+            msgStatus : 0,
+            msgParentID : originalMessageID,
+            msgResponseSent : 0
         });
         
-        console.log(response3);
+        console.log(response);
 
-        // also mark this original message as read, too...
+        // mark on the original message that it was responded to:
+        changeMessageResponseSentStatus(originalMessageID, 1);
+
+        // also mark this original message as read:
         changeMessageStatus(originalMessageID, 1);
         console.log('MARKED message as READ, also. Kthx.'); 
 
@@ -96,17 +161,26 @@ export default function MsgTemplate({passData}) {
     }
 
 
-
+    
     return (
 
       <>
         
+        { hasArchives ?
+            <>
+            <div className='msgTopControls'><span onClick={()=> toggleHideByClass('messageArchived')}>👀 Show/Hide Archived</span></div>
+            </> : <></>
+        }
+
         {passData.map( thisMsg => (
                 
-                <div className={ getMessageWrapperClass(thisMsg['m_ST']) }>
+                <div className={ getMessageWrapperClass(thisMsg['m_ST']) } style={{display:"block"}}>
 
                 <p className="msgFrom">
-                    <b>FROM:</b> <span className="CForange"> {thisMsg['m_FR']} </span>
+                    <b>FROM:</b> 
+                    <span className="CForange"> 
+                        { thisMsg['m_RO'] + ' ' + thisMsg['m_DN'] }
+                    </span>
                 </p>
 
                 <p className="msgDate">
@@ -135,10 +209,21 @@ export default function MsgTemplate({passData}) {
                     </>
                 }
 
+                { ( thisMsg['m_RS'] == 1 ) ?
+                    <> 
+                        <p className="msgResponseInfo">(✅ You responded to this.)</p>
+                    </> :
+                    <>
+                        <p className="msgResponseInfo">(⭕ You haven't yet responded to this).</p>
+                    </>
+
+                }
+
+
                 <div className="msgReplyArea" id={thisMsg['m_ID']} style={{display:"none"}}>
                     <textarea autoFocus id={'reply'+thisMsg['m_ID']}></textarea>
-                    <input type="submit" value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-info"></input>
-                    <button className="btn btn-primary" onClick={()=> toggleHide(thisMsg['m_ID'])}>CANCEL</button>
+                    <input value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-primary"></input>
+                    <button className="btn btn-info" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>CANCEL</button>
                 </div>
 
                 <p className="msgActions">
@@ -150,8 +235,12 @@ export default function MsgTemplate({passData}) {
                         </>
                     }
 
-                    <a href="###" onClick={()=> toggleHide(thisMsg['m_ID'])}>📝 Reply</a>
-                    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                    { ( ( thisMsg['m_ST'] == 0 ) || ( thisMsg['m_ST'] == 1 ) ) &&
+                        <>
+                            <a href="###" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>📝 Reply</a>
+                            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                        </>
+                    }
 
                     { (thisMsg['m_ST'] == 0) &&
                         <>
@@ -167,8 +256,18 @@ export default function MsgTemplate({passData}) {
                         </>
                     }
 
+                    { ( ( thisMsg['m_ST'] == 0 ) || ( thisMsg['m_ST'] == 1 ) ) &&
+                        <>
+                            <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 2)}>🗑️ Archive</a>
+                        </>
+                    }
 
-                    <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 2)}>🗑️ Archive</a>
+                    { (thisMsg['m_ST'] == 2) &&
+                        <>
+                            <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 1)}>🗑️ Unarchive</a>                        
+                        </>
+                    }
+                    
 
                 </p>
 

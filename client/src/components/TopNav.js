@@ -1,57 +1,117 @@
-import React from "react";
-import { Nav } from 'react-bootstrap';
-import { NavDropdown } from 'react-bootstrap';
+import React, { useState, useEffect } from "react";
+import { Nav } from "react-bootstrap";
+import { NavDropdown } from "react-bootstrap";
+import { getDoc, doc } from "firebase/firestore";
+import { firestore } from "../firebase"; // Import your Firestore instance
+import { useAuth } from "../contexts/AuthContext";
 
-const TopNav = () => (
+export default function TopNav() {
+	const [role, setRole] = useState("");
+	const { currentUser } = useAuth();
 
-    <>
+	useEffect(() => {
+		const fetchData = async () => {
+			try {
+				const userDocRef = doc(firestore, "users", currentUser.uid);
+				const userDocSnapshot = await getDoc(userDocRef);
+				if (userDocSnapshot.exists()) {
+					const userData = userDocSnapshot.data();
+					setRole(userData.role);
+				}
+			} catch (error) {
+				console.log("the error: ", error);
+			}
+		};
+		if (currentUser) {
+			fetchData(); // Call the async function immediately
+		}
+	}, []);
 
-        <div className='topnavigation'>
+	return (
+		<>
+			<div className="topnavigation">
+				<div className="contentContainer">
+					<div className="topNavLeft">
+						<img src="cflogo.png" alt="Welcome to CareFinder" />
+						Carefinder
+					</div>
 
-            <div className="contentContainer">
+					<div className="topNavRight">
+						{role === "client" && (
+							<Nav variant="pills">
+								<Nav.Item>
+									<Nav.Link href="/" title="Browse">
+										Browse
+									</Nav.Link>
+								</Nav.Item>
 
-                <div className="topNavLeft">
-                    <img src='cflogo.png' alt="Welcome to CareFinder" />
-                    Carefinder
-                </div>
+								<Nav.Item>
+									<Nav.Link href="##" title="Hub">
+										Hub
+									</Nav.Link>
+								</Nav.Item>
 
-                <div className="topNavRight">
+								<Nav.Item>
+									<Nav.Link href="/msg-inbox" title="Inbox">
+										Inbox
+									</Nav.Link>
+								</Nav.Item>
 
-                    <Nav variant="pills">
+								<Nav.Item>
+									<Nav.Link href="/client-menu" title="Menu">
+										Menu
+									</Nav.Link>
+								</Nav.Item>
 
-                        <Nav.Item>
-                            <Nav.Link href="/" title="Item">HOME</Nav.Link>
-                        </Nav.Item>
+								{/* <NavDropdown title="Dropdown" id="nav-dropdown">
+                                    <NavDropdown.Item>Action</NavDropdown.Item>
+                                    <NavDropdown.Item>Another action</NavDropdown.Item>
+                                    <NavDropdown.Item>Something else here</NavDropdown.Item>
+                                    <NavDropdown.Divider />
+                                    <NavDropdown.Item>Separated link</NavDropdown.Item>
+                                </NavDropdown> */}
+							</Nav>
+						)}
+						{role === "provider" && (
+							<Nav variant="pills">
+								<Nav.Item>
+									<Nav.Link href="/care-provider-dashboard" title="Home">
+										Home
+									</Nav.Link>
+								</Nav.Item>
 
-                        <Nav.Item>
-                            <Nav.Link href="##" title="Item">LINK2</Nav.Link>
-                        </Nav.Item>
-                        
-                        <Nav.Item>
-                            <Nav.Link href="###" title="Item">LINK3</Nav.Link>
-                        </Nav.Item>
+								<Nav.Item>
+									<Nav.Link href="/your-listings" title="Your listings">
+										My Listings
+									</Nav.Link>
+								</Nav.Item>
 
-                        <NavDropdown title="Dropdown" id="nav-dropdown">
+								<Nav.Item>
+									<Nav.Link href="/msg-inbox" title="Inbox">
+										Inbox
+									</Nav.Link>
+								</Nav.Item>
+
+								<Nav.Item>
+									<Nav.Link href="/provider-menu" title="Menu">
+										Menu
+									</Nav.Link>
+								</Nav.Item>
+
+								{/* <NavDropdown title="Dropdown" id="nav-dropdown">
                             <NavDropdown.Item>Action</NavDropdown.Item>
                             <NavDropdown.Item>Another action</NavDropdown.Item>
                             <NavDropdown.Item>Something else here</NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item>Separated link</NavDropdown.Item>
-                        </NavDropdown>
+                        </NavDropdown> */}
+							</Nav>
+						)}
+					</div>
 
-                    </Nav>
-
-                </div>  
-
-                <div className="clear"></div>   
-
-            </div>
-
-        </div>
-
-    </>
-
-);
-
-export default TopNav;
-
+					<div className="clear"></div>
+				</div>
+			</div>
+		</>
+	);
+}

@@ -1,26 +1,36 @@
 import React, { useState } from 'react';
 import { Button, Card } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
-export default function Listings({ listingStatus, listingName, listingImg}) {
-  const [providerNumber, setProviderNumber] = useState('');
-  //const [providerInfo, setProviderInfo] = useState(null);
+export default function Listings({ userData}) {
+  const navigate = useNavigate();
 
-  let toggleImg = listingStatus == "Listing is on" ? "toggleon.ong" : "toggleoff.png";
+  let listingStatus = userData.listingStatus ?? "Incomplete";
+  let toggleImg = listingStatus == "Listing is on" ? "toggleon.png" : "toggleoff.png";
   let btnText = listingStatus == "Incomplete" ? "Create listing" : "Edit listing";
   const defaultListingImg = "house.png";
+
+  const editListing = () => {
+    navigate('/edit-listing', {state: {userData}});
+  }
+
+  const toggleListing = () => {
+    //TODO turn on listing in db and switch toggle button img
+    toggleImg = toggleImg == "toggleon.png" ? "toggleoff.png" : "toggleon.png";
+  }
 
   return (
 
     <>
-      <Card className="listingCard">
+      <Card className="CFListingCard">
       <Card.Body>
-        <div className='d-flex'>
-          <div className="listingStatus alert">{listingStatus}</div>
-          <div className="ml-auto"><img src={toggleImg}/></div>
+        <div className='CFListingCardHeader'>
+          <div className="CFListingStatus">{listingStatus}</div>
+          <div className="ml-auto" onClick={toggleListing}><img src={toggleImg}/></div>
         </div>
-        <Card.Title>{listingName}</Card.Title>
-        <div className="p-5 bg-dark"><img src={listingImg ?? defaultListingImg}/></div>
-        <Button>{btnText}</Button>
+        <Card.Title><h5>{userData.FacilityName}</h5></Card.Title>
+        <div className="CFListingImgContainer"><div className="CFPlaceholderImg"><img src={userData.listingImg ?? defaultListingImg}/></div></div>
+        <Button onClick={editListing}>{btnText}</Button>
       </Card.Body>
       </Card>
     </>

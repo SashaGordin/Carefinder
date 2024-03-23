@@ -1,0 +1,16 @@
+.toggle-option {
+  display: flex; /* Use flexbox to display items side by side */
+  align-items: center; /* Align items vertically */
+  margin-bottom: 10px; /* Add margin for spacing */
+}
+
+.toggle-option img {
+  width: 40px; /* Adjust image width */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 10px; /* Add margin for spacing between image and text */
+}
+
+.toggle-option h2 {
+  font-size: 16px; /* Adjust font size */
+  margin: 0; /* Remove default margin */
+}

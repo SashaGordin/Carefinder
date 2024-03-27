@@ -5,15 +5,16 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import TopNav from "./TopNav";
+import Footer from './Footer';
 
 export default function ClientMenu() {
 
   const menuItems = [
-    { title: 'Personal Info', icon: 'personal_info.png', description: 'Provide personal info so we can reach you' },
-    { title: 'Login & Security', icon: 'login.png', description: 'Update password and secure account' },
-    { title: 'Payment and Payout', icon: 'payment.png' },
-    { title: 'Edit Survey' },
-    { title: 'Privacy', icon: 'privacy.png', description: 'Provide personal info so we can reach you' },
+    { title: 'Personal Info', icon: 'personal_info.png', description: 'Provide personal info so we can reach you', link:'../msg-inbox' },
+    { title: 'Login & Security', icon: 'login.png', description: 'Update password and secure account', link:'../msg-inbox' },
+    { title: 'Payment & Payout', icon: 'payment.png', description: 'Payment and billing area', link:'../msg-inbox' },
+    { title: 'Edit Survey', icon: 'personal_info.png', description: 'Edit your survey answers', link:'../msg-inbox'  },
+    { title: 'Privacy', icon: 'privacy.png', description: 'Provide personal info so we can reach you', link:'../msg-inbox'  },
 
     // Add more menu items as needed
   ];
@@ -21,6 +22,8 @@ export default function ClientMenu() {
   return (
     <>
       <TopNav />
+      <div className="contentContainer utilityPage clientMenu">
+
       <Container>
         <Row xs={1} sm={2} md={4}>
           {menuItems.map((menuItem, index) => (
@@ -30,6 +33,9 @@ export default function ClientMenu() {
           ))}
         </Row>
       </Container>
+
+      </div>
+      <Footer />
     </>
   );
 };

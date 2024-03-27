@@ -5,6 +5,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import TopNav from "./TopNav";
+import Footer from './Footer';
 
 export default function ProviderMenu() {
 
@@ -24,6 +25,8 @@ export default function ProviderMenu() {
   return (
     <>
       <TopNav />
+      <div className="contentContainer utilityPage clientMenu">
+
       <Container>
         <Row xs={1} sm={2} md={4}>
           {menuItems.map((menuItem, index) => (
@@ -33,6 +36,9 @@ export default function ProviderMenu() {
           ))}
         </Row>
       </Container>
+
+      </div>
+      <Footer />
     </>
   );
 };

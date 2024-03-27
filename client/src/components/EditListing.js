@@ -18,7 +18,7 @@ export default function EditListing() {
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
-  const { userData} = state || {};
+  const { userData } = state || {};
 
   const [currentStep, setCurrentStep] = useState(1);
   const [listingInfo, setListingInfo] = useState({

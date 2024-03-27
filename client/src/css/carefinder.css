@@ -127,13 +127,20 @@ body#CF button#takeSurvey { background:orange; }
 .CProw5 { margin-bottom:80px; }
 .mostPopular { float:right; margin-bottom:20px; }
 p.CPchoiceLevel{font-weight:700;font-size: 200%;}
-p.CPchoicePrice{font-weight:700;font-size: 300%;}
+p.CPchoicePrice{font-weight:700;font-size: 260%;}
 p.CPchoiceSubhead{font-weight:700;font-size: 225%;}
 p.CPchoiceTerms{ font-size:70%; font-weight:normal; }
 .allGrayText p {color:#8a8888;}
 p.CPboxText { text-align:left;}
 
+.providerDashboardCard { margin-bottom:40px; }    
+#CF .clientMenu .row {
+    --bs-gutter-y: 2.5rem;
+}
 
+#CF .personalInfo p.card-text label { font-weight: bold; margin-right:10px; }
+#CF .personalInfo p.card-text span { margin-right:10px; }
+#CF .personalInfo .card-title {font-weight: bold;}
 .CProw5 h2 { text-align:center; margin-bottom:20px; }
 body#CF .CProw5 button { background: black;
     font-weight: normal;

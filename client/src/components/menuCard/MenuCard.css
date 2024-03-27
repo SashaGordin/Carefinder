@@ -17,6 +17,7 @@
 
 #CF .menu-card-title {
   text-align: left; /* Left-align the title */
+  font-weight:bold;
 }
 
 #CF .menu-card-text {
@@ -24,9 +25,11 @@
 }
 
 #CF .menu-card-icon {
-  width: 30px; /* Set a fixed width for the icon */
+  width: 50px; /* Set a fixed width for the icon */
   height: auto; /* Allow the height to adjust proportionally */
   margin: 8px; /* Add padding around the icon */
+  margin-left:auto; margin-right:auto;
+  margin-top:20px;
 }
 
 @media screen and (max-width: 768px) {

@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
-export default function Listings({ userData}) {
+export default function RoomCard({ roomData}) {
   const navigate = useNavigate();
 
-  let listingStatus = userData.listingStatus ?? "Incomplete";
+  let listingStatus = roomData.listingStatus ?? "Incomplete";
   let toggleImg = listingStatus == "Listing is on" ? "toggleon.png" : "toggleoff.png";
   let btnText = listingStatus == "Incomplete" ? "Create listing" : "Edit listing";
-  const defaultListingImg = "house.png";
+  const defaultListingImg = "bed.png";
 
   const editListing = () => {
-    navigate('/edit-listing', {state: {userData}});
+    navigate('/edit-listing', {state: {roomData}});
   }
 
   const toggleListing = () => {
@@ -29,8 +29,8 @@ export default function Listings({ userData}) {
           <div className="CFListingStatus">{listingStatus}</div>
           <div className="ml-auto" onClick={toggleListing}><img src={toggleImg}/></div>
         </div>
-        <Card.Title><h5>{userData.FacilityName}</h5></Card.Title>
-        <div className="CFListingImgContainer"><div className="CFPlaceholderImg"><img src={userData.listingImg ?? defaultListingImg}/></div></div>
+        <Card.Title><h5>{roomData.RoomName}</h5></Card.Title>
+        <div className="CFListingImgContainer"><div className="CFPlaceholderImg"><img src={roomData.listingImg ?? defaultListingImg}/></div></div>
         <Button onClick={editListing}>{btnText}</Button>
       </Card.Body>
       </Card>

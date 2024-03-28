@@ -70,7 +70,7 @@ function App() {
                   <PrivateRoute
                   redirectPath="/login"
                     allowedRoles={
-                       'client'
+                       ['client','admin']
                     }>
                       <ClientDashboard />
                   </PrivateRoute>
@@ -82,7 +82,7 @@ function App() {
                   <PrivateRoute
                     redirectPath="/login"
                     allowedRoles={
-                      'provider'
+                      ['provider','admin']
                     }>
                       <CPDashboard />
                   </PrivateRoute>
@@ -94,7 +94,7 @@ function App() {
                   <PrivateRoute
                     redirectPath="/login"
                     allowedRoles={
-                      'client'
+                      ['client','admin']
                     }>
                       <ClientMenu />
                   </PrivateRoute>
@@ -106,7 +106,7 @@ function App() {
                   <PrivateRoute
                     redirectPath="/login"
                     allowedRoles={
-                      'provider'
+                      ['provider','admin']
                     }>
                       <ProviderMenu />
                   </PrivateRoute>
@@ -118,7 +118,7 @@ function App() {
                   <PrivateRoute
                     redirectPath="/login"
                     allowedRoles={
-                      'provider'
+                      ['provider','admin']
                     }>
                       <PersonalInfoPage />
                   </PrivateRoute>
@@ -130,7 +130,7 @@ function App() {
                   <PrivateRoute
                     redirectPath="/login"
                     allowedRoles={
-                      'provider'
+                      ['provider','admin']
                     }>
                       <PrivacyPage />
                   </PrivateRoute>
@@ -142,7 +142,7 @@ function App() {
                   <PrivateRoute
                     redirectPath="/signup"
                     allowedRoles={
-                      'provider'
+                      ['provider','admin']
                     }>
                       <CPListings />
                   </PrivateRoute>
@@ -154,7 +154,7 @@ function App() {
                   <PrivateRoute
                     redirectPath="/signup"
                     allowedRoles={
-                      'provider'
+                      ['provider','admin']
                     }>
                       <EditListing />
                   </PrivateRoute>

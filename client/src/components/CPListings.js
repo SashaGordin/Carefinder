@@ -6,7 +6,9 @@ import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import TopNav from "./TopNav";
 import Footer from "./Footer";
 import Listings from './CPListings/Listings';
-
+import PersonalInfo from './menu/PersonalInfo';
+import Profile from './CPListings/Profile';
+import ListingCard from './CPListings/ListingCard';
 
 export default function CPListings() {
   const [userData, setUserData] = useState({});
@@ -28,15 +30,33 @@ export default function CPListings() {
     fetchData();
   }, []);
   //need to add for loop to iterate through all listings for a provider
-  
-   return (
+
+  const handleUpdate = async (updatedUserData) => {
+    try {
+      const userDocRef = doc(firestore, 'users', currentUser.uid);
+      await updateDoc(userDocRef, updatedUserData);
+      console.log('User data updated successfully');
+
+      // Re-fetch user data after update
+      const updatedUserDocSnapshot = await getDoc(userDocRef);
+      if (updatedUserDocSnapshot.exists()) {
+        const updatedUserData = updatedUserDocSnapshot.data();
+        setUserData(updatedUserData);
+      } else {
+        setError('User document not found after update');
+      }
+    } catch (error) {
+      setError('Error updating user data: ' + error.message);
+    }
+  };
+
+  return (
     <>
       <TopNav userRole="provider" />
 
-      <div className="contentContainer utilityPage">
-        <h1>Your listings</h1>
-        <Listings userData={userData} />
-      </div>
+      <Card><PersonalInfo /></Card>
+      <Profile userData={userData} handleUpdate={handleUpdate} />
+      <ListingCard userData={userData} handleUpdate={handleUpdate} />
       <Footer />
     </>
   )

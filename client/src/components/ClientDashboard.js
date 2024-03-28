@@ -25,9 +25,6 @@ export default function ClientDashboard() {
           </div>
         </Card.Body>
       </Card>
-      <div className="w-100 text-center mt-2">
-        this is the client dashboard
-      </div>
 
     </div>
     <Footer />

@@ -5,6 +5,11 @@ import { useAuth } from "../../contexts/AuthContext"
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import { Alert } from 'react-bootstrap';
 
+import { Card } from 'react-bootstrap';
+
+import TopNav from "../TopNav";
+import Footer from '../Footer';
+
 
 const PersonalInfoPage = () => {
   const [userData, setUserData] = useState({});
@@ -46,14 +51,31 @@ const PersonalInfoPage = () => {
   };
 
   return (
-    <div>
-      <h2>Personal Information</h2>
-      {error && <Alert variant="danger">{error}</Alert>}
+    <>
+      <TopNav />
+      <div className="contentContainer utilityPage personalInfo">
 
-      <EditableField title="Provider Name" value={userData.FacilityPOC || ''} onChange={(newValue) => handleUpdate({ FacilityPOC: newValue })} />
-      <EditableField title="Email Address" value={userData.email || ''} onChange={(newValue) => handleUpdate({ email: newValue })} />
-      <EditableField title="Phone Number" value={userData.TelephoneNmbr || ''} onChange={(newValue) => handleUpdate({ TelephoneNmbr: newValue })} />
-    </div>
+      <Card>
+            <Card.Body>
+                <Card.Title>Personal Information</Card.Title>
+                {error && <Alert variant="danger">{error}</Alert>}
+
+                <Card.Text>
+
+                  <EditableField title="Provider Name" value={userData.FacilityPOC || ''} onChange={(newValue) => handleUpdate({ FacilityPOC: newValue })} />
+                  
+                  <EditableField title="Email Address" value={userData.email || ''} onChange={(newValue) => handleUpdate({ email: newValue })} />
+                  
+                  <EditableField title="Phone Number" value={userData.TelephoneNmbr || ''} onChange={(newValue) => handleUpdate({ TelephoneNmbr: newValue })} />
+                  
+                </Card.Text>
+            </Card.Body>
+      </Card>
+
+      </div>
+      <Footer />
+
+    </>
   );
 };
 

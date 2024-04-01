@@ -46,12 +46,6 @@ export default function TopNav() {
 								</Nav.Item>
 
 								<Nav.Item>
-									<Nav.Link href="##" title="Hub">
-										Hub
-									</Nav.Link>
-								</Nav.Item>
-
-								<Nav.Item>
 									<Nav.Link href="/msg-inbox" title="Inbox">
 										Inbox
 									</Nav.Link>
@@ -63,13 +57,6 @@ export default function TopNav() {
 									</Nav.Link>
 								</Nav.Item>
 
-								{/* <NavDropdown title="Dropdown" id="nav-dropdown">
-                                    <NavDropdown.Item>Action</NavDropdown.Item>
-                                    <NavDropdown.Item>Another action</NavDropdown.Item>
-                                    <NavDropdown.Item>Something else here</NavDropdown.Item>
-                                    <NavDropdown.Divider />
-                                    <NavDropdown.Item>Separated link</NavDropdown.Item>
-                                </NavDropdown> */}
 							</Nav>
 						)}
 						{role === "provider" && (
@@ -107,6 +94,34 @@ export default function TopNav() {
                         </NavDropdown> */}
 							</Nav>
 						)}
+						{role === "admin" && (
+							<Nav variant="pills">
+								<Nav.Item>
+									<Nav.Link href="/" title="Home">
+										CareFinder Home
+									</Nav.Link>
+								</Nav.Item>
+
+								<Nav.Item>
+									<Nav.Link href="/msg-inbox" title="Inbox">
+										Inbox
+									</Nav.Link>
+								</Nav.Item>
+
+								<NavDropdown title="Clients" id="client-dropdown">
+									<NavDropdown.Item href="/client-dashboard" title="Client Dashboard">Client Dashboard</NavDropdown.Item>
+									<NavDropdown.Item href="/client-menu" title="Client Menu">Client Menu</NavDropdown.Item>
+								</NavDropdown>
+
+								<NavDropdown title="Providers" id="provider-dropdown">
+									<NavDropdown.Item href="/provider-menu" title="Provider Menu">Provider Menu</NavDropdown.Item>
+									<NavDropdown.Item href="/care-provider-dashboard" title="Provider Dashboard">Provider Dashboard</NavDropdown.Item>
+									<NavDropdown.Item href="/your-listings" title="Provider Listings">Provider Listings</NavDropdown.Item>
+								</NavDropdown>
+							</Nav>
+
+							)}
+
 					</div>
 
 					<div className="clear"></div>

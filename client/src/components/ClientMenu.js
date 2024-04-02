@@ -9,7 +9,7 @@ import TopNav from "./TopNav";
 export default function ClientMenu() {
 
   const menuItems = [
-    { title: 'Personal Info', icon: 'personal_info.png', description: 'Provide personal info so we can reach you' },
+    { title: 'Personal Info', icon: 'personal_info.png', description: 'Provide personal info so we can reach you', link: "/personal-info" },
     { title: 'Login & Security', icon: 'login.png', description: 'Update password and secure account' },
     { title: 'Payment and Payout', icon: 'payment.png' },
     { title: 'Edit Survey' },

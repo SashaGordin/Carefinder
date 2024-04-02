@@ -23,6 +23,7 @@ export default function TopNav() {
 			}
 		};
 		if (currentUser) {
+            console.log(currentUser);
 			fetchData(); // Call the async function immediately
 		}
 	}, []);

@@ -18,11 +18,11 @@ export default function Step3({ providerInfo, onNext, onBack }) {
             <p><strong>License Number:</strong> {providerInfo.LicenseNumber}</p>
           </Card.Text>
 
+          <Button onClick={onBack}>Back</Button>
           <Button onClick={onNext} variant="primary">Confirm</Button>
-          <Button onClick={onBack}>Back</Button> 
 
         </Card.Body>
-        
+
       </Card>
     </>
 

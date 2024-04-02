@@ -18,6 +18,7 @@ const PersonalInfoPage = () => {
       if (userDocSnapshot.exists()) {
         const userData = userDocSnapshot.data();
         console.log(userData);
+        console.log(currentUser.role);
         setUserData(userData);
       } else {
         setError('User document not found');

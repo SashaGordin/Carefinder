@@ -24,6 +24,7 @@ export default function Login() {
       setError('');
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
+      console.log(currentUser.uid);
       const userDocRef = doc(firestore, 'users', currentUser.uid);
       const userDocSnapshot = await getDoc(userDocRef);
       if (userDocSnapshot.exists()) {
@@ -33,8 +34,9 @@ export default function Login() {
       } else {
         setError('User document not found');
       }
-    } catch {
-      setError('Failed to log in');
+    } catch (error) {
+      console.log(error);
+      setError('Failed to log in', error);
     }
     setLoading(false);
   }
@@ -74,7 +76,7 @@ export default function Login() {
             <Link to="/claim-profile">Join</Link>
           </div>
         </div>
-      
+
       </div>
       <Footer />
     </>

@@ -14,11 +14,11 @@ export default function Step4({ providerInfo, onNext, onBack }) {
             <p>[Terms and conditions text coming from Micah.]</p>
           </Card.Text>
 
+          <Button onClick={onBack}>Back</Button>
           <Button onClick={onNext} variant="primary">Confirm</Button>
-          <Button onClick={onBack}>Back</Button> 
 
         </Card.Body>
-        
+
       </Card>
 
     </>

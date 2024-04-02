@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 
-export default function Step5({ providerInfo, onFinish, onBack }) {
+export default function Step5({ providerInfo, onNext, onBack }) {
   return (
 
     <>
@@ -15,13 +15,13 @@ export default function Step5({ providerInfo, onFinish, onBack }) {
             <p>[text coming from Micah?]</p>
           </Card.Text>
 
-          <Button onClick={onFinish} variant="primary">Confirm</Button>
-          <Button onClick={onBack}>Back</Button> 
+          <Button onClick={onBack}>Back</Button>
+          <Button onClick={onNext} variant="primary">Confirm</Button>
 
         </Card.Body>
-        
+
       </Card>
     </>
-    
+
   );
 };

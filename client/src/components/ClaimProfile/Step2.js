@@ -37,8 +37,8 @@ export default function Step2({ onNext, onBack, providerInfo }) {
               <Form.Control type="text" placeholder="Enter confirmation code" value={confirmationCode} onChange={(e) => setConfirmationCode(e.target.value)} />
               <Form.Text className="text-danger">{verificationError}</Form.Text>
             </Form.Group>
+            <Button onClick={onBack}>Back</Button>
             <Button onClick={verifyConfirmationCode}>Verify Code</Button>
-            <Button onClick={onBack}>Back</Button> 
           </Form>
 
           {/* Button to go back to previous step */}

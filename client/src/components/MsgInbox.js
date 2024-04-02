@@ -5,7 +5,9 @@ import Footer from "./Footer";
 import { useAuth } from "../contexts/AuthContext";
 import { getDoc, doc } from 'firebase/firestore';
 import { firestore } from '../firebase'; 
-import MsgTemplate from "./MsgTemplate";
+
+//import MsgTemplate from "./MsgTemplate";
+import MsgTemplateMVP from "./MsgTemplateMVP";
 
 
 export default function MsgInbox() {
@@ -126,18 +128,12 @@ export default function MsgInbox() {
     return (
         <>
         <TopNav />
-        <div className="contentContainer utilityPage">
+        <div cla
+        ssName="contentContainer utilityPage">
 
-            <h2>Inbox</h2>
+                <MsgTemplateMVP passData={userMessages} hasArchives={containsArchives} />
 
-            <p>for CareFinder Member with the email {currentUser.email}</p> 
-
-            <hr></hr>
-
-            <MsgTemplate passData={userMessages} hasArchives={containsArchives} />
-
-            <div className="clear"></div>
-            <hr></hr>
+                <div className="clear"></div>
 
         </div>
         <Footer />

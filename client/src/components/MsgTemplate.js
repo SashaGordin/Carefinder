@@ -4,6 +4,10 @@ import { getDoc, setDoc, doc, Timestamp } from 'firebase/firestore';
 import { firestore } from '../firebase'; 
 
 
+// ********************************************************
+// NO USED ANYMORE -- SWITCH TO MsgTemplateMVP component.
+// ********************************************************
+
 /**
  * FIREBASE 'messages' collection FIELDS:
  * ================================================================================
@@ -159,8 +163,6 @@ export default function MsgTemplate({passData, hasArchives}) {
         // I guess just refresh. Can we do this w/out a reload? No biggie if not...
         window.location.reload();
     }
-
-
     
     return (
 
@@ -175,101 +177,129 @@ export default function MsgTemplate({passData, hasArchives}) {
         {passData.map( thisMsg => (
                 
                 <div className={ getMessageWrapperClass(thisMsg['m_ST']) } style={{display:"block"}}>
+                
+                <div className="msgAlertLeft">
+                    <img className='msgAvatar' src='defaultavatar.jpg' alt='' />
+                </div>
 
-                <p className="msgFrom">
-                    <b>FROM:</b> 
-                    <span className="CForange"> 
-                        { thisMsg['m_RO'] + ' ' + thisMsg['m_DN'] }
-                    </span>
-                </p>
+                <div className="msgAlertMiddle">
 
-                <p className="msgDate">
-                    <b>DATE:</b> <span className="CForange"> {thisMsg['m_DA']} </span>
-                </p>
+                    <p className="msgFrom">
+                        You received a message from
+                            { ' ' + thisMsg['m_RO'] + ' ' + thisMsg['m_DN'] }
+                    </p>
+
+                    { /* }
+                    <p className="msgDate">
+                        <b>DATE:</b> <span className="CForange"> {thisMsg['m_DA']} </span>
+                    </p>
+                    { */ } 
+
+                    <div className="clear"></div>
+                    
+                { /* }
+                    { ( thisMsg['m_TXbExists'] == 1 ) ?
+                        <> 
+                            <div id={'briefMsg'+thisMsg['m_ID']} style={{display:"block"}}>
+                                <p className="msgText msgBrief"><b>MESSAGE:</b> {thisMsg['m_TXb']}</p>
+                            </div>
+                            <div id={'fullMsg'+thisMsg['m_ID']} style={{display:"none"}}>
+                                <p className="msgText msgFull"><b>MESSAGE:</b> {thisMsg['m_TX']}</p>
+                            </div>
+                        </>
+                        :
+                        <> 
+                            <div id={'briefMsg'+thisMsg['m_ID']} style={{display:"none"}}>
+                                <p className="msgText msgBrief"><b>MESSAGE:</b> {thisMsg['m_TXb']}</p>
+                            </div>
+                            <div id={'fullMsg'+thisMsg['m_ID']} style={{display:"block"}}>
+                                <p className="msgText msgFull"><b>MESSAGE:</b> {thisMsg['m_TX']}</p>
+                            </div>
+                        </>
+                    }
+                { */ }
+
+                    { ( thisMsg['m_RS'] == 1 ) ?
+                        <> 
+                            <p className="msgResponseInfo">(✅ You responded.)</p>
+                        </> :
+                        <>
+                            <p className="msgResponseInfo">(⭕ You haven't responded).</p>
+                        </>
+
+                    }
+
+                </div>
+
+
+                <div className="msgAlertRight">
+
+                    <p className="msgActions">
+
+                    <a href="###" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>📝</a>
+                        
+                    </p>
+                </div>
 
                 <div className="clear"></div>
 
-                { ( thisMsg['m_TXbExists'] == 1 ) ?
-                    <> 
-                        <div id={'briefMsg'+thisMsg['m_ID']} style={{display:"block"}}>
-                            <p className="msgText msgBrief"><b>MESSAGE:</b> {thisMsg['m_TXb']}</p>
-                        </div>
-                        <div id={'fullMsg'+thisMsg['m_ID']} style={{display:"none"}}>
-                            <p className="msgText msgFull"><b>MESSAGE:</b> {thisMsg['m_TX']}</p>
-                        </div>
-                    </>
-                    :
-                    <> 
-                        <div id={'briefMsg'+thisMsg['m_ID']} style={{display:"none"}}>
-                            <p className="msgText msgBrief"><b>MESSAGE:</b> {thisMsg['m_TXb']}</p>
-                        </div>
-                        <div id={'fullMsg'+thisMsg['m_ID']} style={{display:"block"}}>
-                            <p className="msgText msgFull"><b>MESSAGE:</b> {thisMsg['m_TX']}</p>
-                        </div>
-                    </>
-                }
-
-                { ( thisMsg['m_RS'] == 1 ) ?
-                    <> 
-                        <p className="msgResponseInfo">(✅ You responded to this.)</p>
-                    </> :
-                    <>
-                        <p className="msgResponseInfo">(⭕ You haven't yet responded to this).</p>
-                    </>
-
-                }
-
-
                 <div className="msgReplyArea" id={thisMsg['m_ID']} style={{display:"none"}}>
-                    <textarea autoFocus id={'reply'+thisMsg['m_ID']}></textarea>
+
+                    <div id={'fullMsg'+thisMsg['m_ID']}>
+                        <p className="msgText msgFull">{thisMsg['m_TX']}</p>
+                    </div>
+
+                    <textarea autoFocus placeholder="Write here..." id={'reply'+thisMsg['m_ID']}></textarea>
+                    
                     <input value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-primary"></input>
                     <button className="btn btn-info" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>CANCEL</button>
+                    
+                    <br></br>
+                        { /* }
+                        { ( thisMsg['m_TXbExists'] == 1 ) &&
+                            <> 
+                                <a href="###" onClick={()=> toggleMessages(thisMsg['m_ID'])}>👀 Show/Hide Full Message</a>
+                                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                            </>
+                        }
+
+                        { ( ( thisMsg['m_ST'] == 0 ) || ( thisMsg['m_ST'] == 1 ) ) &&
+                            <>
+                                <a href="###" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>📝 Reply</a>
+                                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                            </>
+                        }
+
+                        { (thisMsg['m_ST'] == 0) &&
+                            <>
+                                <a href="###" onClick={()=> changeMessageStatus(thisMsg['m_ID'], 1)}>✔️ Mark as read</a>
+                                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                            </>
+                        }
+
+                    { */ }
+                        
+                        { (thisMsg['m_ST'] == 1) &&
+                            <>
+                                <a href="###" onClick={()=> changeMessageStatus(thisMsg['m_ID'], 0)}>✅ Keep as new</a>
+                                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                            </>
+                        }
+
+                        { ( ( thisMsg['m_ST'] == 0 ) || ( thisMsg['m_ST'] == 1 ) ) &&
+                            <>
+                                <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 2)}>🗑️ Archive</a>
+                            </>
+                        }
+
+                        { (thisMsg['m_ST'] == 2) &&
+                            <>
+                                <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 1)}>🗑️ Unarchive</a>                        
+                            </>
+                        }                    
                 </div>
 
-                <p className="msgActions">
 
-                    { ( thisMsg['m_TXbExists'] == 1 ) &&
-                        <> 
-                            <a href="###" onClick={()=> toggleMessages(thisMsg['m_ID'])}>👀 Show/Hide Full Message</a>
-                            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                        </>
-                    }
-
-                    { ( ( thisMsg['m_ST'] == 0 ) || ( thisMsg['m_ST'] == 1 ) ) &&
-                        <>
-                            <a href="###" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>📝 Reply</a>
-                            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                        </>
-                    }
-
-                    { (thisMsg['m_ST'] == 0) &&
-                        <>
-                            <a href="###" onClick={()=> changeMessageStatus(thisMsg['m_ID'], 1)}>✔️ Mark as read</a>
-                            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                        </>
-                    }
-                    
-                    { (thisMsg['m_ST'] == 1) &&
-                        <>
-                            <a href="###" onClick={()=> changeMessageStatus(thisMsg['m_ID'], 0)}>✅ Keep as new</a>
-                            &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                        </>
-                    }
-
-                    { ( ( thisMsg['m_ST'] == 0 ) || ( thisMsg['m_ST'] == 1 ) ) &&
-                        <>
-                            <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 2)}>🗑️ Archive</a>
-                        </>
-                    }
-
-                    { (thisMsg['m_ST'] == 2) &&
-                        <>
-                            <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 1)}>🗑️ Unarchive</a>                        
-                        </>
-                    }
-                    
-
-                </p>
 
             </div>
 

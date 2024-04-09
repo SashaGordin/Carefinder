@@ -248,6 +248,20 @@ float:right
 .msgDesktopLeft { width:35%; float:left; border-right:1px solid white; padding:40px;  }
 .msgDesktopRight { width:65%; float:left; padding:40px;  }
 
+.msgThreadContainer {
+    max-height: 300px; 
+    overflow-y: scroll; 
+    scroll-behavior: smooth; 
+  
+}
+.msgThreadBox { width:60%; border-radius:16px; padding:10px; margin-bottom:10px; color: white !important;} 
+.msgThreadDate { margin-top:15px; font-size:60%; }
+.msgThreadDateRight { text-align: right; padding-right:10px;  }
+.msgThreadDateLeft { padding-left:10px;  }
+.msgThreadSender{ text-align:left; background:blue;  }
+.msgThreadRecipient{ text-align:right; background:green; float:right; }
+
+
 body#CF .msgReplyArea input.btn.btn-primary { font-size: 100%;  margin-right: 10px; color:white; }
 body#CF .msgReplyArea button.btn.btn-info {    font-size: 90%;
     padding: 7px 15px 5px 15px;

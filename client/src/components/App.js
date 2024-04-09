@@ -29,7 +29,7 @@ import PersonalInfoPage from './menu/PersonalInfo'
 import PrivacyPage from './menu/Privacy'
 import MsgInbox from './MsgInbox';
 import FileUpload from './FileUpload';
-import EditListing from './EditListing';
+import CPHomeSurvey from './CPListings/CPHomeSurvey';
 
 
 function App() {
@@ -149,14 +149,14 @@ function App() {
                 }
               />
               <Route
-                path="/edit-listing"
+                path="/home-survey"
                 element={
                   <PrivateRoute
                     redirectPath="/signup"
                     allowedRoles={
                       ['provider','admin']
                     }>
-                      <EditListing />
+                      <CPHomeSurvey />
                   </PrivateRoute>
                 }
               />

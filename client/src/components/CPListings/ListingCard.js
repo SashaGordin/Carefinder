@@ -10,7 +10,7 @@ export default function ListingCard({ userData, handleUpdate}) {
 
   const gotoHomeSurvey = () => {
     //TODO: change name from edit-listing to homesurvey or something like that
-	navigate('/edit-listing', {state: {userData}});
+	navigate('/home-survey', {state: {userData}});
   }
 
   const addRoom = () => {

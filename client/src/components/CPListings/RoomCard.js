@@ -22,18 +22,31 @@ export default function RoomCard({ roomData}) {
   return (
 
     <>
-      
-      <Card className="CFListingCard">
-      <Card.Body>
-        <div className='CFListingCardHeader'>
-          <div className="CFListingStatus">{listingStatus}</div>
-          <div className="ml-auto" onClick={toggleListing}><img src={toggleImg}/></div>
+    
+      <div className="singleRoomCard">
+
+        <div className='CFListingCardHeader2'>
+
+          <div className="CFListingStatus2">{listingStatus}</div>
+
+          <div className="CFlistingButton2" onClick={toggleListing}><img src={toggleImg}/></div>
+
+          <div className="clear"></div>
+
         </div>
-        <Card.Title><h5>{roomData.RoomName}</h5></Card.Title>
-        <div className="CFListingImgContainer"><div className="CFPlaceholderImg"><img src={roomData.listingImg ?? defaultListingImg}/></div></div>
-        <Button onClick={editListing}>{btnText}</Button>
-      </Card.Body>
-      </Card>
+
+        <h5>{roomData.RoomName}</h5>
+
+        <div className="CFListingImgContainer2">
+
+          <div className="CFPlaceholderImg2"><img src={roomData.listingImg ?? defaultListingImg}/></div>
+
+          <Button onClick={editListing}>{btnText}</Button>
+
+        </div>
+
+      </div>
+
     </>
 
   );

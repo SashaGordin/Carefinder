@@ -54,12 +54,24 @@ export default function Signup() {
           }
 				};
 			} else {
-				userData = {
-					displayName: displayName || "",
-					email: email,
-					createdAt: serverTimestamp(),
-					role: "client",
-				};
+				if (localStorage.getItem('surveyData') !== null) {
+					const data = JSON.parse(localStorage.getItem('surveyData'));
+					console.log(data);
+					userData = {
+						...data,
+						displayName: displayName || "",
+						email: email,
+						createdAt: serverTimestamp(),
+						role: "client",
+					}
+				} else {
+					userData = {
+						displayName: displayName || "",
+						email: email,
+						createdAt: serverTimestamp(),
+						role: "client",
+					};
+				}
 			}
 
 			await setDoc(userDocRef, userData);

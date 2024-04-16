@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import Step1 from './ClaimProfile/Step1';
-import Step2 from './ClaimProfile/Step2';
-import Step3 from './ClaimProfile/Step3';
-import Step4 from './ClaimProfile/Step4';
-import Step5 from './ClaimProfile/Step5';
+import Step1 from '../components/ClaimProfile/Step1';
+import Step2 from '../components/ClaimProfile/Step2';
+import Step3 from '../components/ClaimProfile/Step3';
+import Step4 from '../components/ClaimProfile/Step4';
+import Step5 from '../components/ClaimProfile/Step5';
 import { useNavigate } from 'react-router-dom';
 
 
-import TopNav from "./TopNav";
-import Footer from "./Footer";
+import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
 
 
 export default function ClaimProfile() {

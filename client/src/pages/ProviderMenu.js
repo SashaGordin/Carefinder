@@ -1,11 +1,11 @@
 import React from 'react'
-import MenuCard from './menuCard/MenuCard';
+import MenuCard from '../components/menuCard/MenuCard';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
-import TopNav from "./TopNav";
-import Footer from './Footer';
+import TopNav from "../components/TopNav";
+import Footer from '../components/Footer';
 
 export default function ProviderMenu() {
 

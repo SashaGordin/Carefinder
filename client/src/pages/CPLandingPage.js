@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
-import { Card, Button, Alert, Navbar, Image } from 'react-bootstrap'
-import { Link, useNavigate } from 'react-router-dom';
+import { Image } from 'react-bootstrap'
+import { useNavigate } from 'react-router-dom';
 
 // THIS PAGE IS:  /care-provider
 import Accordion from 'react-bootstrap/Accordion';
-import YoutubeEmbed from "./YoutubeEmbed";
-import TopNav from "./TopNav";
-import Footer from "./Footer";
+import YoutubeEmbed from "../components/YoutubeEmbed";
+import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
 
 // NOTE: This page imports Footer.js, which I think we should import on all pages. I think we should handle the nav bar in this same way, so that we can have a Navbar file that can do the menu system, and we can then import it into all pages in a tidy mnner.
 

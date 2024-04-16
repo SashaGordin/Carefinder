@@ -3,8 +3,8 @@ import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useAuth } from "../contexts/AuthContext"
 import { Link } from 'react-router-dom';
 
-import TopNav from "./TopNav";
-import Footer from "./Footer";
+import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
 
 export default function ForgotPassword() {
   const emailRef = useRef();

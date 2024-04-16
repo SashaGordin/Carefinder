@@ -1,16 +1,15 @@
 //import logo from './logo.svg';
 import React from 'react';
-import Signup from './Signup';
-import Login from "./Login";
-import LandingPage from './LandingPage';
-import ForgotPassword from './ForgotPassword';
-import Survey from './Survey';
-import CPLandingPage from './CPLandingPage';
-import ClaimProfile from './ClaimProfile';
-import CPDashboard from './CPDashboard';
+import Signup from '../pages/Signup';
+import Login from "../pages/Login";
+import LandingPage from '../pages/LandingPage';
+import ForgotPassword from '../pages/ForgotPassword';
+import Survey from '../pages/Survey'
+import CPLandingPage from '../pages/CPLandingPage';
+import ClaimProfile from '../pages/ClaimProfile';
+import CPDashboard from '../pages/CPDashboard';
 import CPListings from './CPListings';
-import ClientDashboard from './ClientDashboard';
-import { Container } from "react-bootstrap";
+import ClientDashboard from '../pages/ClientDashboard';
 import { AuthProvider } from "../contexts/AuthContext"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
 import PrivateRoute from './PrivateRoute';
@@ -23,8 +22,8 @@ import CareFinderContactUs from './CareFinderContactUs';
 import CareFinderSitemap from './CareFinderSitemap';
 import CareFinderPrivacy from './CareFinderPrivacy';
 import CareFinderTerms from './CareFinderTerms';
-import ClientMenu from './ClientMenu';
-import ProviderMenu from './ProviderMenu';
+import ClientMenu from '../pages/ClientMenu';
+import ProviderMenu from '../pages/ProviderMenu';
 import PersonalInfoPage from './menu/PersonalInfo'
 import PrivacyPage from './menu/Privacy'
 import MsgInbox from './MsgInbox';

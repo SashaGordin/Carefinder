@@ -1,12 +1,12 @@
 import React, { useRef, useState } from "react";
-import { Form, Button, Card, Alert, Navbar, Image } from "react-bootstrap";
+import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { firestore } from "../firebase"; // Import your Firestore instance
 import { serverTimestamp, collection, setDoc, doc } from "firebase/firestore";
 
-import TopNav from "./TopNav";
-import Footer from "./Footer";
+import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
 
 export default function Signup() {
 	const emailRef = useRef();
@@ -54,12 +54,24 @@ export default function Signup() {
           }
 				};
 			} else {
-				userData = {
-					displayName: displayName || "",
-					email: email,
-					createdAt: serverTimestamp(),
-					role: "client",
-				};
+				if (localStorage.getItem('surveyData') !== null) {
+					const data = JSON.parse(localStorage.getItem('surveyData'));
+					console.log(data);
+					userData = {
+						...data,
+						displayName: displayName || "",
+						email: email,
+						createdAt: serverTimestamp(),
+						role: "client",
+					}
+				} else {
+					userData = {
+						displayName: displayName || "",
+						email: email,
+						createdAt: serverTimestamp(),
+						role: "client",
+					};
+				}
 			}
 
 			await setDoc(userDocRef, userData);

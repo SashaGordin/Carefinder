@@ -52,9 +52,11 @@ const PersonalInfoPage = () => {
 
   return (
     <>
+      {/*}
       <TopNav />
-      <div className="contentContainer utilityPage personalInfo">
+      {*/}
 
+      <div className="contentContainer utilityPage personalInfo">
       <Card>
             <Card.Body>
                 <Card.Title>Personal Information</Card.Title>
@@ -71,9 +73,11 @@ const PersonalInfoPage = () => {
                 </Card.Text>
             </Card.Body>
       </Card>
-
       </div>
+
+      {/*}
       <Footer />
+    {*/}
 
     </>
   );

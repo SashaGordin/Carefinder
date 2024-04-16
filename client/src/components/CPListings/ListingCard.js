@@ -38,9 +38,9 @@ export default function ListingCard({ userData, handleUpdate}) {
       <Card>
       <Card.Body>
         <Card.Title><h1>My AFH</h1></Card.Title>
-		<div>
+		<div className="myAFHname">
 			<h4>{userData.FacilityName}</h4>
-			<EditableField title="Business Name" value={userData.FacilityName || ''} onChange={(newValue) => handleUpdate({ FacilityName: newValue })} />
+			<EditableField title="Adult Family Home Name" value={userData.FacilityName || ''} onChange={(newValue) => handleUpdate({ FacilityName: newValue })} />
 		</div>
 		<hr/>
 		<div>
@@ -64,10 +64,6 @@ export default function ListingCard({ userData, handleUpdate}) {
 				<p>Add room</p>
 			</div>
 			{rooms.map((roomData, i) => <RoomCard roomData={roomData} key={i}/>)}
-		</div>
-		<div>
-		<Button onClick={previewListing}>Preview Listing</Button>
-		<Button onClick={postListing}>Post listing</Button>
 		</div>
         
       </Card.Body>

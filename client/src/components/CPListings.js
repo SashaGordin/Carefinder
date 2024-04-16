@@ -52,11 +52,23 @@ export default function CPListings() {
 
   return (
     <>
-      <TopNav userRole="provider" />
 
-      <Card><PersonalInfo /></Card>
-      <Profile userData={userData} handleUpdate={handleUpdate} />
-      <ListingCard userData={userData} handleUpdate={handleUpdate} />
+      <div className="CPlistings">
+
+        <TopNav userRole="provider" />
+        <p>&nbsp;</p>
+
+        <Card><PersonalInfo /></Card>
+        <p>&nbsp;</p>
+
+        <Profile userData={userData} handleUpdate={handleUpdate} />
+        <p>&nbsp;</p>
+        
+        <ListingCard userData={userData} handleUpdate={handleUpdate} />
+        <p>&nbsp;</p>
+
+      </div>
+      
       <Footer />
     </>
   )

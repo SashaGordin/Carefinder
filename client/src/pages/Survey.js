@@ -1,19 +1,18 @@
 import React, { useState } from "react";
-import SurveyQuestionRadio from "./SurveyQuestionRadio";
-import SurveyQuestionText from "./SurveyQuestionText";
-import SurveyQuestionCheckboxes from "./SurveyQuestionCheckboxes";
-import SurveyUpload from "./SurveyUpload";
-import SurveyReview from "./SurveyReview";
+import SurveyQuestionRadio from "../components/ClientSurvey/SurveyQuestionRadio";
+import SurveyQuestionText from "../components/ClientSurvey/SurveyQuestionText";
+import SurveyQuestionCheckboxes from "../components/ClientSurvey/SurveyQuestionCheckboxes";
+import SurveyUpload from "../components/ClientSurvey/SurveyUpload";
+import SurveyReview from "../components/ClientSurvey/SurveyReview";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { firestore } from "../firebase";
 import { serverTimestamp } from "firebase/firestore";
-import axios from "axios";
-import SurveyInfo from "./SurveyInfo";
+import SurveyInfo from "../components/ClientSurvey/SurveyInfo";
 import { Card, Button, Container, Row } from "react-bootstrap";
 
-import TopNav from "./TopNav";
-import Footer from "./Footer";
+import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
 
 const Survey = () => {
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -270,18 +269,18 @@ const Survey = () => {
 		setCurrentQuestionIndex(1);
 	};
 
-	if (currentQuestionIndex > 0) {
-		// console.log("qidx: ", currentQuestionIndex - 1);
-		// console.log("qtype: " + questions[currentQuestionIndex - 1].qtype);
-		console.log(answers);
-	}
+	// if (currentQuestionIndex > 0) {
+	// 	// console.log("qidx: ", currentQuestionIndex - 1);
+	// 	// console.log("qtype: " + questions[currentQuestionIndex - 1].qtype);
+	// 	console.log(answers);
+	// }
 
 	return (
 		<>
 			<TopNav />
 			<div className="contentContainer utilityPage">
 				{/* IF INDEX is 0, we run a welcome / splash page... */}
-				{currentQuestionIndex == 0 && (
+				{currentQuestionIndex === 0 && (
 					<>
 						<Card>
 							<Card.Img variant="top" src="senior.jpg" />
@@ -301,7 +300,7 @@ const Survey = () => {
 
 				{/* IF it's a RADIO BUTTON question ... */}
 				{currentQuestionIndex > 0 &&
-					questions[currentQuestionIndex - 1].qtype == "radio" && (
+					questions[currentQuestionIndex - 1].qtype === "radio" && (
 						<>
 							<Card>
 								<Card.Body>
@@ -328,7 +327,7 @@ const Survey = () => {
 
 				{/* IF it's a CHECKBOX question ... needs some tweaking to allow multiple choices. */}
 				{currentQuestionIndex > 0 &&
-					questions[currentQuestionIndex - 1].qtype == "checkboxes" && (
+					questions[currentQuestionIndex - 1].qtype === "checkboxes" && (
 						<>
 							<Card>
 								<Card.Body>
@@ -355,7 +354,7 @@ const Survey = () => {
 
 				{/* IF it's a ONE-LINE TEXT question ... */}
 				{currentQuestionIndex > 0 &&
-					questions[currentQuestionIndex - 1].qtype == "text" && (
+					questions[currentQuestionIndex - 1].qtype === "text" && (
 						<>
 							<Card>
 								<Card.Body>
@@ -377,7 +376,7 @@ const Survey = () => {
 						</>
 					)}
 				{currentQuestionIndex > 0 &&
-					questions[currentQuestionIndex - 1].qtype == "upload" && (
+					questions[currentQuestionIndex - 1].qtype === "upload" && (
 						<>
 							<Card>
 								<Card.Body>
@@ -402,7 +401,7 @@ const Survey = () => {
 						</>
 					)}
 				{currentQuestionIndex > 0 &&
-					questions[currentQuestionIndex - 1].qtype == "meets" && (
+					questions[currentQuestionIndex - 1].qtype === "meets" && (
 						<>
 							<Card>
 								<Card.Body>
@@ -454,7 +453,7 @@ const Survey = () => {
 						</>
 					)}
 				{currentQuestionIndex > 0 &&
-					questions[currentQuestionIndex - 1].qtype == "final" && (
+					questions[currentQuestionIndex - 1].qtype === "final" && (
 						<>
 							<Card>
 								<Card.Body>
@@ -473,7 +472,7 @@ const Survey = () => {
 						</>
 					)}
 				{currentQuestionIndex > 0 &&
-					questions[currentQuestionIndex - 1].qtype == "info" && (
+					questions[currentQuestionIndex - 1].qtype === "info" && (
 						<>
 							<Card>
 								<Card.Body>

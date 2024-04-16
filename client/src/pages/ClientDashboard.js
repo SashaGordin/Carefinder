@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Card, Alert, Navbar, Image } from 'react-bootstrap'
+import { Card, Alert } from 'react-bootstrap'
 
-import TopNav from "./TopNav";
-import Footer from "./Footer";
+import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
 
 export default function ClientDashboard() {
   const [error, setError] = useState('');

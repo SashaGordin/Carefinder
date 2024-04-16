@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import { Card, Button, Alert, Navbar, Image } from 'react-bootstrap'
+import { Card } from 'react-bootstrap'
 
-import TopNav from "./TopNav";
-import Footer from "./Footer";
-import WelcomeMsg from './CPDashboard/WelcomeMsg';
+import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
+import WelcomeMsg from '../components/CPDashboard/WelcomeMsg';
 
 // get usename
 import { useAuth } from "../contexts/AuthContext";
@@ -29,7 +29,7 @@ export default function CPDashboard() {
             Blog posts go here
           </Card.Body>
         </Card>
-        
+
       </div>
       <Footer />
     </>

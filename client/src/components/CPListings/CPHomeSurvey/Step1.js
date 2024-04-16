@@ -3,10 +3,6 @@ import { Button, Card } from 'react-bootstrap';
 import axios from 'axios';
 
 export default function Step1({}) {
-  const [providerNumber, setProviderNumber] = useState('');
-  //const [providerInfo, setProviderInfo] = useState(null);
-
-
   return (
 
     <>

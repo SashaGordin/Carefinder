@@ -37,9 +37,7 @@ const FileUpload = ({controlId, handleNewFilePath, folderPath, uploadLabel, uplo
             console.log(url);
             handleNewFilePath(url);
           });
-          // and we would then write the imgURL to the usertable somewhere...
         });
-
       } else {
         console.log('FILE REJECTED: You cannot upload ' + file.type + 'files. Kthx.')
       }
@@ -55,9 +53,6 @@ const FileUpload = ({controlId, handleNewFilePath, folderPath, uploadLabel, uplo
             <Form.Control type="file" accept={acceptedFileTypes} multiple={allowMultipleFiles} onChange={handleFileChange}/>
           </Form.Group>
           <Button onClick={handleUploadFiles}>Upload</Button>
-          <div>
-
-          </div>
         </Card.Body>
       </Card>
 

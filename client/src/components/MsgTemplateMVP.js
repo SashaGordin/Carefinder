@@ -39,6 +39,10 @@ import MsgThread from "./MsgThread";
 // M4: new Date('March 3, 2024 12:23:08').getTime() -- 1709497388000.
 // M5: new Date('March 2, 2024 10:32:44').getTime() -- 1709404364000.
 
+// *******************************************
+// NOTE:  Get avatar from user record 'profilePicPath' ... if !exists, then just load defaultavatar.jpg
+// *******************************************
+
 export default function MsgTemplateMVP({passData, hasArchives}) {  
     
     console.log('MsgTemplateMVP')

@@ -3,9 +3,11 @@ import React, { useState } from 'react';
 const EditableField = ({ title, value, onChange }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedValue, setEditedValue] = useState(value);
+  const [originalValue, setOriginalValue] = useState(value);
 
   const handleEdit = () => {
     setIsEditing(true);
+    setOriginalValue(editedValue);
   };
 
   const handleSave = () => {
@@ -13,9 +15,14 @@ const EditableField = ({ title, value, onChange }) => {
     setIsEditing(false);
   };
 
+  const handleCancel = () => {
+    setEditedValue(originalValue);
+    setIsEditing(false);
+  };
+
   return (
     <div>
-      <label>{title}:</label>
+      <label>{title}:</label>&nbsp;
       {isEditing ? (
         <input
           type="text"
@@ -26,7 +33,10 @@ const EditableField = ({ title, value, onChange }) => {
         <span>{value}</span>
       )}
       {isEditing ? (
-        <button onClick={handleSave}>Save</button>
+        <>
+        <button onClick={handleSave}>Save</button>&nbsp;
+        <button className="cancelButton" onClick={handleCancel}>Cancel</button>
+        </>
       ) : (
         <button onClick={handleEdit}>Edit</button>
       )}

@@ -77,6 +77,9 @@ body#CF button.btn-secondary:hover { background:#181515;}
     margin-right: auto;
 }
 
+#CF .CPlistings .card { max-width:800px; }
+#CF .CPlistings .utilityPage { padding:initial; }
+
 
 body#CF input, textarea { 
     border-radius: 10px; 
@@ -133,10 +136,12 @@ p.CPchoiceTerms{ font-size:70%; font-weight:normal; }
 .allGrayText p {color:#8a8888;}
 p.CPboxText { text-align:left;}
 
+
 .providerDashboardCard { margin-bottom:40px; }    
 #CF .clientMenu .row {
     --bs-gutter-y: 2.5rem;
 }
+
 
 #CF .personalInfo p.card-text label { font-weight: bold; margin-right:10px; }
 #CF .personalInfo p.card-text span { margin-right:10px; }
@@ -260,15 +265,15 @@ float:right
 .msgThreadDateLeft { padding-left:10px;  }
 .msgThreadSender{ text-align:left; background:blue;  }
 .msgThreadRecipient{ text-align:right; background:green; float:right; }
-
-
+#CF .card-text input { margin-right:10px; }
+#CF .myAFHname button, #CF .myAFHname input { margin-left:10px; }
 body#CF .msgReplyArea input.btn.btn-primary { font-size: 100%;  margin-right: 10px; color:white; }
 body#CF .msgReplyArea button.btn.btn-info {    font-size: 90%;
     padding: 7px 15px 5px 15px;
     margin-bottom: 11px;
     border-radius: 8px;background: gray;}
     body#CF .msgReplyArea button.btn.btn-info:hover {  background: red;}
-
+#CF .cancelButton{background: gray;}
 /* YOUTUBE */
 .video-responsive {
     overflow: hidden;
@@ -284,13 +289,24 @@ body#CF .msgReplyArea button.btn.btn-info {    font-size: 90%;
     width: 100%;
     position: absolute;
   }
+
  /* LISTINGS*/
- #CF .CFListingCard { width:350px; aspect-ratio: 1 /1; margin-right: 20px!important; margin-left: 0px!important; text-align:center;}
+ #CF .CFListingCard { width:350px; aspect-ratio: 1 /1; margin-right: 20px!important; margin-left: 0px!important; text-align:center; margin-bottom:20px !important;}
  #CF .CFListingCardHeader {display:flex; margin-bottom:15px; justify-content: space-between; align-items:center}
  #CF .CFListingStatus {display:flex; align-items:center; padding:5px 10px;border-radius: 20px; background:#212429; height:fit-content;}
  #CF .CFListingImgContainer {display:flex; height:50%; margin-bottom:10px}
  #CF .CFPlaceholderImg {display:flex; aspect-ratio: 1 /1; margin: auto; width: 40%; border-radius: 20px; background:#212429;}
  #CF .CFPlaceholderImg img {margin:auto;}
+
+
+#CF .singleRoomCard { background:#131313; float:left; width: 40%; margin: 20px 5%; border-radius:10px; padding:20px; }
+#CF .CFListingCardHeader2 { width:100%;  }
+#CF .CFListingStatus2 { float:left; width:80%; }
+#CF .CFlistingButton2 { float:left; width:20%; }
+#CF .singleRoomCard h5 { text-align:center; font-weight: bold; font-size: 150%; }
+#CF .CFListingImgContainer2 { text-align:center; }
+#CF .CFPlaceholderImg2 { }
+
   /* FOOTER*/
 .CFfooter .contentContainer {text-align:center;}
 .footerColumn{ float:left; width:30%; margin-left:1%; margin-right:1%; font-size:125%; }
@@ -354,6 +370,7 @@ p.copyright { margin-top:40px; font-size:70%;}
     .messagesMobileUX{ display:block;}
     .messagesMobileUX { padding:15px; }
 
+    #CF .singleRoomCard { width: 90%; }
 }
 
 

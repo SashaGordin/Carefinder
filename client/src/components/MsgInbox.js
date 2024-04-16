@@ -55,7 +55,7 @@ export default function MsgInbox() {
                     localResponseArray[localResponseIndex]["m_TXbExists"] = 1;
                 }
 
-                // stroe date as timestamp (seconds only) and also as readable date
+                // store date as timestamp (seconds only) and also as readable date
                 localResponseArray[localResponseIndex]["m_DS"] = thisMsg.data()['msgDate']['seconds'];
                 localMessageDateString = thisMsg.data()['msgDate'];  // date string 
                 localMessageDate = localMessageDateString.toDate().toLocaleString() 

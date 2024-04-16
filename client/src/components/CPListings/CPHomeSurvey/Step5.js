@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 
-export default function Step4({ listingInfo, setListingInfo}) {
-  const handleCredentialsChange = () => {
-    let credentials = [];
+export default function Step5({ listingInfo, setListingInfo}) {
+  const handleChange = () => {
+    let pets = [];
     document.querySelectorAll("[type='checkbox']:checked").forEach((t) => {
-        credentials.push(t.id);
+        pets.push(t.id);
     });
     setListingInfo({
       ...listingInfo, 
-      providerCredentials: credentials});
+      pets: pets});
   }
 
   
-  const options = ["MD", "DO", "PA-C", "ARNP", "RN, BSN", "RN", "LPN", "EMT", "Other"]
+  const options = ["Cat", "Dog", "Other"];
   
   return (
     <>
@@ -21,21 +21,16 @@ export default function Step4({ listingInfo, setListingInfo}) {
 
         <Card.Body>
 
-          <Card.Title>Does the home provider or manager hold any of following credentials?</Card.Title>
-
-          <Card.Text>
-           Select all that apply
-            
-          </Card.Text>
-          <Form>
+          <Card.Title>Do you have pets in the home?</Card.Title>
+            <Form>
               {options.map((option) => (
                   <Form.Check 
                     key={option}
                     type='checkbox'
                     id={option}
                     label={option}
-                    checked={listingInfo.providerCredentials?.includes(option)}
-                    onChange={handleCredentialsChange}
+                    checked={listingInfo.pets?.includes(option) ?? false}
+                    onChange={handleChange}
                   />
               ))}
           </Form>

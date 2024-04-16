@@ -3,6 +3,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { getDoc, setDoc, doc, Timestamp } from 'firebase/firestore';
 import { firestore } from '../firebase'; 
 
+import MsgThread from "./MsgThread";
 
 /**
  * FIREBASE 'messages' collection FIELDS:
@@ -37,6 +38,10 @@ import { firestore } from '../firebase';
 // M3: new Date('March 4, 2024 09:37:11').getTime() -- 1709573831000.
 // M4: new Date('March 3, 2024 12:23:08').getTime() -- 1709497388000.
 // M5: new Date('March 2, 2024 10:32:44').getTime() -- 1709404364000.
+
+// *******************************************
+// NOTE:  Get avatar from user record 'profilePicPath' ... if !exists, then just load defaultavatar.jpg
+// *******************************************
 
 export default function MsgTemplateMVP({passData, hasArchives}) {  
     
@@ -262,9 +267,13 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                             <div className="msgReplyArea">
 
+                                <MsgThread threadID={thisMsg['m_TH']} />
+                            
+                            {/*}
                             <div id={'fullMsg'+thisMsg['m_ID']}>
                                 <p className="msgText msgFull">{thisMsg['m_TX']}</p>
                             </div>
+                            {*/}
 
                             <textarea autoFocus placeholder="Write here..." id={'reply'+thisMsg['m_ID']}></textarea>
 
@@ -388,10 +397,13 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                             <div className="msgReplyArea" id={thisMsg['m_ID']} style={{display:"none"}}>
 
+                               <MsgThread threadID={thisMsg['m_TH']} />
+                            {/*}
                                 <div id={'fullMsg'+thisMsg['m_ID']}>
                                     <p className="msgText msgFull">{thisMsg['m_TX']}</p>
                                 </div>
-
+                            {*/}
+                            
                                 <textarea autoFocus placeholder="Write here..." id={'reply'+thisMsg['m_ID']}></textarea>
                                 
                                 <input value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-primary"></input>

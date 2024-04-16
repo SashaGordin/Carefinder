@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Card, Button, Alert, Navbar, Image } from 'react-bootstrap'
+import { Card, Button, Alert } from 'react-bootstrap'
 import { useAuth } from '../contexts/AuthContext'
 import { Link, useNavigate } from 'react-router-dom';
 import {
-  GoogleMap, useLoadScript, Marker, InfoWindow, Circle
+  GoogleMap, useLoadScript, Marker, InfoWindow
 } from '@react-google-maps/api';
-import TopNav from "./TopNav";
-import Footer from "./Footer";
+import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
 import axios from 'axios';
-import ProviderCard from './ProviderCard'
+import ProviderCard from '../components/ProviderCard'
 
 export default function LandingPage() {
   const [error, setError] = useState('');

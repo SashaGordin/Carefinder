@@ -5,8 +5,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getDoc, doc } from 'firebase/firestore';
 import { firestore } from '../firebase'; // Import your Firestore instance
 
-import TopNav from "./TopNav";
-import Footer from "./Footer";
+import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
 
 
 export default function Login() {
@@ -74,7 +74,7 @@ export default function Login() {
             <Link to="/claim-profile">Join</Link>
           </div>
         </div>
-      
+
       </div>
       <Footer />
     </>

@@ -1,7 +1,7 @@
 import React from "react";
 
 const Footer = () => (
-    <div className="CFfooter CFgrayBackground">
+    <div className="CFfooter CFpinkBackground">
     <div className="contentContainer">
       <div className="footerColumn">
         <div className='footerHead'>Support</div>

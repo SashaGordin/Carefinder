@@ -48,11 +48,18 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 	const validateInput = (name, value, section) => {
 		let error = "";
 
+		// Ignore dashes, spaces, open paren "(" and close paren ")" characters during input value for phone number validations -- will still show on screen, but will validate
+		// works well, but what it people begin their ph with "1" or "+1"?
+		let sanitizedValue = value;
+		if (name === "phoneNumber") {
+			sanitizedValue = value.replace(/[-\s\(\)]/g, '');
+		}
+
 		switch (name) {
 			case "phoneNumber":
 				// Regular expression to validate phone number format
 				const phoneRegex = /^\d{10}$/;
-				if (!phoneRegex.test(value)) {
+				if (!phoneRegex.test(sanitizedValue)) {
 					error = "Please enter a valid phone number";
 				}
 				break;
@@ -181,7 +188,7 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 						<label htmlFor="isPOA">Do any of the following apply?</label>
 						<div>
 							<select
-								className="w-50"
+								className=""
 								id="isPOA"
 								name="isPOA"
 								value={formData.personalInfo.isPOA}
@@ -262,7 +269,7 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 								type="text"
 								id="seniorName"
 								name="seniorName"
-								placeholder="enter name"
+								placeholder="enter senior's name"
 								value={formData.seniorInfo.seniorName}
 								onChange={(e) => handleChange(e, "seniorInfo")}
 							/>
@@ -273,7 +280,7 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 							)}
 						</div>
 					</div>
-					<div class="flex justify-between gap-10 w-50">
+					<div class="flex justify-between gap-10">
 						<div>
 							<label htmlFor="seniorAge">Age</label>
 							<div>
@@ -281,7 +288,7 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 									type="number"
 									id="seniorAge"
 									name="seniorAge"
-									placeholder="enter your age"
+									placeholder="enter senior's age"
 									value={formData.seniorInfo.seniorAge}
 									onChange={(e) => handleChange(e, "seniorInfo")}
 								/>

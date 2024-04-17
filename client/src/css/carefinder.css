@@ -14,8 +14,32 @@ span.CFpink, span.CForange { padding-left: 10px; padding-right:10px; }
 .CFwhiteBackground { background:white; }
 .CForangeBackground { background:#ff9900; }
 
+
+#CF .progress-bar {
+    width: 100%;
+    /*background-color: #000000;*/
+    border-radius: 4px;
+    margin-top: 16px;
+  }
+  
+  #CF .progress {
+    height: 20px;
+    background-color: #4caf50; /* Green color for the progress bar */
+    border-radius: 4px;
+    color:black;
+    padding-left:10px;
+  }
+  .progress-text {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 16px;
+    color: #ff9900;
+    font-size:75%;
+  }
+
+
 /* NAVBAR */
-#CF .topnavigation { padding:10px; width:100%; background:#272727; }
+#CF .topnavigation { padding:10px; width:100%; background:#333333; }
 #CF .topnavigation { color:white; font-weight: 700; }
 #CF .topnavigation img { width:50px; margin:0px 10px 0px 0px; }
 
@@ -34,7 +58,7 @@ body#CF .topnavigation .dropdown-menu a { color:#ff9900; }
 
 /* BODY */
 body#CF {  
-    background: black;
+    background: #000000;
     color: white;
 }
 
@@ -51,6 +75,10 @@ body#CF button {
     filter: drop-shadow(2px 3px 0px #000000);
 }
 
+#CF .card-body { 
+    padding: 50px;
+    border-radius: 50px; }
+
 body#CF button:hover { 
     background:#000000; 
 }
@@ -58,8 +86,8 @@ body#CF button:hover {
 body#CF button.btn-dark { background:black;}
 body#CF button.btn-dark:hover { background:#333333;}
 
-body#CF button.btn-secondary { background:#333333;}
-body#CF button.btn-secondary:hover { background:#181515;}
+body#CF button.btn-secondary { background:#181515;}
+body#CF button.btn-secondary:hover { background:#000000;}
 
 
 #CF .card-body button { 
@@ -71,7 +99,7 @@ body#CF button.btn-secondary:hover { background:#181515;}
 #CF .card { 
     background:#333333; 
     color:white; 
-    border-radius: 10px;
+    border-radius: 50px;
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
@@ -142,6 +170,10 @@ p.CPboxText { text-align:left;}
     --bs-gutter-y: 2.5rem;
 }
 
+#CF .seniorSurvey input, #CF .seniorSurvey select, #CF input#seniorAge { width:100%; margin-top:3px; }
+#CF .seniorSurvey h3 { margin-top:20px; }
+#CF .seniorSurvey select, #CF .seniorSurvey select#seniorSex { border-radius:10px !important; filter: drop-shadow(2px 3px 0px #000000); }
+
 
 #CF .personalInfo p.card-text label { font-weight: bold; margin-right:10px; }
 #CF .personalInfo p.card-text span { margin-right:10px; }
@@ -169,7 +201,7 @@ body#CF .CProw5 h2.accordion-header { margin-bottom:0; }
 
 .contentContainer{ max-width:1200px; margin-left:auto; margin-right:auto; }
 
-.contentContainer img { max-width:100%; }
+.contentContainer img { max-width:100%; border-radius: 50px 50px 0 0; }
 
 div.clear {
     background: none;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import SurveyQuestionRadio from "../components/ClientSurvey/SurveyQuestionRadio";
 import SurveyQuestionText from "../components/ClientSurvey/SurveyQuestionText";
 import SurveyQuestionCheckboxes from "../components/ClientSurvey/SurveyQuestionCheckboxes";
@@ -16,6 +16,7 @@ import Footer from "../components/Footer";
 
 const Survey = () => {
 	const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+	const [progress, setProgress] = useState(0);
 	const [answers, setAnswers] = useState({});
 	const navigate = useNavigate(); // Initialize useHistory
 	const { currentUser } = useAuth();
@@ -275,10 +276,15 @@ const Survey = () => {
 	// 	console.log(answers);
 	// }
 
+	useEffect(() => {
+		// Calculate progress percentage whenever currentQuestionIndex or questions.length changes
+		setProgress((currentQuestionIndex / questions.length) * 100);
+	  }, [currentQuestionIndex, questions.length]);
+
 	return (
 		<>
 			<TopNav />
-			<div className="contentContainer utilityPage">
+			<div className="contentContainer utilityPage seniorSurvey">
 				{/* IF INDEX is 0, we run a welcome / splash page... */}
 				{currentQuestionIndex === 0 && (
 					<>
@@ -320,6 +326,11 @@ const Survey = () => {
 											onBack={handleBack}
 										/>
 									</Card.Text>
+									<div className="progress-bar">
+										<div className="progress" style={{ width: `${progress}%` }}></div>
+										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
+									</div>									
+
 								</Card.Body>
 							</Card>
 						</>
@@ -347,6 +358,10 @@ const Survey = () => {
 											onBack={handleBack}
 										/>
 									</Card.Text>
+									<div className="progress-bar">
+										<div className="progress" style={{ width: `${progress}%` }}></div>
+										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
+									</div>									
 								</Card.Body>
 							</Card>
 						</>
@@ -371,6 +386,10 @@ const Survey = () => {
 											onBack={handleBack}
 										/>
 									</Card.Text>
+									<div className="progress-bar">
+										<div className="progress" style={{ width: `${progress}%` }}></div>
+										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
+									</div>									
 								</Card.Body>
 							</Card>
 						</>
@@ -396,6 +415,10 @@ const Survey = () => {
 											onBack={handleBack}
 										/>
 									</Card.Text>
+									<div className="progress-bar">
+										<div className="progress" style={{ width: `${progress}%` }}></div>
+										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
+									</div>									
 								</Card.Body>
 							</Card>
 						</>
@@ -448,6 +471,10 @@ const Survey = () => {
 											</Row>
 										</Container>
 									</Card.Text>
+									<div className="progress-bar">
+										<div className="progress" style={{ width: `${progress}%` }}></div>
+										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
+									</div>									
 								</Card.Body>
 							</Card>
 						</>
@@ -467,6 +494,10 @@ const Survey = () => {
 											onNext={handleNextQuestion}
 										/>
 									</Card.Text>
+									<div className="progress-bar">
+										<div className="progress" style={{ width: `${progress}%` }}></div>
+										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
+									</div>									
 								</Card.Body>
 							</Card>
 						</>
@@ -487,10 +518,15 @@ const Survey = () => {
 											onNext={handleNextQuestion}
 										/>
 									</Card.Text>
+									<div className="progress-bar">
+										<div className="progress" style={{ width: `${progress}%` }}></div>
+										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
+									</div>									
 								</Card.Body>
 							</Card>
 						</>
 					)}
+
 			</div>
 			<Footer />
 		</>

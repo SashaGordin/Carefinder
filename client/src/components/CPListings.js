@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, Button, Alert, Navbar, Image } from 'react-bootstrap'
 import { firestore } from '../firebase'; // Assuming you have firebase.js setup
 import { useAuth } from "../contexts/AuthContext"
-import { getDoc, doc, updateDoc } from 'firebase/firestore';
+import { getDoc, getDocs, doc, updateDoc, collection } from 'firebase/firestore';
 import TopNav from "./TopNav";
 import Footer from "./Footer";
 import Listings from './CPListings/Listings';
@@ -14,6 +14,7 @@ export default function CPListings() {
   const [userData, setUserData] = useState({});
   const { currentUser } = useAuth()
   const [error, setError] = useState('');
+  const [listingsData, setListingsData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,6 +22,27 @@ export default function CPListings() {
       const userDocSnapshot = await getDoc(userDocRef);
       if (userDocSnapshot.exists()) {
         const userData = userDocSnapshot.data();
+
+        const listings = [];
+        const listingsPath = userDocSnapshot.ref.path + "/listings";
+        console.log("getting docs from: " + listingsPath);
+        const listingsSnapshot = await getDocs(collection(firestore, listingsPath));
+        //get data for all listings for user
+
+        listingsSnapshot.forEach((listing) => {
+          const data = listing.data();
+          console.log(data);
+          listings.push(data);
+        });
+        if (listings.length == 0) {
+          listings.push({
+            facilityName: userData.FacilityName,
+            licenseNumber: userData.LicenseNumber,
+            listingAddress: `${userData.LocationAddress}, ${userData.LocationCity}, ${userData.LocationState} ${userData.LocationZipCode} `
+          });
+        }
+        console.log("listingsLength=" + listings.length);
+        setListingsData([...listings]);
         console.log(userData);
         setUserData(userData);
       } else {
@@ -29,7 +51,6 @@ export default function CPListings() {
     };
     fetchData();
   }, []);
-  //need to add for loop to iterate through all listings for a provider
 
   const handleUpdate = async (updatedUserData) => {
     try {
@@ -63,12 +84,11 @@ export default function CPListings() {
 
         <Profile userData={userData} handleUpdate={handleUpdate} />
         <p>&nbsp;</p>
-        
-        <ListingCard userData={userData} handleUpdate={handleUpdate} />
+        {listingsData.map((data, i) => (<ListingCard initialListingData={data} key={i} />))}
         <p>&nbsp;</p>
 
       </div>
-      
+
       <Footer />
     </>
   )

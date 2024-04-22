@@ -1,35 +1,81 @@
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import { Button, Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import EditableField from '../menu/EditableField';
 import RoomCard from './RoomCard';
+import { firestore } from '../../firebase'; // Assuming you have firebase.js setup
+import { getDoc, getDocs, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
+import { useAuth } from "../../contexts/AuthContext";
 
-export default function ListingCard({ userData, handleUpdate}) {
+export default function ListingCard({userData, initialListingData}) {
   const navigate = useNavigate();
-  const rooms = [{RoomName:"Room #1"},{RoomName: "Room #2"}];
+  const [error, setError] = useState('');
+  const [roomsArr, setRoomsArr] = useState([]);
+  const [listingData, setListingData] = useState(initialListingData);
+
+  const { currentUser } = useAuth();
+  const facilityPath = `users/${currentUser.uid}/listings/${listingData.facilityName}`;
+  
+  useEffect(() => {
+    fetchRoomData();
+  }, []);
+
+  const fetchRoomData = async () => {
+    const roomsSnapshot = await getDocs(collection(firestore, facilityPath, 'rooms'));
+      //get data for all rooms for this listing
+      const rooms = [];
+      roomsSnapshot.forEach((room) => {
+        const data = room.data();
+        console.log(data);
+        rooms.push(data);
+     });
+      console.log("roomsLength=" + rooms.length);
+      setRoomsArr([...rooms]);
+  };
+
 
   const gotoHomeSurvey = () => {
-    //TODO: change name from edit-listing to homesurvey or something like that
-	navigate('/home-survey', {state: {userData}});
+	navigate('/home-survey', {state: {listingData}});
   }
 
   const addRoom = () => {
-	alert("TBD");
-	return;
-	//TODO
+    const roomNumber =roomsArr.length + 1;
+    const roomData = {roomName: "Room # " + roomNumber, roomId: "Room" + roomNumber};
+	  navigate('/room-survey', {state: {userData, roomData, listingData, facilityPath }});
   }
 
-  const previewListing = () => {
-	alert("TBD");
-	return;
-	//TODO
-  }
+  const handleUpdate = async (updatedListingData) => {
+    try {
+      const listingDocRef = doc(firestore, facilityPath);
+      await setDoc(listingDocRef, updatedListingData);
+      console.log('Listing data updated successfully');
 
-  const postListing = () => {
-	alert("TBD");
-	return;
-	//TODO
-  }
+      // Re-fetch user data after update
+      const updatedListingDocSnapshot = await getDoc(listingDocRef);
+      if (updatedListingDocSnapshot.exists()) {
+        const updatedUserData = updatedListingDocSnapshot.data();
+        setListingData(updatedUserData);
+      } else {
+        setError('Listing document not found after update');
+      }
+    } catch (error) {
+      setError('Error updating listing data: ' + error.message);
+    }
+  };
+
+  const handleRoomUpdate = async (updatedRoomInfo, roomId) => {
+    try {
+      const roomDocRef = doc(firestore, facilityPath, 'rooms', roomId);
+      await updateDoc(roomDocRef, updatedRoomInfo);
+      console.log('Room data updated successfully');
+
+      await fetchRoomData();
+    } catch (error) {
+      setError('Error updating user data: ' + error.message);
+    }
+  };
+
+
   
   return (
 
@@ -39,8 +85,8 @@ export default function ListingCard({ userData, handleUpdate}) {
       <Card.Body>
         <Card.Title><h1>My AFH</h1></Card.Title>
 		<div className="myAFHname">
-			<h4>{userData.FacilityName}</h4>
-			<EditableField title="Adult Family Home Name" value={userData.FacilityName || ''} onChange={(newValue) => handleUpdate({ FacilityName: newValue })} />
+			<h4>{listingData.facilityName}</h4>
+			<EditableField title="Adult Family Home Name" value={listingData.facilityName || ''} onChange={(newValue) => handleUpdate({ facilityName: newValue })} />
 		</div>
 		<hr/>
 		<div>
@@ -58,12 +104,12 @@ export default function ListingCard({ userData, handleUpdate}) {
 		</div>
 		<hr/>
 		<div>
-			<h1>{userData.FacilityName}</h1>
-			<div className="ml-auto" onClick={addRoom}>
+			<h1>{listingData.facilityName}</h1>
+			<div className="ml-auto" role="button" onClick={addRoom}>
 				<img src="circleplus.png"/>
 				<p>Add room</p>
 			</div>
-			{rooms.map((roomData, i) => <RoomCard roomData={roomData} key={i}/>)}
+			{roomsArr.map((roomData, i) => <RoomCard userData={userData} roomData={roomData}  listingData={listingData} facilityPath={facilityPath} handleRoomUpdate={handleRoomUpdate} key={i}/>)}
 		</div>
         
       </Card.Body>

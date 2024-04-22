@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { firestore } from '../../firebase'; // Assuming you have firebase.js setup
 import { getDoc, doc, setDoc } from 'firebase/firestore';
-import { useAuth } from "../../contexts/AuthContext"
+import { useAuth } from "../../contexts/AuthContext";
 
 import Step1 from './CPHomeSurvey/Step1';
 import Step2 from './CPHomeSurvey/Step2';
@@ -34,14 +34,9 @@ export default function CPHomeSurvey() {
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
-  const { userData} = state || {};
-
+  const { listingData} = state || {};
   const [currentStep, setCurrentStep] = useState(1);
-  const [listingInfo, setListingInfo] = useState({
-    facilityName: userData.FacilityName,
-    licenseNumber: userData.LicenseNumber,
-    listingAddress: `${userData.LocationAddress}, ${userData.LocationCity}, ${userData.LocationState} ${userData.LocationZipCode} `
-  });
+  const [listingInfo, setListingInfo] = useState(listingData);
   const [error, setError] = useState('');
 
   const handleNext = () => {
@@ -57,7 +52,9 @@ export default function CPHomeSurvey() {
   };
 
   const handleSubmit = () => {
-    handleUpdate(listingInfo);
+    handleUpdate(listingInfo).then(() => {       
+       navigate("/your-listings");
+    });
   }
 
   const { currentUser } = useAuth();
@@ -73,7 +70,6 @@ export default function CPHomeSurvey() {
       if (updatedListingDocSnapshot.exists()) {
         const updatedUserData = updatedListingDocSnapshot.data();
         setListingInfo(updatedUserData);
-        navigate("/your-listings");
       } else {
         setError('User document not found after update');
       }

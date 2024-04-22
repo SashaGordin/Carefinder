@@ -1,45 +1,27 @@
 import React, { useState } from 'react';
-import { Button, Card, Form, Image} from 'react-bootstrap';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import FileUpload from '../FileUpload';
+import { Button, Form, Card, Placeholder } from 'react-bootstrap';
+import axios from 'axios';
 
-export default function Step7({ listingInfo, setListingInfo }) {
-  const options = ["French", "Spanish", "German"]; //TODO add comprehesnive list of languages
-  const handleChange = () => {
-    let options = [];
-    document.querySelectorAll("[type='checkbox']:checked").forEach((t) => {
-        options.push(t.id);
-    });
-    setListingInfo({
-      ...listingInfo, 
-      languages: options});
+
+export default function Step7({ roomInfo, setRoomInfo }) {
+  const handleChange = (e) => {
+    setRoomInfo({
+      ...roomInfo, 
+      roomNotes: e.target.value});
   }
 
   return (
+
     <>
       <Card className="claimProfileCard">
 
         <Card.Body>
 
-          <Card.Title>Cultural & language</Card.Title>
-          <Card.Text>Do you or the staff speak any languages other than English?</Card.Text>
-          <Form>
-              {options.map((option) => (
-                  <Form.Check 
-                    key={option}
-                    type='checkbox'
-                    id={option}
-                    label={option}
-                    checked={listingInfo.languages?.includes(option) ?? false}
-                    onChange={handleChange}
-                  />
-              ))}
-            </Form>
+          <Card.Title>Anything else you care to share about the room?</Card.Title>
+            <textarea className="small" rows="5" cols="50" placeholder="Type here" value={roomInfo.roomNotes ?? ""} onChange={handleChange} />
         </Card.Body>
-
       </Card>
-
     </>
 
   );
-};
+}

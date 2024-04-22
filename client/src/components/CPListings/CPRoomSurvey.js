@@ -12,14 +12,6 @@ import Step6 from './CPRoomSurvey/Step6';
 import Step7 from './CPRoomSurvey/Step7';
 import Step8 from './CPRoomSurvey/Step8';
 import Step9 from './CPRoomSurvey/Step9';
-import Step10 from './CPRoomSurvey/Step10';
-import Step11 from './CPRoomSurvey/Step11';
-import Step12 from './CPRoomSurvey/Step12';
-import Step13 from './CPRoomSurvey/Step13';
-import Step14 from './CPRoomSurvey/Step14';
-
-
-
 
 
 import { Link, useNavigate, useLocation } from "react-router-dom";
@@ -34,8 +26,9 @@ export default function CPRoomSurvey() {
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
-  const { roomData, facilityName} = state || {};
-  const [currentStep, setCurrentStep] = useState(1);
+  const { userData, roomData, listingData, facilityPath} = state || {};
+  const startStep = 8; //for debugging.. should be 1 normally
+  const [currentStep, setCurrentStep] = useState(startStep);
   const [roomInfo, setRoomInfo] = useState(roomData);
   const [error, setError] = useState('');
 
@@ -51,30 +44,36 @@ export default function CPRoomSurvey() {
 		setCurrentStep(currentStep - 1);
   };
 
-  const handleSubmit = () => {
+  const handleApprove = () => {
+    setRoomInfo({...roomInfo, isAvailable:true});
     handleUpdate(roomInfo).then(() => {       
-       navigate("/your-listings");
+       setCurrentStep(currentStep + 1);
     });
   }
 
+  const handleDone = () => {
+    navigate("/your-listings");
+  }
+
+
   const { currentUser } = useAuth();
 
-  const handleUpdate = async (updatedroomInfo) => {
+  const handleUpdate = async (updatedRoomInfo) => {
     try {
-      const listingDocRef = doc(firestore, 'users', currentUser.uid, 'listings', roomInfo.facilityName);
-      await setDoc(listingDocRef, updatedroomInfo);
-      console.log('User data updated successfully');
+      const roomDocRef = doc(firestore, facilityPath, 'rooms', roomInfo.roomId);
+      await setDoc(roomDocRef, updatedRoomInfo);
+      console.log('Room data updated successfully');
 
       // Re-fetch user data after update
-      const updatedListingDocSnapshot = await getDoc(listingDocRef);
-      if (updatedListingDocSnapshot.exists()) {
-        const updatedUserData = updatedListingDocSnapshot.data();
-        setRoomInfo(updatedUserData);
+      const updatedRoomDocSnapshot = await getDoc(roomDocRef);
+      if (updatedRoomDocSnapshot.exists()) {
+        const updatedRoomData = updatedRoomDocSnapshot.data();
+        setRoomInfo(updatedRoomData);
       } else {
-        setError('User document not found after update');
+        setError('Room document not found after update');
       }
     } catch (error) {
-      setError('Error updating user data: ' + error.message);
+      setError('Error updating room data: ' + error.message);
     }
   };
 
@@ -93,20 +92,16 @@ export default function CPRoomSurvey() {
       {currentStep === 6 && <Step6 setRoomInfo={setRoomInfo} roomInfo={roomInfo}/>}
       {currentStep === 7 && <Step7 setRoomInfo={setRoomInfo} roomInfo={roomInfo}/>}
 
-      {currentStep === 8 && <Step8 setRoomInfo={setRoomInfo} roomInfo={roomInfo}/>}
+      {currentStep === 8 && <Step8 userData={userData} listingData={listingData} setRoomInfo={setRoomInfo} roomInfo={roomInfo}/>}
       {currentStep === 9 && <Step9 setRoomInfo={setRoomInfo} roomInfo={roomInfo}/>}
-      {currentStep === 10 && <Step10 setRoomInfo={setRoomInfo} roomInfo={roomInfo}/>}
-      {currentStep === 11 && <Step11 setRoomInfo={setRoomInfo} roomInfo={roomInfo}/>}
-      {currentStep === 12 && <Step12 setRoomInfo={setRoomInfo} roomInfo={roomInfo}/>}
-      {currentStep === 13 && <Step13 setRoomInfo={setRoomInfo} roomInfo={roomInfo}/>}
-      {currentStep === 14 && <Step14 setRoomInfo={setRoomInfo} roomInfo={roomInfo}/>}
-
 
 		  <div className="SurveyBtnGroup d-flex justify-content-between">          
 			  <Button onClick={handleBack}>Back</Button>
-			  {currentStep < 14 &&<Button onClick={handleNext}>Next</Button>}
-        {currentStep == 14 && <Button onClick={handleSubmit}>Submit</Button>}
+			  {currentStep < 8 &&<Button onClick={handleNext}>Next</Button>}
+        {currentStep == 8 && <Button onClick={handleApprove}>Approve</Button>}
+        {currentStep == 9 && <Button onClick={handleDone}>Done</Button>}
       </div>
+      
     </div>
     <Footer />
     </>

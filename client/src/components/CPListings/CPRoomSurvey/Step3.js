@@ -1,30 +1,31 @@
 import React, { useState } from 'react';
-import { Button, Label, Card } from 'react-bootstrap';
+import { Button, Card, Form, Image} from 'react-bootstrap';
+import { getStorage, ref, uploadBytes } from "firebase/storage";
+import FileUpload from '../FileUpload';
 
+export default function Step3({ roomInfo, setRoomInfo }) {
+  const folderPath = `users/${roomInfo.LicenseNumber}`;
+	const handleNewPic = (newFilePath) => {
+		let roomPhotos = roomInfo?.roomPhotos ?? [];
+    roomPhotos.push(newFilePath); 
+    setRoomInfo({...roomInfo, roomPhotos: roomPhotos});
+	}
 
-export default function Step3({ listingInfo, setListingInfo}) {
-  const handleStatementChange = (e) => {
-    setListingInfo({
-      ...listingInfo, 
-      providerStatement: e.target.value});
-  }
-
-  
   return (
-
     <>
       <Card className="claimProfileCard">
 
         <Card.Body>
 
-          <Card.Title>About the home</Card.Title>
-
-          <Card.Text>
-              Provider statement
-              <textarea className="small" rows="5" cols="50" value={listingInfo.providerStatement ?? ""} onChange={handleStatementChange}></textarea>
-          </Card.Text>
+          <Card.Title>Upload photo of room</Card.Title>
+          <FileUpload controlId="roomPhotos" handleNewFilePath={handleNewPic} folderPath={folderPath} uploadType="Photo" allowMultipleFiles={true} />    
+          {roomInfo?.roomPhotos && roomInfo.roomPhotos.map((path, i) => (
+                 <Image height="50px"src={path} key={i}/>
+              ))}
         </Card.Body>
+
       </Card>
+
     </>
 
   );

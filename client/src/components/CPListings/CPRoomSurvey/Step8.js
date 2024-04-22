@@ -1,39 +1,40 @@
 import React, { useState } from 'react';
-import { Button, Card, Form, Image} from 'react-bootstrap';
+import { Button, Card, Form, Image } from 'react-bootstrap';
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import FileUpload from '../FileUpload';
 
-export default function Step8({ listingInfo, setListingInfo }) {
-  const options = ["Dementia", "Developmentally disabled", "Mental health"]; //TODO add comprehesnive list of languages
-  const handleChange = () => {
-    let options = [];
-    document.querySelectorAll("[type='checkbox']:checked").forEach((t) => {
-        options.push(t.id);
-    });
-    setListingInfo({
-      ...listingInfo, 
-      speciality: options});
-  }
+export default function Step8({userData, listingData, roomInfo, setRoomInfo }) {
 
   return (
     <>
+      <div>
+        <h2>Approve listing</h2>
+        <p>Review before making listing public</p>
+      </div>
       <Card className="claimProfileCard">
-
         <Card.Body>
-
-          <Card.Title>Select what you are licensed for?</Card.Title>
-          <Form>
-              {options.map((option) => (
-                  <Form.Check 
-                    key={option}
-                    type='checkbox'
-                    id={option}
-                    label={option}
-                    checked={listingInfo.speciality?.includes(option) ?? false}
-                    onChange={handleChange}
-                  />
+        { userData.profilePicPath && <Image height="150px"src={userData.profilePicPath}/>}
+        {/* add listing photos here */}
+        {roomInfo?.roomPhotos && roomInfo.roomPhotos.map((path, i) => (
+                 <Image height="50px" src={path} key={i}/>
               ))}
-            </Form>
+        <div>
+          <h2>{userData.FacilityPOC}</h2>
+          <p>Verified Provider</p>
+          <p>Licensed since {listingData.licenseYear}</p>
+        </div>
+        <div>
+          <h3>{listingData.facilityName}</h3>
+          <p>Licensed for</p>
+          {listingData.speciality && listingData.speciality.map((x, i) => (
+              <p key={i}>{x}</p>
+          ))}
+        </div>
+        <div>
+          <h3>What's special</h3>
+          <p>{listingData.providerStatement}</p>
+        </div>
+
         </Card.Body>
 
       </Card>

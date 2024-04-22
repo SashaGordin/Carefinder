@@ -84,7 +84,7 @@ export default function CPListings() {
 
         <Profile userData={userData} handleUpdate={handleUpdate} />
         <p>&nbsp;</p>
-        {listingsData.map((data, i) => (<ListingCard initialListingData={data} key={i} />))}
+        {listingsData.map((data, i) => (<ListingCard userData={userData} initialListingData={data} key={i} />))}
         <p>&nbsp;</p>
 
       </div>

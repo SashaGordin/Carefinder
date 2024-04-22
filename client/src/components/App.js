@@ -29,6 +29,8 @@ import PrivacyPage from './menu/Privacy'
 import MsgInbox from './MsgInbox';
 import FileUpload from './FileUpload';
 import CPHomeSurvey from './CPListings/CPHomeSurvey';
+import CPRoomSurvey from './CPListings/CPRoomSurvey';
+
 
 
 function App() {
@@ -156,6 +158,18 @@ function App() {
                       ['provider','admin']
                     }>
                       <CPHomeSurvey />
+                  </PrivateRoute>
+                }
+              />
+                 <Route
+                path="/room-survey"
+                element={
+                  <PrivateRoute
+                    redirectPath="/signup"
+                    allowedRoles={
+                      ['provider','admin']
+                    }>
+                      <CPRoomSurvey />
                   </PrivateRoute>
                 }
               />

@@ -4,7 +4,7 @@ import { getStorage, ref, uploadBytes } from "firebase/storage";
 import FileUpload from '../FileUpload';
 
 export default function Step8({ listingInfo, setListingInfo }) {
-  const options = ["Dementia", "Developmentally disabled", "Mental health"]; //TODO add comprehesnive list of languages
+  const options = ["Dementia", "Developmentally disabled", "Mental health"];
   const handleChange = () => {
     let options = [];
     document.querySelectorAll("[type='checkbox']:checked").forEach((t) => {

@@ -32,8 +32,10 @@ export default function TopNav() {
 			<div className="topnavigation">
 				<div className="contentContainer">
 					<div className="topNavLeft">
-						<img src="cflogo.png" alt="Welcome to CareFinder" />
+					<a href={process.env.PUBLIC_URL + '/'}>
+						<img src={process.env.PUBLIC_URL + '/cflogo.png'} alt="Welcome to CareFinder" />
 						Carefinder
+					</a>
 					</div>
 
 					<div className="topNavRight">

@@ -169,7 +169,7 @@ export default function LandingPage() {
     <>
     <TopNav />
 
-    <div className="CFgrayBackground">
+    <div className="CFblackBackground">
 
         <div className="contentContainer clientSearchBar">
 
@@ -194,11 +194,11 @@ export default function LandingPage() {
 
     </div>
 
-    <div className="CFgrayBackground">
+    <div className="CFblackBackground">
 
         <div className='contentContainer'>
 
-            <div className='clientLProw2left CFgrayBackground' style={{ height: '400px' }}>
+            <div className='clientLProw2left CFblackBackground' style={{ height: '400px' }}>
               {isLoaded ?
                 <GoogleMap
                   zoom={zoomRef.current}

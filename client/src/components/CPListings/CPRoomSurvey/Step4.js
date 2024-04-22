@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 
-export default function Step4({ listingInfo, setListingInfo}) {
-  const handleCredentialsChange = () => {
-    let credentials = [];
+export default function Step4({ roomInfo, setRoomInfo}) {
+  const handleChange = () => {
+    let roomDetails = [];
     document.querySelectorAll("[type='checkbox']:checked").forEach((t) => {
-        credentials.push(t.id);
+      roomDetails.push(t.id);
     });
-    setListingInfo({
-      ...listingInfo, 
-      providerCredentials: credentials});
+    setRoomInfo({
+      ...roomInfo, 
+      roomDetails: roomDetails});
   }
 
   
-  const options = ["MD", "DO", "PA-C", "ARNP", "RN, BSN", "RN", "LPN", "EMT", "Other"]
+  const options = ["Private room", "Shared room", "Private bathroom", "Half bathroom", "Shared bathroom", "No bathroom (Comode in room)", "Community shower", "Standard door", "Large door"]
   
   return (
     <>
@@ -21,12 +21,7 @@ export default function Step4({ listingInfo, setListingInfo}) {
 
         <Card.Body>
 
-          <Card.Title>Does the home provider or manager hold any of following credentials?</Card.Title>
-
-          <Card.Text>
-           Select all that apply
-            
-          </Card.Text>
+          <Card.Title>Which of these apply to this room?</Card.Title>
           <Form>
               {options.map((option) => (
                   <Form.Check 
@@ -34,8 +29,8 @@ export default function Step4({ listingInfo, setListingInfo}) {
                     type='checkbox'
                     id={option}
                     label={option}
-                    checked={listingInfo.providerCredentials?.includes(option) ?? false}
-                    onChange={handleCredentialsChange}
+                    checked={roomInfo.roomDetails?.includes(option) ?? false}
+                    onChange={handleChange}
                   />
               ))}
           </Form>

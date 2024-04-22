@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import EditableField from '../menu/EditableField';
 import RoomCard from './RoomCard';
 import { firestore } from '../../firebase'; // Assuming you have firebase.js setup
-import { getDoc, getDocs, collection, doc, setDoc } from 'firebase/firestore';
+import { getDoc, getDocs, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { useAuth } from "../../contexts/AuthContext";
 
-export default function ListingCard({ initialListingData}) {
+export default function ListingCard({userData, initialListingData}) {
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [roomsArr, setRoomsArr] = useState([]);
@@ -17,22 +17,21 @@ export default function ListingCard({ initialListingData}) {
   const facilityPath = `users/${currentUser.uid}/listings/${listingData.facilityName}`;
   
   useEffect(() => {
-    const fetchData = async () => {
-      const roomsSnapshot = await getDocs(collection(firestore, facilityPath, 'rooms'));
-        //get data for all rooms for this listing
-        const rooms = [];
-        roomsSnapshot.forEach((room) => {
-          const data = room.data();
-          console.log(data);
-          rooms.push(data);
-       });
-        console.log("roomsLength=" + rooms.length);
-        setRoomsArr([...rooms]);
-    };
-    fetchData();
+    fetchRoomData();
   }, []);
 
-
+  const fetchRoomData = async () => {
+    const roomsSnapshot = await getDocs(collection(firestore, facilityPath, 'rooms'));
+      //get data for all rooms for this listing
+      const rooms = [];
+      roomsSnapshot.forEach((room) => {
+        const data = room.data();
+        console.log(data);
+        rooms.push(data);
+     });
+      console.log("roomsLength=" + rooms.length);
+      setRoomsArr([...rooms]);
+  };
 
 
   const gotoHomeSurvey = () => {
@@ -40,8 +39,9 @@ export default function ListingCard({ initialListingData}) {
   }
 
   const addRoom = () => {
-    const roomData = {roomName: "Room # " + roomsArr.length};
-	  navigate('/room-survey', {state: {roomData, facilityPath }});
+    const roomNumber =roomsArr.length + 1;
+    const roomData = {roomName: "Room # " + roomNumber, roomId: "Room" + roomNumber};
+	  navigate('/room-survey', {state: {userData, roomData, listingData, facilityPath }});
   }
 
   const handleUpdate = async (updatedListingData) => {
@@ -62,6 +62,19 @@ export default function ListingCard({ initialListingData}) {
       setError('Error updating listing data: ' + error.message);
     }
   };
+
+  const handleRoomUpdate = async (updatedRoomInfo, roomId) => {
+    try {
+      const roomDocRef = doc(firestore, facilityPath, 'rooms', roomId);
+      await updateDoc(roomDocRef, updatedRoomInfo);
+      console.log('Room data updated successfully');
+
+      await fetchRoomData();
+    } catch (error) {
+      setError('Error updating user data: ' + error.message);
+    }
+  };
+
 
   
   return (
@@ -96,7 +109,7 @@ export default function ListingCard({ initialListingData}) {
 				<img src="circleplus.png"/>
 				<p>Add room</p>
 			</div>
-			{roomsArr.map((roomData, i) => <RoomCard roomData={roomData} key={i}/>)}
+			{roomsArr.map((roomData, i) => <RoomCard userData={userData} roomData={roomData}  listingData={listingData} facilityPath={facilityPath} handleRoomUpdate={handleRoomUpdate} key={i}/>)}
 		</div>
         
       </Card.Body>

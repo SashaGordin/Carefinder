@@ -1,41 +1,72 @@
 import React, { useState } from 'react';
 import { Button, Card, Form } from 'react-bootstrap';
 
-export default function Step5({ listingInfo, setListingInfo}) {
-  const handleChange = () => {
-    let pets = [];
-    document.querySelectorAll("[type='checkbox']:checked").forEach((t) => {
-        pets.push(t.id);
-    });
-    setListingInfo({
-      ...listingInfo, 
-      pets: pets});
+export default function Step5({ roomInfo, setRoomInfo }) {
+  const getInitialOptionState = () => {
+    if (roomInfo.addlDetails) {
+      for (const val of roomInfo.addlDetails) {
+        if (val.startsWith("Other"))
+          return val.substring(5);
+      }
+    }
+    return "";
   }
 
-  
-  const options = ["Cat", "Dog", "Other"];
-  
+  let initialOptionState = getInitialOptionState();
+  const [otherOption, setOtherOption] = useState(initialOptionState)
+
+  const getCheckedStatus = (option) => {
+    if (roomInfo.addlDetails?.includes(option))
+      return true;
+    else if (option == "Other" && roomInfo.addlDetails) {
+      for (const val of roomInfo.addlDetails) {
+        if (val.startsWith("Other"))
+          return true;
+      }
+    }
+    return false;
+  }
+
+
+  const handleChange = () => {
+    let addlDetails = [];
+    setOtherOption(document.getElementById("OtherInputField").value);
+
+    document.querySelectorAll("[type='checkbox']:checked").forEach((t) => {
+      let thisVal = t.id.startsWith("Other") ? "Other " + document.getElementById("OtherInputField").value : t.id;
+      addlDetails.push(thisVal);
+    });
+    setRoomInfo({
+      ...roomInfo,
+      addlDetails: addlDetails
+    });
+  }
+
+
+  const options = ["Main floor", "Must use stairs or elevator to access room", "Door to outside", "Pleasant view", "Other"];
+
   return (
     <>
       <Card className="claimProfileCard">
 
         <Card.Body>
 
-          <Card.Title>Do you have pets in the home?</Card.Title>
-            <Form>
-              {options.map((option) => (
-                  <Form.Check 
-                    key={option}
-                    type='checkbox'
-                    id={option}
-                    label={option}
-                    checked={listingInfo.pets?.includes(option) ?? false}
-                    onChange={handleChange}
-                  />
-              ))}
+          <Card.Title>Which of these apply to this room?</Card.Title>
+          <Form>
+            {options.map((option, i) => (
+              <Form.Check
+                key={i}
+                type='checkbox'
+                id={option}
+                label={option}
+                checked={getCheckedStatus(option)}
+                onChange={handleChange}
+              />
+            ))}
+            <input type="text" id="OtherInputField" value={otherOption} onChange={handleChange} />
           </Form>
         </Card.Body>
-        
+
       </Card>
 
     </>

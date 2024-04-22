@@ -1,32 +1,29 @@
 import React, { useState } from 'react';
-import { Button, Card, Form, Image} from 'react-bootstrap';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import FileUpload from '../FileUpload';
+import { Button, Form, Card, Placeholder } from 'react-bootstrap';
+import axios from 'axios';
 
-export default function Step6({ listingInfo, setListingInfo }) {
-  const folderPath = `users/${listingInfo.LicenseNumber}`;
-	const handleNewPic = (newFilePath) => {
-		let petPics = listingInfo?.petPics ?? [];
-    petPics.push(newFilePath); 
-    setListingInfo({petPics: petPics});
-	}
+
+export default function Step6({ roomInfo, setRoomInfo }) {
+  const handleChange = (e) => {
+    setRoomInfo({
+      ...roomInfo, 
+      dimensions: e.target.value});
+  }
 
   return (
+
     <>
       <Card className="claimProfileCard">
 
         <Card.Body>
 
-          <Card.Title>Upload photo of house pet</Card.Title>
-          <FileUpload controlId="petPhotos" handleNewFilePath={handleNewPic} folderPath={folderPath} uploadType="Photo" allowMultipleFiles={true} />    
-          {listingInfo?.petPics && listingInfo.petPics.map((path) => (
-                 <Image height="50px"src={path}/>
-              ))}
+          <Card.Title>Provide a rough estimate of room dimensions</Card.Title>
+         
+            <input type="text" placeholder="e.g. 120 Sq ft" value={roomInfo.dimensions ?? ""} onChange={handleChange} />
+            <Card.Text>Calculate the length times the width of the room and add it together for total</Card.Text>
         </Card.Body>
-
       </Card>
-
     </>
 
   );
-};
+}

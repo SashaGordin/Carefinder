@@ -27,7 +27,7 @@ export default function CPRoomSurvey() {
   const location = useLocation();
   const { state } = location;
   const { userData, roomData, listingData, facilityPath} = state || {};
-  const startStep = 8; //for debugging.. should be 1 normally
+  const startStep = 1; //for debugging.. should be 1 normally
   const [currentStep, setCurrentStep] = useState(startStep);
   const [roomInfo, setRoomInfo] = useState(roomData);
   const [error, setError] = useState('');
@@ -45,8 +45,7 @@ export default function CPRoomSurvey() {
   };
 
   const handleApprove = () => {
-    setRoomInfo({...roomInfo, isAvailable:true});
-    handleUpdate(roomInfo).then(() => {       
+    handleUpdate({...roomInfo, isAvailable:true}).then(() => {       
        setCurrentStep(currentStep + 1);
     });
   }

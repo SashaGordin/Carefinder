@@ -46,7 +46,7 @@ function MsgThread({threadID}) {
                 localThreadArray[localThreadIndex]["m_DS"] = thisThreadItem.data()['msgDate']['seconds'];
                 localThreadDateString = thisThreadItem.data()['msgDate'];  // date string 
                 localThreadDate = localThreadDateString.toDate().toLocaleString() 
-                localThreadArray[localThreadIndex]["m_DA"] = localThreadDate;
+                localThreadArray[localThreadIndex]["mt_DA"] = localThreadDate;
                 localThreadIndex++;
 
             });

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useAuth } from "../contexts/AuthContext";
 import { getDoc, setDoc, doc, Timestamp } from 'firebase/firestore';
 import { firestore } from '../firebase'; 
@@ -48,6 +48,29 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
     console.log('MsgTemplateMVP')
     console.log(passData);
     console.log('Archives?: '+hasArchives);
+
+    const [avatarURLs, setAvatarURLs] = useState(null);
+
+    useEffect(() => {
+        // Fetch avatar URLs asynchronously for all messages
+        async function fetchAvatarURLs() {
+            try {
+                const avatarURLs = await Promise.all(
+                    passData.map(async (thisMsg) => {
+                        return await getMessageAvatar(thisMsg['m_FR']);
+                    })
+                );
+                // Update state with the fetched avatar URLs
+                setAvatarURLs(avatarURLs);
+            } catch (error) {
+                console.error('Error fetching avatar URLs:', error);
+                // Handle error appropriately
+            }
+        }
+
+        // Call the fetchAvatarURLs function
+        fetchAvatarURLs();
+    }, [passData]); // Run this effect whenever passData changes
 
     const [activeDivId, setActiveDivId] = useState(null);
     const toggleHideDivID = (id) => {
@@ -112,6 +135,31 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
         }
         return 'messageWrapper';
     }
+
+    async function getMessageAvatar(theSenderID) {
+        console.log('Lookup avatar for userID: ' + theSenderID);
+    
+        const dbDocument = firestore.collection('users').doc(theSenderID);
+    
+        try {
+            const snapshot = await dbDocument.get();
+            const userData = snapshot.data();
+            if (userData) {
+                const profilePicPath = userData.profilePicPath;
+                console.log('Profile picture path:', profilePicPath);
+                // Return or do something with the profile picture path
+                return profilePicPath;
+            } else {
+                console.log('No user data found for user ID:', theSenderID);
+                return 'defaultavatar.jpg';
+            }
+        } catch (error) {
+            console.error('Error getting user data:', error);
+            // Handle error appropriately
+            return 'defaultavatar.jpg';
+        }
+    }
+    
 
     const changeMessageStatus = async(targetMessageID, targetFieldValue) => {
 
@@ -201,9 +249,13 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                             <div className={ getMessageWrapperClass(thisMsg['m_ST']) } style={{display:"block"}}>
                             
-                                <div className="msgAlertLeft">
-                                    <img className='msgAvatar' src='defaultavatar.jpg' alt='' />
-                                </div>
+                            <div key={index} className="msgAlertLeft">
+                                {avatarURLs && avatarURLs[index] ? (
+                                    <img className='msgAvatar' src={avatarURLs[index]} alt='' />
+                                ) : (
+                                    <img className='msgAvatar' src='defaultavatar.jpg' alt='' /> 
+                                )}
+                            </div>
 
                                 <div className="msgAlertMiddle">
 
@@ -240,7 +292,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                 <div className="msgDesktopRight"> {/* RIGHT SIDE OF DESKTOP UX, where MESSAGE SHOW HERE... */}
 
-                    {passData.map( thisMsg => (
+                    {passData.map( (thisMsg, index) => (
                     <>
 
                         {activeDivId == thisMsg['m_ID'] && (
@@ -248,7 +300,11 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                             <div className="rightFromHeader">
                                 <div className="msgAlertLeft">
-                                    <img className='msgAvatar' src='defaultavatar.jpg' alt='' />
+                                    {avatarURLs && avatarURLs[index] ? (
+                                        <img className='msgAvatar' src={avatarURLs[index]} alt='' />
+                                    ) : (
+                                        <img className='msgAvatar' src='defaultavatar.jpg' alt='' /> 
+                                    )}
                                 </div>
 
                                 <div className="msgAlertMiddle">
@@ -326,12 +382,16 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                         </> : <></>
                     }
 
-                    {passData.map( thisMsg => (
+                    {passData.map( (thisMsg, index) => (
                             
                             <div className={ getMessageWrapperClass(thisMsg['m_ST']) } style={{display:"block"}}>
                             
-                            <div className="msgAlertLeft">
-                                <img className='msgAvatar' src='defaultavatar.jpg' alt='' />
+                            <div key={index} className="msgAlertLeft">
+                                {avatarURLs && avatarURLs[index] ? (
+                                    <img className='msgAvatar' src={avatarURLs[index]} alt='' />
+                                ) : (
+                                    <img className='msgAvatar' src='defaultavatar.jpg' alt='' /> // Use default avatar if URL not available
+                                )}
                             </div>
 
                             <div className="msgAlertMiddle">

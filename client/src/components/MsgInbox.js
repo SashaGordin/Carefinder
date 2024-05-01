@@ -9,11 +9,11 @@ import { firestore } from '../firebase';
 //import MsgTemplate from "./MsgTemplate";
 import MsgTemplateMVP from "./MsgTemplateMVP";
 
-
+//v20240430.837pm
 export default function MsgInbox() {
 
     const [error, setError] = useState('');
-    const { login, currentUser } = useAuth()
+    const {login, currentUser } = useAuth()
     const [userMessages, setUserMessages] = useState([]); 
     const [loading, setLoading] = useState(false);
     const [containsArchives, setContainsArchives] = useState(0);

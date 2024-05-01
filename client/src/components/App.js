@@ -32,8 +32,6 @@ import CPHomeSurvey from './CPListings/CPHomeSurvey';
 import CPRoomSurvey from './CPListings/CPRoomSurvey';
 import MessageAdmin from '../pages/MessageAdmin';
 
-
-
 function App() {
   return (
     <Router>

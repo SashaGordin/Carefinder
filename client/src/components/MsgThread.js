@@ -6,12 +6,21 @@ import { firestore } from '../firebase';
 
 console.log('MsgThread component');
 
-function MsgThread({threadID}) {
+//v20240430.837pm
+
+function MsgThread({threadID, pageIteration}) {
+
+    console.log('NOW IN... MsgThread');
+    console.log('MsgThread Iteration: '+pageIteration);
 
     const [entireThread, setEntireThread] = useState([]); 
     const { login, currentUser } = useAuth()
 
-    useEffect(() => { fetchThread(); }, []);
+    // useEffect(() => { fetchThread(); }, []);
+
+    useEffect(() => { 
+        fetchThread(); 
+    }, [threadID, pageIteration]);
 
     const fetchThread = async () => { 
 
@@ -43,9 +52,9 @@ function MsgThread({threadID}) {
                 localThreadArray[localThreadIndex]["mt_TX"] = thisThreadItem.data()['msgText'];
                 localThreadArray[localThreadIndex]["mt_TH"] = thisThreadItem.data()['msgThreadID'];
                 localThreadArray[localThreadIndex]["mt_TO"] = thisThreadItem.data()['msgTo'];
-                localThreadArray[localThreadIndex]["m_DS"] = thisThreadItem.data()['msgDate']['seconds'];
+                localThreadArray[localThreadIndex]["mt_DS"] = thisThreadItem.data()['msgDate']['seconds'];
                 localThreadDateString = thisThreadItem.data()['msgDate'];  // date string 
-                localThreadDate = localThreadDateString.toDate().toLocaleString() 
+                localThreadDate = localThreadDateString.toDate().toLocaleString(); 
                 localThreadArray[localThreadIndex]["mt_DA"] = localThreadDate;
                 localThreadIndex++;
 

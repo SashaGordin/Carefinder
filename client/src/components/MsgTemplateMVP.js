@@ -5,6 +5,8 @@ import { firestore } from '../firebase';
 
 import MsgThread from "./MsgThread";
 
+//v20240430.837pm
+
 /**
  * FIREBASE 'messages' collection FIELDS:
  * ================================================================================
@@ -45,9 +47,12 @@ import MsgThread from "./MsgThread";
 
 export default function MsgTemplateMVP({passData, hasArchives}) {  
     
-    console.log('MsgTemplateMVP')
+    const [pageIteration, setPageIteration] = useState(1);
+
+    console.log('NOW IN... MsgTemplateMVP');
+    console.log('MsgTemplateMVP Iteration: '+pageIteration);
     console.log(passData);
-    console.log('Archives?: '+hasArchives);
+    console.log('MsgTemplateMVP, Archives?: '+hasArchives);
 
     const [avatarURLs, setAvatarURLs] = useState(null);
 
@@ -171,7 +176,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
         
         console.log(response);
         
-        window.location.reload();
+        //window.location.reload();
     }
 
     const changeMessageResponseSentStatus = async(targetMessageID, targetFieldValue) => {
@@ -199,8 +204,10 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
         console.log('SENDING REPLY:  TO: ' + sendingTo + ', FROM: ' + sendingFrom + ', TXT: ' + replyText + ', THREAD: ' + messageThreadID + ')'); 
 
         const dbCollection = firestore.collection('messages');
+
+        const rightNow = Timestamp.now();
         const response = await dbCollection.add({ 
-            msgDate : Timestamp.now(),
+            msgDate : rightNow,
             msgTo : sendingTo,
             msgFrom : sendingFrom,
             msgText : replyText,
@@ -220,8 +227,16 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
         changeMessageStatus(originalMessageID, 1);
         console.log('MARKED message as READ, also. Kthx.'); 
 
-        // I guess just refresh. Can we do this w/out a reload? No biggie if not...
-        window.location.reload();
+        // advance page iteration so we can pass this as a prop
+        // to the thread component, so that it can know to
+        // fire fetchThread
+        setPageIteration(pageIteration+1);
+        console.log('Iteration:' + pageIteration);
+
+        //finally, let's clear the old message from the textarea
+        let targetID = 'reply'+originalMessageID;
+        console.log('Clearing textarea ID:' + targetID);
+        document.getElementById(targetID).value='';
     }
 
     return (
@@ -323,7 +338,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                             <div className="msgReplyArea">
 
-                                <MsgThread threadID={thisMsg['m_TH']} />
+                                <MsgThread threadID={thisMsg['m_TH']} pageIteration={pageIteration} />
                             
                             {/*}
                             <div id={'fullMsg'+thisMsg['m_ID']}>
@@ -457,7 +472,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                             <div className="msgReplyArea" id={thisMsg['m_ID']} style={{display:"none"}}>
 
-                               <MsgThread threadID={thisMsg['m_TH']} />
+                               <MsgThread threadID={thisMsg['m_TH']} pageIteration={pageIteration} />
                             {/*}
                                 <div id={'fullMsg'+thisMsg['m_ID']}>
                                     <p className="msgText msgFull">{thisMsg['m_TX']}</p>

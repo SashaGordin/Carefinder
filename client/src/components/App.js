@@ -30,6 +30,7 @@ import MsgInbox from './MsgInbox';
 import FileUpload from './FileUpload';
 import CPHomeSurvey from './CPListings/CPHomeSurvey';
 import CPRoomSurvey from './CPListings/CPRoomSurvey';
+import AdminViewClient from './AdminViewClient';
 
 
 
@@ -161,7 +162,7 @@ function App() {
                   </PrivateRoute>
                 }
               />
-                 <Route
+              <Route
                 path="/room-survey"
                 element={
                   <PrivateRoute
@@ -173,6 +174,19 @@ function App() {
                   </PrivateRoute>
                 }
               />
+              <Route
+                path="/admin-client-viewer"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      ['admin']
+                    }>
+                      <AdminViewClient />
+                  </PrivateRoute>
+                }
+              />
+
             </Routes>
           </AuthProvider>
 

@@ -110,6 +110,12 @@ export default function TopNav() {
 									</Nav.Link>
 								</Nav.Item>
 
+								<Nav.Item>
+									<Nav.Link href="/msg-admin" title="Inbox">
+										Outbox
+									</Nav.Link>
+								</Nav.Item>
+
 								<NavDropdown title="Clients" id="client-dropdown">
 									<NavDropdown.Item href="/client-dashboard" title="Client Dashboard">Client Dashboard</NavDropdown.Item>
 									<NavDropdown.Item href="/client-menu" title="Client Menu">Client Menu</NavDropdown.Item>

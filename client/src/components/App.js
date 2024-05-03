@@ -30,8 +30,7 @@ import MsgInbox from './MsgInbox';
 import FileUpload from './FileUpload';
 import CPHomeSurvey from './CPListings/CPHomeSurvey';
 import CPRoomSurvey from './CPListings/CPRoomSurvey';
-import AdminViewClient from './AdminViewClient';
-
+import MessageAdmin from '../pages/MessageAdmin';
 
 
 function App() {
@@ -78,6 +77,20 @@ function App() {
                   </PrivateRoute>
                 }
               />
+
+              <Route
+                path="/msg-admin"
+                element={
+                  <PrivateRoute
+                  redirectPath="/login"
+                    allowedRoles={
+                       ['admin']
+                    }>
+                      <MessageAdmin />
+                  </PrivateRoute>
+                }
+              />
+
               <Route
                 path="/care-provider-dashboard"
                 element={

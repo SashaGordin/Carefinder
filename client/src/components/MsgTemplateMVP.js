@@ -1,9 +1,11 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useAuth } from "../contexts/AuthContext";
 import { getDoc, setDoc, doc, Timestamp } from 'firebase/firestore';
 import { firestore } from '../firebase'; 
 
 import MsgThread from "./MsgThread";
+
+//v20240430.837pm
 
 /**
  * FIREBASE 'messages' collection FIELDS:
@@ -45,9 +47,35 @@ import MsgThread from "./MsgThread";
 
 export default function MsgTemplateMVP({passData, hasArchives}) {  
     
-    console.log('MsgTemplateMVP')
+    const [pageIteration, setPageIteration] = useState(1);
+
+    console.log('NOW IN... MsgTemplateMVP');
+    console.log('MsgTemplateMVP Iteration: '+pageIteration);
     console.log(passData);
-    console.log('Archives?: '+hasArchives);
+    console.log('MsgTemplateMVP, Archives?: '+hasArchives);
+
+    const [avatarURLs, setAvatarURLs] = useState(null);
+
+    useEffect(() => {
+        // Fetch avatar URLs asynchronously for all messages
+        async function fetchAvatarURLs() {
+            try {
+                const avatarURLs = await Promise.all(
+                    passData.map(async (thisMsg) => {
+                        return await getMessageAvatar(thisMsg['m_FR']);
+                    })
+                );
+                // Update state with the fetched avatar URLs
+                setAvatarURLs(avatarURLs);
+            } catch (error) {
+                console.error('Error fetching avatar URLs:', error);
+                // Handle error appropriately
+            }
+        }
+
+        // Call the fetchAvatarURLs function
+        fetchAvatarURLs();
+    }, [passData]); // Run this effect whenever passData changes
 
     const [activeDivId, setActiveDivId] = useState(null);
     const toggleHideDivID = (id) => {
@@ -113,6 +141,31 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
         return 'messageWrapper';
     }
 
+    async function getMessageAvatar(theSenderID) {
+        console.log('Lookup avatar for userID: ' + theSenderID);
+    
+        const dbDocument = firestore.collection('users').doc(theSenderID);
+    
+        try {
+            const snapshot = await dbDocument.get();
+            const userData = snapshot.data();
+            if (userData) {
+                const profilePicPath = userData.profilePicPath;
+                console.log('Profile picture path:', profilePicPath);
+                // Return or do something with the profile picture path
+                return profilePicPath;
+            } else {
+                console.log('No user data found for user ID:', theSenderID);
+                return 'defaultavatar.jpg';
+            }
+        } catch (error) {
+            console.error('Error getting user data:', error);
+            // Handle error appropriately
+            return 'defaultavatar.jpg';
+        }
+    }
+    
+
     const changeMessageStatus = async(targetMessageID, targetFieldValue) => {
 
         console.log('Set `messages` (id '+ targetMessageID + ') `msgStatus` to: ' + targetFieldValue ); 
@@ -123,7 +176,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
         
         console.log(response);
         
-        window.location.reload();
+        //window.location.reload();
     }
 
     const changeMessageResponseSentStatus = async(targetMessageID, targetFieldValue) => {
@@ -151,8 +204,10 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
         console.log('SENDING REPLY:  TO: ' + sendingTo + ', FROM: ' + sendingFrom + ', TXT: ' + replyText + ', THREAD: ' + messageThreadID + ')'); 
 
         const dbCollection = firestore.collection('messages');
+
+        const rightNow = Timestamp.now();
         const response = await dbCollection.add({ 
-            msgDate : Timestamp.now(),
+            msgDate : rightNow,
             msgTo : sendingTo,
             msgFrom : sendingFrom,
             msgText : replyText,
@@ -172,8 +227,16 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
         changeMessageStatus(originalMessageID, 1);
         console.log('MARKED message as READ, also. Kthx.'); 
 
-        // I guess just refresh. Can we do this w/out a reload? No biggie if not...
-        window.location.reload();
+        // advance page iteration so we can pass this as a prop
+        // to the thread component, so that it can know to
+        // fire fetchThread
+        setPageIteration(pageIteration+1);
+        console.log('Iteration:' + pageIteration);
+
+        //finally, let's clear the old message from the textarea
+        let targetID = 'reply'+originalMessageID;
+        console.log('Clearing textarea ID:' + targetID);
+        document.getElementById(targetID).value='';
     }
 
     return (
@@ -201,9 +264,13 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                             <div className={ getMessageWrapperClass(thisMsg['m_ST']) } style={{display:"block"}}>
                             
-                                <div className="msgAlertLeft">
-                                    <img className='msgAvatar' src='defaultavatar.jpg' alt='' />
-                                </div>
+                            <div key={index} className="msgAlertLeft">
+                                {avatarURLs && avatarURLs[index] ? (
+                                    <img className='msgAvatar' src={avatarURLs[index]} alt='' />
+                                ) : (
+                                    <img className='msgAvatar' src='defaultavatar.jpg' alt='' /> 
+                                )}
+                            </div>
 
                                 <div className="msgAlertMiddle">
 
@@ -240,7 +307,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                 <div className="msgDesktopRight"> {/* RIGHT SIDE OF DESKTOP UX, where MESSAGE SHOW HERE... */}
 
-                    {passData.map( thisMsg => (
+                    {passData.map( (thisMsg, index) => (
                     <>
 
                         {activeDivId == thisMsg['m_ID'] && (
@@ -248,7 +315,11 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                             <div className="rightFromHeader">
                                 <div className="msgAlertLeft">
-                                    <img className='msgAvatar' src='defaultavatar.jpg' alt='' />
+                                    {avatarURLs && avatarURLs[index] ? (
+                                        <img className='msgAvatar' src={avatarURLs[index]} alt='' />
+                                    ) : (
+                                        <img className='msgAvatar' src='defaultavatar.jpg' alt='' /> 
+                                    )}
                                 </div>
 
                                 <div className="msgAlertMiddle">
@@ -267,7 +338,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                             <div className="msgReplyArea">
 
-                                <MsgThread threadID={thisMsg['m_TH']} />
+                                <MsgThread threadID={thisMsg['m_TH']} pageIteration={pageIteration} />
                             
                             {/*}
                             <div id={'fullMsg'+thisMsg['m_ID']}>
@@ -326,12 +397,16 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                         </> : <></>
                     }
 
-                    {passData.map( thisMsg => (
+                    {passData.map( (thisMsg, index) => (
                             
                             <div className={ getMessageWrapperClass(thisMsg['m_ST']) } style={{display:"block"}}>
                             
-                            <div className="msgAlertLeft">
-                                <img className='msgAvatar' src='defaultavatar.jpg' alt='' />
+                            <div key={index} className="msgAlertLeft">
+                                {avatarURLs && avatarURLs[index] ? (
+                                    <img className='msgAvatar' src={avatarURLs[index]} alt='' />
+                                ) : (
+                                    <img className='msgAvatar' src='defaultavatar.jpg' alt='' /> // Use default avatar if URL not available
+                                )}
                             </div>
 
                             <div className="msgAlertMiddle">
@@ -397,7 +472,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                             <div className="msgReplyArea" id={thisMsg['m_ID']} style={{display:"none"}}>
 
-                               <MsgThread threadID={thisMsg['m_TH']} />
+                               <MsgThread threadID={thisMsg['m_TH']} pageIteration={pageIteration} />
                             {/*}
                                 <div id={'fullMsg'+thisMsg['m_ID']}>
                                     <p className="msgText msgFull">{thisMsg['m_TX']}</p>

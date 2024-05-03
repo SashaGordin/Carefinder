@@ -9,11 +9,11 @@ import { firestore } from '../firebase';
 //import MsgTemplate from "./MsgTemplate";
 import MsgTemplateMVP from "./MsgTemplateMVP";
 
-
+//v20240430.837pm
 export default function MsgInbox() {
 
     const [error, setError] = useState('');
-    const { login, currentUser } = useAuth()
+    const {login, currentUser } = useAuth()
     const [userMessages, setUserMessages] = useState([]); 
     const [loading, setLoading] = useState(false);
     const [containsArchives, setContainsArchives] = useState(0);
@@ -83,7 +83,11 @@ export default function MsgInbox() {
                 const response2 = await lookupUserTable.get();                 
                 
                 // ok we've got a response...
-                if (!response2.empty) {
+                // note: I used to just check if the response was not empty, but now I'm checking to see if the
+                // response exists prior to iterating. This is because we may have situations where we delete users,
+                // but they have prior messages in the system, so I'll want to not show those, I think.
+                // but, really, if we ever delete users, maybe we should delete their messages, too??
+                if (response2.exists) {
 
                     // if role is defined, let's use that first..
                     if (response2.data()['role']) {

@@ -66,7 +66,7 @@ body#CF .fixed-top {position:initial; }
 
 body#CF a { color:#ff6699; text-decoration: none; }
 
-body#CF button { 
+body#CF button:not(.clientLProw2left button) { 
     background:#ff6699; 
     color:white;
     text-decoration: none;
@@ -79,6 +79,13 @@ body#CF button {
     padding: 50px;
     border-radius: 50px; }
 
+#CF .clientLProw2right .card-body { 
+    padding: 20px 20px 20px 7%;
+    border-radius: 10px; }
+    
+    #CF .clientLProw2right .card { 
+        margin-bottom:10px; }
+        
 body#CF button:hover { 
     background:#000000; 
 }
@@ -105,6 +112,14 @@ body#CF button.btn-secondary:hover { background:#000000;}
     margin-right: auto;
 }
 
+#CF .clientLProw2right .card { 
+    background:#333333; 
+    color:white; 
+    border-radius: 50px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
 #CF .CPlistings .card { max-width:800px; }
 #CF .CPlistings .utilityPage { padding:initial; }
 
@@ -244,7 +259,15 @@ float:right
     text-align:center;
 }
 
-.msgAvatar { width:90%; border-radius:50%; }
+.msgAvatar { 
+    width: 90%; /* Set a percentage width */
+    height: auto; /* Automatically adjust height to maintain aspect ratio */
+    max-width: 100px; /* Set a maximum width to prevent excessive stretching */
+    max-height: 100px; /* Set a maximum height to prevent excessive stretching */
+    border-radius: 50%; /* Make it circular */
+    object-fit: cover; /* Ensure the image covers the entire container */
+}
+
 .msgAlertLeft { width:13%; float:left; }
 .msgAlertMiddle { width:80%; float:left; }
 .msgAlertRight { width:7%; float:left; }

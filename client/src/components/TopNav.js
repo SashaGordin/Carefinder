@@ -119,6 +119,7 @@ export default function TopNav() {
 								<NavDropdown title="Clients" id="client-dropdown">
 									<NavDropdown.Item href="/client-dashboard" title="Client Dashboard">Client Dashboard</NavDropdown.Item>
 									<NavDropdown.Item href="/client-menu" title="Client Menu">Client Menu</NavDropdown.Item>
+									<NavDropdown.Item href="/admin-client-viewer" title="Client Viewer">Client Viewer</NavDropdown.Item>
 								</NavDropdown>
 
 								<NavDropdown title="Providers" id="provider-dropdown">

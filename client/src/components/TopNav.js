@@ -54,6 +54,12 @@ export default function TopNav() {
 								</Nav.Item>
 
 								<Nav.Item>
+									<Nav.Link href="/msg-outbox" title="Outbox">
+										Outbox
+									</Nav.Link>
+								</Nav.Item>
+
+								<Nav.Item>
 									<Nav.Link href="/client-menu" title="Menu">
 										Menu
 									</Nav.Link>
@@ -82,6 +88,13 @@ export default function TopNav() {
 								</Nav.Item>
 
 								<Nav.Item>
+									<Nav.Link href="/msg-outbox" title="Outbox">
+										Outbox
+									</Nav.Link>
+								</Nav.Item>
+
+
+								<Nav.Item>
 									<Nav.Link href="/provider-menu" title="Menu">
 										Menu
 									</Nav.Link>
@@ -104,22 +117,19 @@ export default function TopNav() {
 									</Nav.Link>
 								</Nav.Item>
 
-								<Nav.Item>
-									<Nav.Link href="/msg-inbox" title="Inbox">
-										Inbox
-									</Nav.Link>
-								</Nav.Item>
+								<NavDropdown title="Messaging" id="admin-utils">
+									<NavDropdown.Item href="/msg-inbox" title="Message Anyone">Inbox</NavDropdown.Item>
+									<NavDropdown.Item href="/msg-outbox" title="User Viewer">Outbox</NavDropdown.Item>
+								</NavDropdown>
 
-								<Nav.Item>
-									<Nav.Link href="/msg-admin" title="Inbox">
-										Outbox
-									</Nav.Link>
-								</Nav.Item>
+								<NavDropdown title="Admin Utils" id="admin-utils">
+									<NavDropdown.Item href="/msg-admin" title="Message Anyone">Admin Messager</NavDropdown.Item>
+									<NavDropdown.Item href="/admin-client-viewer" title="User Viewer">User Viewer</NavDropdown.Item>
+								</NavDropdown>
 
 								<NavDropdown title="Clients" id="client-dropdown">
 									<NavDropdown.Item href="/client-dashboard" title="Client Dashboard">Client Dashboard</NavDropdown.Item>
 									<NavDropdown.Item href="/client-menu" title="Client Menu">Client Menu</NavDropdown.Item>
-									<NavDropdown.Item href="/admin-client-viewer" title="Client Viewer">Client Viewer</NavDropdown.Item>
 								</NavDropdown>
 
 								<NavDropdown title="Providers" id="provider-dropdown">

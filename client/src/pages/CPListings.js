@@ -3,12 +3,12 @@ import { Card, Button, Alert, Navbar, Image } from 'react-bootstrap'
 import { firestore } from '../firebase'; // Assuming you have firebase.js setup
 import { useAuth } from "../contexts/AuthContext"
 import { getDoc, getDocs, doc, updateDoc, collection } from 'firebase/firestore';
-import TopNav from "./TopNav";
-import Footer from "./Footer";
-import Listings from './CPListings/Listings';
-import PersonalInfo from './menu/PersonalInfo';
-import Profile from './CPListings/Profile';
-import ListingCard from './CPListings/ListingCard';
+import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
+import Listings from '../components/CPListings/Listings';
+import PersonalInfo from '../components/menu/PersonalInfo';
+import Profile from '../components/CPListings/Profile';
+import ListingCard from '../components/CPListings/ListingCard';
 
 export default function CPListings() {
   const [userData, setUserData] = useState({});

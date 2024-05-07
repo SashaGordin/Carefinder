@@ -14,7 +14,7 @@ span.CFpink, span.CForange { padding-left: 10px; padding-right:10px; }
 .CFwhiteBackground { background:white; }
 .CForangeBackground { background:#ff9900; }
 
-
+.outboxTextarea{width:90%; height:300px; }
 #CF .progress-bar {
     width: 100%;
     /*background-color: #000000;*/

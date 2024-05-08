@@ -46,52 +46,45 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 	};
 
 	const validateInput = (name, value, section) => {
-		let error = "";
+    let error = "";
 
-		// Ignore dashes, spaces, open paren "(" and close paren ")" characters during input value for phone number validations -- will still show on screen, but will validate
-		// works well, but what it people begin their ph with "1" or "+1"?
-		let sanitizedValue = value;
-		if (name === "phoneNumber") {
-			sanitizedValue = value.replace(/[-\s\(\)]/g, '');
-		}
+    switch (name) {
+        case "phoneNumber":
+            // Regular expression to validate phone number format
+            const phoneRegex = /^\d{10}$/;
+            if (!phoneRegex.test(value)) {
+                error = "Please enter a valid phone number";
+            }
+            break;
+        case "email":
+            // Regular expression to validate email format
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(value)) {
+                error = "Please enter a valid email address";
+            }
+            break;
+        case "seniorAge":
+            const age = parseInt(value);
+            if (isNaN(age) || age < 40 || age > 120) {
+                error = "Please enter a valid age";
+            }
+            break;
+        default:
+            // For other fields, just check if it's empty
+            if (value.trim() === "") {
+                error = "This field is required";
+            }
+            break;
+    }
 
-		switch (name) {
-			case "phoneNumber":
-				// Regular expression to validate phone number format
-				const phoneRegex = /^\d{10}$/;
-				if (!phoneRegex.test(sanitizedValue)) {
-					error = "Please enter a valid phone number";
-				}
-				break;
-			case "email":
-				// Regular expression to validate email format
-				const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-				if (!emailRegex.test(value)) {
-					error = "Please enter a valid email address";
-				}
-				break;
-			case "seniorAge":
-				const age = parseInt(value);
-				if (isNaN(age) || age < 18) {
-					error = "Please enter a valid age";
-				}
-				break;
-			default:
-				// For other fields, just check if it's empty
-				if (value.trim() === "") {
-					error = "This field is required";
-				}
-				break;
-		}
-
-		setInputErrors((prevState) => ({
-			...prevState,
-			[section]: {
-				...prevState[section],
-				[name]: error,
-			},
-		}));
-	};
+    setInputErrors((prevState) => ({
+        ...prevState,
+        [section]: {
+            ...prevState[section],
+            [name]: error,
+        },
+    }));
+};
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
@@ -116,6 +109,7 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 	};
 
 	const handleNext = (e) => {
+
 		handleSubmit(e);
 	};
 
@@ -160,9 +154,7 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 								onChange={(e) => handleChange(e, "personalInfo")}
 							/>
 							{inputErrors.personalInfo.phoneNumber && (
-								<div className="text-danger">
-									{inputErrors.personalInfo.phoneNumber}
-								</div>
+								<div className="text-danger">{inputErrors.personalInfo.phoneNumber}</div>
 							)}
 						</div>
 					</div>
@@ -178,9 +170,7 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 								onChange={(e) => handleChange(e, "personalInfo")}
 							/>
 							{inputErrors.personalInfo.email && (
-								<div className="text-danger">
-									{inputErrors.personalInfo.email}
-								</div>
+								<div className="text-danger">{inputErrors.personalInfo.email}</div>
 							)}
 						</div>
 					</div>
@@ -188,7 +178,7 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 						<label htmlFor="isPOA">Do any of the following apply?</label>
 						<div>
 							<select
-								className=""
+								className="w-50"
 								id="isPOA"
 								name="isPOA"
 								value={formData.personalInfo.isPOA}
@@ -196,66 +186,11 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 								style={inputStyle}
 							>
 								<option value="">Select an option</option>
-								<optgroup label="Powers of Attorney (POA)">
-									<option value="general">General Power of Attorney</option>
-									<option value="limited">
-										Limited or Special Power of Attorney
-									</option>
-									<option value="durable">Durable Power of Attorney</option>
-									<option value="medical">
-										Medical or Healthcare Power of Attorney
-									</option>
-									<option value="financial">Financial Power of Attorney</option>
-									<option value="springing">Springing Power of Attorney</option>
-									<option value="non-durable">
-										Non-Durable Power of Attorney
-									</option>
-									<option value="special-real-estate">
-										Special Power of Attorney for Real Estate
-									</option>
-								</optgroup>
-								<optgroup label="Guardianship">
-									<option value="guardianship-person">
-										Guardianship of the Person
-									</option>
-									<option value="guardianship-estate">
-										Guardianship of the Estate
-									</option>
-									<option value="limited-guardianship">
-										Limited Guardianship
-									</option>
-									<option value="temporary-guardianship">
-										Temporary Guardianship
-									</option>
-									<option value="voluntary-guardianship">
-										Voluntary Guardianship
-									</option>
-									<option value="guardianship-minor-children">
-										Guardianship of Minor Children
-									</option>
-								</optgroup>
-								<optgroup label="Other Legal Arrangements or Roles">
-									<option value="trustee">Trustee</option>
-									<option value="executor">
-										Executor or Personal Representative
-									</option>
-									<option value="healthcare-proxy">Healthcare Proxy</option>
-									<option value="representative-payee">
-										Representative Payee
-									</option>
-									<option value="conservatorship">Conservatorship</option>
-									<option value="agent-living-will">
-										Agent under a Living Will or Advance Directive
-									</option>
-									<option value="court-appointed-advocate">
-										Court-Appointed Advocate or Guardian
-									</option>
-								</optgroup>
+								<option value="poa">I am POA</option>
+								<option value="other">Other</option>
 							</select>
 							{inputErrors.personalInfo.isPOA && (
-								<div className="text-danger">
-									{inputErrors.personalInfo.isPOA}
-								</div>
+								<div className="text-danger">{inputErrors.personalInfo.isPOA}</div>
 							)}
 						</div>
 					</div>
@@ -269,18 +204,16 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 								type="text"
 								id="seniorName"
 								name="seniorName"
-								placeholder="enter senior's name"
+								placeholder="enter name"
 								value={formData.seniorInfo.seniorName}
 								onChange={(e) => handleChange(e, "seniorInfo")}
 							/>
 							{inputErrors.seniorInfo.seniorName && (
-								<div className="text-danger">
-									{inputErrors.seniorInfo.seniorName}
-								</div>
+								<div className="text-danger">{inputErrors.seniorInfo.seniorName}</div>
 							)}
 						</div>
 					</div>
-					<div class="flex justify-between gap-10">
+					<div class="flex justify-between gap-10 w-50">
 						<div>
 							<label htmlFor="seniorAge">Age</label>
 							<div>
@@ -288,14 +221,12 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 									type="number"
 									id="seniorAge"
 									name="seniorAge"
-									placeholder="enter senior's age"
+									placeholder="enter your age"
 									value={formData.seniorInfo.seniorAge}
 									onChange={(e) => handleChange(e, "seniorInfo")}
 								/>
 								{inputErrors.seniorInfo.seniorAge && (
-									<div className="text-danger">
-										{inputErrors.seniorInfo.seniorAge}
-									</div>
+									<div className="text-danger">{inputErrors.seniorInfo.seniorAge}</div>
 								)}
 							</div>
 						</div>
@@ -314,9 +245,7 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 									<option value="female">Female</option>
 								</select>
 								{inputErrors.seniorInfo.seniorSex && (
-									<div className="text-danger">
-										{inputErrors.seniorInfo.seniorSex}
-									</div>
+									<div className="text-danger">{inputErrors.seniorInfo.seniorSex}</div>
 								)}
 							</div>
 						</div>

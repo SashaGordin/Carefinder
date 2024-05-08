@@ -19,7 +19,7 @@ span.CFpink, span.CForange { padding-left: 10px; padding-right:10px; }
 .CFwhiteBackground { background:white; }
 .CForangeBackground { background:#ff9900; }
 
-
+.outboxTextarea{width:90%; height:300px; }
 #CF .progress-bar {
     width: 100%;
     /*background-color: #000000;*/
@@ -71,7 +71,7 @@ body#CF .fixed-top {position:initial; }
 
 body#CF a { color:#ff6699; text-decoration: none; }
 
-body#CF button {
+body#CF button:not(.clientLProw2left button) {
     background:#ff6699;
     color:white;
     text-decoration: none;
@@ -110,6 +110,14 @@ body#CF button.btn-secondary:hover { background:#000000;}
     margin-right: auto;
 }
 
+#CF .clientLProw2right .card {
+    background:#333333;
+    color:white;
+    border-radius: 50px;
+    max-width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
 #CF .CPlistings .card { max-width:800px; }
 #CF .CPlistings .utilityPage { padding:initial; }
 
@@ -249,7 +257,15 @@ float:right
     text-align:center;
 }
 
-.msgAvatar { width:90%; border-radius:50%; }
+.msgAvatar {
+    width: 90%; /* Set a percentage width */
+    height: auto; /* Automatically adjust height to maintain aspect ratio */
+    max-width: 100px; /* Set a maximum width to prevent excessive stretching */
+    max-height: 100px; /* Set a maximum height to prevent excessive stretching */
+    border-radius: 50%; /* Make it circular */
+    object-fit: cover; /* Ensure the image covers the entire container */
+}
+
 .msgAlertLeft { width:13%; float:left; }
 .msgAlertMiddle { width:80%; float:left; }
 .msgAlertRight { width:7%; float:left; }

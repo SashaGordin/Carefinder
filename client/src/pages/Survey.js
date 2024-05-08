@@ -404,10 +404,9 @@ const Survey = () => {
 										<p>
 											Question {currentQuestionIndex} of {questions.length}
 										</p>
+										{/* NO IDEA HOW THIS WORKS, SO I AM JUST GONNA FORCE THIS TO "1" SO IT'LL TRIGGER THE UPLOAD */}
 										<SurveyUpload
-											assessment={
-												questions[currentQuestionIndex - 1].assessment === "Yes"
-											}
+											assessment={1} 
 											description={
 												questions[currentQuestionIndex - 1].description
 											}

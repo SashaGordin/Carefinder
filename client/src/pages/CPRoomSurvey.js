@@ -1,25 +1,25 @@
 import React, { useState } from 'react';
-import { firestore } from '../../firebase'; // Assuming you have firebase.js setup
+import { firestore } from '../firebase'; // Assuming you have firebase.js setup
 import { getDoc, doc, setDoc } from 'firebase/firestore';
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
-import Step1 from './CPRoomSurvey/Step1';
-import Step2 from './CPRoomSurvey/Step2';
-import Step3 from './CPRoomSurvey/Step3';
-import Step4 from './CPRoomSurvey/Step4';
-import Step5 from './CPRoomSurvey/Step5';
-import Step6 from './CPRoomSurvey/Step6';
-import Step7 from './CPRoomSurvey/Step7';
-import Step8 from './CPRoomSurvey/Step8';
-import Step9 from './CPRoomSurvey/Step9';
+import Step1 from '../components/CPListings/CPRoomSurvey/Step1';
+import Step2 from '../components/CPListings/CPRoomSurvey/Step2';
+import Step3 from '../components/CPListings/CPRoomSurvey/Step3';
+import Step4 from '../components/CPListings/CPRoomSurvey/Step4';
+import Step5 from '../components/CPListings/CPRoomSurvey/Step5';
+import Step6 from '../components/CPListings/CPRoomSurvey/Step6';
+import Step7 from '../components/CPListings/CPRoomSurvey/Step7';
+import Step8 from '../components/CPListings/CPRoomSurvey/Step8';
+import Step9 from '../components/CPListings/CPRoomSurvey/Step9';
 
 
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button, Card, Alert} from 'react-bootstrap';
 
 
-import TopNav from "../TopNav";
-import Footer from "../Footer";
+import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
 
 
 export default function CPRoomSurvey() {

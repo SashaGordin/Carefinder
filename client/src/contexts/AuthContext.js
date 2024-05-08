@@ -32,6 +32,14 @@ export function AuthProvider({ children }) {
       setCurrentUser(user)
       setLoading(false)
 
+      // gonna pop localStorageCurrentUserID into local storage to make it
+      // accessible everywhere...
+      if (user) {
+        localStorage.setItem('localStorageCurrentUserID', user.uid);
+      } else {
+        localStorage.removeItem('localStorageCurrentUserID');
+      }
+
     })
     return unsubscribe
   }, [])

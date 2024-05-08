@@ -27,10 +27,12 @@ import ProviderMenu from '../pages/ProviderMenu';
 import PersonalInfoPage from './menu/PersonalInfo'
 import PrivacyPage from './menu/Privacy'
 import MsgInbox from './MsgInbox';
+import MsgOutbox from '../pages/MsgOutbox';
 import FileUpload from './FileUpload';
 import CPHomeSurvey from './CPListings/CPHomeSurvey';
 import CPRoomSurvey from './CPListings/CPRoomSurvey';
-
+import MessageAdmin from '../pages/MessageAdmin';
+import AdminViewClient from './AdminViewClient';
 
 
 function App() {
@@ -60,6 +62,12 @@ function App() {
                       <MsgInbox />
                   </PrivateRoute>
                 } />
+              <Route path="/msg-outbox" element={
+                  <PrivateRoute redirectPath="/login" allowedRoles={['admin','client', 'provider']}>
+                      <MsgOutbox />
+                  </PrivateRoute>
+                } />
+
               <Route path="/join-team" element={<CareFinderJoinTeam />} />
               <Route path="/contact-us" element={<CareFinderContactUs />} />
               <Route path="/sitemap" element={<CareFinderSitemap />} />
@@ -77,6 +85,20 @@ function App() {
                   </PrivateRoute>
                 }
               />
+
+              <Route
+                path="/msg-admin"
+                element={
+                  <PrivateRoute
+                  redirectPath="/login"
+                    allowedRoles={
+                       ['admin']
+                    }>
+                      <MessageAdmin />
+                  </PrivateRoute>
+                }
+              />
+
               <Route
                 path="/care-provider-dashboard"
                 element={
@@ -161,7 +183,7 @@ function App() {
                   </PrivateRoute>
                 }
               />
-                 <Route
+              <Route
                 path="/room-survey"
                 element={
                   <PrivateRoute
@@ -173,6 +195,19 @@ function App() {
                   </PrivateRoute>
                 }
               />
+              <Route
+                path="/admin-client-viewer"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      ['admin']
+                    }>
+                      <AdminViewClient />
+                  </PrivateRoute>
+                }
+              />
+
             </Routes>
           </AuthProvider>
 

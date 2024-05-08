@@ -102,67 +102,128 @@ app.post('/matchUserWithHouses', async (req, res) => { // Async handler
   }
 });
 
-app.post('/getProviders' , async (req, res) => {
-
+app.post('/getProviders', async (req, res) => {
   const bounds = req.body.bounds;
   const center = req.body.center;
   const radius = req.body.radius;
-  console.log(radius);
   const centerArray = Array.isArray(center) ? center : [center.lat, center.lng];
 
-
-
-  //const radiusInM = 10000;
   try {
-    console.log(typeof bounds.north);
+    // Query the users collection for providers within the specified bounds
+    const snapshot = await admin.firestore().collection('users')
+      .where('role', '==', 'provider')
+      .where('geolocation', '>=', new admin.firestore.GeoPoint(bounds.south, bounds.west))
+      .where('geolocation', '<=', new admin.firestore.GeoPoint(bounds.north, bounds.east))
+      .get();
 
-    const snapshot = await admin.firestore().collection('API_AFH_DATA')
-    .where('geolocation', '>=', new admin.firestore.GeoPoint(bounds.south, bounds.west))
-    .where('geolocation', '<=', new admin.firestore.GeoPoint(bounds.north, bounds.east))
-    .get();
     const providersInBounds = snapshot.docs.map(doc => doc.data());
-    console.log("provider Count:", providersInBounds.length);
+
+    // Filter providers based on distance from the center and radius
     const filteredProviders = providersInBounds.filter(provider => {
       const distanceInKm = geofire.distanceBetween([provider.geolocation.latitude, provider.geolocation.longitude], centerArray);
       const distanceInM = distanceInKm * 1000;
-
       return distanceInM <= radius;
-  });
+    });
 
-  console.log("Filtered Provider Count:", filteredProviders.length); // Log filtered provider count
+    // If there are providers from the users collection, add them to the list of providers
+    if (filteredProviders.length > 0) {
+      res.json({ providers: filteredProviders });
+    } else {
+      // If there are no providers from the users collection, query the API_AFH_DATA collection
+      const snapshotAPI = await admin.firestore().collection('API_AFH_DATA')
+        .where('geolocation', '>=', new admin.firestore.GeoPoint(bounds.south, bounds.west))
+        .where('geolocation', '<=', new admin.firestore.GeoPoint(bounds.north, bounds.east))
+        .get();
+      const providersInBoundsAPI = snapshotAPI.docs.map(doc => doc.data());
 
-    res.json({ providers: filteredProviders });
+      // Filter providers from API_AFH_DATA based on distance from the center and radius
+      const filteredProvidersAPI = providersInBoundsAPI.filter(provider => {
+        const distanceInKm = geofire.distanceBetween([provider.geolocation.latitude, provider.geolocation.longitude], centerArray);
+        const distanceInM = distanceInKm * 1000;
+        return distanceInM <= radius;
+      });
+
+      // Combine providers from users collection and API_AFH_DATA collection
+      const allProviders = [...filteredProviders, ...filteredProvidersAPI];
+
+      res.json({ providers: allProviders });
+    }
   } catch (error) {
     console.error('Error getting providers:', error);
     res.status(500).send('Internal Server Error');
   }
-})
-
-app.post('/findProvider', async (req, res) => { // Async handler
-  try {
-    const providerNumber = req.body.providerNumber;
-    console.log(providerNumber);
-
-    // Fetch data from external API
-    const response = await axios.get('https://fortress.wa.gov/dshs/adsaapps/lookup/FacilityLookupJSON.aspx?factype=AF');
-    const data = response.data;
-
-    // Filter the data by LocationCity === "Shoreline"
-    const providerInfo = data.filter(home => home.LicenseNumber === providerNumber);
-
-    console.log(providerInfo);
-    // Process filtered data here
-
-    // Implement your matching logic here
-    // ...
-
-    // Return matched houses to the client
-    res.json({ providerInfo: providerInfo });
-  } catch (error) {
-    console.error('Error matching houses:', error);
-    res.status(500).send('Internal Server Error');
-  }
 });
+
+
+// app.post('/getProviders' , async (req, res) => {
+
+//   const bounds = req.body.bounds;
+//   const center = req.body.center;
+//   const radius = req.body.radius;
+//   console.log(radius);
+//   const centerArray = Array.isArray(center) ? center : [center.lat, center.lng];
+
+//   console.log(center.lat, center.lng);
+
+
+
+//   //const radiusInM = 10000;
+//   try {
+//     console.log(typeof bounds.north);
+
+//     const snapshot = await admin.firestore().collection('API_AFH_DATA')
+//     .where('geolocation', '>=', new admin.firestore.GeoPoint(bounds.south, bounds.west))
+//     .where('geolocation', '<=', new admin.firestore.GeoPoint(bounds.north, bounds.east))
+//     .get();
+//     const providersInBounds = snapshot.docs.map(doc => doc.data());
+//     //console.log(radius);
+//     // for (const provider of providersInBounds) {
+//     //   console.log(geofire.distanceBetween([provider.geolocation.latitude, provider.geolocation.longitude], centerArray) * 1000);
+//     // }
+//     console.log("provider Count:", providersInBounds.length);
+//     const filteredProviders = providersInBounds.filter(provider => {
+//       const distanceInKm = geofire.distanceBetween([provider.geolocation.latitude, provider.geolocation.longitude], centerArray);
+//       const distanceInM = distanceInKm * 1000;
+
+//       //console.log(distanceInM, radius, distanceInM <= radius);
+
+//       return distanceInM <= radius;
+//   });
+
+//   console.log("Filtered Provider Count:", filteredProviders.length); // Log filtered provider count
+
+//     res.json({ providers: filteredProviders });
+//   } catch (error) {
+//     console.error('Error getting providers:', error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// })
+
+// app.post('/findProvider', async (req, res) => { // Async handler
+//   try {
+//     const providerNumber = req.body.providerNumber;
+//     console.log(providerNumber);
+
+//     // Fetch data from external API
+//     const response = await axios.get('https://fortress.wa.gov/dshs/adsaapps/lookup/FacilityLookupJSON.aspx?factype=AF');
+//     const data = response.data;
+
+//     // Filter the data by LocationCity === "Shoreline"
+//     const providerInfo = data.filter(home => home.LicenseNumber === providerNumber);
+
+//     console.log(providerInfo);
+//     // Process filtered data here
+
+//     // Implement your matching logic here
+//     // ...
+
+//     // Return matched houses to the client
+//     res.json({ providerInfo: providerInfo });
+//   } catch (error) {
+//     console.error('Error matching houses:', error);
+//     res.status(500).send('Internal Server Error');
+//   }
+// });
 //debug
 const debugNumber = process.env.DEBUG_PHONE_NUMBER;
 const debugMode = process.env.DEBUG_MODE;
@@ -175,7 +236,7 @@ app.post('/sendConfirmationText', async (req, res) => {
 // Prepend +1 to the numeric phone number
     const formattedPhoneNumber = '+1' + numericPhoneNumber;
     let phoneNumber = debugMode ? debugNumber : formattedPhoneNumber;
-    
+
     const serviceSid = await getServiceSid();
 
   // Create a verification request
@@ -371,11 +432,7 @@ app.post('/sendConfirmationText', async (req, res) => {
     snapshot.forEach(doc => {
         console.log('House data:', doc.data());
     });
-  }
-
-
- 
-
+  };
 
 
   // Call the function to fetch data and store it in Firestore

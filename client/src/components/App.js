@@ -8,7 +8,9 @@ import Survey from '../pages/Survey'
 import CPLandingPage from '../pages/CPLandingPage';
 import ClaimProfile from '../pages/ClaimProfile';
 import CPDashboard from '../pages/CPDashboard';
-import CPListings from './CPListings';
+import CPListings from '../pages/CPListings';
+import CPHomeSurvey from '../pages/CPHomeSurvey';
+import CPRoomSurvey from '../pages/CPRoomSurvey';
 import ClientDashboard from '../pages/ClientDashboard';
 import { AuthProvider } from "../contexts/AuthContext"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
@@ -29,8 +31,6 @@ import PrivacyPage from './menu/Privacy'
 import MsgInbox from './MsgInbox';
 import MsgOutbox from '../pages/MsgOutbox';
 import FileUpload from './FileUpload';
-import CPHomeSurvey from './CPListings/CPHomeSurvey';
-import CPRoomSurvey from './CPListings/CPRoomSurvey';
 import MessageAdmin from '../pages/MessageAdmin';
 import AdminViewClient from './AdminViewClient';
 

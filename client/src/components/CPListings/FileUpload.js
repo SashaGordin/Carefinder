@@ -5,7 +5,7 @@ import { Button, Card, Form } from 'react-bootstrap';
 // to do later -- use server.js
 // import axios from 'axios';
 
-const FileUpload = ({controlId, handleNewFilePath, folderPath, uploadLabel, uploadType, allowMultipleFiles}) => {
+const FileUpload = ({controlId, handleNewFilePaths, folderPath, uploadLabel, uploadType, allowMultipleFiles}) => {
 
   const [file, setFile] = useState(null);
   let acceptedFileTypes = uploadType == "Photo" ? "image/*" : uploadType == "Video" ? "video/*" : "";
@@ -20,7 +20,7 @@ const FileUpload = ({controlId, handleNewFilePath, folderPath, uploadLabel, uplo
     let fileList = document.getElementById(controlId).files;
     let fileIndex = 0;
     let newFileName;
-
+    let promises = [];
     for (const file of fileList) {
 
       if (!acceptedFileTypes || file.type.startsWith(acceptedFileTypes.replace("*", ""))) {
@@ -30,18 +30,20 @@ const FileUpload = ({controlId, handleNewFilePath, folderPath, uploadLabel, uplo
         let newFilePath = `${folderPath}/${newFileName}`
         const storageRef = ref(storage, newFilePath);
         console.log("Uploading " + file.name + "...");
-        uploadBytes(storageRef, file).then((snapshot) => {
-          console.log(file.name + ' uploaded');
-          var imgURL = getDownloadURL(storageRef);
-          imgURL.then((url) => {
-            console.log(url);
-            handleNewFilePath(url);
-          });
-        });
+        var uploadPromise = uploadBytes(storageRef, file).then(() => {
+          console.log("getting download url");
+          return getDownloadURL(storageRef)});
+        console.log(uploadPromise);
+        promises.push(uploadPromise);
       } else {
         console.log('FILE REJECTED: You cannot upload ' + file.type + 'files. Kthx.')
       }
     }
+    Promise.all(promises).then((imgURLs) => {
+      console.log("All uploads completed. URLs:");
+      console.log(imgURLs);
+      handleNewFilePaths(imgURLs);
+    })
   }
 
   return (

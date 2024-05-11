@@ -1,8 +1,10 @@
 import React, { useState , useEffect} from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Button, Card, Image} from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import EditableField from '../menu/EditableField';
 import RoomCard from './RoomCard';
+import FileUpload from './FileUpload';
+
 import { firestore } from '../../firebase'; // Assuming you have firebase.js setup
 import { getDoc, getDocs, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
 import { useAuth } from "../../contexts/AuthContext";
@@ -14,7 +16,7 @@ export default function ListingCard({userData, initialListingData}) {
   const [listingData, setListingData] = useState(initialListingData);
 
   const { currentUser } = useAuth();
-  const facilityPath = `users/${currentUser.uid}/listings/${listingData.facilityName}`;
+  const facilityPath = `users/${currentUser.uid}/listings/${listingData.licenseNumber}`;
   
   useEffect(() => {
     fetchRoomData();
@@ -33,9 +35,15 @@ export default function ListingCard({userData, initialListingData}) {
       setRoomsArr([...rooms]);
   };
 
+  const folderPath = `users/${currentUser.uid}`;
+	const handleNewPics = (arrNewFilePaths) => {
+		let homePhotos = listingData?.homePhotos ?? [];
+    homePhotos.push(...arrNewFilePaths); 
+    handleUpdate({...listingData, homePhotos: homePhotos});
+	}
 
   const gotoHomeSurvey = () => {
-	navigate('/home-survey', {state: {listingData}});
+	navigate('/home-survey', {state: {listingData, facilityPath}});
   }
 
   const addRoom = () => {
@@ -47,6 +55,8 @@ export default function ListingCard({userData, initialListingData}) {
   const handleUpdate = async (updatedListingData) => {
     try {
       const listingDocRef = doc(firestore, facilityPath);
+      //since we aren't guaranteed to have an existing listingDocRef, we use setdoc to create/overwrite it
+      //setdoc creates/overwrites any existing doc, so we need to pass in the entire update doc. updatedoc can be used to update just one field without modifying the rest of the doc
       await setDoc(listingDocRef, updatedListingData);
       console.log('Listing data updated successfully');
 
@@ -86,7 +96,7 @@ export default function ListingCard({userData, initialListingData}) {
         <Card.Title><h1>My AFH</h1></Card.Title>
 		<div className="myAFHname">
 			<h4>{listingData.facilityName}</h4>
-			<EditableField title="Adult Family Home Name" value={listingData.facilityName || ''} onChange={(newValue) => handleUpdate({ facilityName: newValue })} />
+			<EditableField title="Adult Family Home Name" value={listingData.facilityName || ''} onChange={(newValue) => handleUpdate({...listingData, facilityName: newValue })} />
 		</div>
 		<hr/>
 		<div>
@@ -95,7 +105,10 @@ export default function ListingCard({userData, initialListingData}) {
 				1.Exterior front of house. 2. Interior common area. 3. Interior common area.<br/>
 				Upload up to 20 photos. DO NOT POST ROOM PHOTOS here. :)
 			</p>
-			{/* insert photo gallery component here*/}
+			<FileUpload controlId="homePhotos" handleNewFilePaths={handleNewPics} folderPath={folderPath} uploadType="Photo" allowMultipleFiles={true} />    
+          {listingData?.homePhotos && listingData.homePhotos.map((path, i) => (
+                 <Image height="50px"src={path} key={i}/>
+              ))}
 		</div>
 		<hr/>
 		<div>

@@ -34,7 +34,7 @@ export default function CPHomeSurvey() {
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
-  const { listingData} = state || {};
+  const { listingData, facilityPath} = state || {};
   const [currentStep, setCurrentStep] = useState(1);
   const [listingInfo, setListingInfo] = useState(listingData);
   const [error, setError] = useState('');
@@ -61,7 +61,7 @@ export default function CPHomeSurvey() {
 
   const handleUpdate = async (updatedListingInfo) => {
     try {
-      const listingDocRef = doc(firestore, 'users', currentUser.uid, 'listings', listingInfo.facilityName);
+      const listingDocRef = doc(firestore, facilityPath);
       await setDoc(listingDocRef, updatedListingInfo);
       console.log('User data updated successfully');
 

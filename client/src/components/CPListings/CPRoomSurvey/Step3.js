@@ -5,9 +5,9 @@ import FileUpload from '../FileUpload';
 
 export default function Step3({ roomInfo, setRoomInfo }) {
   const folderPath = `users/${roomInfo.LicenseNumber}`;
-	const handleNewPic = (newFilePath) => {
+	const handleNewPics = (arrNewFilePaths) => {
 		let roomPhotos = roomInfo?.roomPhotos ?? [];
-    roomPhotos.push(newFilePath); 
+    roomPhotos.push(...arrNewFilePaths); 
     setRoomInfo({...roomInfo, roomPhotos: roomPhotos});
 	}
 
@@ -18,7 +18,7 @@ export default function Step3({ roomInfo, setRoomInfo }) {
         <Card.Body>
 
           <Card.Title>Upload photo of room</Card.Title>
-          <FileUpload controlId="roomPhotos" handleNewFilePath={handleNewPic} folderPath={folderPath} uploadType="Photo" allowMultipleFiles={true} />    
+          <FileUpload controlId="roomPhotos" handleNewFilePaths={handleNewPics} folderPath={folderPath} uploadType="Photo" allowMultipleFiles={true} />    
           {roomInfo?.roomPhotos && roomInfo.roomPhotos.map((path, i) => (
                  <Image height="50px"src={path} key={i}/>
               ))}

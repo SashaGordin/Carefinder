@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { firestore } from '../../firebase'; // Assuming you have firebase.js setup
+import { firestore } from '../firebase'; // Assuming you have firebase.js setup
 import { getDoc, doc, setDoc } from 'firebase/firestore';
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
-import Step1 from './CPHomeSurvey/Step1';
-import Step2 from './CPHomeSurvey/Step2';
-import Step3 from './CPHomeSurvey/Step3';
-import Step4 from './CPHomeSurvey/Step4';
-import Step5 from './CPHomeSurvey/Step5';
-import Step6 from './CPHomeSurvey/Step6';
-import Step7 from './CPHomeSurvey/Step7';
-import Step8 from './CPHomeSurvey/Step8';
-import Step9 from './CPHomeSurvey/Step9';
-import Step10 from './CPHomeSurvey/Step10';
-import Step11 from './CPHomeSurvey/Step11';
-import Step12 from './CPHomeSurvey/Step12';
-import Step13 from './CPHomeSurvey/Step13';
-import Step14 from './CPHomeSurvey/Step14';
+import Step1 from '../components/CPListings/CPHomeSurvey/Step1';
+import Step2 from '../components/CPListings/CPHomeSurvey/Step2';
+import Step3 from '../components/CPListings/CPHomeSurvey/Step3';
+import Step4 from '../components/CPListings/CPHomeSurvey/Step4';
+import Step5 from '../components/CPListings/CPHomeSurvey/Step5';
+import Step6 from '../components/CPListings/CPHomeSurvey/Step6';
+import Step7 from '../components/CPListings/CPHomeSurvey/Step7';
+import Step8 from '../components/CPListings/CPHomeSurvey/Step8';
+import Step9 from '../components/CPListings/CPHomeSurvey/Step9';
+import Step10 from '../components/CPListings/CPHomeSurvey/Step10';
+import Step11 from '../components/CPListings/CPHomeSurvey/Step11';
+import Step12 from '../components/CPListings/CPHomeSurvey/Step12';
+import Step13 from '../components/CPListings/CPHomeSurvey/Step13';
+import Step14 from '../components/CPListings/CPHomeSurvey/Step14';
 
 
 
@@ -26,15 +26,15 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Button, Card, Alert} from 'react-bootstrap';
 
 
-import TopNav from "../TopNav";
-import Footer from "../Footer";
+import TopNav from "../components/TopNav";
+import Footer from "../components/Footer";
 
 
 export default function CPHomeSurvey() {
   const navigate = useNavigate();
   const location = useLocation();
   const { state } = location;
-  const { listingData} = state || {};
+  const { listingData, facilityPath} = state || {};
   const [currentStep, setCurrentStep] = useState(1);
   const [listingInfo, setListingInfo] = useState(listingData);
   const [error, setError] = useState('');
@@ -61,7 +61,7 @@ export default function CPHomeSurvey() {
 
   const handleUpdate = async (updatedListingInfo) => {
     try {
-      const listingDocRef = doc(firestore, 'users', currentUser.uid, 'listings', listingInfo.facilityName);
+      const listingDocRef = doc(firestore, facilityPath);
       await setDoc(listingDocRef, updatedListingInfo);
       console.log('User data updated successfully');
 

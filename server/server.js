@@ -358,6 +358,55 @@ app.post("/getAddress", async (req, res) => {
 	}
 });
 
+
+  //IN PROGRESS
+  app.post('/getAvailListings', async (req, res) => { // Async handler
+    try {
+      let listings = new Set();
+      let listingPaths = new Set();
+      let listingsData = [];
+      const availableRoomsSnapshot = await admin.firestore().collectionGroup('rooms').where('isAvailable', '==', true).get();
+        availableRoomsSnapshot.forEach((doc) => {
+            //we have all the available room data right here but currently only use it to get the parent listing.
+            //it might be better to combine this method with the 'getRoomDataForListingPath' to return both the listing and room data in a single JSON object
+            //console.log(doc.id, ' => ', doc.data());
+            const listingId = doc.ref.parent.parent.id;
+            const listingPath = doc.ref.parent.parent.path;
+            listings.add(listingId);
+            listingPaths.add(listingPath);
+      });
+      const arrListingPaths = Array.from(listingPaths);
+      console.log(arrListingPaths);
+      await Promise.all(arrListingPaths.map((path) => {
+        return admin.firestore().doc(path).get().then((doc) => {
+          console.log(doc.data());
+          listingsData.push(doc.data());
+        });
+      }));
+      console.log(listings);
+      res.json({ listingsData: listingsData, listingPaths: arrListingPaths });
+    } catch (error) {
+      console.error('Error getting listings with availability', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+  app.post('/getRoomDataForListingPath', async (req, res) => { // Async handler
+    try {
+      const listingPath = req.body.listingPath;
+      const roomCollectionPath = `${listingPath}/rooms`;
+      const roomsSnapshot = await admin.firestore().collection(roomCollectionPath).where('isAvailable', '==', true).get();
+      const roomData = roomsSnapshot.docs.map(doc => doc.data());
+      console.log(roomData);
+      res.json({ roomData: roomData });
+    } catch (error) {
+      console.error('Error getting room data for listing', error);
+      res.status(500).send('Internal Server Error');
+    }
+  });
+
+
+
 const fetchDataAndStoreInFirestore = async () => {
 	try {
 		const response = await axios.get(

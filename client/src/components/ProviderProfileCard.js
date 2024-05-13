@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 const ProviderProfileCard = ({ provider }) => {
 	const {
@@ -21,6 +22,7 @@ const ProviderProfileCard = ({ provider }) => {
 		profilePicPath,
 		profilePicPath,
 	];
+	console.log([provider]);
 	return (
 		<>
 			<div
@@ -70,18 +72,33 @@ const ProviderProfileCard = ({ provider }) => {
 						}}
 					>
 						<div style={{ margin: "20px" }}>
-							<div style={{display: "flex", flexDirection: "row", marginBottom: "20px"}}>
+							<div
+								style={{
+									display: "flex",
+									flexDirection: "row",
+									marginBottom: "20px",
+								}}
+							>
 								<img
 									style={{ width: "100%", borderRadius: "25px" }}
 									src={profilePicPath}
 									alt="Profile pic"
 								/>
-								<div style={{display: "flex", flexDirection: "column", marginLeft: "10px"}}>
+								<div
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										marginLeft: "10px",
+									}}
+								>
 									<img
-										style={{ width: "100%", borderRadius: "5px", marginBottom: "10px"}}
+										style={{
+											width: "100%",
+											borderRadius: "5px",
+											marginBottom: "10px",
+										}}
 										src={profilePicPath}
 										alt="Profile pic"
-
 									/>
 									<img
 										style={{ width: "100%", borderRadius: "5px" }}
@@ -89,9 +106,19 @@ const ProviderProfileCard = ({ provider }) => {
 										alt="Profile pic"
 									/>
 								</div>
-								<div style={{display: "flex", flexDirection: "column", marginLeft: "10px"}}>
+								<div
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										marginLeft: "10px",
+									}}
+								>
 									<img
-										style={{ width: "100%", borderRadius: "5px", marginBottom: "10px" }}
+										style={{
+											width: "100%",
+											borderRadius: "5px",
+											marginBottom: "10px",
+										}}
 										src={profilePicPath}
 										alt="Profile pic"
 									/>
@@ -122,10 +149,35 @@ const ProviderProfileCard = ({ provider }) => {
 										<div>Mental Health</div>
 									</div>
 								</div>
-								<div style={{ display: "flex", flexDirection: "column", backgroundColor: "black", borderRadius: "10px", padding: "20px" }}>
-									<Button style={{marginBottom: "10px"}} >Message</Button>
-									<Button style={{marginBottom: "10px"}}>Request Quote</Button>
-									<Button style={{marginBottom: "10px"}}>Google Meets</Button>
+								<div
+									style={{
+										display: "flex",
+										flexDirection: "column",
+										backgroundColor: "black",
+										borderRadius: "10px",
+										padding: "20px",
+									}}
+								>
+									<Button
+										className="mb-2"
+										onClick={() => {
+											window.location.href = `/msg-outbox?ref=${provider.userId}`;
+										}}
+									>
+										Message
+									</Button>
+									{/* <Link to={`/msg-outbox?ref=${provider.userId}`}>
+										Forgot Password?
+									</Link> */}
+									<Button
+										className="mb-2"
+										onClick={() => {
+											window.location.href = `/msg-outbox?ref=${provider.userId}&type=quote`;
+										}}
+									>
+										Request Quote
+									</Button>
+									<Button className="mb-2">Google Meets</Button>
 									<Button>Tour Home</Button>
 								</div>
 							</div>
@@ -150,7 +202,14 @@ const ProviderProfileCard = ({ provider }) => {
 									rent outlined in quote, select a move in date and you're ready
 									to move.
 								</div>
-								<div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%" }}>
+								<div
+									style={{
+										display: "flex",
+										flexDirection: "row",
+										justifyContent: "space-between",
+										width: "100%",
+									}}
+								>
 									<div></div>
 									{/* Use marginTop: auto to push the button to the bottom */}
 									<Button>Reserve Room</Button>

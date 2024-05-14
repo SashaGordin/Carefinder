@@ -6,17 +6,17 @@ import { getDoc, doc } from 'firebase/firestore';
 import { firestore } from '../firebase'; // Import your Firestore instance
 import { FaEye, FaEyeSlash } from 'react-icons/fa'; // Import eye and eye-slash icons
 
+
 import TopNav from "../components/TopNav";
 import Footer from "../components/Footer";
 
-
 export default function Login() {
-  const emailRef = useRef();
-  const passwordRef = useRef();
-  const { login, currentUser } = useAuth()
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+	const emailRef = useRef();
+	const passwordRef = useRef();
+	const { login } = useAuth();
+	const [error, setError] = useState("");
+	const [loading, setLoading] = useState(false);
+	const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const togglePasswordVisibility = () => {
@@ -26,37 +26,48 @@ export default function Login() {
   async function handleSubmit(e) {
     e.preventDefault()
 
-    try {
-      setError('');
-      setLoading(true);
-      await login(emailRef.current.value, passwordRef.current.value);
-      const userDocRef = doc(firestore, 'users', currentUser.uid);
-      const userDocSnapshot = await getDoc(userDocRef);
-      if (userDocSnapshot.exists()) {
-        const userData = userDocSnapshot.data();
-        const userRole = userData.role;
-        userRole === 'client' ? navigate('/client-dashboard') : navigate('/care-provider-dashboard');
-      } else {
-        setError('User document not found');
-      }
-    } catch {
-      setError('Failed to log in');
-    }
-    setLoading(false);
-  }
 
-  return (
-    <>
-    <TopNav />
-    <div className="contentContainer utilityPage loginPage">
+		try {
+			setError("");
+			setLoading(true);
+			await login(emailRef.current.value, passwordRef.current.value)
+				.then(async (userCredential) => {
+					const user = userCredential.user;
+					const userDocRef = doc(firestore, "users", user.uid);
+					const userDocSnapshot = await getDoc(userDocRef);
+					if (userDocSnapshot.exists()) {
+						const userData = userDocSnapshot.data();
+						const userRole = userData.role;
+						userRole === "client"
+							? navigate("/client-dashboard")
+							: navigate("/care-provider-dashboard");
+					} else {
+						setError("User document not found");
+					}
+				})
+				.catch((error) => {
+					setError("Failed to log in");
+					console.log(error);
+				});
+		} catch (error) {
+			setError("Failed to log in");
+			console.log(error);
+		}
 
-        <Card>
-          <Card.Body>
-            <h2 className ="text-center mb-4">Log In</h2>
-            {error && <Alert variant="danger">{error}</Alert>}
-            <Form onSubmit={handleSubmit} autoComplete="on">
-              <Form.Group id="email">
-                <Form.Label>Email:</Form.Label>
+		setLoading(false);
+	}
+
+	return (
+		<>
+			<TopNav />
+			<div className="contentContainer utilityPage loginPage">
+				<Card>
+					<Card.Body>
+						<h2 className="text-center mb-4">Log In</h2>
+						{error && <Alert variant="danger">{error}</Alert>}
+						<Form onSubmit={handleSubmit} autoComplete="on">
+							<Form.Group id="email">
+								<Form.Label>Email:</Form.Label>
                 <Form.Control type="email" id="email" name="email" ref={emailRef} required />
               </Form.Group>
               <Form.Group id="password">
@@ -81,9 +92,8 @@ export default function Login() {
             <Link to="/claim-profile">Join</Link>
           </div>
         </div>
-
-      </div>
-      <Footer />
-    </>
-  )
+			</div>
+			<Footer />
+		</>
+	);
 }

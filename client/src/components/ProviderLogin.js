@@ -21,8 +21,9 @@ export default function ProviderLogin() {
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
       navigate('/');
-    } catch {
+    } catch(error) {
       setError('Failed to log in');
+      console.log(error);
     }
     setLoading(false);
   }
@@ -55,7 +56,7 @@ export default function ProviderLogin() {
         <div className="w-100 text-center mt-2">
           Need an account? <Link to="/signup">Sign Up</Link>
         </div>
-      
+
       </div>
       <Footer />
     </>

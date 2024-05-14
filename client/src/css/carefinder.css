@@ -2,7 +2,6 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 
-
 /* CAREFINDER CSS ... */
 
 .CFpink { color:#ff6699; }
@@ -10,6 +9,8 @@
 .CFblack { color:black; }
 .CFwhite { color:white; }
 .CForange { color:#ff9900; }
+.CFred { color:red; }
+.CFgreen { color:#0bdf0b; }
 
 span.CFpink, span.CForange { padding-left: 10px; padding-right:10px; }
 
@@ -374,6 +375,9 @@ p.copyright { margin-top:40px; font-size:70%;}
 .surveyUL input { margin-right:10px; }
 
 .msgHeader{ text-align:center; font-size:50px; font-weight:bold; border-radius:30px; padding-bottom:10px;margin-bottom: 30px;}
+
+#CF .loginPage svg { display:initial !important; }
+.loginPasswordControl { font-size:80%; text-align:right; }
 
 /**
    RESPONSIVE MEDIA QUERIES:

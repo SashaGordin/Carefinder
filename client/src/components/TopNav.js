@@ -4,6 +4,7 @@ import { NavDropdown } from "react-bootstrap";
 import { getDoc, doc } from "firebase/firestore";
 import { firestore } from "../firebase"; // Import your Firestore instance
 import { useAuth } from "../contexts/AuthContext";
+import firebase from 'firebase/compat/app';
 
 export default function TopNav() {
 	const [role, setRole] = useState("");
@@ -27,6 +28,17 @@ export default function TopNav() {
 		}
 	}, []);
 
+	const handleLogout = () => {
+		firebase.auth().signOut().then(() => {
+		  // Sign-out successful.
+		  console.log("User signed out successfully");
+		}).catch((error) => {
+		  // An error happened.
+		  console.error("Error signing out:", error);
+		});
+	  };
+
+	  
 	return (
 		<>
 			<div className="topnavigation">
@@ -39,6 +51,25 @@ export default function TopNav() {
 					</div>
 
 					<div className="topNavRight">
+
+						{!role && (
+
+							<Nav variant="pills">
+								<Nav.Item>
+									<Nav.Link href="/" title="About Us">
+										About Carefinder
+									</Nav.Link>
+								</Nav.Item>
+
+								<Nav.Item>
+									<Nav.Link href="/login" title="Login">
+										Login
+									</Nav.Link>
+								</Nav.Item>
+
+							</Nav>
+						)}
+
 						{role === "client" && (
 							<Nav variant="pills">
 								<Nav.Item>
@@ -123,7 +154,8 @@ export default function TopNav() {
 								</NavDropdown>
 
 								<NavDropdown title="Admin Utils" id="admin-utils">
-									<NavDropdown.Item href="/msg-admin" title="Message Anyone">Admin Messager</NavDropdown.Item>
+								<NavDropdown.Item href="/msg-admin" title="Message Anyone from YOU">Admin Messager</NavDropdown.Item>
+								<NavDropdown.Item href="/msg-admin-spoof" title="Message Anyone from ANYONE">Admin Messager Spoof</NavDropdown.Item>
 									<NavDropdown.Item href="/admin-client-viewer" title="User Viewer">User Viewer</NavDropdown.Item>
 								</NavDropdown>
 
@@ -137,6 +169,13 @@ export default function TopNav() {
 									<NavDropdown.Item href="/care-provider-dashboard" title="Provider Dashboard">Provider Dashboard</NavDropdown.Item>
 									<NavDropdown.Item href="/your-listings" title="Provider Listings">Provider Listings</NavDropdown.Item>
 								</NavDropdown>
+
+								<Nav.Item>
+									<Nav.Link onClick={handleLogout} title="Logout">
+										Logout
+									</Nav.Link>
+								</Nav.Item>
+
 							</Nav>
 
 							)}

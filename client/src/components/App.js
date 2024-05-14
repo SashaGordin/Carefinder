@@ -32,6 +32,7 @@ import MsgInbox from './MsgInbox';
 import MsgOutbox from '../pages/MsgOutbox';
 import FileUpload from './FileUpload';
 import MessageAdmin from '../pages/MessageAdmin';
+import MessageAdminSpoof from '../pages/MessageAdminSpoof';
 import AdminViewClient from './AdminViewClient';
 
 
@@ -98,7 +99,18 @@ function App() {
                   </PrivateRoute>
                 }
               />
-
+              <Route
+                path="/msg-admin-spoof"
+                element={
+                  <PrivateRoute
+                  redirectPath="/login"
+                    allowedRoles={
+                       ['admin']
+                    }>
+                      <MessageAdminSpoof />
+                  </PrivateRoute>
+                }
+              />
               <Route
                 path="/care-provider-dashboard"
                 element={

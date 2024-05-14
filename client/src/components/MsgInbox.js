@@ -48,6 +48,8 @@ export default function MsgInbox() {
                 localResponseArray[localResponseIndex]["m_FR"] = thisMsg.data()['msgFrom'];
                 localResponseArray[localResponseIndex]["m_TX"] = thisMsg.data()['msgText'];
 
+                localResponseArray[localResponseIndex]["m_TY"] = thisMsg.data()['msgType'];
+                
                 // BRIEF VERSION?
                 localResponseArray[localResponseIndex]["m_TXbExists"] = 0;
                 if (thisMsg.data()['msgText'].length > configs_msgTruncateLimit) {

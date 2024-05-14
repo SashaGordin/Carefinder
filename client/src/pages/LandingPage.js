@@ -58,22 +58,22 @@ export default function LandingPage() {
 	};
 
 	//IN PROGRESS
-	const getAvailListings = () => {
-		axios
-			.post("http://localhost:3001/getAvailListings", {})
-			.then((response) => {
-				console.log(response.data);
-				const listingPaths = response.data.listingPaths;
-				for (let path of listingPaths) {
-					axios.post("http://localhost:3001/getRoomDataForListingPath", {listingPath: path}).then((response) => {
-						console.log(response.data.roomData);
-					});
-				}
-			})
-			.catch((error) => {
-				console.error("Error fetching avail listings:", error);
-			});
-	};
+	// const getAvailListings = () => {
+	// 	axios
+	// 		.post("http://localhost:3001/getAvailListings", {})
+	// 		.then((response) => {
+	// 			console.log(response.data);
+	// 			const listingPaths = response.data.listingPaths;
+	// 			for (let path of listingPaths) {
+	// 				axios.post("http://localhost:3001/getRoomDataForListingPath", {listingPath: path}).then((response) => {
+	// 					console.log(response.data.roomData);
+	// 				});
+	// 			}
+	// 		})
+	// 		.catch((error) => {
+	// 			console.error("Error fetching avail listings:", error);
+	// 		});
+	// };
 
 	const debouncedGetProviders = useRef(
 		debounce(getProvidersFromBounds, delayDuration)
@@ -222,7 +222,7 @@ export default function LandingPage() {
 	return (
 		<>
 			<TopNav />
-			<Button onClick={getAvailListings}>Test getAvailProviders()</Button>
+			{/* <Button onClick={getAvailListings}>Test getAvailProviders()</Button> */}
 			<div className="CFblackBackground">
 				<div className="contentContainer clientSearchBar">
 					<input

@@ -150,10 +150,61 @@ app.post("/getProviders", async (req, res) => {
 
 		console.log("Provider Count:", filteredProviders.length); // Log filtered provider count
 
-		// If there are providers from the users collection, add them to the list of providers
 		if (filteredProviders.length > 0) {
-			console.log("here");
-			res.json({ providers: filteredProviders });
+			try {
+				for (const provider of filteredProviders) {
+					const userSnapshot = await admin
+						.firestore()
+						.collection("users")
+						.doc(provider.userId)
+						.get();
+
+					if (userSnapshot.exists) {
+						const listingsSnapshot = await userSnapshot.ref
+							.collection("listings")
+              // .doc(provider.LicenseNumber)
+							.get();
+
+						for (const listingDoc of listingsSnapshot.docs) {
+							try {
+								const roomsSnapshot = await listingDoc.ref
+									.collection("rooms")
+									.where("isAvailable", "==", true)
+									.get();
+								const roomData = roomsSnapshot.docs.map((doc) => doc.data());
+
+								if (!provider.listingsData) {
+									provider.listingsData = [];
+								}
+								provider.listingsData.push({
+									listingId: listingDoc.id,
+									roomData: roomData,
+								});
+								if (listingDoc.exists) {
+									const homePhotos = listingDoc.data().homePhotos;
+									if (homePhotos) {
+										if (!provider.homePhotos) {
+											provider.homePhotos = [];
+										}
+										provider.homePhotos.push(...homePhotos);
+									}
+								}
+							} catch (error) {
+								console.error("Error getting room data for listing:", error);
+							}
+						}
+					} else {
+						console.error(
+							"User document not found for provider:",
+							provider.userId
+						);
+					}
+				}
+				res.json({ providers: filteredProviders });
+			} catch (error) {
+				console.error("Error getting providers:", error);
+				res.status(500).send("Internal Server Error");
+			}
 		} else {
 			// If there are no providers from the users collection, query the API_AFH_DATA collection
 			const snapshotAPI = await admin
@@ -358,54 +409,67 @@ app.post("/getAddress", async (req, res) => {
 	}
 });
 
+//IN PROGRESS
+// app.post("/getAvailListings", async (req, res) => {
+// 	// Async handler
+// 	try {
+// 		let listings = new Set();
+// 		let listingPaths = new Set();
+// 		let listingsData = [];
+// 		const availableRoomsSnapshot = await admin
+// 			.firestore()
+// 			.collectionGroup("rooms")
+// 			.where("isAvailable", "==", true)
+// 			.get();
+// 		availableRoomsSnapshot.forEach((doc) => {
+// 			//we have all the available room data right here but currently only use it to get the parent listing.
+// 			//it might be better to combine this method with the 'getRoomDataForListingPath' to return both the listing and room data in a single JSON object
+// 			//console.log(doc.id, ' => ', doc.data());
+// 			const listingId = doc.ref.parent.parent.id;
+// 			const listingPath = doc.ref.parent.parent.path;
+// 			listings.add(listingId);
+// 			listingPaths.add(listingPath);
+// 		});
+// 		const arrListingPaths = Array.from(listingPaths);
+// 		console.log(arrListingPaths);
+// 		await Promise.all(
+// 			arrListingPaths.map((path) => {
+// 				return admin
+// 					.firestore()
+// 					.doc(path)
+// 					.get()
+// 					.then((doc) => {
+// 						console.log(doc.data());
+// 						listingsData.push(doc.data());
+// 					});
+// 			})
+// 		);
+// 		console.log(listings);
+// 		res.json({ listingsData: listingsData, listingPaths: arrListingPaths });
+// 	} catch (error) {
+// 		console.error("Error getting listings with availability", error);
+// 		res.status(500).send("Internal Server Error");
+// 	}
+// });
 
-  //IN PROGRESS
-  app.post('/getAvailListings', async (req, res) => { // Async handler
-    try {
-      let listings = new Set();
-      let listingPaths = new Set();
-      let listingsData = [];
-      const availableRoomsSnapshot = await admin.firestore().collectionGroup('rooms').where('isAvailable', '==', true).get();
-        availableRoomsSnapshot.forEach((doc) => {
-            //we have all the available room data right here but currently only use it to get the parent listing.
-            //it might be better to combine this method with the 'getRoomDataForListingPath' to return both the listing and room data in a single JSON object
-            //console.log(doc.id, ' => ', doc.data());
-            const listingId = doc.ref.parent.parent.id;
-            const listingPath = doc.ref.parent.parent.path;
-            listings.add(listingId);
-            listingPaths.add(listingPath);
-      });
-      const arrListingPaths = Array.from(listingPaths);
-      console.log(arrListingPaths);
-      await Promise.all(arrListingPaths.map((path) => {
-        return admin.firestore().doc(path).get().then((doc) => {
-          console.log(doc.data());
-          listingsData.push(doc.data());
-        });
-      }));
-      console.log(listings);
-      res.json({ listingsData: listingsData, listingPaths: arrListingPaths });
-    } catch (error) {
-      console.error('Error getting listings with availability', error);
-      res.status(500).send('Internal Server Error');
-    }
-  });
-
-  app.post('/getRoomDataForListingPath', async (req, res) => { // Async handler
-    try {
-      const listingPath = req.body.listingPath;
-      const roomCollectionPath = `${listingPath}/rooms`;
-      const roomsSnapshot = await admin.firestore().collection(roomCollectionPath).where('isAvailable', '==', true).get();
-      const roomData = roomsSnapshot.docs.map(doc => doc.data());
-      console.log(roomData);
-      res.json({ roomData: roomData });
-    } catch (error) {
-      console.error('Error getting room data for listing', error);
-      res.status(500).send('Internal Server Error');
-    }
-  });
-
-
+// app.post("/getRoomDataForListingPath", async (req, res) => {
+// 	// Async handler
+// 	try {
+// 		const listingPath = req.body.listingPath;
+// 		const roomCollectionPath = `${listingPath}/rooms`;
+// 		const roomsSnapshot = await admin
+// 			.firestore()
+// 			.collection(roomCollectionPath)
+// 			.where("isAvailable", "==", true)
+// 			.get();
+// 		const roomData = roomsSnapshot.docs.map((doc) => doc.data());
+// 		console.log(roomData);
+// 		res.json({ roomData: roomData });
+// 	} catch (error) {
+// 		console.error("Error getting room data for listing", error);
+// 		res.status(500).send("Internal Server Error");
+// 	}
+// });
 
 const fetchDataAndStoreInFirestore = async () => {
 	try {
@@ -514,8 +578,8 @@ const fetchDataAndStoreInFirestore = async () => {
 };
 
 app.post("/getCoordinates", async (req, res) => {
-  const { address } = req.body;
-  console.log(address);
+	const { address } = req.body;
+	console.log(address);
 
 	let position;
 	try {
@@ -524,21 +588,20 @@ app.post("/getCoordinates", async (req, res) => {
 		console.error("error geocoding address", address);
 	}
 	const { lat, lng } = position;
-  const geolocation = new admin.firestore.GeoPoint(lat, lng);
+	const geolocation = new admin.firestore.GeoPoint(lat, lng);
 
-  // Serialize the GeoPoint object before sending it to the frontend
-  const serializedGeolocation = {
-    latitude: geolocation.latitude,
-    longitude: geolocation.longitude,
-  };
+	// Serialize the GeoPoint object before sending it to the frontend
+	const serializedGeolocation = {
+		latitude: geolocation.latitude,
+		longitude: geolocation.longitude,
+	};
 
-  const locationData = {
-    position: { lat, lng },
-    geolocation: serializedGeolocation,
-  };
-  res.json({ locationData });
+	const locationData = {
+		position: { lat, lng },
+		geolocation: serializedGeolocation,
+	};
+	res.json({ locationData });
 });
-
 
 async function findSpokaneHouse() {
 	const address = "8211 N Standard St"; // Specify the address you want to search for

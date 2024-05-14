@@ -1,17 +1,28 @@
 import React, { useState } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import PropertyPhotoModal from "./PropertyPhotoModal";
 
 const ProviderProfileCard = ({ provider }) => {
 	const {
 		profilePicPath,
 		FacilityPOC,
 		FacilityName,
-
-		// Add more fields as needed
+		homePhotos,
+		listingsData,		// Add more fields as needed
 	} = provider;
 
+	const roomPhotos = listingsData[0].roomData.map((room) => room.roomPhotos);
+
+
 	const [showModal, setShowModal] = useState(false);
+
+	const [showImageModal, setShowImageModal] = useState(false);
+
+
+	const handleImageClick = () => {
+    setShowImageModal(true);
+  };
 
 	const handleClose = () => setShowModal(false);
 	const handleShow = () => setShowModal(true);
@@ -22,7 +33,7 @@ const ProviderProfileCard = ({ provider }) => {
 		profilePicPath,
 		profilePicPath,
 	];
-	console.log([provider]);
+	console.log("this is the provider", provider);
 	return (
 		<>
 			<div
@@ -78,6 +89,7 @@ const ProviderProfileCard = ({ provider }) => {
 									flexDirection: "row",
 									marginBottom: "20px",
 								}}
+								onClick={handleImageClick}
 							>
 								<img
 									style={{ width: "100%", borderRadius: "25px" }}
@@ -97,12 +109,12 @@ const ProviderProfileCard = ({ provider }) => {
 											borderRadius: "5px",
 											marginBottom: "10px",
 										}}
-										src={profilePicPath}
+										src={homePhotos[0]}
 										alt="Profile pic"
 									/>
 									<img
 										style={{ width: "100%", borderRadius: "5px" }}
-										src={profilePicPath}
+										src={homePhotos[1]}
 										alt="Profile pic"
 									/>
 								</div>
@@ -119,12 +131,12 @@ const ProviderProfileCard = ({ provider }) => {
 											borderRadius: "5px",
 											marginBottom: "10px",
 										}}
-										src={profilePicPath}
+										src={homePhotos[2]}
 										alt="Profile pic"
 									/>
 									<img
 										style={{ width: "100%", borderRadius: "5px" }}
-										src={profilePicPath}
+										src={homePhotos[3]}
 										alt="Profile pic"
 									/>
 								</div>
@@ -224,6 +236,9 @@ const ProviderProfileCard = ({ provider }) => {
 					</Button>
 				</Modal.Footer>
 			</Modal>
+			{showImageModal && (
+				<PropertyPhotoModal showModal={showImageModal} setShowModal={setShowImageModal} FacilityName={FacilityName} homePhotos={homePhotos} roomPhotos={roomPhotos} />
+			)}
 		</>
 	);
 };

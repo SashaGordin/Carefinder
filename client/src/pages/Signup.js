@@ -7,8 +7,11 @@ import { serverTimestamp, collection, setDoc, doc } from "firebase/firestore";
 import { FaCheck, FaTimes, FaEyeSlash, FaEye } from 'react-icons/fa'; // Import eye and eye-slash icons
 import { query, where, getDocs } from "firebase/firestore";
 
+import firebase from 'firebase/compat/app';
+
 import TopNav from "../components/TopNav";
 import Footer from "../components/Footer";
+import axios from "axios";
 
 export default function Signup() {
 	const emailRef = useRef();
@@ -67,7 +70,7 @@ export default function Signup() {
 		};
 	}, []);
 	
-	
+
 	async function handleSubmit(e) {
 		e.preventDefault();
 
@@ -89,8 +92,24 @@ export default function Signup() {
 			let userData;
 
 			if (fromClaimProfile) {
+				let providerAddress = `${providerInfo.LocationAddress}, ${providerInfo.LocationCity}, ${providerInfo.LocationState}`;
+				const response = await axios
+					.post(`http://localhost:3001/getCoordinates`, {
+						address: providerAddress,
+					}).then((response) => {return response.data;})
+					.catch((error) => {
+						console.error("Error occurred during the request:", error);
+					});
+				const { position, geolocation } = response.locationData;
+
+				const newGeoPoint = new firebase.firestore.GeoPoint(
+					geolocation.latitude,
+					geolocation.longitude
+				);
+
 				userData = {
 					...providerInfo,
+					userId: uid,
 					displayName: displayName || "",
 					createdAt: serverTimestamp(),
 					email: email,
@@ -99,21 +118,25 @@ export default function Signup() {
 						allowAnyoneToMessage: true, // Default value, you can adjust as needed
 						recieveEmailNotifications: true,
 						recieveTextNotifications: false,
-					}
+					},
+					position,
+					geolocation: newGeoPoint,
 				};
 			} else {
-				if (localStorage.getItem('surveyData') !== null) {
-					const data = JSON.parse(localStorage.getItem('surveyData'));
+				if (localStorage.getItem("surveyData") !== null) {
+					const data = JSON.parse(localStorage.getItem("surveyData"));
 					console.log(data);
 					userData = {
 						...data,
+						userId: uid,
 						displayName: displayName || "",
 						email: email,
 						createdAt: serverTimestamp(),
 						role: "client",
-					}
+					};
 				} else {
 					userData = {
+						userId: uid,
 						displayName: displayName || "",
 						email: email,
 						createdAt: serverTimestamp(),

@@ -97,7 +97,8 @@ export default function ListingCard({userData, initialListingData}) {
 		<div className="myAFHname">
 			<h4>{listingData.facilityName}</h4>
 			<EditableField title="Adult Family Home Name" value={listingData.facilityName || ''} onChange={(newValue) => handleUpdate({...listingData, facilityName: newValue })} />
-		</div>
+      <p>License Number: {listingData.licenseNumber}</p>
+    </div>
 		<hr/>
 		<div>
 			<h4>Upload home photos</h4>

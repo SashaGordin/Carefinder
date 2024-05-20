@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Alert, Navbar, Image } from 'react-bootstrap'
+import { Card, Button, Alert, Navbar, Image, CardTitle, CardText } from 'react-bootstrap'
 import { firestore } from '../firebase'; // Assuming you have firebase.js setup
 import { useAuth } from "../contexts/AuthContext"
 import { getDoc, getDocs, doc, updateDoc, collection } from 'firebase/firestore';
@@ -9,6 +9,7 @@ import Listings from '../components/CPListings/Listings';
 import PersonalInfo from '../components/menu/PersonalInfo';
 import Profile from '../components/CPListings/Profile';
 import ListingCard from '../components/CPListings/ListingCard';
+import AddAFH from '../components/AddAFH';
 
 export default function CPListings() {
   const [userData, setUserData] = useState({});
@@ -86,7 +87,7 @@ export default function CPListings() {
         <p>&nbsp;</p>
         {listingsData.map((data, i) => (<ListingCard userData={userData} initialListingData={data} key={i} />))}
         <p>&nbsp;</p>
-
+        <AddAFH uid={currentUser.uid}/>
       </div>
 
       <Footer />

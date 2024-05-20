@@ -57,7 +57,6 @@ export default function CPHomeSurvey() {
     });
   }
 
-  const { currentUser } = useAuth();
 
   const handleUpdate = async (updatedListingInfo) => {
     try {

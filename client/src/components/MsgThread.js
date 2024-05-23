@@ -32,6 +32,8 @@ function MsgThread({threadID, pageIteration}) {
         // I want to ensure that all links that we present as links to users in the chat are
         // authentic. So, I will check to see that they contain the following substring:
         const validLinkSubstring = 'https://firebasestorage.googleapis.com/v0/b/carefinder-development.appspot.com';
+        // NOTE.. leaving this in for now, but we may not use it initially...
+        // ... refactoring some stuff in messaging per micah...
 
         const dbCollection = firestore.collection('messages')
             .orderBy('msgDate', 'asc')
@@ -44,34 +46,40 @@ function MsgThread({threadID, pageIteration}) {
 
                     // Process each document in the snapshot
                     let threadItemData = thisThreadItem.data();
+  
+                    console.log('MessageThread Iteration: Quote request');
 
-                    // process for special new types...
-                    // meet, quote, tour -- mainly process links in text here...
-                    if (threadItemData.msgType == 'quote') {
+                    const linkRegex = new RegExp(validLinkSubstring, 'i');
+                    const validLinkPresent = linkRegex.test(threadItemData.msgText);
+                    
+                    // NEW PLAN ... I think we scan the message to find any links. Any that are not going to
+                    // urls beginning with the validSubstring, we flash a warning... tbd...
 
-                        console.log('MessageThread Iteration: Quote request')
-
-                        const linkRegex = new RegExp(validLinkSubstring, 'i');
-                        const validLinkPresent = linkRegex.test(threadItemData.msgText);
-                        
-                        if (validLinkPresent){
-                            const urlRegex = /(https?:\/\/[^\s]+)/g;
-                            const tempURL = threadItemData.msgText.match(urlRegex)[0];
-                            threadItemData.msgText = threadItemData.msgText.replace(urlRegex, `<a href="${tempURL}" target="_blank">💾 <b>DOWNLOAD ASSESSMENT LINK</b></a>`);
-                        }
-
+                    if (validLinkPresent){
+                        const urlRegex = /(https?:\/\/[^\s]+)/g;
+                        const tempURL = threadItemData.msgText.match(urlRegex)[0];
+                        // threadItemData.msgText = threadItemData.msgText.replace(urlRegex, `<a href="${tempURL}" target="_blank">💾 <b>DOWNLOAD ASSESSMENT</b></a>`);
+                        // REMOVING THIS FOR NOW, AS WE ARE CHANGING UP A LOT OF STUFF
+                        // RELATED TO THIS ITEM.
                     }
                     
-                    localThreadArray.push({
-                        mt_ID: thisThreadItem.id,
-                        mt_FR: threadItemData.msgFrom,
-                        mt_TX: threadItemData.msgText,
-                        mt_TH: threadItemData.msgThreadID,
-                        mt_TO: threadItemData.msgTo,
-                        mt_DS: threadItemData.msgDate.seconds,
-                        mt_DA: threadItemData.msgDate.toDate().toLocaleString(),
-                        mt_TY: threadItemData.msgType
-                    });
+                    // if there is no flag to hide this, then, add to array:
+                    if (!threadItemData.hasOwnProperty('msgHide')) {
+
+                        localThreadArray.push({
+                            mt_ID: thisThreadItem.id,
+                            mt_FR: threadItemData.msgFrom,
+                            mt_TX: threadItemData.msgText,
+                            mt_TH: threadItemData.msgThreadID,
+                            mt_TO: threadItemData.msgTo,
+                            mt_DS: threadItemData.msgDate.seconds,
+                            mt_DA: threadItemData.msgDate.toDate().toLocaleString(),
+                            mt_TY: threadItemData.msgType
+                        });
+
+                    } else {
+                        console.log('A system message was skipped here.');
+                    }
                     
                 });
                 setEntireThread(localThreadArray);
@@ -96,7 +104,7 @@ function MsgThread({threadID, pageIteration}) {
                 <div key={index}>
                     {item.mt_FR === currentUser.uid ? (
                         <>
-                        <div className="msgThreadDate msgThreadDateRight">{item.mt_DA}</div>
+                        <div className="msgThreadDate msgThreadDateRight"><b>YOU</b> @ {item.mt_DA}:</div>
                         <div className="msgThreadBox msgThreadRecipient">
                             <span dangerouslySetInnerHTML={{ __html: item.mt_TX }}></span>
                         </div>
@@ -104,7 +112,7 @@ function MsgThread({threadID, pageIteration}) {
                         </>                    
                     ) : (
                         <>
-                        <div className="msgThreadDate msgThreadDateLeft">{item.mt_DA}</div>
+                        <div className="msgThreadDate msgThreadDateLeft"><b>THEM</b> @ {item.mt_DA}:</div>
                         <div className="msgThreadBox msgThreadSender">
                             <span dangerouslySetInnerHTML={{ __html: item.mt_TX }}></span>
                         </div>

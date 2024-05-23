@@ -374,7 +374,13 @@ p.copyright { margin-top:40px; font-size:70%;}
 .surveyUL li { list-style-type: none; }
 .surveyUL input { margin-right:10px; }
 
-.msgHeader{ text-align:center; font-size:50px; font-weight:bold; border-radius:30px; padding-bottom:10px;margin-bottom: 30px;}
+.msgHeader{    text-align: center;
+    font-size: 34px;
+    font-weight: bold;
+    border-radius: 30px;
+    padding-bottom: 7px;
+    margin-bottom: 25px;
+    margin-top: 13px;}
 
 #CF .loginPage svg { display:initial !important; }
 .loginPasswordControl { font-size:80%; text-align:right; }

@@ -2,10 +2,12 @@ import React, {useState, useEffect} from 'react';
 import { useAuth } from "../contexts/AuthContext";
 import { getDoc, setDoc, doc, Timestamp } from 'firebase/firestore';
 import { firestore } from '../firebase'; 
-
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/storage';
 import MsgThread from "./MsgThread";
 
-//v20240430.837pm
+// Still a bit of spaghetti code here and there in this component, sorry, as I had to refactor a few times to meet the design spec.
+// NOTE ALSO... I've coded TWO distinct UXs here... one for desktop, one for mobile. Both get rendered, only one shows per CSS.
 
 /**
  * FIREBASE 'messages' collection FIELDS:
@@ -26,38 +28,36 @@ import MsgThread from "./MsgThread";
  *                  on responses, make this the ID of the msg being responded to
  * msgResponseSent  0 (default) == message was NOT responded to
  *                  1 == message WAS responded to
+ * msgType          optional, but can be set to quote, meet, tour if a request from a client
+ * msgHide          optional but can be set to 1 to hide the message in the inbox
  */
-
-// Still a bit of spaghetti code here and there in this component, sorry, as I had to refactor a few times to meet the design spec.
-// NOTE ALSO... I've coded TWO distinct UXs here... one for desktop, one for mobile. Both get rendered, only one shows per CSS.
-
 
 // TESTING NOTES:
 // JIM USER:      LXxo4pjrsSYgb3xmOfC4Loco8L03
 // OTHER USERS:   LV6IbCIwMdbs5rMAp5Hb, EEQWegKrxbVQDZ4Ns0qEHDBar8J2, 0CFJRjjE8IcFmyJ11tT9cFq3UIV2
 // M1: new Date('March 6, 2024 05:05:31').getTime() -- 1709730331000.
-// M2: new Date('March 5, 2024 07:31:22').getTime() -- 1709652682000.
-// M3: new Date('March 4, 2024 09:37:11').getTime() -- 1709573831000.
-// M4: new Date('March 3, 2024 12:23:08').getTime() -- 1709497388000.
-// M5: new Date('March 2, 2024 10:32:44').getTime() -- 1709404364000.
-
-// *******************************************
-// NOTE:  Get avatar from user record 'profilePicPath' ... if !exists, then just load defaultavatar.jpg
+// NOTE:  Get avatar from user record 'profilePicPath' ... if !exists, then load defaultavatar.jpg
 // *******************************************
 
 export default function MsgTemplateMVP({passData, hasArchives}) {  
     
     const [pageIteration, setPageIteration] = useState(1);
+    const [userRole, setUserRole] = useState(null);
+
+    useEffect(() => {
+      const role = localStorage.getItem('localStorageCurrentUserRole');
+      setUserRole(role);
+    }, []);
 
     console.log('NOW IN... MsgTemplateMVP');
+    console.log('USER ROLE IS: ', userRole);
     console.log('MsgTemplateMVP Iteration: '+pageIteration);
-    console.log(passData);
+    // console.log(passData);
     console.log('MsgTemplateMVP, Archives?: '+hasArchives);
 
     const [avatarURLs, setAvatarURLs] = useState(null);
 
     useEffect(() => {
-        // Fetch avatar URLs asynchronously for all messages
         async function fetchAvatarURLs() {
             try {
                 const avatarURLs = await Promise.all(
@@ -65,17 +65,13 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                         return await getMessageAvatar(thisMsg['m_FR']);
                     })
                 );
-                // Update state with the fetched avatar URLs
                 setAvatarURLs(avatarURLs);
             } catch (error) {
                 console.error('Error fetching avatar URLs:', error);
-                // Handle error appropriately
             }
         }
-
-        // Call the fetchAvatarURLs function
         fetchAvatarURLs();
-    }, [passData]); // Run this effect whenever passData changes
+    }, [passData]); 
 
     const [activeDivId, setActiveDivId] = useState(null);
     const toggleHideDivID = (id) => {
@@ -93,6 +89,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
         //return;
     }
 
+
     function toggleHideByClass(targetClass) {
         var elementArray = document.getElementsByClassName(targetClass); 
         // returns array, so...
@@ -104,6 +101,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
             }
         }
     }
+
 
     function toggleMessages(targetID){
         //console.log( "TARGET: " + targetID ); 
@@ -117,7 +115,6 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
             toggleTarget.style.display = "block";
         }
         
-
         var fID = 'fullMsg' + targetID;
         //console.log( "FULL: " + fID ); 
         var toggleTarget = document.getElementById(fID);
@@ -130,29 +127,23 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
          return;
     }  
 
+
     function getMessageWrapperClass (theStatus){
-        // replaces <div className="messageWrapper"> below
-        if (theStatus === 1) {
-            return 'messageWrapper messageRead';
-        }
-        if (theStatus === 2) {
-            return 'messageWrapper messageArchived';
-        }
+        if (theStatus === 1) { return 'messageWrapper messageRead'; }
+        if (theStatus === 2) { return 'messageWrapper messageArchived'; }
         return 'messageWrapper';
     }
 
+
     async function getMessageAvatar(theSenderID) {
         console.log('Lookup avatar for userID: ' + theSenderID);
-    
         const dbDocument = firestore.collection('users').doc(theSenderID);
-    
         try {
             const snapshot = await dbDocument.get();
             const userData = snapshot.data();
             if (userData) {
                 const profilePicPath = userData.profilePicPath;
                 console.log('Profile picture path:', profilePicPath);
-                // Return or do something with the profile picture path
                 return profilePicPath;
             } else {
                 console.log('No user data found for user ID:', theSenderID);
@@ -169,24 +160,18 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
     const changeMessageStatus = async(targetMessageID, targetFieldValue) => {
 
         console.log('Set `messages` (id '+ targetMessageID + ') `msgStatus` to: ' + targetFieldValue ); 
-
         const dbCollection = firestore.collection('messages').doc(targetMessageID);
-        
         const response = await dbCollection.update( {'msgStatus':targetFieldValue} );
-        
         console.log(response);
-        
         //window.location.reload();
     }
+
 
     const changeMessageResponseSentStatus = async(targetMessageID, targetFieldValue) => {
 
         console.log('Set `messages` (id '+ targetMessageID + ') `msgResponseSent` to: ' + targetFieldValue ); 
-
         const dbCollection = firestore.collection('messages').doc(targetMessageID);
-        
         const response = await dbCollection.update( {'msgResponseSent':targetFieldValue} );
-        
         console.log(response);
         
     }
@@ -199,6 +184,94 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
         if (!replyText) {
             alert('We cannot send this message, as no text was present. Please make sure to write a message. Thanks! :-)');
             return;
+        }
+
+        let replyAppend ='';
+
+        // ADD TO OUR REPLIES:
+
+        // PROVIDERS:
+        if ( userRole == 'provider' ) {
+            console.log('Sending message from a PROVIDER.');
+            
+            replyAppend += '<br />Reply below and/or you may use any of these links anytime.';
+
+            try {
+
+                // user is a PROVIDER, so we get the sendingFROM record, which is his record:
+                const userDoc = await firestore.collection('users').doc(sendingFrom).get();
+                if (userDoc.exists) {
+                    console.log('Provider exists for '+sendingFrom);
+                    const userData = userDoc.data();
+                    if (userData.hasOwnProperty('CalendlyLink')) {
+                        const calendlyLink = userData.CalendlyLink;
+                        console.log('Provider calendlyLink:', calendlyLink);
+                        replyAppend += '<br />📆 <b><a href="'+calendlyLink+'" target="_blank">SCHEDULE MEETING</a></b>';
+                    } else {
+                        console.log('No provider CalendlyLink present.');
+                    }
+                }
+
+            }  catch (error) {
+                console.error('Error fetching provider data:', error);
+            }
+            
+            replyAppend += '<br />🏡 <b><a href="###">SCHEDULE TOUR</a></b>';
+            replyAppend += '<br />🛏️ <b><a href="###?userID='+sendingFrom+'?providerID='+sendingTo+'">RESERVE ROOM</a></b>';
+            replyText+=replyAppend;
+        }
+
+        // CLIENTS:
+        if (userRole === 'client') {
+            console.log('Sending message from a CLIENT.');
+
+            try {
+                // user is a CLIENT, so we get the sendingFROM record, which is his record:
+                const userDoc = await firestore.collection('users').doc(sendingFrom).get();
+                if (userDoc.exists) {
+
+                    console.log('TEST: client exists.');
+                    const userData = userDoc.data();
+
+                    if (userData.hasOwnProperty('assessmentPDFfileName')) {
+
+                        const assessmentFileName = userData.assessmentPDFfileName;
+                        console.log('TEST: has assessmentPDFfileName:', assessmentFileName);
+
+                        if (assessmentFileName) {
+
+                            const fileRef = firebase.storage().ref().child(`assessments/${assessmentFileName}`);
+                            try {
+                                const url = await fileRef.getDownloadURL();
+                                replyAppend += '<br />Reply to this user below. As a reminder, the user has an ';
+                                replyAppend += 'assessment on file: 📁 <b><a href="' + url + '" target="_blank">DOWNLOAD</a></b>';
+                                replyText += replyAppend;
+                                console.log('TEST: reply appended.');
+                            } catch (error) {
+                                console.error('Error getting download URL:', error);
+                            }
+
+                        } else {
+
+                            replyAppend += '<br />(⚠️ User has no assessment on file with CareFinder. You should ask the user to upload or schedule one.)';
+                            replyText += replyAppend;
+
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching client data:', error);
+            }
+        }
+        
+
+        // ADMINS:
+        if ( userRole == 'admin' ){
+            console.log('Sending message from an ADMIN.');
+
+            replyAppend += '<br />This message is from a CareFinder admin. Let us know if you have any additional questions.';
+            replyText+=replyAppend;
+
         }
 
         console.log('SENDING REPLY:  TO: ' + sendingTo + ', FROM: ' + sendingFrom + ', TXT: ' + replyText + ', THREAD: ' + messageThreadID + ')'); 
@@ -275,7 +348,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                                 <div className="msgAlertMiddle">
 
                                     <p className="msgFrom">
-                                        You received a message from
+                                        Conversation with
                                         { ' ' + thisMsg['m_RO'] + ' ' + thisMsg['m_DN'] }
                                     </p>
 
@@ -346,32 +419,37 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                             </div>
                             {*/}
 
-                            <textarea autoFocus placeholder="Write here..." id={'reply'+thisMsg['m_ID']}></textarea>
+                            <textarea autoFocus placeholder="Write here..." id={'reply'+thisMsg['m_ID']} style={{marginTop:10,marginBottom:7}}></textarea>
 
-                            <input value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-primary"></input>
+                            <input value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-primary" style={{background:'green', float:'right', marginLeft:10, marginRight:0}}></input>
 
                             <button className="btn btn-info" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>CANCEL</button>
 
-                            <br></br>
+                            <div className="clear"></div>
 
-                            { (thisMsg['m_ST'] == 1) &&
-                                <>
-                                    <a href="###" onClick={()=> changeMessageStatus(thisMsg['m_ID'], 0)}>✅ Keep as new</a>
-                                    &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                                </>
-                            }
+                            <div style={{float:'right', marginRight:20}}>
 
-                            { ( ( thisMsg['m_ST'] == 0 ) || ( thisMsg['m_ST'] == 1 ) ) &&
-                                <>
-                                    <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 2)}>🗑️ Archive</a>
-                                </>
-                            }
+                                { (thisMsg['m_ST'] == 1) &&
+                                    <>
+                                        <a href="###" onClick={()=> changeMessageStatus(thisMsg['m_ID'], 0)}>✅ Keep as new</a>
+                                        &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+                                    </>
+                                }
 
-                            { (thisMsg['m_ST'] == 2) &&
-                                <>
-                                    <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 1)}>🗑️ Unarchive</a>                        
-                                </>
-                            }
+                                { ( ( thisMsg['m_ST'] == 0 ) || ( thisMsg['m_ST'] == 1 ) ) &&
+                                    <>
+                                        <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 2)}>🗑️ Archive</a>
+                                    </>
+                                }
+
+                                { (thisMsg['m_ST'] == 2) &&
+                                    <>
+                                        <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 1)}>🗑️ Unarchive</a>                        
+                                    </>
+                                }
+                            </div>
+                            <div className="clear"></div>
+
 
                             </div>
 
@@ -412,7 +490,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                             <div className="msgAlertMiddle">
 
                                 <p className="msgFrom">
-                                    You received a message from
+                                    Conversation with
                                         { ' ' + thisMsg['m_RO'] + ' ' + thisMsg['m_DN'] }
                                 </p>
 
@@ -481,7 +559,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                             
                                 <textarea autoFocus placeholder="Write here..." id={'reply'+thisMsg['m_ID']}></textarea>
                                 
-                                <input value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-primary"></input>
+                                <input value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-primary" style={{background:'green'}}></input>
                                 <button className="btn btn-info" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>CANCEL</button>
                                 
                                 <br></br>

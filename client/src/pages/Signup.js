@@ -84,6 +84,11 @@ export default function Signup() {
 				emailRef.current.value,
 				passwordRef.current.value
 			);
+
+			// Send email verification
+			await user.sendEmailVerification();
+			setError("Verification email sent. Please check your inbox and verify your email address before logging in.");
+
 			const { displayName, email, uid } = user;
 
 			const usersCollection = collection(firestore, "users");
@@ -146,7 +151,7 @@ export default function Signup() {
 			}
 
 			await setDoc(userDocRef, userData);
-			navigate("/login");
+			navigate("/verify-email");
 
 		} catch (error) {
 
@@ -158,26 +163,31 @@ export default function Signup() {
 
 			} else if (error.code === "auth/email-already-in-use") {
 
-				setError("Email address is already in use.");
-
+				setError(
+					<>
+						⚠️ This email address is already in use. Please{" "}
+						<Link to="/login"><b>log in</b></Link> instead, or click{" "}
+						<Link to="/forgot-password"><b>here</b></Link> if you have forgotten your password.
+					</>
+				);
+					
 				// Find the user ID associated with the provided email...
-				// I put this here because, although the above error fires sometimes,
-				// that does not apparently mean that the email is actually being used.
-				// So, we need to figure out why and address that.
+				// I don't think this will work, though, b/c the person is not 
+				// logged in and so FB will reject the query.
+				console.log('Attempting to find user ID for email:', emailRef.current.value);
 				const email = emailRef.current.value;
 				const usersCollection = collection(firestore, "users");
 				const q = query(usersCollection, where("email", "==", email));
-				const querySnapshot = await getDocs(q);
-				
-				if (!querySnapshot.empty) {
-
-					const userID = querySnapshot.docs[0].id;
-					console.log('Email address is already in use by user with ID: ' +userID);
-
-				} else {
-
-					console.log(`Email address is already in use, but it's not in Firebase`);
-
+				try {
+					const querySnapshot = await getDocs(q);
+					if (!querySnapshot.empty) {
+						const userID = querySnapshot.docs[0].id;
+						console.log('Email address is already in use by user with ID: ' + userID);
+					} else {
+						console.log(`Email address is already in use, but it's not in Firebase`);
+					}
+				} catch (queryError) {
+					console.error("Error querying Firestore:", queryError);
 				}
 
 			} else {
@@ -200,7 +210,7 @@ export default function Signup() {
 			<div className="contentContainer utilityPage loginPage">
 				<Card>
 					<Card.Body>
-						<h2 className="text-center mb-4">Sign Up</h2>
+						<h2 className="text-center mb-4">Sign Up to Find an Adult Family Home</h2>
 						{error && <Alert variant="danger">{error}</Alert>}
 						<Form onSubmit={handleSubmit}>
 							<Form.Group id="email">
@@ -236,9 +246,14 @@ export default function Signup() {
 					</Card.Body>
 				</Card>
 				{fromClaimProfile ? null : (
+					<>
 					<div className="w-100 text-center mt-2">
 						Already have an account? <Link to="/login">Log In</Link>
 					</div>
+					<div className="w-100 text-center mt-2">
+						If you are with an Adult Family Home <Link to="/claim-profile">sign up here as licensed AFH care provider</Link>.
+					</div>
+					</>
 				)}
 			</div>
 			<Footer />

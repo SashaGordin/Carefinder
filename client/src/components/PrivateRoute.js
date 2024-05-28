@@ -36,6 +36,11 @@ export default function PrivateRoute({ allowedRoles, redirectPath = "/", childre
     return <Navigate to="/login" />;
   }
 
+  if (!currentUser.emailVerified) {
+    // Redirect to login if user is not verified
+    return <Navigate to="/verify-email" />;
+  } 
+
   if (loading) {
     // Render loading state while fetching user role
     return <div>Loading...</div>;

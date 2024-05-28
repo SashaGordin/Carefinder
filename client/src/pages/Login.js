@@ -84,13 +84,10 @@ export default function Login() {
           </Card.Body>
         </Card>
         <div className="w-100 text-center mt-2">
-          Need an account? <Link to="/signup">Sign Up</Link>
+          Need an account for a senior? <Link to="/signup">Sign up here</Link>.
         </div>
         <div className="w-100 text-center mt-2">
-          Join as licensed AFH care provider
-          <div>
-            <Link to="/claim-profile">Join</Link>
-          </div>
+          Are you with an AFH?  <Link to="/claim-profile">Sign up as licensed AFH care provider</Link>.
         </div>
 			</div>
 			<Footer />

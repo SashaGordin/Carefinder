@@ -40,9 +40,17 @@ export default function CPHomeSurvey() {
   const [error, setError] = useState('');
 
   const handleNext = () => {
-    setCurrentStep(currentStep + 1);
-	console.log(listingInfo);
+    if (validateInputs())
+      setCurrentStep(currentStep + 1);
   };
+
+  const validateInputs = () => {
+    let inputElements = document.querySelectorAll("input, textarea");
+    let allValid = true;
+    for (let el of inputElements)
+      allValid &= el.reportValidity();
+    return allValid;
+  }
 
   const handleBack = () => {
     if (currentStep == 1) //go back to listings page
@@ -85,7 +93,7 @@ export default function CPHomeSurvey() {
     {error && <Alert variant="danger">{error}</Alert>}
 
       {currentStep === 1 && <Step1 />}
-      {currentStep === 2 && <Step2  setListingInfo={setListingInfo} listingInfo={listingInfo}/>}
+      {currentStep === 2 && <Step2 setError={setError} setListingInfo={setListingInfo} listingInfo={listingInfo}/>}
       {currentStep === 3 && <Step3 setListingInfo={setListingInfo} listingInfo={listingInfo}/>}
       {currentStep === 4 && <Step4 setListingInfo={setListingInfo} listingInfo={listingInfo}/>}
       {currentStep === 5 && <Step5 setListingInfo={setListingInfo} listingInfo={listingInfo}/>}

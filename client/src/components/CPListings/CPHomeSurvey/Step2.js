@@ -10,6 +10,7 @@ export default function Step2({ listingInfo, setListingInfo }) {
       licenseYear: e.target.value});
   }
 
+
   return (
 
     <>
@@ -19,7 +20,7 @@ export default function Step2({ listingInfo, setListingInfo }) {
 
           <Card.Title>About the home</Card.Title>
           <Card.Text>Enter the year this home was licensed.</Card.Text>
-            <input type="text" placeholder="Enter the year" value={listingInfo.licenseYear ?? ""} onChange={handleYearChange} />
+            <input type="number" min={1000} max={new Date().getFullYear()} required placeholder="Enter the year" value={listingInfo.licenseYear ?? ""} onChange={handleYearChange} />
            {/* Button to go back to previous step */}
         </Card.Body>
       </Card>

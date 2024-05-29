@@ -29,7 +29,7 @@ export default function Step12({ listingInfo, setListingInfo }) {
 
         <Card.Body>
 
-          <Card.Title>What happens if a resident\'s private funds are depleted while in your care?</Card.Title>
+          <Card.Title>What happens if a resident's private funds are depleted while in your care?</Card.Title>
           <Form>
               {options.map((option, i) => (
                   <Form.Check 
@@ -39,6 +39,8 @@ export default function Step12({ listingInfo, setListingInfo }) {
                     label={option}
                     checked={listingInfo.fundDepletionPolicy?.includes(option) ?? false}
                     onChange={handleChange}
+                    name='fundDepletionPolicy'
+                    required
                   />
               ))}
               <input type="text" id="OtherInputField" value={otherOption} onChange={handleChange}/>

@@ -1,3 +1,4 @@
+const Stripe = require("stripe");
 const admin = require("./config/firebase-config");
 require("dotenv").config({ path: ".env.local" });
 const express = require("express");
@@ -8,6 +9,8 @@ const path = require("path");
 const db = admin.firestore();
 const geohash = require("geohash");
 const geofire = require("geofire-common");
+
+const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY);
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -602,6 +605,54 @@ app.post("/getCoordinates", async (req, res) => {
 	};
 	res.json({ locationData });
 });
+
+app.post("/create-reservation", async (req, res) => {
+	try {
+		// Create a PaymentIntent on Stripe with the capture_method set to manual
+		const paymentIntent = await stripe.paymentIntents.create({
+			amount: 1500, // Replace with the actual deposit amount
+			currency: "usd", // Replace with the desired currency
+			capture_method: "manual",
+		});
+
+		// Return the client secret
+		res.status(200).json({ clientSecret: paymentIntent.client_secret });
+	} catch (error) {
+		console.error("Error creating PaymentIntent:", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.post("/capture-payment", async (req, res) => {
+	try {
+		const { paymentIntentId } = req.body;
+
+		// Capture the payment
+		const paymentIntent = await stripe.paymentIntents.capture(paymentIntentId);
+
+		console.log("Payment captured:", paymentIntent);
+		res.status(200).json({ message: "Payment captured successfully" });
+	} catch (error) {
+		console.error("Error capturing payment:", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
+app.post("/cancel-payment", async (req, res) => {
+	try {
+		const { paymentIntentId } = req.body;
+
+		// Cancel the payment
+		const paymentIntent = await stripe.paymentIntents.cancel(paymentIntentId);
+
+		console.log("Payment canceled:", paymentIntent);
+		res.status(200).json({ message: "Payment canceled successfully" });
+	} catch (error) {
+		console.error("Error canceling payment:", error);
+		res.status(500).json({ error: error.message });
+	}
+});
+
 
 async function findSpokaneHouse() {
 	const address = "8211 N Standard St"; // Specify the address you want to search for

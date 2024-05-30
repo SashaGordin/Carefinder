@@ -34,6 +34,7 @@ import FileUpload from './FileUpload';
 import MessageAdmin from '../pages/MessageAdmin';
 import MessageAdminSpoof from '../pages/MessageAdminSpoof';
 import AdminViewClient from './AdminViewClient';
+import ReserveRoom from '../pages/ReserveRoom';
 
 
 function App() {
@@ -216,6 +217,18 @@ function App() {
                       ['admin']
                     }>
                       <AdminViewClient />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/reserve-room"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      ['admin', 'client']
+                    }>
+                      <ReserveRoom />
                   </PrivateRoute>
                 }
               />

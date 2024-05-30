@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import PropertyPhotoModal from "./PropertyPhotoModal";
+import { useNavigate } from 'react-router-dom';
+
 
 const ProviderProfileCard = ({ provider }) => {
 	const {
@@ -9,30 +10,29 @@ const ProviderProfileCard = ({ provider }) => {
 		FacilityPOC,
 		FacilityName,
 		homePhotos,
-		listingsData,		// Add more fields as needed
+		listingsData, // Add more fields as needed
+		Speciality,
 	} = provider;
+	console.log('adskfjslkdjf', provider)
 
 	const roomPhotos = listingsData[0].roomData.map((room) => room.roomPhotos);
-
 
 	const [showModal, setShowModal] = useState(false);
 
 	const [showImageModal, setShowImageModal] = useState(false);
 
+	const navigate = useNavigate();
+
+
+
 
 	const handleImageClick = () => {
-    setShowImageModal(true);
-  };
+		setShowImageModal(true);
+	};
 
 	const handleClose = () => setShowModal(false);
 	const handleShow = () => setShowModal(true);
 
-	const facilityImages = [
-		profilePicPath,
-		profilePicPath,
-		profilePicPath,
-		profilePicPath,
-	];
 	console.log("this is the provider", provider);
 	return (
 		<>
@@ -47,14 +47,14 @@ const ProviderProfileCard = ({ provider }) => {
 				}}
 			>
 				<img
-					style={{ width: "100px" }}
+					className="w-40"
 					src={profilePicPath}
 					alt="Profile pic"
 				/>
-				<div style={{ display: "flex", flexDirection: "column" }}>
+				<div className="flex flex-col">
 					<Card.Title>{FacilityPOC}</Card.Title>
 					<div>5 miles away</div>
-					<Button style={{ fontSize: "10px" }} onClick={handleShow}>
+					<Button className="text-xs" onClick={handleShow}>
 						View profile
 					</Button>
 				</div>
@@ -98,6 +98,7 @@ const ProviderProfileCard = ({ provider }) => {
 								/>
 								<div
 									style={{
+
 										display: "flex",
 										flexDirection: "column",
 										marginLeft: "10px",
@@ -106,6 +107,7 @@ const ProviderProfileCard = ({ provider }) => {
 									<img
 										style={{
 											width: "100%",
+											height: "50%",
 											borderRadius: "5px",
 											marginBottom: "10px",
 										}}
@@ -113,7 +115,7 @@ const ProviderProfileCard = ({ provider }) => {
 										alt="Profile pic"
 									/>
 									<img
-										style={{ width: "100%", borderRadius: "5px" }}
+										style={{ width: "100%", height:"50%", borderRadius: "5px" }}
 										src={homePhotos[1]}
 										alt="Profile pic"
 									/>
@@ -128,6 +130,7 @@ const ProviderProfileCard = ({ provider }) => {
 									<img
 										style={{
 											width: "100%",
+											height: "50%",
 											borderRadius: "5px",
 											marginBottom: "10px",
 										}}
@@ -135,7 +138,7 @@ const ProviderProfileCard = ({ provider }) => {
 										alt="Profile pic"
 									/>
 									<img
-										style={{ width: "100%", borderRadius: "5px" }}
+										style={{ width: "100%", height: "50%", borderRadius: "5px" }}
 										src={homePhotos[3]}
 										alt="Profile pic"
 									/>
@@ -157,8 +160,7 @@ const ProviderProfileCard = ({ provider }) => {
 									<div style={{ display: "flex", flexDirection: "row" }}>
 										<Card.Title>{FacilityName}</Card.Title>
 										<div>Licensed For: </div>
-										<div>Diabetes</div>
-										<div>Mental Health</div>
+										<div>{Speciality}</div>
 									</div>
 								</div>
 								<div
@@ -178,23 +180,19 @@ const ProviderProfileCard = ({ provider }) => {
 									>
 										Message
 									</Button>
-									{/* <Link to={`/msg-outbox?ref=${provider.userId}`}>
-										Forgot Password?
-									</Link> */}
 									<Button
-										className="mb-2"
 										onClick={() => {
-											window.location.href = `/msg-outbox?ref=${provider.userId}&type=quote`;
+											navigate('/reserve-room');
 										}}
 									>
-										Request Quote
+										Reserve Room
 									</Button>
-									<Button className="mb-2">Google Meets</Button>
-									<Button>Tour Home</Button>
 								</div>
 							</div>
-							<div>Whats special</div>
+							<h4>Whats special</h4>
 							<div>At our blah blah blah... {/*description */}</div>
+							<h4>Features</h4>
+							<h4>Where will you be visiting from?</h4>
 							<div
 								style={{
 									display: "flex",
@@ -237,10 +235,19 @@ const ProviderProfileCard = ({ provider }) => {
 				</Modal.Footer>
 			</Modal>
 			{showImageModal && (
-				<PropertyPhotoModal showModal={showImageModal} setShowModal={setShowImageModal} FacilityName={FacilityName} homePhotos={homePhotos} roomPhotos={roomPhotos} />
+				<PropertyPhotoModal
+					showModal={showImageModal}
+					setShowModal={setShowImageModal}
+					FacilityName={FacilityName}
+					homePhotos={homePhotos}
+					roomPhotos={roomPhotos}
+				/>
 			)}
 		</>
 	);
 };
 
 export default ProviderProfileCard;
+
+
+

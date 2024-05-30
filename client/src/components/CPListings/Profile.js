@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, Image } from 'react-bootstrap';
 import FileUpload from './FileUpload';
+import EditableField from '../menu/EditableField';
 
 export default function Profile({ userData, handleUpdate}) {
 	const folderPath = `users/${userData.LicenseNumber}`;
@@ -26,6 +27,8 @@ export default function Profile({ userData, handleUpdate}) {
 			<video height="150px" controls>
 				<source src={userData.profileVidPath}/>
 			</video>}
+		<EditableField title="Calendly Link" value={userData.CalendlyLink || ''} onChange={(newValue) => handleUpdate({ CalendlyLink: newValue })} />
+
       </Card.Body>
       </Card>
     </>

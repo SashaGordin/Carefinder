@@ -1,6 +1,7 @@
 //import logo from './logo.svg';
 import React from 'react';
 import Signup from '../pages/Signup';
+import VerifyEmail from '../pages/VerifyEmail';
 import Login from "../pages/Login";
 import LandingPage from '../pages/LandingPage';
 import ForgotPassword from '../pages/ForgotPassword';
@@ -51,6 +52,7 @@ function App() {
               <Route exact path="/" element={<LandingPage />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/verify-email" element={<VerifyEmail />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/survey" element={<Survey />} />
               <Route path="/care-provider" element={<CPLandingPage />} />

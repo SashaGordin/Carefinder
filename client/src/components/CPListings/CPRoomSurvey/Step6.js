@@ -19,7 +19,7 @@ export default function Step6({ roomInfo, setRoomInfo }) {
 
           <Card.Title>Provide a rough estimate of room dimensions</Card.Title>
          
-            <input type="text" placeholder="e.g. 120 Sq ft" value={roomInfo.dimensions ?? ""} onChange={handleChange} />
+            <input required type="text" placeholder="e.g. 120 Sq ft" value={roomInfo.dimensions ?? ""} onChange={handleChange} />
             <Card.Text>Calculate the length times the width of the room and add it together for total</Card.Text>
         </Card.Body>
       </Card>

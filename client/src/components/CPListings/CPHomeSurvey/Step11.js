@@ -27,6 +27,8 @@ export default function Step11({ listingInfo, setListingInfo }) {
                     label={option}
                     checked={listingInfo.minFunding?.includes(option) ?? false}
                     onChange={handleChange}
+                    name='minFunding'
+                    required
                   />
               ))}
             </Form>

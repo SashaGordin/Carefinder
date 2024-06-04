@@ -35,7 +35,10 @@ import FileUpload from './FileUpload';
 import MessageAdmin from '../pages/MessageAdmin';
 import MessageAdminSpoof from '../pages/MessageAdminSpoof';
 import AdminViewClient from './AdminViewClient';
-import ReserveRoom from '../pages/ReserveRoom';
+import ReserveRoom from '../pages/Reservation/ReserveRoom';
+import ReservationResponse from '../pages/Reservation/ReservationResponse';
+import ReservationConfirmation from '../pages/Reservation/ReservationConfirmation';
+import ReservationDenial from '../pages/Reservation/ReservationDenial';
 
 
 function App() {
@@ -231,6 +234,42 @@ function App() {
                       ['admin', 'client']
                     }>
                       <ReserveRoom />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/reservation-response"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      ['admin', 'provider']
+                    }>
+                      <ReservationResponse />
+                  </PrivateRoute>
+                }
+              />
+               <Route
+                path="/reservation-confirmation"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      ['admin', 'provider']
+                    }>
+                      <ReservationConfirmation />
+                  </PrivateRoute>
+                }
+              />
+               <Route
+                path="/reservation-denial"
+                element={
+                  <PrivateRoute
+                    redirectPath="/login"
+                    allowedRoles={
+                      ['admin', 'provider']
+                    }>
+                      <ReservationDenial />
                   </PrivateRoute>
                 }
               />

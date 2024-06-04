@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
 import PropertyPhotoModal from "./PropertyPhotoModal";
 import { useNavigate } from 'react-router-dom';
+import VisitingMap from "./VisitingMap";
 
 
 const ProviderProfileCard = ({ provider }) => {
@@ -182,49 +183,48 @@ const ProviderProfileCard = ({ provider }) => {
 									</Button>
 									<Button
 										onClick={() => {
-											navigate('/reserve-room');
+											navigate('/reserve-room', { state: { provider } });
 										}}
 									>
 										Reserve Room
 									</Button>
 								</div>
 							</div>
-							<h4>Whats special</h4>
-							<div>At our blah blah blah... {/*description */}</div>
-							<h4>Features</h4>
-							<h4>Where will you be visiting from?</h4>
-							<div
-								style={{
-									display: "flex",
-									flexDirection: "column",
-									alignItems: "flex-start",
-									maxWidth: "60%",
-									backgroundImage: 'url("bookCare.png")',
-									borderRadius: "8px",
-									padding: "20px",
-								}}
-							>
-								<div style={{ color: "#ffffff", fontSize: "50px" }}>
-									Book Care.
-								</div>
-								<div>
-									Review disclosures, contract, make a deposit of first months
-									rent outlined in quote, select a move in date and you're ready
-									to move.
-								</div>
+						<div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", maxWidth: "60%", padding: "20px"}}>
+								<h4>Whats special</h4>
+								<div>At our blah blah blah... {/*description */}</div>
+								<h4>Features</h4>
+								<h4>Where will you be visiting from?</h4>
+								<VisitingMap provider={provider}/>
 								<div
 									style={{
-										display: "flex",
-										flexDirection: "row",
-										justifyContent: "space-between",
-										width: "100%",
+										backgroundImage: 'url("bookCare.png")',
+										borderRadius: "8px",
+										padding: "20px",
 									}}
 								>
-									<div></div>
-									{/* Use marginTop: auto to push the button to the bottom */}
-									<Button>Reserve Room</Button>
+									<div style={{ color: "#ffffff", fontSize: "50px" }}>
+										Book Care.
+									</div>
+									<div>
+										Review disclosures, contract, make a deposit of first months
+										rent outlined in quote, select a move in date and you're ready
+										to move.
+									</div>
+									<div
+										style={{
+											display: "flex",
+											flexDirection: "row",
+											justifyContent: "space-between",
+											width: "100%",
+										}}
+									>
+										<div></div>
+										{/* Use marginTop: auto to push the button to the bottom */}
+										<Button>Reserve Room</Button>
+									</div>
 								</div>
-							</div>
+						</div>
 						</div>
 					</div>
 				</Modal.Body>

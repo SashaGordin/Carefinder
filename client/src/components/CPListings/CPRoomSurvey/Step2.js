@@ -28,6 +28,8 @@ export default function Step2({ roomInfo, setRoomInfo}) {
                     label={option}
                     checked={roomInfo.medicaidAccepted?.includes(option) ?? false}
                     onChange={handleChange}
+                    name='medicaidAccepted'
+                    required
                   />
               ))}
             </Form>

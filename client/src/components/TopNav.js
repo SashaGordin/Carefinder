@@ -38,7 +38,7 @@ export default function TopNav() {
 		});
 	  };
 
-	  
+
 	return (
 		<>
 			<div className="topnavigation">
@@ -73,7 +73,7 @@ export default function TopNav() {
 						{role === "client" && (
 							<Nav variant="pills">
 								<Nav.Item>
-									<Nav.Link href="/" title="Browse">
+									<Nav.Link href="/client-dashboard" title="Browse">
 										Browse
 									</Nav.Link>
 								</Nav.Item>

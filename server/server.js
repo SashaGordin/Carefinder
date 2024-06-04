@@ -21,6 +21,124 @@ const port = 3001; // Choose a port for your server
 app.use(bodyParser.json());
 app.use(cors());
 
+// ********************************************************
+// BEGIN MONITORING MESSAGES for CHANGES / 
+// SENDING SMS NOTIFICATIONS to PROVIDERS (or ADMINS)
+// .....
+
+    // phone # cleanup for Twilio:
+	// format phone number in E.164 format before sending the SMS
+	//  -- adds the country code prefix (e.g., +1 for US numbers)
+	//  -- removes any non-digit characters.
+	const formatPhoneNumber = (phone) => {
+		// Assuming US phone numbers, add country code +1
+		if (!phone.startsWith('+')) {
+		return `+1${phone.replace(/\D/g, '')}`;
+		}
+		return phone.replace(/\D/g, '');
+	};
+  
+	// Function to handle new messages:
+	const handleNewMessage = async (doc) => {
+		
+		try {
+
+			const messageData = doc.data();
+			const msgTo = messageData.msgTo;
+			const docId = doc.id;
+			console.log(`SERVER: Work w/ document ID: ${docId}`);
+
+			// ********** BEGIN VALIDATIONS **********
+
+			// Validation:  Check if msgTo is null
+			if (!msgTo) {
+				console.log('SERVER: `msgTo` is null for msgID ' + docId + '. Skipping message!');
+				return;
+			}			
+
+			// Validation:  Skip any already notified...
+			const SMSsent = messageData.msgNotified;
+			if (SMSsent==1) {
+				console.log('SERVER: Response already sent to: ', docId);
+				return;
+			}
+
+			// Validation:  Message recipient must be a valid user...
+			const userSnapshot = await db.collection('users').doc(msgTo).get();
+			if (!userSnapshot.exists) {
+				console.log('SERVER: User not found: ', msgTo);
+				return;
+			}
+
+			const userData = userSnapshot.data();
+			const userRole = userData.role;
+
+			// Validation:  Recipient cannot be a "client" role...
+			if (userRole == 'client') {
+				console.log('SERVER: We are not sending notifications to role: ', userRole);
+				return;
+			}
+
+			// Validation:  Recipient needs to have phone on file...
+			let userPhone = userData.TelephoneNmbr;
+			if (!userPhone) {
+				console.log('SERVER: User phone number not found.');
+				return;
+			}
+			// Validation:  Format the phone number to E.164
+			userPhone = formatPhoneNumber(userPhone);
+
+			// Validation:  Future logic TBD -- e.g., check if user has opted out of messaging
+
+			// ********** END VALIDATIONS **********
+
+			// Set the SMS (s/b short, I guess). Best practice is to include a full URL, like so:
+			const smsMessage = 'You have a new message on CareFinder! Visit https://www.carefinder.com to read/respond.';
+
+			// Fetch or create the Messaging Service SID
+			console.log('SERVER: FETCH TRILIO SERVICE ID...');
+			const msgSvcSID = await getMessagingServiceSid();
+			console.log(`SERVER: Using Twilio Service SID: ${msgSvcSID}`);
+					
+			client.messages.create({
+				body: smsMessage,
+				to: userPhone,
+				messagingServiceSid: msgSvcSID
+			})
+			.then(async (message) => {
+				console.log('SERVER: SMS sent to phone# '+ userPhone +', ID: ', message.sid);
+			
+				// Update the msgNotified field to 1...
+				// I think we definitely need to do this, as sometimes Firestore initially sends ALL
+				// messages here. So, we want to skip any already-notified ones.
+				console.log(`SERVER: Updating msgNotified for document ID: ${docId}`);
+				await db.collection('messages').doc(docId).update({ msgNotified: 1 });
+				console.log('SERVER: msgNotified field updated to 1');
+			})
+			.catch(error => console.error('SERVER: Error sending SMS of messageID ' + docId + ' ... ERROR: ', error));
+
+		} catch (error) {
+
+			console.error('SERVER: Error handling new message:', error);
+
+		}
+
+	};
+
+	// Listen for new messages in Firestore
+	db.collection('messages').onSnapshot((snapshot) => {
+		snapshot.docChanges().forEach((change) => {
+			if (change.type === 'added') {
+				handleNewMessage(change.doc);
+			}
+		});
+	});
+
+// END MONITORING MESSAGES for CHANGES
+// && SENDING SMS NOTIFICATIONS
+// ********************************************************
+
+
 async function updateAPIDATA() {
 	const snapshot = await admin.firestore().collection("API_AFH_DATA").get();
 
@@ -80,6 +198,45 @@ async function getServiceSid() {
 		throw error;
 	}
 }
+
+async function getMessagingServiceSid() {
+	try {
+	  const docRef = admin.firestore().collection("twilio").doc("messagingServiceSid");
+	  const doc = await docRef.get();
+	  if (doc.exists) {
+		const serviceSid = doc.data().sid;
+		// Check if the service SID is still valid by attempting to use it
+		try {
+		  await client.messaging.v1.services(serviceSid).fetch();
+		  return serviceSid; // Service SID is still valid
+		} catch (error) {
+		  console.error("Error using stored Messaging Service SID:", error);
+		  // If service SID is expired or invalid, create a new one
+		  const newService = await client.messaging.v1.services.create({
+			friendlyName: "My Messaging Service",
+		  });
+		  const newServiceSid = newService.sid;
+		  // Store new service SID in Firestore
+		  await docRef.set({ sid: newServiceSid });
+		  return newServiceSid;
+		}
+	  } else {
+		// If service SID doesn't exist, create a new one
+		const service = await client.messaging.v1.services.create({
+		  friendlyName: "My Messaging Service",
+		});
+		const serviceSid = service.sid;
+		// Store service SID in Firestore
+		await docRef.set({ sid: serviceSid });
+		return serviceSid;
+	  }
+	} catch (error) {
+	  console.error("Error getting Messaging Service SID:", error);
+	  throw error;
+	}
+  }
+  
+
 
 app.post("/matchUserWithHouses", async (req, res) => {
 	// Async handler

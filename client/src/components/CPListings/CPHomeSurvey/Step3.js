@@ -21,7 +21,7 @@ export default function Step3({ listingInfo, setListingInfo}) {
 
           <Card.Text>
               Provider statement
-              <textarea className="small" rows="5" cols="50" value={listingInfo.providerStatement ?? ""} onChange={handleStatementChange}></textarea>
+              <textarea required className="small" rows="5" cols="50" value={listingInfo.providerStatement ?? ""} onChange={handleStatementChange}></textarea>
           </Card.Text>
         </Card.Body>
       </Card>

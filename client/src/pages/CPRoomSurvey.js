@@ -33,9 +33,16 @@ export default function CPRoomSurvey() {
   const [error, setError] = useState('');
 
   const handleNext = () => {
-    setCurrentStep(currentStep + 1);
-	console.log(roomInfo);
+    if (validateInputs())
+      setCurrentStep(currentStep + 1);
   };
+  const validateInputs = () => {
+    let inputElements = document.querySelectorAll("input, textarea");
+    let allValid = true;
+    for (let el of inputElements)
+      allValid &= el.reportValidity();
+    return allValid;
+  }
 
   const handleBack = () => {
     if (currentStep == 1) //go back to listings page

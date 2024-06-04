@@ -165,7 +165,7 @@ app.post("/getProviders", async (req, res) => {
 					if (userSnapshot.exists) {
 						const listingsSnapshot = await userSnapshot.ref
 							.collection("listings")
-              // .doc(provider.LicenseNumber)
+							// .doc(provider.LicenseNumber)
 							.get();
 
 						for (const listingDoc of listingsSnapshot.docs) {
@@ -244,6 +244,78 @@ app.post("/getProviders", async (req, res) => {
 	} catch (error) {
 		console.error("Error getting providers:", error);
 		res.status(500).send("Internal Server Error");
+	}
+});
+
+app.get("/getUser", async (req, res) => {
+	const userId = req.query.userId;
+	if (!userId) {
+		return res.status(400).json({ error: "User ID is required" });
+	}
+
+	try {
+		const userDoc = await db.collection("users").doc(userId).get();
+		if (!userDoc.exists) {
+			return res.status(404).json({ error: "User not found" });
+		} else {
+			const userData = userDoc.data();
+			return res.status(200).json(userData);
+		}
+	} catch (error) {
+		console.error("Error fetching user:", error);
+		return res.status(500).json({ error: "Internal Server Error" });
+	}
+});
+
+app.get("/getProvider", async (req, res) => {
+	const providerId = req.query.providerId;
+	if (!providerId) {
+		return res.status(400).json({ error: "Provider ID is required" });
+	}
+	let provider;
+	try {
+		const providerSnapshot = await db.collection("users").doc(providerId).get();
+		if (providerSnapshot.exists) {
+			const listingsSnapshot = await providerSnapshot.ref
+				.collection("listings")
+				// .doc(provider.LicenseNumber)
+				.get();
+			provider = providerSnapshot.data();
+			for (const listingDoc of listingsSnapshot.docs) {
+				try {
+					const roomsSnapshot = await listingDoc.ref
+						.collection("rooms")
+						.where("isAvailable", "==", true)
+						.get();
+					const roomData = roomsSnapshot.docs.map((doc) => doc.data());
+
+					if (!provider.listingsData) {
+						provider.listingsData = [];
+					}
+					provider.listingsData.push({
+						listingId: listingDoc.id,
+						roomData: roomData,
+					});
+					if (listingDoc.exists) {
+						const homePhotos = listingDoc.data().homePhotos;
+						if (homePhotos) {
+							if (!provider.homePhotos) {
+								provider.homePhotos = [];
+							}
+							provider.homePhotos.push(...homePhotos);
+						}
+					}
+				} catch (error) {
+					console.error("Error getting room data for listing:", error);
+				}
+			}
+		} else {
+			return res.status(404).json({ error: "Provider not found" });
+		}
+		res.json({ provider: provider });
+	} catch (error) {
+		console.error("Error fetching provider:", error);
+		return res.status(500).json({ error: "Internal Server Error" });
 	}
 });
 
@@ -623,6 +695,144 @@ app.post("/create-reservation", async (req, res) => {
 	}
 });
 
+app.post("/create-setup-intent", async (req, res) => {
+	console.log("create-setup-intent endpoint hit");
+	const { paymentMethodId, userId } = req.body;
+	console.log("Payment Method ID:", paymentMethodId);
+
+	const user = await db.collection("users").doc(userId).get();
+	let stripeCustomerId;
+	console.log("cusotmerId", user.stripeCustomerId);
+	if (!user.stripeCustomerId) {
+		stripeCustomerId = await stripe.customers
+			.create({
+				// Replace with the user's email
+				name: user.displayName || "",
+				email: user.email,
+			})
+			.then((res) => res.id);
+		await db.collection("users").doc(userId).update({
+			stripeCustomerId: stripeCustomerId,
+		});
+	} else {
+		stripeCustomerId = user.stripeCustomerId;
+	}
+	console.log("added customer id to user");
+
+	try {
+		const setupIntent = await stripe.setupIntents.create({
+			automatic_payment_methods: {
+				enabled: true,
+				allow_redirects: "never",
+			},
+			customer: stripeCustomerId,
+			payment_method: paymentMethodId,
+			confirm: true,
+			usage: "off_session",
+		});
+		console.log("Setup Intent created:", setupIntent.id);
+
+		// Update Firestore with the Setup Intent ID
+
+		res.send({
+			clientSecret: setupIntent.client_secret,
+			setupIntentId: setupIntent.id,
+		});
+	} catch (error) {
+		console.error("Error creating Setup Intent:", error);
+		res.status(500).send({ error: error.message });
+	}
+});
+
+app.post("/confirm-setup-intent", async (req, res) => {
+	const { setupIntentId, userId } = req.body;
+	const setup = await stripe.setupIntents.retrieve(setupIntentId);
+
+	const customerId = await db
+		.collection("users")
+		.doc(userId)
+		.get()
+		.then((doc) => {
+			return doc.data().stripeCustomerId;
+		});
+
+	if (!customerId) {
+		console.error("No customer ID found for user:", userId);
+		res.status(400).json({ error: "No customer ID found for user" });
+	}
+
+	await stripe.paymentMethods.attach(setup.payment_method, {
+		customer: customerId,
+	});
+
+	await stripe.customers.update(setup.customer, {
+		invoice_settings: {
+			default_payment_method: setup.payment_method,
+		},
+	});
+
+	await db.collection("users").doc(userId).update({
+		setupIntentId: setupIntentId,
+	});
+	res.status(200).json({ message: "Setup Intent confirmed successfully" });
+});
+
+app.post("/get-list-of-payments", async (req, res) => {
+	const userId = req.body.userId;
+	const userDoc = await db.collection("users").doc(userId).get();
+	const stripeCustomerId = userDoc.data().stripeCustomerId;
+	if (stripeCustomerId) {
+		const cards = await stripe.paymentMethods.list({
+			customer: stripeCustomerId,
+			type: "card",
+		});
+		const customer = await stripe.customers.retrieve(stripeCustomerId);
+		if (customer.deleted) {
+			res.status(400).json({ error: "Customer not found" });
+		}
+		res.status(200).json({
+			cards: cards.data,
+			defaultPaymentMethod: customer.invoice_settings.default_payment_method,
+		});
+	} else {
+		res.status(400).json({ error: "Customer not found" });
+	}
+});
+
+app.post("/charge-customer", async (req, res) => {
+	const { amount, currency, userId } = req.body;
+
+	try {
+		const userDoc = await db.collection("users").doc(userId).get();
+		const user = userDoc.data();
+		const customerId = user.stripeCustomerId;
+
+		if (!customerId) {
+			throw new Error("Customer ID not found for user");
+		}
+
+		const customer = await stripe.customers.retrieve(customerId);
+		const defaultPaymentMethod = customer.invoice_settings.default_payment_method;
+
+		const paymentIntent = await stripe.paymentIntents.create({
+			amount: amount, // amount in cents
+			currency: currency,
+			customer: customerId,
+			payment_method: defaultPaymentMethod, // We don't need to set this explicitly if the customer has a default payment method
+			off_session: true,
+			confirm: true,
+		});
+
+		res.status(200).json({
+			message: "Payment Intent created and confirmed successfully",
+			paymentIntentId: paymentIntent.id,
+		});
+	} catch (error) {
+		console.error("Error creating Payment Intent:", error);
+		res.status(500).send({ error: error.message });
+	}
+});
+
 app.post("/capture-payment", async (req, res) => {
 	try {
 		const { paymentIntentId } = req.body;
@@ -652,7 +862,6 @@ app.post("/cancel-payment", async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 });
-
 
 async function findSpokaneHouse() {
 	const address = "8211 N Standard St"; // Specify the address you want to search for

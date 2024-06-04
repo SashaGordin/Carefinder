@@ -1,94 +1,57 @@
 import React from "react";
 import { Button, Card } from "react-bootstrap";
 
-export default function Step3({ onNext, onBack, houseRules }) {
+export default function Step3({ onNext, onBack, houseName }) {
 	return (
 		<>
 			<Card>
 				<Card.Body>
-					<Card.Title style={{ textAlign: "center" }}>House Rules</Card.Title>
+					<Card.Title style={{textAlign: "center"}}>Review {houseName} Contract</Card.Title>
 
 					<Card.Text>
-						<div>
-							Quiet Hours: Establish specific times during the day when noise
-							levels should be kept to a minimum to ensure peace and quiet for
-							all residents.
-						</div>
-						<div>
-							Respect for Others: Emphasize the importance of respecting other
-							residents\' privacy, space, and belongings.
-						</div>
-						<div>
-							Cleanliness and Hygiene: Encourage residents to maintain
-							cleanliness and good hygiene standards in shared spaces such as
-							kitchens, bathrooms, and living areas.
-						</div>
-						<div>
-							No Smoking: Implement a no-smoking policy indoors to promote a
-							healthy and smoke-free environment.
-						</div>
-						<div>
-							Guest Policy: Set guidelines for having guests over, including
-							restrictions on overnight stays and the number of visitors allowed
-							at one time.
-						</div>
-						<div>
-							Safety and Security: Remind residents to lock doors and windows
-							when leaving the premises and report any suspicious activity to
-							the appropriate authorities.
-						</div>
-						<div>
-							Pets: If pets are allowed, establish rules regarding pet behavior,
-							waste disposal, and noise control.
-						</div>
-						<div>
-							Shared Responsibilities: Clearly outline residents\'
-							responsibilities for chores, maintenance tasks, and other shared
-							duties to ensure a well-maintained living environment.
-						</div>
-						<div>
-							Prohibited Items: Specify items that are not allowed on the
-							premises, such as illegal substances, weapons, or hazardous
-							materials.
-						</div>
-						<div>
-							Emergency Procedures: Provide guidance on what to do in case of
-							emergencies, including evacuation procedures, emergency contact
-							information, and location of emergency supplies.
-						</div>
-						<div>
-							Parking Rules: Establish rules for parking vehicles, including
-							designated parking areas, visitor parking, and restrictions on
-							parking in certain areas.
-						</div>
-						<div>
-							Internet and Technology Use: Set guidelines for internet and
-							technology use, including bandwidth limitations, acceptable use
-							policies, and consequences for violating these rules.
-						</div>
-						<div>
-							Respect for Property: Encourage residents to take care of the
-							property and report any damages or maintenance issues promptly.
-						</div>
-						<div>
-							Community Events and Gatherings: Promote a sense of community by
-							organizing regular events or gatherings for residents to socialize
-							and connect with one another.
-						</div>
-						<div>
-							Dispute Resolution: Provide procedures for resolving conflicts or
-							disputes among residents in a peaceful and constructive manner.
-						</div>
-						<div>
-							These house rules can help create a harmonious and respectful
-							living environment for all residents. Adjustments can be made
-							based on the specific needs and preferences of the community.
-						</div>
+						Adult Family Home Resident Agreement] This Agreement ("Agreement")
+						is entered into on [Date] between [Name of Adult Family Home],
+						located at [Address of Adult Family Home] ("Provider"), and [Name of
+						Resident], located at [Address of Resident] ("Resident"). Services
+						Provided: Provider agrees to provide the following services to
+						Resident: Room and board Assistance with activities of daily living
+						(ADLs) as needed, including bathing, dressing, grooming, toileting,
+						eating, and mobility Medication management and administration
+						Monitoring of health status and assistance with medical appointments
+						Social and recreational activities Term: This Agreement shall be
+						effective as of [Date] and shall continue on a month-to-month basis
+						until terminated by either party with [Number] days\' written
+						notice. Fees and Payment: Resident agrees to pay Provider the
+						following fees for the services provided: Monthly fee of [Amount]
+						for room and board Additional fees for specialized services or
+						amenities, if applicable Payment is due on the first day of each
+						month. Rights and Responsibilities: Provider\'s Responsibilities:
+						Provide care and assistance in a safe and respectful manner Maintain
+						the cleanliness and safety of the premises Respect Resident\'s
+						privacy and dignity Provide meals and snacks that meet Resident\'s
+						dietary needs and preferences Ensure that staff are properly trained
+						and qualified to provide care Resident\'s Responsibilities:
+						Cooperate with Provider and staff in developing and implementing a
+						care plan Pay fees and charges in a timely manner Respect the rights
+						and privacy of other residents Provide accurate and complete
+						information about health status and medical history Abide by the
+						rules and policies of the Adult Family Home Termination: Either
+						party may terminate this Agreement with [Number] days\' written
+						notice. Provider may terminate this Agreement immediately if
+						Resident\'s behavior poses a threat to the health or safety of
+						themselves or others, or if Resident fails to pay fees as required.
+						Miscellaneous: This Agreement constitutes the entire agreement
+						between the parties and supersedes all prior agreements and
+						understandings, whether written or oral. This Agreement may not be
+						modified or amended except in writing signed by both parties. This
+						Agreement shall be governed by the laws of [State]. IN WITNESS
+						WHEREOF, the parties hereto have executed this Agreement as of the
+						date first above written. Provider: [Signature] Date: [Date]
 					</Card.Text>
 
-					<div style={{ display: "flex", justifyContent: "space-between" }}>
-						<Button onClick={onBack}>Back</Button>
-						<Button onClick={onNext}>Agree</Button>
+					<div style={{display: "flex", justifyContent: "space-between"}}>
+					  <Button onClick={onBack}>Back</Button>
+  					<Button onClick={onNext}>Agree</Button>
 					</div>
 
 					{/* Button to go back to previous step */}

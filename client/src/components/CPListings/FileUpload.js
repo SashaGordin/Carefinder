@@ -5,10 +5,13 @@ import { Button, Card, Form } from 'react-bootstrap';
 // to do later -- use server.js
 // import axios from 'axios';
 
-const FileUpload = ({controlId, handleNewFilePaths, folderPath, uploadLabel, uploadType, allowMultipleFiles}) => {
+const FileUpload = ({controlId, handleNewFiles, folderPath, uploadLabel, uploadType, allowMultipleFiles}) => {
 
   const [file, setFile] = useState(null);
-  let acceptedFileTypes = uploadType == "Photo" ? "image/*" : uploadType == "Video" ? "video/*" : "";
+  let acceptedFileTypes = 
+    uploadType == "Photo" ? "image/*" : 
+    uploadType == "Video" ? "video/*" : 
+    uploadType == "Document" ? "application/pdf" : "";
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -23,26 +26,44 @@ const FileUpload = ({controlId, handleNewFilePaths, folderPath, uploadLabel, upl
     let promises = [];
     for (const file of fileList) {
 
-      if (!acceptedFileTypes || file.type.startsWith(acceptedFileTypes.replace("*", ""))) {
+      let isAcceptedFileType = false;
+      if (!acceptedFileTypes)
+        isAcceptedFileType = true;
+      else if (acceptedFileTypes.endsWith("*"))
+        isAcceptedFileType = file.type.startsWith(acceptedFileTypes.replace("*", ""));
+      else {
+        let arr = acceptedFileTypes.split(",");
+        for (let type of arr) {
+          if (type.startsWith(".")) //extension
+            isAcceptedFileType |= file.name.endsWith(type);
+          else //mime type
+            isAcceptedFileType |= file.type == type;
+        }
+      }
+
+      if (isAcceptedFileType) {
 
         fileIndex++;
-        newFileName = Date.now() + '-' + fileIndex;
+        newFileName = Date.now() + '-' + fileIndex; //this needs to have the correct extension at the end of the name
         let newFilePath = `${folderPath}/${newFileName}`
         const storageRef = ref(storage, newFilePath);
         console.log("Uploading " + file.name + "...");
         var uploadPromise = uploadBytes(storageRef, file).then(() => {
           console.log("getting download url");
-          return getDownloadURL(storageRef)});
+          return getDownloadURL(storageRef).then((url) => {
+            let thisFileName = file.name;
+            return {name: thisFileName, path: url};
+          })});
         console.log(uploadPromise);
         promises.push(uploadPromise);
       } else {
-        console.log('FILE REJECTED: You cannot upload ' + file.type + 'files. Kthx.')
+        console.log('FILE REJECTED: You cannot upload ' + file.type + ' files. Kthx.')
       }
     }
-    Promise.all(promises).then((imgURLs) => {
+    Promise.all(promises).then((files) => {
       console.log("All uploads completed. URLs:");
-      console.log(imgURLs);
-      handleNewFilePaths(imgURLs);
+      console.log(files);
+      handleNewFiles(files);
     })
   }
 

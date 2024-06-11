@@ -5,9 +5,9 @@ import FileUpload from '../FileUpload';
 
 export default function Step6({ listingInfo, setListingInfo }) {
   const folderPath = `users/${listingInfo.LicenseNumber}`;
-	const handleNewPics = (arrNewFilePaths) => {
+	const handleNewPics = (arrNewFiles) => {
 		let petPics = listingInfo?.petPics ?? [];
-    petPics.push(...arrNewFilePaths); 
+    petPics.push(...arrNewFiles); 
     setListingInfo({...listingInfo, petPics: petPics});
 	}
 
@@ -18,9 +18,9 @@ export default function Step6({ listingInfo, setListingInfo }) {
         <Card.Body>
 
           <Card.Title>Upload photo of house pet</Card.Title>
-          <FileUpload controlId="petPhotos" handleNewFilePaths={handleNewPics} folderPath={folderPath} uploadType="Photo" allowMultipleFiles={true} />    
-          {listingInfo?.petPics && listingInfo.petPics.map((path) => (
-                 <Image height="50px"src={path}/>
+          <FileUpload controlId="petPhotos" handleNewFiles={handleNewPics} folderPath={folderPath} uploadType="Photo" allowMultipleFiles={true} />    
+          {listingInfo?.petPics && listingInfo.petPics.map((pic) => (
+                 <Image height="50px"src={pic.path}/>
               ))}
         </Card.Body>
 

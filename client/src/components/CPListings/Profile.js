@@ -7,11 +7,11 @@ export default function Profile({ userData, handleUpdate }) {
 	const folderPath = `users/${userData.LicenseNumber}`;
 	const [error, setError] = useState('');
 
-	const handleNewProfilePic = (newFilePath) => {
-		handleUpdate({ profilePicPath: newFilePath[0] });
+	const handleNewProfilePic = (newFile) => {
+		handleUpdate({ profilePicPath: newFile[0]?.path });
 	}
-	const handleNewProfileVid = (newFilePath) => {
-		handleUpdate({ profileVidPath: newFilePath[0] });
+	const handleNewProfileVid = (newFile) => {
+		handleUpdate({ profileVidPath: newFile[0]?.path });
 	}
 
 	const validateLink = (newValue) => {
@@ -40,10 +40,10 @@ export default function Profile({ userData, handleUpdate }) {
 			<Card	>
 				<Card.Body>
 					<Card.Title><h2>Profile</h2></Card.Title>
-					<FileUpload controlId="profilePhotoUpload" handleNewFilePaths={handleNewProfilePic} folderPath={folderPath} uploadLabel="Upload profile photo (Headshot)" uploadType="Photo" />
+					<FileUpload controlId="profilePhotoUpload" handleNewFiles={handleNewProfilePic} folderPath={folderPath} uploadLabel="Upload profile photo (Headshot)" uploadType="Photo" />
 					{userData.profilePicPath && <Image style={{height: '150px'}} src={userData.profilePicPath} />}	
 					<hr />
-					<FileUpload controlId="profileVidUpload" handleNewFilePaths={handleNewProfileVid} uploadLabel="Upload introduction video" uploadType="Video" />
+					<FileUpload controlId="profileVidUpload" handleNewFiles={handleNewProfileVid} uploadLabel="Upload introduction video" uploadType="Video" />
 					{userData.profileVidPath &&
 						<video style={{height: '150px'}} controls>
 							<source src={userData.profileVidPath} />

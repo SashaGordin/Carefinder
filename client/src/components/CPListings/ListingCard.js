@@ -36,10 +36,19 @@ export default function ListingCard({userData, initialListingData}) {
   };
 
   const folderPath = `users/${currentUser.uid}`;
-	const handleNewPics = (arrNewFilePaths) => {
+	
+  const handleNewPics = (arrNewFiles) => {
 		let homePhotos = listingData?.homePhotos ?? [];
+    //FileUpload component returns an object with a path and name property. The line below converts the array of objects to an array of paths
+    let arrNewFilePaths = arrNewFiles.map(file => file.path);
     homePhotos.push(...arrNewFilePaths); 
     handleUpdate({...listingData, homePhotos: homePhotos});
+	}
+
+  const handleNewDocs = (arrNewFiles) => {
+		let homeDocs = listingData?.homeDocs ?? [];
+    homeDocs.push(...arrNewFiles); 
+    handleUpdate({...listingData, homeDocs: homeDocs});
 	}
 
   const gotoHomeSurvey = () => {
@@ -106,7 +115,7 @@ export default function ListingCard({userData, initialListingData}) {
 				1.Exterior front of house. 2. Interior common area. 3. Interior common area.<br/>
 				Upload up to 20 photos. DO NOT POST ROOM PHOTOS here. :)
 			</p>
-			<FileUpload controlId="homePhotos" handleNewFilePaths={handleNewPics} folderPath={folderPath} uploadType="Photo" allowMultipleFiles={true} />    
+			<FileUpload controlId="homePhotos" handleNewFiles={handleNewPics} folderPath={folderPath} uploadType="Photo" allowMultipleFiles={true} />    
           {listingData?.homePhotos && listingData.homePhotos.map((path, i) => (
                  <Image height="50px"src={path} key={i}/>
               ))}
@@ -115,6 +124,14 @@ export default function ListingCard({userData, initialListingData}) {
 		<div>
 			<h4>Complete home survey</h4>
 			<Button onClick={gotoHomeSurvey}>Take survey</Button>
+		</div>
+		<hr/>
+    <div>
+			<h4>Upload facility contract, house rules, and other client facing documents</h4>
+			<FileUpload controlId="homeDocs" handleNewFiles={handleNewDocs} folderPath={folderPath} uploadType="Document" allowMultipleFiles={true} />    
+          {listingData?.homeDocs && listingData.homeDocs.map((file, i) => (
+                 <div><a href={file.path} target="_blank" key={i}>{file.name}</a><br></br></div>
+              ))}
 		</div>
 		<hr/>
 		<div>

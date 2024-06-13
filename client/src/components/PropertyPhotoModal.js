@@ -15,8 +15,12 @@ export default function PropertyPhotoModal({
 			show={showModal}
 			onHide={() => setShowModal(false)}
 		>
-			<Modal.Header closeButton>
+			<Modal.Header>
 				<Modal.Title>{FacilityName}</Modal.Title>
+				<Button variant="link" onClick={() => setShowModal(false)} className="ms-auto">
+				<span aria-hidden="true">&times;</span>
+				</Button>
+
 			</Modal.Header>
 			<Modal.Body>
 				<div>

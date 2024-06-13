@@ -42,7 +42,7 @@ export default function ReserveRoom() {
   return(
     <>
     <TopNav />
-    <div className="contentContainer utilityPage">
+    <div className="contentContainer utilityPage reserveRoom">
 
       {currentStep === 1 && <Step1 onNext={handleNext} provider={provider} />}
       {currentStep === 2 && <Step2 onNext={handleNext} onBack={handleBack} provider={provider}/>}

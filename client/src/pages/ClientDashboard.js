@@ -264,7 +264,7 @@ export default function ClientDashboard() {
 							<GoogleMap
 								zoom={zoomRef.current}
 								center={startingPosition.current}
-								mapContainerStyle={{ width: "100%", height: "100%" }}
+								mapContainerStyle={{ width: "100%", height: "100%", borderRadius:10 }}
 								onLoad={handleMapLoad}
 								onBoundsChanged={handleMapBoundsChanged}
 								options={mapOptions}
@@ -326,6 +326,7 @@ export default function ClientDashboard() {
 				</div>
 			</div>
 
+			{/*  
 			<div className="contentContainer utilityPage">
 				<div className="clientDashboard">
 					<Card>
@@ -356,6 +357,10 @@ export default function ClientDashboard() {
 					</div>
 				</div>
 			</div>
+ 			*/}
+
+			<div style={{height:40}}></div>
+
 			<Footer />
 		</>
 	);

@@ -51,10 +51,11 @@ const ProviderProfileCard = ({ provider }) => {
 					className="w-40"
 					src={profilePicPath}
 					alt="Profile pic"
+					style={{ marginRight:10, borderRadius:10 }}
 				/>
 				<div className="flex flex-col">
 					<Card.Title>{FacilityPOC}</Card.Title>
-					<div>5 miles away</div>
+					<div style={{marginBottom:5}}>5 miles away</div>
 					<Button className="text-xs" onClick={handleShow}>
 						View profile
 					</Button>
@@ -68,8 +69,12 @@ const ProviderProfileCard = ({ provider }) => {
 				size="xl"
 				centered
 			>
-				<Modal.Header closeButton>
+				<Modal.Header>
 					<Modal.Title>Provider Profile</Modal.Title>
+					<Button variant="link" onClick={() => setShowModal(false)} className="ms-auto">
+					<span aria-hidden="true">&times;</span>
+					</Button>
+
 				</Modal.Header>
 				<Modal.Body>
 					<div
@@ -79,7 +84,7 @@ const ProviderProfileCard = ({ provider }) => {
 							display: "flex",
 							flexDirection: "column",
 							flex: 1,
-							margin: "20px",
+							margin: "10px",
 							backgroundColor: "#1e1f26",
 						}}
 					>
@@ -95,11 +100,10 @@ const ProviderProfileCard = ({ provider }) => {
 								<img
 									style={{ width: "100%", borderRadius: "25px" }}
 									src={profilePicPath}
-									alt="Profile pic"
+									alt="pic"
 								/>
 								<div
 									style={{
-
 										display: "flex",
 										flexDirection: "column",
 										marginLeft: "10px",
@@ -113,12 +117,12 @@ const ProviderProfileCard = ({ provider }) => {
 											marginBottom: "10px",
 										}}
 										src={homePhotos[0]}
-										alt="Profile pic"
+										alt="pic"
 									/>
 									<img
 										style={{ width: "100%", height:"50%", borderRadius: "5px" }}
 										src={homePhotos[1]}
-										alt="Profile pic"
+										alt="pic"
 									/>
 								</div>
 								<div
@@ -136,12 +140,12 @@ const ProviderProfileCard = ({ provider }) => {
 											marginBottom: "10px",
 										}}
 										src={homePhotos[2]}
-										alt="Profile pic"
+										alt="pic"
 									/>
 									<img
 										style={{ width: "100%", height: "50%", borderRadius: "5px" }}
 										src={homePhotos[3]}
-										alt="Profile pic"
+										alt="pic"
 									/>
 								</div>
 							</div>
@@ -170,7 +174,7 @@ const ProviderProfileCard = ({ provider }) => {
 										flexDirection: "column",
 										backgroundColor: "black",
 										borderRadius: "10px",
-										padding: "20px",
+										padding: "15px",
 									}}
 								>
 									<Button
@@ -199,7 +203,7 @@ const ProviderProfileCard = ({ provider }) => {
 								<div
 									style={{
 										backgroundImage: 'url("bookCare.png")',
-										borderRadius: "8px",
+										borderRadius: "10px",
 										padding: "20px",
 									}}
 								>

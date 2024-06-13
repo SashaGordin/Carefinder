@@ -38,7 +38,7 @@ export default function Signup() {
 	const togglePasswordVisibility = () => {
 	  setShowPassword(!showPassword);
 	};
-  
+
 
 	const checkPasswordsMatch = () => {
 		if (passwordRef.current && passwordConfirmRef.current) {
@@ -48,20 +48,20 @@ export default function Signup() {
 			console.log('set pwdMatch: ', password === confirmPassword )
 		}
 	};
-		
+
 	useEffect(() => {
 		const passwordField = passwordRef.current;
 		const confirmPasswordField = passwordConfirmRef.current;
-	
+
 		const handleChange = () => {
 			checkPasswordsMatch();
 		};
-	
+
 		if (passwordField && confirmPasswordField) {
 			passwordField.addEventListener('input', handleChange);
 			confirmPasswordField.addEventListener('input', handleChange);
 		}
-	
+
 		return () => {
 			if (passwordField && confirmPasswordField) {
 				passwordField.removeEventListener('input', handleChange);
@@ -69,7 +69,7 @@ export default function Signup() {
 			}
 		};
 	}, []);
-	
+
 
 	async function handleSubmit(e) {
 		e.preventDefault();
@@ -99,7 +99,7 @@ export default function Signup() {
 			if (fromClaimProfile) {
 				let providerAddress = `${providerInfo.LocationAddress}, ${providerInfo.LocationCity}, ${providerInfo.LocationState}`;
 				const response = await axios
-					.post(`http://localhost:3001/getCoordinates`, {
+					.post(`${process.env.REACT_APP_ENDPOINT}/getCoordinates`, {
 						address: providerAddress,
 					}).then((response) => {return response.data;})
 					.catch((error) => {
@@ -111,6 +111,8 @@ export default function Signup() {
 					geolocation.latitude,
 					geolocation.longitude
 				);
+
+				console.log("INFO:", providerInfo);
 
 				userData = {
 					...providerInfo,
@@ -170,9 +172,9 @@ export default function Signup() {
 						<Link to="/forgot-password"><b>here</b></Link> if you have forgotten your password.
 					</>
 				);
-					
+
 				// Find the user ID associated with the provided email...
-				// I don't think this will work, though, b/c the person is not 
+				// I don't think this will work, though, b/c the person is not
 				// logged in and so FB will reject the query.
 				console.log('Attempting to find user ID for email:', emailRef.current.value);
 				const email = emailRef.current.value;
@@ -201,7 +203,7 @@ export default function Signup() {
 			setLoading(false);
 
 		}
-		
+
 	}
 
 	return (
@@ -230,7 +232,7 @@ export default function Signup() {
 								/>
 							</Form.Group>
 
-							{isTouched && 
+							{isTouched &&
 								<>
 								<div className="loginPasswordControl" onClick={togglePasswordVisibility} style={{ cursor: 'pointer' }}>{showPassword ? <><FaEyeSlash /> Hide Passwords</> : <><FaEye /> Show Passwords</>}</div>
 

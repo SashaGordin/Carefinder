@@ -4,6 +4,7 @@ import { Timestamp } from "firebase/firestore";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 import { Card, Button } from "react-bootstrap";
+import TopNav from "../../components/TopNav";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 
@@ -24,7 +25,7 @@ export default function ReservationResponse() {
 	useEffect(() => {
 		const fetchUserData = async () => {
 			try {
-				const response = await axios.get(`http://localhost:3001/getUser`, {
+				const response = await axios.get(`${process.env.REACT_APP_ENDPOINT}/getUser`, {
 					params: { userId: messageSeniorID },
 				});
 				setSenior(response.data);
@@ -35,7 +36,7 @@ export default function ReservationResponse() {
 
 		const fetchProviderData = async () => {
 			try {
-				const response = await axios.get(`http://localhost:3001/getProvider`, {
+				const response = await axios.get(`${process.env.REACT_APP_ENDPOINT}/getProvider`, {
 					params: { providerId: currentUser.uid },
 				});
 				setProvider(response.data.provider);
@@ -53,11 +54,17 @@ export default function ReservationResponse() {
 	const onAccept = async () => {
     try {
       // Charge the customer
-      const res = await axios.post('http://localhost:3001/charge-customer', {
+      const res = await axios.post(`${process.env.REACT_APP_ENDPOINT}/charge-customer`, {
         amount: 150000,
         currency: 'usd', // use lowercase 'usd' as per ISO 4217 standard
         userId: messageSeniorID
       });
+
+			// Begin trial for provider
+			await axios.post(`${process.env.REACT_APP_ENDPOINT}/create-subscription`, {
+				userId: messageProviderID,
+				priceId: 'price_1OwXeJIXjP7K0OxqytIC2Ndl',
+			});
 
       // Check if the charge was successful
       if (res.status === 200) {
@@ -117,28 +124,32 @@ export default function ReservationResponse() {
 
 
 	return (
-		<Card>
-			<Card.Body>
-				{provider.homePhotos && (
-          <img
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          src={provider.homePhotos[0]}
-          alt="Profile pic"
-					/>
-				)}
-        <Card.Title style={{textAlign: "center"}}>Reservation Request</Card.Title>
-				<Card.Text>
-					By accepting this request you are agreeing to reserve this room for
-					senior resident {senior.displayName} for the move-in day of (date). If you accept,
-					you will receive a non-refundable deposit of $1,500 to hold the room
-					for this resident. View terms.
-				</Card.Text>
 
-				<div style={{ display: "flex", justifyContent: "space-between" }}>
-					<Button onClick={onDeny}>Decline</Button>
-					<Button onClick={onAccept}>Accept</Button>
-				</div>
-			</Card.Body>
-		</Card>
+		<>
+			<TopNav />
+			<Card>
+				<Card.Body>
+					{provider.homePhotos && (
+	          <img
+	          style={{ width: "100%", height: "100%", objectFit: "cover" }}
+	          src={provider.homePhotos[0]}
+	          alt="Profile pic"
+						/>
+					)}
+	        <Card.Title style={{textAlign: "center"}}>Reservation Request</Card.Title>
+					<Card.Text>
+						By accepting this request you are agreeing to reserve this room for
+						senior resident {senior.displayName} for the move-in day of (date). If you accept,
+						you will receive a non-refundable deposit of $1,500 to hold the room
+						for this resident. View terms.
+					</Card.Text>
+
+					<div style={{ display: "flex", justifyContent: "space-between" }}>
+						<Button onClick={onDeny}>Decline</Button>
+						<Button onClick={onAccept}>Accept</Button>
+					</div>
+				</Card.Body>
+			</Card>
+		</>
 	);
 }

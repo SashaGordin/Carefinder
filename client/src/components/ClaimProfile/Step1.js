@@ -12,12 +12,12 @@ export default function Step1({ onNext, setProviderInfo }) {
     const providerObject = {
       providerNumber: providerNumber
     }
-    axios.post('http://localhost:3001/findProvider', providerObject)
+    axios.post(`${process.env.REACT_APP_ENDPOINT}/findProvider`, providerObject)
         .then(response => {
           setProviderInfo(response.data.providerInfo[0])
           console.log('provider info:', response.data.providerInfo[0].TelephoneNmbr);
 
-          axios.post('http://localhost:3001/sendConfirmationText', { phone: response.data.providerInfo[0].TelephoneNmbr })
+          axios.post(`${process.env.REACT_APP_ENDPOINT}/sendConfirmationText`, { phone: response.data.providerInfo[0].TelephoneNmbr })
             .then(response => {
               console.log('Confirmation text sent successfully.');
             })

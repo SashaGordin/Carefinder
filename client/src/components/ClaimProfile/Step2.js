@@ -12,7 +12,7 @@ export default function Step2({ onNext, onBack, providerInfo }) {
 
   const verifyConfirmationCode = () => {
     // Make a request to the server to verify the confirmation code
-    axios.post('http://localhost:3001/verifyConfirmationCode', { phoneNumber: providerInfo.TelephoneNmbr, code: confirmationCode })
+    axios.post(`${process.env.REACT_APP_ENDPOINT}/verifyConfirmationCode`, { phoneNumber: providerInfo.TelephoneNmbr, code: confirmationCode })
       .then(response => {
         // If code is verified successfully, proceed to next step
         onNext();
@@ -38,7 +38,7 @@ export default function Step2({ onNext, onBack, providerInfo }) {
               <Form.Text className="text-danger">{verificationError}</Form.Text>
             </Form.Group>
             <Button onClick={verifyConfirmationCode}>Verify Code</Button>
-            <Button onClick={onBack}>Back</Button> 
+            <Button onClick={onBack}>Back</Button>
           </Form>
 
           {/* Button to go back to previous step */}

@@ -9,14 +9,14 @@ export default function Step1({ onNext, provider }) {
 					<div style={{ display: "flex", flexDirection: "row" }}>
 						<div style={{ flex: 1, maxHeight: "200px" }}>
 							<img
-								style={{ width: "100%", height: "100%", objectFit: "cover" }}
+								style={{ width: "90%", height: "90%", objectFit: "cover" }}
 								src={provider.homePhotos[0]}
-								alt="Profile pic"
+								alt="room pic"
 							/>
 						</div>
 						<div style={{ flex: 1, marginLeft: "20px" }}>
 							<Card.Title>Reserve room</Card.Title>
-							<Card.Text style={{ fontSize: "12px" }}>
+							<Card.Text style={{ fontSize: "15px" }}>
 								<div style={{ textAlign: "left" }}>
 									<div style={{ fontWeight: "bold" }}>
 										Step 1: Reserving a Room

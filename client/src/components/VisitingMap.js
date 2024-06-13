@@ -60,6 +60,7 @@ export default function VisitingMap({ provider }) {
 					height: "400px",
 					width: "600px",
 					marginBottom: "20px",
+					borderRadius:10
 				}}
 				center={{ lat: provider.position.lat, lng: provider.position.lng }}
 				zoom={12}

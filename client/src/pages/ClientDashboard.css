@@ -1,0 +1,97 @@
+/* CFblackBackground class to make the background black */
+.CFblackBackground {
+  background-color: #18191a;
+  color: #ffffff;
+}
+
+/* Content container for center alignment */
+.contentContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Search bar styling */
+.clientSearchBar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+
+#clientSearch {
+  width: 400px;
+  height: 40px;
+  padding: 0 15px;
+  border-radius: 20px;
+  border: none;
+  margin-right: 10px;
+}
+
+#findMatches, #takeSurvey {
+  margin: 0 10px;
+}
+
+#findMatches {
+  background-color: #ff9f1c;
+  border: none;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+#takeSurvey {
+  background-color: #ff3b6b;
+  border: none;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 20px;
+}
+
+/* Google Maps Container */
+.googleMapsContainer {
+  height: 450px;
+  margin-bottom: 20px;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+/* Neighboring Cities List */
+.neighboringCitiesList {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.neighboringCitiesList li {
+  list-style: none;
+  cursor: pointer;
+}
+
+.neighboringCitiesList img {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
+}
+
+/* Provider List Styling */
+.providerList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 600px;
+  overflow-y: auto;
+}
+
+.providerImage {
+  border-radius: 10px;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Providers Row Styling */
+.providersRow {
+  display: flex;
+  gap: 20px;
+}

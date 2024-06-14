@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 // ********************************************************
-// BEGIN MONITORING MESSAGES for CHANGES / 
+// BEGIN MONITORING MESSAGES for CHANGES /
 // SENDING SMS NOTIFICATIONS to PROVIDERS (or ADMINS)
 // .....
 
@@ -40,10 +40,10 @@ app.use(cors());
 		}
 		return phone.replace(/\D/g, '');
 	};
-  
+
 	// Function to handle new messages:
 	const handleNewMessage = async (doc) => {
-		
+
 		try {
 
 			const messageData = doc.data();
@@ -57,7 +57,7 @@ app.use(cors());
 			if (!msgTo) {
 				console.log('SERVER: `msgTo` is null for msgID ' + docId + '. Skipping message!');
 				return;
-			}			
+			}
 
 			// Validation:  Skip any already notified...
 			const SMSsent = messageData.msgNotified;
@@ -102,7 +102,7 @@ app.use(cors());
 			console.log('SERVER: FETCH TRILIO SERVICE ID...');
 			const msgSvcSID = await getMessagingServiceSid();
 			console.log(`SERVER: Using Twilio Service SID: ${msgSvcSID}`);
-					
+
 			client.messages.create({
 				body: smsMessage,
 				to: userPhone,
@@ -110,7 +110,7 @@ app.use(cors());
 			})
 			.then(async (message) => {
 				console.log('SERVER: SMS sent to phone# '+ userPhone +', ID: ', message.sid);
-			
+
 				// Update the msgNotified field to 1...
 				// I think we definitely need to do this, as sometimes Firestore initially sends ALL
 				// messages here. So, we want to skip any already-notified ones.
@@ -238,7 +238,7 @@ async function getMessagingServiceSid() {
 	  throw error;
 	}
   }
-  
+
 
 
 app.post("/matchUserWithHouses", async (req, res) => {
@@ -277,9 +277,69 @@ app.post("/getProviders", async (req, res) => {
 	const center = req.body.center;
 	const radius = req.body.radius;
 	const centerArray = Array.isArray(center) ? center : [center.lat, center.lng];
+	const apiKey = API_KEY; // Replace with your Google Maps API key
+
 
 	try {
 		// Query the users collection for providers within the specified bounds
+		const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${centerArray[0]},${centerArray[1]}&key=${apiKey}`;
+		const geocodeResponse = await axios.get(geocodeUrl);
+		const geocodeData = geocodeResponse.data;
+
+		let currentZipCode = "";
+		let cityName = "";
+		let nearbyBigCities = [];
+
+		if (geocodeData.results.length > 0) {
+			const addressComponents = geocodeData.results[0].address_components;
+			currentZipCode = addressComponents.find(component => component.types.includes("postal_code"))?.long_name || "";
+			cityName = addressComponents.find(component => component.types.includes("locality"))?.long_name || "";
+
+
+			const bigCities = [
+				{ name: "Seattle", lat: 47.6062, lng: -122.3321 },
+				{ name: "Spokane", lat: 47.6588, lng: -117.4260 },
+				{ name: "Tacoma", lat: 47.2529, lng: -122.4443 },
+				{ name: "Vancouver", lat: 45.6387, lng: -122.6615 },
+				{ name: "Bellevue", lat: 47.6101, lng: -122.2015 },
+				{ name: "Kent", lat: 47.3809, lng: -122.2348 },
+				{ name: "Everett", lat: 47.9780, lng: -122.2021 },
+				{ name: "Renton", lat: 47.4829, lng: -122.2171 },
+				{ name: "Spokane Valley", lat: 47.6732, lng: -117.2394 },
+				{ name: "Federal Way", lat: 47.3223, lng: -122.3126 },
+				{ name: "Yakima", lat: 46.6021, lng: -120.5059 },
+				{ name: "Kirkland", lat: 47.6769, lng: -122.2060 },
+				{ name: "Bellingham", lat: 48.7519, lng: -122.4787 },
+				{ name: "Kennewick", lat: 46.2112, lng: -119.1372 },
+				{ name: "Auburn", lat: 47.3073, lng: -122.2285 },
+				{ name: "Pasco", lat: 46.2396, lng: -119.1006 },
+				{ name: "Marysville", lat: 48.0518, lng: -122.1771 },
+				{ name: "Lakewood", lat: 47.1718, lng: -122.5185 },
+				{ name: "Redmond", lat: 47.6730, lng: -122.1215 },
+				{ name: "Shoreline", lat: 47.7557, lng: -122.3415 },
+				{ name: "Richland", lat: 46.2804, lng: -119.2752 },
+				{ name: "Sammamish", lat: 47.6163, lng: -122.0356 },
+				{ name: "Burien", lat: 47.4704, lng: -122.3468 },
+				{ name: "Lynnwood", lat: 47.8279, lng: -122.3050 },
+				{ name: "Bothell", lat: 47.7623, lng: -122.2054 },
+				{ name: "Puyallup", lat: 47.1854, lng: -122.2929 },
+				{ name: "Olympia", lat: 47.0379, lng: -122.9007 },
+				{ name: "Lacey", lat: 47.0343, lng: -122.8232 },
+				{ name: "Edmonds", lat: 47.8107, lng: -122.3774 },
+				{ name: "Bremerton", lat: 47.5673, lng: -122.6326 },
+				{ name: "Tumwater", lat: 47.0073, lng: -122.9093 }
+		];
+			// Calculate distances and sort big cities by distance
+			nearbyBigCities = bigCities.map(city => {
+					const distanceInKm = geofire.distanceBetween(
+							[city.lat, city.lng],
+							centerArray
+					);
+					return { ...city, distanceInKm };
+			}).sort((a, b) => a.distanceInKm - b.distanceInKm).slice(0, 4);
+
+	}
+
 		const snapshot = await admin
 			.firestore()
 			.collection("users")
@@ -308,7 +368,6 @@ app.post("/getProviders", async (req, res) => {
 			return distanceInM <= radius;
 		});
 
-		console.log("Provider Count:", filteredProviders.length); // Log filtered provider count
 
 		if (filteredProviders.length > 0) {
 			try {
@@ -360,7 +419,7 @@ app.post("/getProviders", async (req, res) => {
 						);
 					}
 				}
-				res.json({ providers: filteredProviders });
+				res.json({ providers: filteredProviders, nearbyBigCities, currentZipCode, cityName });
 			} catch (error) {
 				console.error("Error getting providers:", error);
 				res.status(500).send("Internal Server Error");
@@ -383,6 +442,7 @@ app.post("/getProviders", async (req, res) => {
 				.get();
 			const providersInBoundsAPI = snapshotAPI.docs.map((doc) => doc.data());
 
+				console.log(centerArray, radius);
 			// Filter providers from API_AFH_DATA based on distance from the center and radius
 			const filteredProvidersAPI = providersInBoundsAPI.filter((provider) => {
 				const distanceInKm = geofire.distanceBetween(
@@ -396,7 +456,7 @@ app.post("/getProviders", async (req, res) => {
 			// Combine providers from users collection and API_AFH_DATA collection
 			const allProviders = [...filteredProviders, ...filteredProvidersAPI];
 
-			res.json({ providers: allProviders });
+			res.json({ providers: allProviders, nearbyBigCities, currentZipCode, cityName });
 		}
 	} catch (error) {
 		console.error("Error getting providers:", error);
@@ -901,6 +961,45 @@ app.post("/create-setup-intent", async (req, res) => {
 	}
 });
 
+app.post("/create-provider-setup-intent", async (req, res) => {
+	console.log("create-setup-intent endpoint hit");
+	const { paymentMethodId, displayName, email } = req.body;
+	console.log("Payment Method ID:", paymentMethodId);
+
+	let stripeCustomerId;
+		stripeCustomerId = await stripe.customers
+			.create({
+				// Replace with the user's email
+				name: displayName || "",
+				email: email,
+			})
+			.then((res) => res.id);
+	try {
+		const setupIntent = await stripe.setupIntents.create({
+			automatic_payment_methods: {
+				enabled: true,
+				allow_redirects: "never",
+			},
+			customer: stripeCustomerId,
+			payment_method: paymentMethodId,
+			confirm: true,
+			usage: "off_session",
+		});
+		console.log("Setup Intent created:", setupIntent.id);
+
+		// Update Firestore with the Setup Intent ID
+
+		res.send({
+			clientSecret: setupIntent.client_secret,
+			setupIntentId: setupIntent.id,
+			customerId: stripeCustomerId,
+		});
+	} catch (error) {
+		console.error("Error creating Setup Intent:", error);
+		res.status(500).send({ error: error.message });
+	}
+});
+
 app.post("/confirm-setup-intent", async (req, res) => {
 	const { setupIntentId, userId } = req.body;
 	const setup = await stripe.setupIntents.retrieve(setupIntentId);
@@ -933,6 +1032,64 @@ app.post("/confirm-setup-intent", async (req, res) => {
 	});
 	res.status(200).json({ message: "Setup Intent confirmed successfully" });
 });
+
+app.post("/create-subscription", async (req, res) => {
+	const { userId, priceId } = req.body;
+
+	try {
+			const userDoc = await db.collection("users").doc(userId).get();
+			const user = userDoc.data();
+			const setupIntentId = user.setupIntentId;
+
+			if (!setupIntentId) {
+					throw new Error("No setup intent ID found for user");
+			}
+
+			const setupIntent = await stripe.setupIntents.retrieve(setupIntentId);
+
+			const subscription = await stripe.subscriptions.create({
+					customer: user.customerId,
+					items: [{ price: priceId }], // Replace with your price ID
+					default_payment_method: setupIntent.payment_method,
+					// trial_period_days: 30, // Set trial period of 30 days
+					// billing_cycle_anchor: "now", // Start billing cycle immediately after trial
+			});
+
+			await db.collection('users').doc(userId).update({
+				subscriptionId: subscription.id,
+			});
+
+			res.status(200).json({ message: "Success" });
+	} catch (error) {
+			console.error("Error creating subscription:", error);
+			res.status(500).send({ error: error.message });
+	}
+});
+
+
+app.post("/confirm-provider-setup-intent", async (req, res) => {
+	const { setupIntentId, customerId } = req.body;
+	const setup = await stripe.setupIntents.retrieve(setupIntentId);
+
+
+
+	if (!customerId) {
+		res.status(400).json({ error: "No customer ID found for user" });
+	}
+
+	await stripe.paymentMethods.attach(setup.payment_method, {
+		customer: customerId,
+	});
+
+	await stripe.customers.update(setup.customer, {
+		invoice_settings: {
+			default_payment_method: setup.payment_method,
+		},
+	});
+
+	res.status(200).json({ message: "Setup Intent confirmed successfully" });
+});
+
 
 app.post("/get-list-of-payments", async (req, res) => {
 	const userId = req.body.userId;

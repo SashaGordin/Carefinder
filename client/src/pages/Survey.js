@@ -238,7 +238,7 @@ const Survey = () => {
 			//     timestamp: serverTimestamp(),
 			//   })
 
-			//   axios.post('http://localhost:3001/matchUserWithHouses', answers)
+			//   axios.post('${process.env.REACT_APP_ENDPOINT}/matchUserWithHouses', answers)
 			//   .then(response => {
 			//     console.log('Matched houses:', response.data.matchedHouses);
 			//   })
@@ -329,7 +329,7 @@ const Survey = () => {
 									<div className="progress-bar">
 										<div className="progress" style={{ width: `${progress}%` }}></div>
 										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
-									</div>									
+									</div>
 
 								</Card.Body>
 							</Card>
@@ -361,7 +361,7 @@ const Survey = () => {
 									<div className="progress-bar">
 										<div className="progress" style={{ width: `${progress}%` }}></div>
 										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
-									</div>									
+									</div>
 								</Card.Body>
 							</Card>
 						</>
@@ -389,7 +389,7 @@ const Survey = () => {
 									<div className="progress-bar">
 										<div className="progress" style={{ width: `${progress}%` }}></div>
 										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
-									</div>									
+									</div>
 								</Card.Body>
 							</Card>
 						</>
@@ -406,7 +406,7 @@ const Survey = () => {
 										</p>
 										{/* NO IDEA HOW THIS WORKS, SO I AM JUST GONNA FORCE THIS TO "1" SO IT'LL TRIGGER THE UPLOAD */}
 										<SurveyUpload
-											assessment={1} 
+											assessment={1}
 											description={
 												questions[currentQuestionIndex - 1].description
 											}
@@ -417,7 +417,7 @@ const Survey = () => {
 									<div className="progress-bar">
 										<div className="progress" style={{ width: `${progress}%` }}></div>
 										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
-									</div>									
+									</div>
 								</Card.Body>
 							</Card>
 						</>
@@ -473,7 +473,7 @@ const Survey = () => {
 									<div className="progress-bar">
 										<div className="progress" style={{ width: `${progress}%` }}></div>
 										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
-									</div>									
+									</div>
 								</Card.Body>
 							</Card>
 						</>
@@ -496,7 +496,7 @@ const Survey = () => {
 									<div className="progress-bar">
 										<div className="progress" style={{ width: `${progress}%` }}></div>
 										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
-									</div>									
+									</div>
 								</Card.Body>
 							</Card>
 						</>
@@ -520,7 +520,7 @@ const Survey = () => {
 									<div className="progress-bar">
 										<div className="progress" style={{ width: `${progress}%` }}></div>
 										<p className="progress-text">{progress.toFixed(0)}% Complete</p>
-									</div>									
+									</div>
 								</Card.Body>
 							</Card>
 						</>

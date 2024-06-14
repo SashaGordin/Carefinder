@@ -25,7 +25,7 @@ export default function Step6({ onNext, onBack, providerInfo }) {
 	useEffect(() => {
 		const fetchPayments = async () => {
 			const response = await axios.post(
-				`http://localhost:3001/get-list-of-payments`,
+				`${process.env.REACT_APP_ENDPOINT}/get-list-of-payments`,
 				{ userId: currentUser.uid },
 				{
 					headers: {
@@ -144,7 +144,7 @@ const PaymentForm = ({
 
 			// Create Setup Intent on your server
 			const response = await axios.post(
-				`http://localhost:3001/create-setup-intent`,
+				`${process.env.REACT_APP_ENDPOINT}/create-setup-intent`,
 				{ paymentMethodId: paymentMethod.id, userId: currentUser.uid },
 				{
 					headers: {
@@ -158,7 +158,7 @@ const PaymentForm = ({
 			// Confirm the Setup Intent
 			if (setupIntentId) {
 				await axios.post(
-					`http://localhost:3001/confirm-setup-intent`,
+					`${process.env.REACT_APP_ENDPOINT}/confirm-setup-intent`,
 					{ setupIntentId, userId: currentUser.uid },
 					{
 						headers: {

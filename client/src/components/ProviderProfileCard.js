@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
 import PropertyPhotoModal from "./PropertyPhotoModal";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import VisitingMap from "./VisitingMap";
-
 
 const ProviderProfileCard = ({ provider }) => {
 	const {
@@ -14,7 +13,7 @@ const ProviderProfileCard = ({ provider }) => {
 		listingsData, // Add more fields as needed
 		Speciality,
 	} = provider;
-	console.log('adskfjslkdjf', provider)
+	console.log("adskfjslkdjf", provider);
 
 	const roomPhotos = listingsData[0].roomData.map((room) => room.roomPhotos);
 
@@ -23,9 +22,6 @@ const ProviderProfileCard = ({ provider }) => {
 	const [showImageModal, setShowImageModal] = useState(false);
 
 	const navigate = useNavigate();
-
-
-
 
 	const handleImageClick = () => {
 		setShowImageModal(true);
@@ -51,11 +47,11 @@ const ProviderProfileCard = ({ provider }) => {
 					className="w-40"
 					src={profilePicPath}
 					alt="Profile pic"
-					style={{ marginRight:10, borderRadius:10 }}
+					style={{ marginRight: 10, borderRadius: 10 }}
 				/>
 				<div className="flex flex-col">
 					<Card.Title>{FacilityPOC}</Card.Title>
-					<div style={{marginBottom:5}}>5 miles away</div>
+					<div style={{ marginBottom: 5 }}>5 miles away</div>
 					<Button className="text-xs" onClick={handleShow}>
 						View profile
 					</Button>
@@ -71,10 +67,13 @@ const ProviderProfileCard = ({ provider }) => {
 			>
 				<Modal.Header>
 					<Modal.Title>Provider Profile</Modal.Title>
-					<Button variant="link" onClick={() => setShowModal(false)} className="ms-auto">
-					<span aria-hidden="true">&times;</span>
+					<Button
+						variant="link"
+						onClick={() => setShowModal(false)}
+						className="ms-auto"
+					>
+						<span aria-hidden="true">&times;</span>
 					</Button>
-
 				</Modal.Header>
 				<Modal.Body>
 					<div
@@ -120,7 +119,11 @@ const ProviderProfileCard = ({ provider }) => {
 										alt="pic"
 									/>
 									<img
-										style={{ width: "100%", height:"50%", borderRadius: "5px" }}
+										style={{
+											width: "100%",
+											height: "50%",
+											borderRadius: "5px",
+										}}
 										src={homePhotos[1]}
 										alt="pic"
 									/>
@@ -143,7 +146,11 @@ const ProviderProfileCard = ({ provider }) => {
 										alt="pic"
 									/>
 									<img
-										style={{ width: "100%", height: "50%", borderRadius: "5px" }}
+										style={{
+											width: "100%",
+											height: "50%",
+											borderRadius: "5px",
+										}}
 										src={homePhotos[3]}
 										alt="pic"
 									/>
@@ -187,19 +194,27 @@ const ProviderProfileCard = ({ provider }) => {
 									</Button>
 									<Button
 										onClick={() => {
-											navigate('/reserve-room', { state: { provider } });
+											navigate("/reserve-room", { state: { provider } });
 										}}
 									>
 										Reserve Room
 									</Button>
 								</div>
 							</div>
-						<div style={{display: "flex", flexDirection: "column", alignItems: "flex-start", maxWidth: "60%", padding: "20px"}}>
+							<div
+								style={{
+									display: "flex",
+									flexDirection: "column",
+									alignItems: "flex-start",
+									maxWidth: "60%",
+									padding: "20px",
+								}}
+							>
 								<h4>Whats special</h4>
 								<div>At our blah blah blah... {/*description */}</div>
 								<h4>Features</h4>
 								<h4>Where will you be visiting from?</h4>
-								<VisitingMap provider={provider}/>
+								<VisitingMap provider={provider} />
 								<div
 									style={{
 										backgroundImage: 'url("bookCare.png")',
@@ -212,8 +227,8 @@ const ProviderProfileCard = ({ provider }) => {
 									</div>
 									<div>
 										Review disclosures, contract, make a deposit of first months
-										rent outlined in quote, select a move in date and you're ready
-										to move.
+										rent outlined in quote, select a move in date and you're
+										ready to move.
 									</div>
 									<div
 										style={{
@@ -228,7 +243,7 @@ const ProviderProfileCard = ({ provider }) => {
 										<Button>Reserve Room</Button>
 									</div>
 								</div>
-						</div>
+							</div>
 						</div>
 					</div>
 				</Modal.Body>
@@ -252,6 +267,3 @@ const ProviderProfileCard = ({ provider }) => {
 };
 
 export default ProviderProfileCard;
-
-
-

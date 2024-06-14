@@ -3,7 +3,7 @@
 @import 'tailwindcss/utilities';
 
 /* CAREFINDER CSS ... */
-
+ 
 .CFpink { color:#ff6699; }
 .CFgray { color:#333333; }
 .CFblack { color:black; }
@@ -43,6 +43,20 @@ span.CFpink, span.CForange { padding-left: 10px; padding-right:10px; }
     font-size:75%;
   }
 
+  #CF .homeRow3 .checkBoxList { margin-bottom:20px;}
+  #CF .homeRow3 .checkBoxList svg {
+    color: #ff6699;
+    font-size: 3em;
+    margin-right: 1.5rem;
+    float:left;
+    display:table-cell;
+  }
+
+  #CF .homeRow3 .checkBoxList p {
+    margin: 0;
+    font-size:110%;
+    display:table-cell;
+  }
 
 /* NAVBAR */
 #CF .topnavigation { padding:10px; width:100%; background:#333333; }
@@ -72,18 +86,27 @@ body#CF .fixed-top {position:initial; }
 
 body#CF a { color:#ff6699; text-decoration: none; }
 
-body#CF button:not(.clientLProw2left button) {
+body#CF button {
     background:#ff6699;
     color:white;
     text-decoration: none;
     border:none;
     border-radius: 10px;
-    /* filter: drop-shadow(2px 3px 0px #000000); */
+}
+body#CF .accordion button {
+    background:#333333;
+    color:white;
+    text-decoration: none;
+    border:none;
+    border-radius: 10px;
 }
 
 #CF .card-body {
     padding: 50px;
-    border-radius: 50px; }
+    border-radius: 10px; }
+#CF .providerCard .card-body {
+    padding:10px;
+}
 
 body#CF button:hover {
     background:#000000;
@@ -105,7 +128,7 @@ body#CF button.btn-secondary:hover { background:#000000;}
 #CF .card {
     background:#333333;
     color:white;
-    border-radius: 50px;
+    border-radius: 10px;
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
@@ -114,7 +137,7 @@ body#CF button.btn-secondary:hover { background:#000000;}
 #CF .clientLProw2right .card {
     background:#333333;
     color:white;
-    border-radius: 50px;
+    border-radius: 10px;
     max-width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -155,9 +178,11 @@ button#findMatches { margin-right:30px; }
 body#CF button#takeSurvey { background:orange; }
 
 #CF .claimProfileCard{ text-align:center; }
+.farLeft{ margin-left:0 !important; }
+.farRight{ margin-right:0 !important; }
 
 /* CARE PROVIDER */
-.CProw1 h1 { font-size: 400%; font-weight: 700; }
+.CProw1 h1, .homeRow1 h2 { font-size: 400%; font-weight: 700; }
 .CProw1 p, .CProw2 p, .CProw3 p, .CProw4 p, .CProw5 p { font-size: 175%; line-height: 125%; }
 .CProw1 .left60 { padding:30px; }
 
@@ -166,8 +191,12 @@ body#CF button#takeSurvey { background:orange; }
 
 .CProw3 .contentContainer { font-size:250%; font-weight:700; text-align:center;     padding-top: 2%; padding-bottom: 10%; }
 
-.CPchoiceBox { width:30%; float:left; border-radius:20px; padding:20px; margin-right: 3%;
-    text-align: center;    display: inline-block;  vertical-align: top; margin-bottom:40px; position:relative; top: -80px;     min-height: 650px; }
+#CF .modal-content{ background: black;  border: 3px solid #ff6699;  border-radius: 10px !important; }
+#CF .modal-header { padding-top:10px; padding-bottom:10px;}
+#CF .modal-title {color:white; }
+#CF .provider-card {border-radius:10px; margin:10px; }
+
+.CPchoiceBox { width:30%; float:left; border-radius:10px; padding:20px; margin-right: 3%;  text-align: center;    display: inline-block;  vertical-align: top; margin-bottom:40px; position:relative; top: -80px;     min-height: 650px; }
 
 .CProw5 { margin-bottom:80px; }
 .mostPopular { float:right; margin-bottom:20px; }
@@ -184,6 +213,12 @@ p.CPboxText { text-align:left;}
     --bs-gutter-y: 2.5rem;
 }
 
+#CF .clientMenu .card-body {
+    padding: 20px;
+}
+
+#CF .reserveRoom img { border-radius:10px; }
+
 #CF .seniorSurvey input, #CF .seniorSurvey select, #CF input#seniorAge { width:100%; margin-top:3px; }
 #CF .seniorSurvey h3 { margin-top:20px; }
 #CF .seniorSurvey select, #CF .seniorSurvey select#seniorSex { border-radius:10px !important; filter: drop-shadow(2px 3px 0px #000000); }
@@ -192,21 +227,45 @@ p.CPboxText { text-align:left;}
 #CF .personalInfo p.card-text label { font-weight: bold; margin-right:10px; }
 #CF .personalInfo p.card-text span { margin-right:10px; }
 #CF .personalInfo .card-title {font-weight: bold;}
-.CProw5 h2 { text-align:center; margin-bottom:20px; }
-body#CF .CProw5 button { background: black;
+.CProw5 h2, .homeRow5 h2 { text-align:center; margin-bottom:20px; }
+body#CF .CProw5 button, body#CF .homeRow5 button  { background: #333333;
     font-weight: normal;
     font-size: 100%;margin-bottom: 3px;}
-.CProw5 .accordion-item {    background: black;
+    
+.CProw5 .accordion-item, .homeRow5 .accordion-item {    background: black;
     border: initial;
     color: white;}
-body#CF .CProw5 button { border:initial; border-top: 2px white solid;
-    border-radius: initial; }
-body#CF .CProw5 .accordion-button:not(.collapsed) {
+
+body#CF .CProw5 button, body#CF .homeRow5 button { border:initial; border-top: 1px white solid;
+    border-radius: initial; border-radius:10px; margin-bottom:10px; }
+
+body#CF .CProw5 .accordion-button:not(.collapsed), body#CF .homeRow5 .accordion-button:not(.collapsed) {
     background-color: initial;
     box-shadow: initial;
 }
-body#CF .CProw5 h2.accordion-header { margin-bottom:0; }
 
+body#CF .CProw5 h2.accordion-header, body#CF .homeRow5 h2.accordion-header  { margin-bottom:0; }
+
+.homeRow1, .homeRow2, .homeRow3, .homeRow4, .homerow5 { margin-bottom:60px; }
+.homeRow1 p { font-size: 175%; line-height: 125%; }
+.homeRow1 .left60 { padding: 30px; }
+.homeRow2 .video-responsive { max-width:800px; margin-left:auto; margin-right:auto; }
+.homeRow3 .contentContainer { padding:40px; border-radius:10px; }
+.homeRow5 .accordion { --bs-accordion-color: initial;  --bs-accordion-bg:initial;
+    --bs-accordion-border-color: initial; }
+.homeRow4 .hr4Box {  width:30%; float:left; border-radius:10px; padding:20px; margin-right: 3%;  text-align: center;  
+      display: inline-block;  vertical-align: top; margin-bottom:40px;  min-height: 350px; }
+.homeRow4 .hr4Box p { font-size:12px; text-align:left; }
+.homeRow4 .hr4Box button { width:100%; }
+#CF .accordion button[aria-expanded="true"] { background: #ff6699 !important;  }
+
+#CF .accordion-button.collapsed::after {  /*filter: invert(0.5) sepia(1) saturate(5) hue-rotate(190deg);*/     filter: invert(0.27) sepia(1) saturate(10000%) hue-rotate(330deg) brightness(0.9); }
+
+.checkBoxList svg { 
+    width: 0.7em; /* 80% of the original size */
+    height: 0.7em; /* 80% of the original size */
+}
+  
 
 /* GLOBAL */
 .left60, .left40, .right60, .right40 {float:left;}
@@ -215,7 +274,7 @@ body#CF .CProw5 h2.accordion-header { margin-bottom:0; }
 
 .contentContainer{ max-width:1200px; margin-left:auto; margin-right:auto; }
 
-.contentContainer img { max-width:100%; border-radius: 50px 50px 0 0; }
+.contentContainer img { max-width:100%; /*border-radius: 50px 50px 0 0;*/ }
 
 div.clear {
     background: none;
@@ -244,7 +303,7 @@ div.clear {
     /*background: #333333;*/
     padding: 10px 20px;
     margin-bottom:30px;
-    border-radius:30px;
+    border-radius:10px;
     border:1px solid white;
 }
 .messageWrapper p.msgFrom {
@@ -302,7 +361,7 @@ float:right
 .messageArchived .CForange {color:#6a4002;}
 .messageArchived p.msgActions { text-align:right;}
 .messageWrapper.messageArchived {margin-bottom:10px;}
-.msgActions{    background: #ffffff1c;    border-radius: 9px;    font-size: 90%;}
+.msgActions{    background: #ffffff1c;    border-radius: 10px;    font-size: 90%;}
 
 .msgDesktopLeft { width:35%; float:left; border-right:1px solid white; padding:40px;  }
 .msgDesktopRight { width:65%; float:left; padding:40px;  }
@@ -313,7 +372,7 @@ float:right
     scroll-behavior: smooth;
 
 }
-.msgThreadBox { width:60%; border-radius:16px; padding:10px; margin-bottom:10px; color: white !important;}
+.msgThreadBox { width:60%; border-radius:10px; padding:10px; margin-bottom:10px; color: white !important;}
 .msgThreadDate { margin-top:15px; font-size:60%; }
 .msgThreadDateRight { text-align: right; padding-right:10px;  }
 .msgThreadDateLeft { padding-left:10px;  }
@@ -325,7 +384,7 @@ body#CF .msgReplyArea input.btn.btn-primary { font-size: 100%;  margin-right: 10
 body#CF .msgReplyArea button.btn.btn-info {    font-size: 90%;
     padding: 7px 15px 5px 15px;
     margin-bottom: 11px;
-    border-radius: 8px;background: gray;}
+    border-radius: 10px;background: gray;}
     body#CF .msgReplyArea button.btn.btn-info:hover {  background: red;}
 #CF .cancelButton{background: gray;}
 /* YOUTUBE */
@@ -341,15 +400,16 @@ body#CF .msgReplyArea button.btn.btn-info {    font-size: 90%;
     top: 0;
     height: 100%;
     width: 100%;
-    position: absolute;
+    position: absolute; border-radius: 10px;
+    border: 2px solid #ff6699;
   }
 
  /* LISTINGS*/
  #CF .CFListingCard { width:350px; aspect-ratio: 1 /1; margin-right: 20px!important; margin-left: 0px!important; text-align:center; margin-bottom:20px !important;}
  #CF .CFListingCardHeader {display:flex; margin-bottom:15px; justify-content: space-between; align-items:center}
- #CF .CFListingStatus {display:flex; align-items:center; padding:5px 10px;border-radius: 20px; background:#212429; height:fit-content;}
+ #CF .CFListingStatus {display:flex; align-items:center; padding:5px 10px;border-radius: 10px; background:#212429; height:fit-content;}
  #CF .CFListingImgContainer {display:flex; height:50%; margin-bottom:10px}
- #CF .CFPlaceholderImg {display:flex; aspect-ratio: 1 /1; margin: auto; width: 40%; border-radius: 20px; background:#212429;}
+ #CF .CFPlaceholderImg {display:flex; aspect-ratio: 1 /1; margin: auto; width: 40%; border-radius: 10px; background:#212429;}
  #CF .CFPlaceholderImg img {margin:auto;}
 
 
@@ -377,7 +437,7 @@ p.copyright { margin-top:40px; font-size:70%;}
 .msgHeader{    text-align: center;
     font-size: 34px;
     font-weight: bold;
-    border-radius: 30px;
+    border-radius: 10px;
     padding-bottom: 7px;
     margin-bottom: 25px;
     margin-top: 13px;}

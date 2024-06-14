@@ -1,0 +1,52 @@
+look on uizard for care-provider 
+CARDS on surveys... got
+a placeformom.com and look at theirs
+make standard height...
+
+
+PRIOR TO SHOWING SITE, npm start and npm run serve1
+
+CSS STATUS:
+======================================================
+path="/"                        Desktop looks good. TODO: Mobile, pending finalization.
+path="/care-provider"           Desktop looks good. BUT... compare widths here and above.
+                                                Then decide which is nicer.
+path="/signup"                  Desktop looks good.
+path="/login"                   Desktop looks good.
+path="/verify-email"            Desktop looks good.
+path="/forgot-password"         Desktop looks good.
+path="/survey"                  Desktop looks good.
+path="/claim-profile"           Desktop looks good.
+path="/support-report-issue"    Desktop looks good.
+path="/support-advisor"         Desktop looks good.
+path="/support-suggestion"      Desktop looks good.
+path="/temp-file-upload"        (NA -- not a real page)
+path="/msg-inbox"               Desktop & mobile look good.
+path="/msg-outbox"              Desktop looks good.
+path="/join-team"               Desktop looks good.
+path="/contact-us"              Desktop looks good.
+path="/sitemap"                 Desktop looks good.
+path="/privacy-policy"          Desktop looks good.
+path="/terms-of-service"        Desktop looks good.
+path="/client-dashboard"        Desktop looks good.
+path="/msg-admin"               Desktop looks good.
+path="/msg-admin-spoof"         Desktop looks good.
+path="/care-provider-dashboard" Desktop looks good.
+path="/client-menu"             Desktop looks good.
+path="/provider-menu"           Desktop looks good.
+path="/personal-info"           ***DOES THIS GET CALLED INTO ANOTHER COMPONENT???*** MIGHT NEED CSS
+path="/privacy"                 *** IS THIS TB INTEGRATED w/ MESSAGING, etc? I WASN"t SURE...***
+path="/your-listings"           **** NEEDS A LITTLE WORK******
+path="/home-survey"             *** CANNOT SEE YET -- NEED TO SETUP TEST ACCT AS PROVIDER ***
+path="/room-survey"             *** CANNOT SEE YET -- NEED TO SETUP TEST ACCT AS PROVIDER ***
+path="/admin-client-viewer"     Desktop looks good.
+path="/reserve-room"            ***********NEEDS WORK*********
+                      STEP1    (okay)
+                      STEP2    (is this final form?)
+                      STEP3    (is this final form?)
+                      STEP4    (not done yet)
+                      STEP5    (** CANT SEE W/OUT STRIPE KEY)
+                      STEP6
+path="/reservation-response"        (HAVE NOT SEEN YET)
+path="/reservation-confirmation"    (HAVE NOT SEEN YET)
+path="/reservation-denial"          (HAVE NOT SEEN YET)

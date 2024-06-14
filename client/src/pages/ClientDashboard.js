@@ -549,5 +549,7 @@ export default function ClientDashboard() {
       </div>
       <Footer />
     </>
+
+			
 	);
 }

@@ -115,9 +115,12 @@ export default function ClientDashboard() {
 		const hasCityAndState = /\w+,\s*\w{2}/.test(query);
 		if (isZipCode || hasCityAndState) {
 			try {
-				const response = await axios.post(`${process.env.REACT_APP_ENDPOINT}/getAddress`, {
-					address: query,
-				});
+				const response = await axios.post(
+					`${process.env.REACT_APP_ENDPOINT}/getAddress`,
+					{
+						address: query,
+					}
+				);
 				const { lat, lng } = response.data.address;
 				startingPosition.current = { lat: lat, lng: lng };
 				mapRef.current.panTo(startingPosition.current);
@@ -244,7 +247,6 @@ export default function ClientDashboard() {
 		}
 	}, 500);
 
-
 	useEffect(() => {
 		if (!isBoundsChanging && boundsRef.current) {
 			getProvidersFromBounds();
@@ -256,300 +258,166 @@ export default function ClientDashboard() {
 		scrollToProvider(marker.LicenseNumber);
 	};
 
-	async function handleLogout() {
-		setError("");
-
-		try {
-			await logout();
-			navigate("/login");
-		} catch {
-			setError("Failed to log out");
-		}
-	}
-
 	return (
-		// <>
-		// 	<TopNav />
-		// 	<div className="CFblackBackground">
-		// 		<div className="contentContainer clientSearchBar">
-		// 			<input
-		// 				id="clientSearch"
-		// 				name="yyy"
-		// 				placeholder="Search city, zip code, etc."
-		// 				value={searchQuery}
-		// 				onChange={(e) => setSearchQuery(e.target.value)}
-		// 				onKeyDown={(e) => {
-		// 					if (e.key === "Enter") {
-		// 						handleSearch();
-		// 					}
-		// 				}}
-		// 			/>
-
-		// 			<button id="findMatches" type="button" className="btn">
-		// 				Find Matches
-		// 			</button>
-
-		// 			<Link to="/survey" id="takeSurvey" type="button" className="btn">
-		// 				Take Survey
-		// 			</Link>
-		// 		</div>
-		// 	</div>
-
-		// 	<div className="CFblackBackground">
-		// 		<div
-		// 			style={{
-		// 				maxWidth: "1200px",
-		// 				marginLeft: "auto",
-		// 				marginRight: "auto",
-		// 			}}
-		// 		>
-		// 			<div
-		// 				className="clientLProw2left CFblackBackground"
-		// 				style={{ height: "400px" }}
-		// 			>
-		// 				<div style={{ textAlign: "center" }}>
-		// 					<h3>{city ? city : "Seattle"}, WA</h3>
-		// 					<h6>Licensed AFH care providers in {zip ? zip : "98101"}</h6>
-		// 				</div>
-		// 				{isLoaded ? (
-		// 					<GoogleMap
-		// 						zoom={zoomRef.current}
-		// 						center={startingPosition.current}
-		// 						mapContainerStyle={{ width: "100%", height: "100%" }}
-		// 						onLoad={handleMapLoad}
-		// 						onBoundsChanged={handleMapBoundsChanged}
-		// 						options={mapOptions}
-		// 					>
-		// 						{providers.length > 0 &&
-		// 							providers.map((provider) => (
-		// 								<Marker
-		// 									key={provider.id}
-		// 									position={provider.position}
-		// 									onClick={() => {
-		// 										handleMarkerClick(provider);
-		// 										return false; // Handle the click event and open the InfoWindow
-		// 									}}
-		// 									// You can customize markers with icons, labels, etc. here
-		// 								/>
-		// 							))}
-		// 						{selectedMarker && (
-		// 							<InfoWindowF
-		// 								position={selectedMarker.position}
-		// 								onCloseClick={() => setSelectedMarker(null)}
-		// 							>
-		// 								<div style={{ color: "black" }}>
-		// 									<div>
-		// 										<h5>{formatFacilityPOC(selectedMarker.FacilityPOC)}</h5>
-		// 									</div>
-		// 									<div>
-		// 										<div>{selectedMarker.LocationAddress}</div>
-		// 									</div>
-		// 									<div>
-		// 										<div>
-		// 											{selectedMarker.LocationCity},{" "}
-		// 											{selectedMarker.LocationState}{" "}
-		// 											{selectedMarker.LocationZipCode}
-		// 										</div>
-		// 									</div>
-		// 								</div>
-		// 							</InfoWindowF>
-		// 						)}
-		// 					</GoogleMap>
-		// 				) : (
-		// 					<div>Loading ...</div>
-		// 				)}
-		// 				<div>
-		// 					<h6 style={{ textAlign: "center" }}>
-		// 						Neighboring cities near {zip}
-		// 					</h6>
-		// 					<ul
-		// 						style={{
-		// 							display: "flex",
-		// 							gap: "20px",
-		// 							justifyContent: "flex-start",
-		// 						}}
-		// 					>
-		// 						{nearbyBigCities.map((city) => (
-		// 							<li key={city.name} onClick={() => panToCity(city)}>
-		// 								{city.name}
-		// 							</li>
-		// 						))}
-		// 					</ul>
-		// 				</div>
-		// 			</div>
-
-		// 			<div
-		// 				className="clientLProw2right CFblackBackground"
-		// 				style={{ maxHeight: "400px", overflowY: "auto" }}
-		// 				ref={providerListRef}
-		// 			>
-		// 				{providers.length > 0 ? (
-		// 					providers.map((provider) => (
-		// 						<ProviderCard
-		// 							key={provider.LicenseNumber}
-		// 							provider={provider}
-		// 							onClick={() => handleProviderSelect(provider)}
-		// 						/>
-		// 					))
-		// 				) : (
-		// 					<div>No providers found</div>
-		// 				)}
-		// 			</div>
-
-		// 			<div className="clear"></div>
-		// 		</div>
-		// 	</div>
-
-		// 	<div className="contentContainer utilityPage">
-		// 		<div className="clientDashboard">
-		// 			<div className="w-100 text-center mt-2">
-		// 				{currentUser ? (
-		// 					<>
-		// 						<Button variant="link" onClick={handleLogout}>
-		// 							Log Out
-		// 						</Button>
-		// 					</>
-		// 				) : (
-		// 					<>
-		// 						<Button variant="link" onClick={() => navigate("/login")}>
-		// 							Log In
-		// 						</Button>
-		// 					</>
-		// 				)}
-		// 			</div>
-		// 		</div>
-		// 	</div>
-		// 	<Footer />
-		// </>
 		<>
-      <TopNav />
-      <div className="CFblackBackground">
-        <div className="contentContainer clientSearchBar" style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px" }}>
-          <input
-            id="clientSearch"
-            name="yyy"
-            placeholder="Search city, zip code etc."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                handleSearch();
-              }
-            }}
-            style={{ padding: "10px", borderRadius: "25px", width: "60%", marginRight: "10px" }}
-          />
-          <button
-            id="findMatches"
-            type="button"
-            className="btn"
-            onClick={handleSearch}
-            style={{ padding: "10px 20px", borderRadius: "25px", backgroundColor: "#FFA500", color: "white", marginRight: "10px" }}
-          >
-            Find a Match
-          </button>
-          <Link to="/survey" id="takeSurvey" type="button" className="btn" style={{ padding: "10px 20px", borderRadius: "25px", backgroundColor: "#FF69B4", color: "white" }}>
-            Contact us
-          </Link>
-        </div>
-      </div>
+			<TopNav />
+			<div className="CFblackBackground">
+				<div
+					className="contentContainer clientSearchBar"
+					style={{
+						display: "flex",
+						justifyContent: "center",
+						alignItems: "center",
+						padding: "20px",
+					}}
+				>
+					<input
+						id="clientSearch"
+						name="yyy"
+						placeholder="Search city, zip code etc."
+						value={searchQuery}
+						onChange={(e) => setSearchQuery(e.target.value)}
+						onKeyDown={(e) => {
+							if (e.key === "Enter") {
+								handleSearch();
+							}
+						}}
+						style={{
+							padding: "10px",
+							borderRadius: "25px",
+							width: "60%",
+							marginRight: "10px",
+						}}
+					/>
+					<button
+						id="findMatches"
+						type="button"
+						className="btn"
+						onClick={handleSearch}
+						style={{
+							padding: "10px 20px",
+							borderRadius: "25px",
+							backgroundColor: "#FFA500",
+							color: "white",
+							marginRight: "10px",
+						}}
+					>
+						Find a Match
+					</button>
+					<Link
+						to="/survey"
+						id="takeSurvey"
+						type="button"
+						className="btn"
+						style={{
+							padding: "10px 20px",
+							borderRadius: "25px",
+							backgroundColor: "#FF69B4",
+							color: "white",
+						}}
+					>
+						Contact us
+					</Link>
+				</div>
+			</div>
 
-      <div className="CFblackBackground" style={{ backgroundColor: "#1E1E1E" }}>
-        <div className="contentContainer" style={{ padding: "20px" }}>
-          <div style={{ textAlign: "center", marginBottom: "20px" }}>
-            <h3>{city ? city : "Woodinville"}, WA</h3>
-            <h6>Licensed AFH care providers in {zip ? zip : "98072"}</h6>
-          </div>
-          <div className="providersRow" style={{ display: "flex" }}>
-            <div className="googleMapsContainer" style={{ flex: 1, paddingRight: "20px" }}>
-              {isLoaded ? (
-                <GoogleMap
-                  zoom={zoomRef.current}
-                  center={startingPosition.current}
-                  mapContainerStyle={{ width: "100%", height: "500px" }}
-                  onLoad={handleMapLoad}
-                  onBoundsChanged={handleMapBoundsChanged}
-                  options={mapOptions}
-                >
-                  {providers.length > 0 &&
-                    providers.map((provider) => (
-                      <Marker
-                        key={provider.id}
-                        position={provider.position}
-                        onClick={() => handleMarkerClick(provider)}
-                      />
-                    ))}
-                  {selectedMarker && (
-                    <InfoWindowF
-                      position={selectedMarker.position}
-                      onCloseClick={() => setSelectedMarker(null)}
-                    >
-                      <div style={{ color: "black" }}>
-                        <h5>{formatFacilityPOC(selectedMarker.FacilityPOC)}</h5>
-                        <div>{selectedMarker.LocationAddress}</div>
-                        <div>{`${selectedMarker.LocationCity}, ${selectedMarker.LocationState} ${selectedMarker.LocationZipCode}`}</div>
-                      </div>
-                    </InfoWindowF>
-                  )}
-                </GoogleMap>
-              ) : (
-                <div>Loading ...</div>
-              )}
-              <div>
-                <h6 style={{ textAlign: "center" }}>Neighboring cities near {zip}</h6>
-                <ul style={{ display: "flex", gap: "20px", justifyContent: "center" }}>
-                  {nearbyBigCities.map((city) => (
-                    <li key={city.name} onClick={() => panToCity(city)} style={{listStyle: 'none', textAlign: 'center'}}>
-                      {/* <img src={city.image} alt={city.name} style={{ width: "50px", height: '50px', objectFit: "cover", borderRadius: "5px", margin: '0 auto' }} /> */}
-                      <div>{city.name}</div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+			<div className="CFblackBackground" style={{ backgroundColor: "#1E1E1E" }}>
+				<div className="contentContainer" style={{ padding: "20px" }}>
+					<div style={{ textAlign: "center", marginBottom: "20px" }}>
+						<h3>{city ? city : "Woodinville"}, WA</h3>
+						<h6>Licensed AFH care providers in {zip ? zip : "98072"}</h6>
+					</div>
+					<div className="providersRow" style={{ display: "flex" }}>
+						<div
+							className="googleMapsContainer"
+							style={{ flex: 1, paddingRight: "20px" }}
+						>
+							{isLoaded ? (
+								<GoogleMap
+									zoom={zoomRef.current}
+									center={startingPosition.current}
+									mapContainerStyle={{ width: "100%", height: "500px" }}
+									onLoad={handleMapLoad}
+									onBoundsChanged={handleMapBoundsChanged}
+									options={mapOptions}
+								>
+									{providers.length > 0 &&
+										providers.map((provider) => (
+											<Marker
+												key={provider.id}
+												position={provider.position}
+												onClick={() => handleMarkerClick(provider)}
+											/>
+										))}
+									{selectedMarker && (
+										<InfoWindowF
+											position={selectedMarker.position}
+											onCloseClick={() => setSelectedMarker(null)}
+										>
+											<div style={{ color: "black" }}>
+												<h5>{formatFacilityPOC(selectedMarker.FacilityPOC)}</h5>
+												<div>{selectedMarker.LocationAddress}</div>
+												<div>{`${selectedMarker.LocationCity}, ${selectedMarker.LocationState} ${selectedMarker.LocationZipCode}`}</div>
+											</div>
+										</InfoWindowF>
+									)}
+								</GoogleMap>
+							) : (
+								<div>Loading ...</div>
+							)}
+							<div>
+								<h6 style={{ textAlign: "center" }}>
+									Neighboring cities near {zip}
+								</h6>
+								<ul
+									style={{
+										display: "flex",
+										gap: "20px",
+										justifyContent: "center",
+									}}
+								>
+									{nearbyBigCities.map((city) => (
+										<li
+											key={city.name}
+											onClick={() => panToCity(city)}
+											style={{ listStyle: "none", textAlign: "center" }}
+										>
+											{/* <img src={city.image} alt={city.name} style={{ width: "50px", height: '50px', objectFit: "cover", borderRadius: "5px", margin: '0 auto' }} /> */}
+											<div>{city.name}</div>
+										</li>
+									))}
+								</ul>
+							</div>
+						</div>
 
-            <div
-              className="clientLProw2right CFblackBackground"
-              style={{ flex: 1, maxHeight: "500px", overflowY: "auto", backgroundColor: "#282828", borderRadius: "15px", padding: "15px" }}
-              ref={providerListRef}
-            >
-              {providers.length > 0 ? (
-                providers.map((provider) => (
-                  <ProviderCard
-                    key={provider.LicenseNumber}
-                    provider={provider}
-                    onClick={() => handleProviderSelect(provider)}
-                  />
-                ))
-              ) : (
-                <div>No providers found</div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="contentContainer utilityPage" style={{ padding: "20px" }}>
-        <div className="clientDashboard">
-          <div className="w-100 text-center mt-2">
-            {currentUser ? (
-              <>
-                <Button variant="link" onClick={handleLogout} style={{ color: "white" }}>
-                  Log Out
-                </Button>
-              </>
-            ) : (
-              <>
-                <Button variant="link" onClick={() => navigate("/login")} style={{ color: "white" }}>
-                  Log In
-                </Button>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-      <Footer />
-    </>
-
-			
+						<div
+							className="clientLProw2right CFblackBackground"
+							style={{
+								flex: 1,
+								maxHeight: "500px",
+								overflowY: "auto",
+								backgroundColor: "#282828",
+								borderRadius: "15px",
+								padding: "15px",
+							}}
+							ref={providerListRef}
+						>
+							{providers.length > 0 ? (
+								providers.map((provider) => (
+									<ProviderCard
+										key={provider.LicenseNumber}
+										provider={provider}
+										onClick={() => handleProviderSelect(provider)}
+									/>
+								))
+							) : (
+								<div>No providers found</div>
+							)}
+						</div>
+					</div>
+				</div>
+			</div>
+			<Footer />
+		</>
 	);
 }

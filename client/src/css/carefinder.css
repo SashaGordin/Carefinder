@@ -394,7 +394,7 @@ body#CF .msgReplyArea button.btn.btn-info {    font-size: 90%;
     position: relative;
     height: 0;
   }
-
+  
   .video-responsive iframe {
     left: 0;
     top: 0;
@@ -402,6 +402,35 @@ body#CF .msgReplyArea button.btn.btn-info {    font-size: 90%;
     width: 100%;
     position: absolute; border-radius: 10px;
     border: 2px solid #ff6699;
+  }
+
+  #CFNAV {border-bottom:2px solid #ff6699; }
+
+nav { max-width:1200px; margin-left: auto; margin-right: auto; background: black !important;  }
+nav a { color:white !important; }
+#CF .navbar-text { color:white; font-size:200%; font-weight:bold; margin-right: 10% !important; }
+#CFNAV a.nav-link { color:white; font-size:150%; font-weight:bold;  line-height: 25px;     padding-right: 50px;}
+
+#nav1 .ml-auto {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  nav .dropdown-menu a { color:black !important; }
+.nonhamburger{}
+
+.dropdown {margin-left: 5%;}
+
+  .dropdown-menu {
+    /* Reset default right positioning */
+    right: unset !important;
+    left: 20%; /* Position the menu to the left of the button */
+  }
+  
+  .dropdown-menu.show {
+    /* Flip the dropdown on open */
+    transform: translateX(-20%);
   }
 
  /* LISTINGS*/

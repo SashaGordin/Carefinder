@@ -284,9 +284,11 @@ export default function ClientDashboard() {
 						}}
 						style={{
 							padding: "10px",
-							borderRadius: "25px",
+							borderRadius: "10px",
 							width: "60%",
 							marginRight: "10px",
+							position: "relative",
+							top: 6
 						}}
 					/>
 					<button
@@ -296,7 +298,7 @@ export default function ClientDashboard() {
 						onClick={handleSearch}
 						style={{
 							padding: "10px 20px",
-							borderRadius: "25px",
+							borderRadius: "10px",
 							backgroundColor: "#FFA500",
 							color: "white",
 							marginRight: "10px",
@@ -311,7 +313,7 @@ export default function ClientDashboard() {
 						className="btn"
 						style={{
 							padding: "10px 20px",
-							borderRadius: "25px",
+							borderRadius: "10px",
 							backgroundColor: "#FF69B4",
 							color: "white",
 						}}
@@ -336,7 +338,7 @@ export default function ClientDashboard() {
 								<GoogleMap
 									zoom={zoomRef.current}
 									center={startingPosition.current}
-									mapContainerStyle={{ width: "100%", height: "500px" }}
+									mapContainerStyle={{ width: "100%", height: "500px", borderRadius:10 }}
 									onLoad={handleMapLoad}
 									onBoundsChanged={handleMapBoundsChanged}
 									options={mapOptions}

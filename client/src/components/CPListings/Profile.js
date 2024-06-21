@@ -2,16 +2,34 @@ import React, { useState } from 'react';
 import { Button, Card, Image } from 'react-bootstrap';
 import FileUpload from './FileUpload';
 import EditableField from '../menu/EditableField';
+import { getStorage, ref, deleteObject } from "firebase/storage";
 
 export default function Profile({ userData, handleUpdate }) {
 	const folderPath = `users/${userData.LicenseNumber}`;
 	const [error, setError] = useState('');
+	const storage = getStorage();
 
 	const handleNewProfilePic = (newFile) => {
-		handleUpdate({ profilePicPath: newFile[0]?.path });
+		const oldFilePath = userData.profilePicPath;
+		handleUpdate({ profilePicPath: newFile[0]?.path }).then(() => {
+			deleteFile(oldFilePath);
+		});
 	}
 	const handleNewProfileVid = (newFile) => {
-		handleUpdate({ profileVidPath: newFile[0]?.path });
+		const oldFilePath = userData.profileVidPath;
+		handleUpdate({ profileVidPath: newFile[0]?.path }).then(() => {
+			deleteFile(oldFilePath);
+		});
+	}
+
+	const deleteFile = (filePath) => {
+		console.log('deleting file...');
+		const storageRef = ref(storage, filePath);
+		deleteObject(storageRef).then(() => {
+		  console.log("file deleted");
+		}).catch((error) => {
+		  console.log(error);
+		});
 	}
 
 	const validateLink = (newValue) => {

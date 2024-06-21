@@ -1,5 +1,5 @@
-import React, { useState , useEffect} from 'react';
-import { Button, Card, Image} from 'react-bootstrap';
+import React, { useState, useEffect } from 'react';
+import { Button, Card, Image } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import EditableField from '../menu/EditableField';
 import RoomCard from './RoomCard';
@@ -7,58 +7,66 @@ import FileUpload from './FileUpload';
 
 import { firestore } from '../../firebase'; // Assuming you have firebase.js setup
 import { getDoc, getDocs, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
-import { useAuth } from "../../contexts/AuthContext";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 
-export default function ListingCard({userData, initialListingData}) {
+import { useAuth } from "../../contexts/AuthContext";
+import DynamicModal from '../DynamicModal';
+
+export default function ListingCard({ userData, initialListingData }) {
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [roomsArr, setRoomsArr] = useState([]);
   const [listingData, setListingData] = useState(initialListingData);
+  const [showModal, setShowModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState("");
+  const [modalBody, setModalBody] = useState("");
+
+  const storage = getStorage();
 
   const { currentUser } = useAuth();
   const facilityPath = `users/${currentUser.uid}/listings/${listingData.licenseNumber}`;
-  
+
   useEffect(() => {
     fetchRoomData();
   }, []);
 
   const fetchRoomData = async () => {
     const roomsSnapshot = await getDocs(collection(firestore, facilityPath, 'rooms'));
-      //get data for all rooms for this listing
-      const rooms = [];
-      roomsSnapshot.forEach((room) => {
-        const data = room.data();
-        console.log(data);
-        rooms.push(data);
-     });
-      console.log("roomsLength=" + rooms.length);
-      setRoomsArr([...rooms]);
+    //get data for all rooms for this listing
+    const rooms = [];
+    roomsSnapshot.forEach((room) => {
+      const data = room.data();
+      console.log(data);
+      rooms.push(data);
+    });
+    console.log("roomsLength=" + rooms.length);
+    setRoomsArr([...rooms]);
   };
 
   const folderPath = `users/${currentUser.uid}`;
-	
+
   const handleNewPics = (arrNewFiles) => {
-		let homePhotos = listingData?.homePhotos ?? [];
+    let homePhotos = listingData?.homePhotos ?? [];
     //FileUpload component returns an object with a path and name property. The line below converts the array of objects to an array of paths
     let arrNewFilePaths = arrNewFiles.map(file => file.path);
-    homePhotos.push(...arrNewFilePaths); 
-    handleUpdate({...listingData, homePhotos: homePhotos});
-	}
+    homePhotos.push(...arrNewFilePaths);
+    handleUpdate({ ...listingData, homePhotos: homePhotos });
+  }
 
   const handleNewDocs = (arrNewFiles) => {
-		let homeDocs = listingData?.homeDocs ?? [];
-    homeDocs.push(...arrNewFiles); 
-    handleUpdate({...listingData, homeDocs: homeDocs});
-	}
+    let homeDocs = listingData?.homeDocs ?? [];
+    homeDocs.push(...arrNewFiles);
+    handleUpdate({ ...listingData, homeDocs: homeDocs });
+  }
 
   const gotoHomeSurvey = () => {
-	navigate('/home-survey', {state: {listingData, facilityPath}});
+    navigate('/home-survey', { state: { listingData, facilityPath } });
   }
 
   const addRoom = () => {
-    const roomNumber =roomsArr.length + 1;
-    const roomData = {roomName: "Room # " + roomNumber, roomId: "Room" + roomNumber};
-	  navigate('/room-survey', {state: {userData, roomData, listingData, facilityPath }});
+    const roomNumber = roomsArr.length + 1;
+    const roomData = { roomName: "Room # " + roomNumber, roomId: "Room" + roomNumber };
+    navigate('/room-survey', { state: { userData, roomData, listingData, facilityPath } });
   }
 
   const handleUpdate = async (updatedListingData) => {
@@ -94,56 +102,109 @@ export default function ListingCard({userData, initialListingData}) {
     }
   };
 
+  const showDocModal = (file) => {
+    console.log('showing modal for file: ');
+    console.log(file);
 
-  
+    setModalTitle(file.name);
+    const body = <><iframe style={{ height: '70vh', width: '100%' }} src={file.path}></iframe></>;
+    setModalBody(body);
+    setShowModal(true);
+  }
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  }
+
+  const deleteDoc = (file) => {
+    console.log('deleting file...' + file.name);
+    const storageRef = ref(storage, file.path);
+    deleteObject(storageRef).then(() => {
+      console.log("file deleted");
+      let homeDocs = listingData?.homeDocs ?? [];
+      let newHomeDocs = homeDocs.filter((f) => f.path !== file.path);
+      handleUpdate({ ...listingData, homeDocs: newHomeDocs });
+    }).catch((error) => {
+      console.log("error deleting file: ");
+      console.log(error);
+    });
+  }
+
+  const deletePhoto = (filePath, propertyName) => {
+    console.log('deleting photo...' + filePath);
+    const storageRef = ref(storage, filePath);
+    deleteObject(storageRef).then(() => {
+      console.log("file deleted");
+      updateListing(filePath, propertyName);
+    }).catch((error) => {
+      console.log(error);
+      if (error.toString().includes("(storage/object-not-found)"))
+        updateListing(filePath, propertyName);
+    });
+  }
+
+  const updateListing = (filePath, propertyName) => {
+    let originalArr = listingData?.[propertyName] ?? [];
+    let newArr = originalArr.filter((fPath) => fPath !== filePath);
+    if (originalArr.length > newArr.length) //no need to update if nothing changed
+      handleUpdate({ ...listingData, [propertyName]: newArr }).then(console.log("db reference deleted"));
+  }
+
   return (
 
     <>
-      
+
       <Card>
-      <Card.Body>
-        <Card.Title><h1>My AFH</h1></Card.Title>
-		<div className="myAFHname">
-			<h4>{listingData.facilityName}</h4>
-			<EditableField title="Adult Family Home Name" value={listingData.facilityName || ''} onChange={(newValue) => handleUpdate({...listingData, facilityName: newValue })} />
-      <p>License Number: {listingData.licenseNumber}</p>
-    </div>
-		<hr/>
-		<div>
-			<h4>Upload home photos</h4>
-			<p>Upload in the following order<br/>
-				1.Exterior front of house. 2. Interior common area. 3. Interior common area.<br/>
-				Upload up to 20 photos. DO NOT POST ROOM PHOTOS here. :)
-			</p>
-			<FileUpload controlId="homePhotos" handleNewFiles={handleNewPics} folderPath={folderPath} uploadType="Photo" allowMultipleFiles={true} />    
-          {listingData?.homePhotos && listingData.homePhotos.map((path, i) => (
-                 <Image height="50px"src={path} key={i}/>
-              ))}
-		</div>
-		<hr/>
-		<div>
-			<h4>Complete home survey</h4>
-			<Button onClick={gotoHomeSurvey}>Take survey</Button>
-		</div>
-		<hr/>
-    <div>
-			<h4>Upload facility contract, house rules, and other client facing documents</h4>
-			<FileUpload controlId="homeDocs" handleNewFiles={handleNewDocs} folderPath={folderPath} uploadType="Document" allowMultipleFiles={true} />    
-          {listingData?.homeDocs && listingData.homeDocs.map((file, i) => (
-                 <div><a href={file.path} target="_blank" key={i}>{file.name}</a><br></br></div>
-              ))}
-		</div>
-		<hr/>
-		<div>
-			<h1>{listingData.facilityName}</h1>
-			<div className="ml-auto" role="button" onClick={addRoom}>
-				<img src="circleplus.png"/>
-				<p>Add room</p>
-			</div>
-			{roomsArr.map((roomData, i) => <RoomCard userData={userData} roomData={roomData}  listingData={listingData} facilityPath={facilityPath} handleRoomUpdate={handleRoomUpdate} key={i}/>)}
-		</div>
-        
-      </Card.Body>
+        <Card.Body>
+          <Card.Title><h1>My AFH</h1></Card.Title>
+          <div className="myAFHname">
+            <h4>{listingData.facilityName}</h4>
+            <EditableField title="Adult Family Home Name" value={listingData.facilityName || ''} onChange={(newValue) => handleUpdate({ ...listingData, facilityName: newValue })} />
+            <p>License Number: {listingData.licenseNumber}</p>
+          </div>
+          <hr />
+          <div>
+            <h4>Upload home photos</h4>
+            <p>Upload in the following order<br />
+              1.Exterior front of house. 2. Interior common area. 3. Interior common area.<br />
+              Upload up to 20 photos. DO NOT POST ROOM PHOTOS here. :)
+            </p>
+            <FileUpload controlId="homePhotos" handleNewFiles={handleNewPics} folderPath={folderPath} uploadType="Photo" allowMultipleFiles={true} />
+            {listingData?.homePhotos && listingData.homePhotos.map((path, i) => (
+              <div  key={i}><Image height="50px" src={path} />
+              <Button onClick={() => { deletePhoto(path, 'homePhotos') }} className="text-danger">X</Button>
+              </div>
+            ))}
+          </div>
+          <hr />
+          <div>
+            <h4>Complete home survey</h4>
+            <Button onClick={gotoHomeSurvey}>Take survey</Button>
+          </div>
+          <hr />
+          <div>
+            <h4>Upload facility contract, house rules, and other client facing documents</h4>
+            <FileUpload controlId="homeDocs" handleNewFiles={handleNewDocs} folderPath={folderPath} uploadType="Document" allowMultipleFiles={true} />
+            {listingData?.homeDocs && listingData.homeDocs.map((file, i) => (
+              <div key={i}>
+                <a role="button" onClick={() => { showDocModal(file) }}>{file.name}</a>
+                <Button onClick={() => { deleteDoc(file) }} className="text-danger">X</Button>
+                <br></br>
+              </div>
+            ))}
+            <DynamicModal showModal={showModal} modalTitle={modalTitle} modalBody={modalBody} handleCloseModal={handleCloseModal} />
+          </div>
+          <hr />
+          <div>
+            <h1>{listingData.facilityName}</h1>
+            <div className="ml-auto" role="button" onClick={addRoom}>
+              <img src="circleplus.png" />
+              <p>Add room</p>
+            </div>
+            {roomsArr.map((roomData, i) => <RoomCard userData={userData} roomData={roomData} listingData={listingData} facilityPath={facilityPath} handleRoomUpdate={handleRoomUpdate} key={i} />)}
+          </div>
+
+        </Card.Body>
       </Card>
     </>
 

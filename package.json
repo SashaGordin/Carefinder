@@ -84,7 +84,8 @@
     "test": "node scripts/test.js",
     "serve": "nodemon server/server.js",
     "serve1": "node server/server.js",
-    "deploy": "firebase deploy"
+    "deploy": "firebase deploy",
+    "ci": "npm install && npm run build"
   },
   "eslintConfig": {
     "extends": [

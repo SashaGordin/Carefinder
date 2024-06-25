@@ -80,7 +80,7 @@
   },
   "scripts": {
     "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "build": "EXTEND_ESLINT=false node scripts/build.js",
     "test": "node scripts/test.js",
     "serve": "nodemon server/server.js",
     "serve1": "node server/server.js",

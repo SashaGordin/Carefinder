@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { firestore } from '../firebase'; 
+import { firestore } from '../firebase';
 import { Timestamp } from 'firebase/firestore';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
@@ -19,7 +19,7 @@ export default function AdminViewClient() {
     const [messageToID, setMessageToID] = useState(null);
     const [messageSent, setMessageSent] = useState(false);
 
-    const location = useLocation(); 
+    const location = useLocation();
 
     const handleUserIdChange = (event) => {
         setUserId(event.target.value);
@@ -56,7 +56,7 @@ export default function AdminViewClient() {
             // Note: Was gonna do this...
             // window.open(url + "?&inline=true", '_blank');
             // But that might be too unsecure, as anyone w/ the link could read it,
-            // AND we would have to make a Firestore rule to allow these to be viewable 
+            // AND we would have to make a Firestore rule to allow these to be viewable
             /// So, this just lets it be downloadable, and it works as-is.
             window.open(url, '_blank');
 
@@ -64,9 +64,9 @@ export default function AdminViewClient() {
             // could not get the following to work, but could be good for future...
 
             // Generate a signed URL for the file with expiration (e.g., 5 minutes)
-            // const expiresAt = new Date(Date.now() + 5 * 60 * 1000); 
+            // const expiresAt = new Date(Date.now() + 5 * 60 * 1000);
             // const signedUrl = await getSignedUrl(storage, `assessments/${targetFile}`, { action: 'read', expires: expiresAt });
-            
+
             // Open the signed URL in a new window
             // window.open(signedUrl, '_blank');
 
@@ -83,31 +83,32 @@ export default function AdminViewClient() {
         const searchParams = new URLSearchParams(location.search);
         const refParam = searchParams.get('ref');
         if (refParam) {
-            getUserRecord(refParam); 
+            getUserRecord(refParam);
         }
     };
 
     // hook to parse query string when the component mounts
     useEffect(() => {
         parseQueryString();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location.search]); // Re-run when location.search changes
 
     const sendMessage = async () => {
 
         const currentUserID = localStorage.getItem('localStorageCurrentUserID');
-    
+
         if (messageToID === currentUserID) {
           alert('You cannot send yourself a message. Kthx. :-)');
-          return; 
+          return;
         }
-    
+
         const messageText = document.getElementById('messageTextArea').value;
         const messageThreadID = new Date().getTime();
-    
+
         console.log('SENDING MESSAGE: TO:', messageToID, 'FROM:', currentUserID, 'TXT:', messageText, 'THREAD:', messageThreadID);
-    
+
         const dbCollection = firestore.collection('messages');
-        await dbCollection.add({ 
+        await dbCollection.add({
           msgDate: Timestamp.now(),
           msgTo: messageToID,
           msgFrom: currentUserID,
@@ -117,11 +118,11 @@ export default function AdminViewClient() {
           msgStatus: 0,
           msgResponseSent: 0
         });
-    
+
         setMessageSent(true);
         document.getElementById('messageTextArea').value = '';
         // Hide message sent alert after 5 seconds
-        setTimeout(() => setMessageSent(false), 5000); 
+        setTimeout(() => setMessageSent(false), 5000);
 
       };
 
@@ -132,11 +133,11 @@ export default function AdminViewClient() {
                 <h2>Admin Client Viewer</h2>
                 <p>Here you (an Admin) can view a client profile privately, including downloading an assessment if available.</p>
 
-                <input 
-                    type="text" 
+                <input
+                    type="text"
                     value={userId}
-                    onChange={handleUserIdChange} 
-                    placeholder="Input userID here or append ?ref=[userID] to URL." 
+                    onChange={handleUserIdChange}
+                    placeholder="Input userID here or append ?ref=[userID] to URL."
                     style={{ width: 500, marginRight: 20 }}
                 />
                 <button variant="primary" onClick={() => getUserRecord(userId)} style={{ padding: 9, position: 'relative', top: -3 }}>Get User Record</button>
@@ -144,10 +145,10 @@ export default function AdminViewClient() {
                 {userRecord && (
                     <div>
                         <hr></hr>
-                        <p>NOTE: We can tie this into the outgoing message system so that admins can use this screen to send messages to the viewed user.</p>                    
+                        <p>NOTE: We can tie this into the outgoing message system so that admins can use this screen to send messages to the viewed user.</p>
 
-                        {userRecord.profilePicPath && 
-                            <img src={userRecord.profilePicPath} style={{width:300}} />
+                        {userRecord.profilePicPath &&
+                            <img alt={""} src={userRecord.profilePicPath} style={{width:300}} />
                         }
                         <h3>User Record for <span className="CForange">{userRecord.displayName}</span>:</h3>
 

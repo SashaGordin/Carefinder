@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Button, Card, Form, InputGroup } from "react-bootstrap";
+import { Button, Card } from "react-bootstrap";
 import { loadStripe } from "@stripe/stripe-js";
-import { useAuth } from "../../contexts/AuthContext";
-import { firestore } from "../../firebase";
-import { Timestamp } from "firebase/firestore";
 
 import {
 	Elements,
@@ -80,6 +77,7 @@ const PaymentForm = ({
 			onFinish();
 			setUpdateInProgress(false);
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [provider, updateInProgress]);
 
 	if (!stripe || !elements) {

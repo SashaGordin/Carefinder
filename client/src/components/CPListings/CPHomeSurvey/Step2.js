@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Form, Card, Placeholder } from 'react-bootstrap';
-import axios from 'axios';
+import React from 'react';
+import { Card } from 'react-bootstrap';
 
 
 export default function Step2({ listingInfo, setListingInfo }) {

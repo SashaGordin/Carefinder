@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, Form } from 'react-bootstrap';
+import { Card, Form } from 'react-bootstrap';
 
 export default function Step5({ roomInfo, setRoomInfo }) {
   const getInitialOptionState = () => {
@@ -18,7 +18,7 @@ export default function Step5({ roomInfo, setRoomInfo }) {
   const getCheckedStatus = (option) => {
     if (roomInfo.addlDetails?.includes(option))
       return true;
-    else if (option == "Other" && roomInfo.addlDetails) {
+    else if (option === "Other" && roomInfo.addlDetails) {
       for (const val of roomInfo.addlDetails) {
         if (val.startsWith("Other"))
           return true;

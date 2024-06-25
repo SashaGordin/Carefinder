@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { Button, Label, Card } from 'react-bootstrap';
+import React from 'react';
+import { Card } from 'react-bootstrap';
 
 
 export default function Step3({ listingInfo, setListingInfo}) {
   const handleStatementChange = (e) => {
     setListingInfo({
-      ...listingInfo, 
+      ...listingInfo,
       providerStatement: e.target.value});
   }
 
-  
+
   return (
 
     <>

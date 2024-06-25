@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Card } from 'react-bootstrap'
 
 import TopNav from "../components/TopNav";
@@ -10,10 +10,9 @@ import { useAuth } from "../contexts/AuthContext";
 
 
 export default function CPDashboard() {
-  const [error, setError] = useState('')
 
   // was thinking we could grab displayName from here... maybe not...
-  const { login, currentUser } = useAuth()
+  const { currentUser } = useAuth()
   let providerName = currentUser.displayName;
   if (!providerName) {providerName = 'Provider';}
   console.log(currentUser.displayName);

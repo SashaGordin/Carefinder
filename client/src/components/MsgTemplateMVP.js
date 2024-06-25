@@ -1,7 +1,6 @@
-import React, {useState, useEffect} from 'react';
-import { useAuth } from "../contexts/AuthContext";
-import { getDoc, setDoc, doc, Timestamp } from 'firebase/firestore';
-import { firestore } from '../firebase'; 
+import React, { useState, useEffect } from 'react';
+import { Timestamp } from 'firebase/firestore';
+import { firestore } from '../firebase';
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
 import MsgThread from "./MsgThread";
@@ -39,8 +38,8 @@ import MsgThread from "./MsgThread";
 // NOTE:  Get avatar from user record 'profilePicPath' ... if !exists, then load defaultavatar.jpg
 // *******************************************
 
-export default function MsgTemplateMVP({passData, hasArchives}) {  
-    
+export default function MsgTemplateMVP({passData, hasArchives}) {
+
     const [pageIteration, setPageIteration] = useState(1);
     const [userRole, setUserRole] = useState(null);
 
@@ -71,61 +70,61 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
             }
         }
         fetchAvatarURLs();
-    }, [passData]); 
+    }, [passData]);
 
     const [activeDivId, setActiveDivId] = useState(null);
     const toggleHideDivID = (id) => {
         setActiveDivId(id === activeDivId ? null : id);
       };
 
-      
+
     function toggleHideByID(targetID) {
-        var toggleTarget = document.getElementById(targetID); 
+        var toggleTarget = document.getElementById(targetID);
         if (toggleTarget.style.display === "none") {
-            toggleTarget.style.display = "block"; 
+            toggleTarget.style.display = "block";
         } else {
-            toggleTarget.style.display = "none"; 
+            toggleTarget.style.display = "none";
         }
         //return;
     }
 
 
     function toggleHideByClass(targetClass) {
-        var elementArray = document.getElementsByClassName(targetClass); 
+        var elementArray = document.getElementsByClassName(targetClass);
         // returns array, so...
         for (let i=0; i<elementArray.length; i++) {
             if (elementArray[i].style.display === "none") {
-                elementArray[i].style.display = "block"; 
+                elementArray[i].style.display = "block";
             } else {
-                elementArray[i].style.display = "none"; 
+                elementArray[i].style.display = "none";
             }
         }
     }
 
 
-    function toggleMessages(targetID){
-        //console.log( "TARGET: " + targetID ); 
-        var bID = 'briefMsg' + targetID;
-        //console.log( "BRIEF: " + bID ); 
-        var toggleTarget = document.getElementById(bID);
-        
-        if ( toggleTarget.style.display == "block" ) {
-            toggleTarget.style.display = "none";
-        } else {
-            toggleTarget.style.display = "block";
-        }
-        
-        var fID = 'fullMsg' + targetID;
-        //console.log( "FULL: " + fID ); 
-        var toggleTarget = document.getElementById(fID);
-        if (toggleTarget.style.display === "none") {
-            toggleTarget.style.display = "block";
-        } else {
-            toggleTarget.style.display = "none";
-        }
-        
-         return;
-    }  
+    // function toggleMessages(targetID){
+    //     //console.log( "TARGET: " + targetID );
+    //     var bID = 'briefMsg' + targetID;
+    //     //console.log( "BRIEF: " + bID );
+    //     var toggleTarget = document.getElementById(bID);
+
+    //     if ( toggleTarget.style.display === "block" ) {
+    //         toggleTarget.style.display = "none";
+    //     } else {
+    //         toggleTarget.style.display = "block";
+    //     }
+
+    //     var fID = 'fullMsg' + targetID;
+    //     //console.log( "FULL: " + fID );
+    //     var toggleTarget = document.getElementById(fID);
+    //     if (toggleTarget.style.display === "none") {
+    //         toggleTarget.style.display = "block";
+    //     } else {
+    //         toggleTarget.style.display = "none";
+    //     }
+
+    //      return;
+    // }
 
 
     function getMessageWrapperClass (theStatus){
@@ -155,11 +154,11 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
             return 'defaultavatar.jpg';
         }
     }
-    
+
 
     const changeMessageStatus = async(targetMessageID, targetFieldValue) => {
 
-        console.log('Set `messages` (id '+ targetMessageID + ') `msgStatus` to: ' + targetFieldValue ); 
+        console.log('Set `messages` (id '+ targetMessageID + ') `msgStatus` to: ' + targetFieldValue );
         const dbCollection = firestore.collection('messages').doc(targetMessageID);
         const response = await dbCollection.update( {'msgStatus':targetFieldValue} );
         console.log(response);
@@ -169,11 +168,11 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
     const changeMessageResponseSentStatus = async(targetMessageID, targetFieldValue) => {
 
-        console.log('Set `messages` (id '+ targetMessageID + ') `msgResponseSent` to: ' + targetFieldValue ); 
+        console.log('Set `messages` (id '+ targetMessageID + ') `msgResponseSent` to: ' + targetFieldValue );
         const dbCollection = firestore.collection('messages').doc(targetMessageID);
         const response = await dbCollection.update( {'msgResponseSent':targetFieldValue} );
         console.log(response);
-        
+
     }
 
     const sendReply = async(sendingTo, sendingFrom, originalMessageID, messageThreadID) => {
@@ -191,9 +190,9 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
         // ADD TO OUR REPLIES:
 
         // PROVIDERS:
-        if ( userRole == 'provider' ) {
+        if ( userRole === 'provider' ) {
             console.log('Sending message from a PROVIDER.');
-            
+
             replyAppend += '<br />Reply below and/or you may use any of these links anytime.';
 
             try {
@@ -215,7 +214,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
             }  catch (error) {
                 console.error('Error fetching provider data:', error);
             }
-            
+
             replyAppend += '<br />🏡 <b><a href="###">SCHEDULE TOUR</a></b>';
             replyAppend += '<br />🛏️ <b><a href="###?userID='+sendingFrom+'?providerID='+sendingTo+'">RESERVE ROOM</a></b>';
             replyText+=replyAppend;
@@ -263,10 +262,10 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                 console.error('Error fetching client data:', error);
             }
         }
-        
+
 
         // ADMINS:
-        if ( userRole == 'admin' ){
+        if ( userRole === 'admin' ){
             console.log('Sending message from an ADMIN.');
 
             replyAppend += '<br />This message is from a CareFinder admin. Let us know if you have any additional questions.';
@@ -274,12 +273,12 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
         }
 
-        console.log('SENDING REPLY:  TO: ' + sendingTo + ', FROM: ' + sendingFrom + ', TXT: ' + replyText + ', THREAD: ' + messageThreadID + ')'); 
+        console.log('SENDING REPLY:  TO: ' + sendingTo + ', FROM: ' + sendingFrom + ', TXT: ' + replyText + ', THREAD: ' + messageThreadID + ')');
 
         const dbCollection = firestore.collection('messages');
 
         const rightNow = Timestamp.now();
-        const response = await dbCollection.add({ 
+        const response = await dbCollection.add({
             msgDate : rightNow,
             msgTo : sendingTo,
             msgFrom : sendingFrom,
@@ -290,7 +289,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
             msgParentID : originalMessageID,
             msgResponseSent : 0
         });
-        
+
         console.log(response);
 
         // mark on the original message that it was responded to:
@@ -298,7 +297,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
         // also mark this original message as read:
         changeMessageStatus(originalMessageID, 1);
-        console.log('MARKED message as READ, also. Kthx.'); 
+        console.log('MARKED message as READ, also. Kthx.');
 
         // advance page iteration so we can pass this as a prop
         // to the thread component, so that it can know to
@@ -336,12 +335,12 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                             )}
 
                             <div className={ getMessageWrapperClass(thisMsg['m_ST']) } style={{display:"block"}}>
-                            
+
                             <div key={index} className="msgAlertLeft">
                                 {avatarURLs && avatarURLs[index] ? (
                                     <img className='msgAvatar' src={avatarURLs[index]} alt='' />
                                 ) : (
-                                    <img className='msgAvatar' src='defaultavatar.jpg' alt='' /> 
+                                    <img className='msgAvatar' src='defaultavatar.jpg' alt='' />
                                 )}
                             </div>
 
@@ -352,8 +351,8 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                                         { ' ' + thisMsg['m_RO'] + ' ' + thisMsg['m_DN'] }
                                     </p>
 
-                                    { ( thisMsg['m_RS'] == 1 ) ?
-                                        <> 
+                                    { ( thisMsg['m_RS'] === 1 ) ?
+                                        <>
                                             <p className="msgResponseInfo">(✅ You responded.)</p>
                                         </> :
                                         <>
@@ -369,7 +368,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                                 </div>
                                 <div className="clear"></div>
 
-                            </div> 
+                            </div>
 
                             <div className="clear"></div>
 
@@ -383,7 +382,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                     {passData.map( (thisMsg, index) => (
                     <>
 
-                        {activeDivId == thisMsg['m_ID'] && (
+                        {activeDivId === thisMsg['m_ID'] && (
                         <>
 
                             <div className="rightFromHeader">
@@ -391,7 +390,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                                     {avatarURLs && avatarURLs[index] ? (
                                         <img className='msgAvatar' src={avatarURLs[index]} alt='' />
                                     ) : (
-                                        <img className='msgAvatar' src='defaultavatar.jpg' alt='' /> 
+                                        <img className='msgAvatar' src='defaultavatar.jpg' alt='' />
                                     )}
                                 </div>
 
@@ -412,7 +411,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                             <div className="msgReplyArea">
 
                                 <MsgThread threadID={thisMsg['m_TH']} pageIteration={pageIteration} />
-                            
+
                             {/*}
                             <div id={'fullMsg'+thisMsg['m_ID']}>
                                 <p className="msgText msgFull">{thisMsg['m_TX']}</p>
@@ -429,22 +428,22 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                             <div style={{float:'right', marginRight:20}}>
 
-                                { (thisMsg['m_ST'] == 1) &&
+                                { (thisMsg['m_ST'] === 1) &&
                                     <>
                                         <a href="###" onClick={()=> changeMessageStatus(thisMsg['m_ID'], 0)}>✅ Keep as new</a>
                                         &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
                                     </>
                                 }
 
-                                { ( ( thisMsg['m_ST'] == 0 ) || ( thisMsg['m_ST'] == 1 ) ) &&
+                                { ( ( thisMsg['m_ST'] === 0 ) || ( thisMsg['m_ST'] === 1 ) ) &&
                                     <>
                                         <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 2)}>🗑️ Archive</a>
                                     </>
                                 }
 
-                                { (thisMsg['m_ST'] == 2) &&
+                                { (thisMsg['m_ST'] === 2) &&
                                     <>
-                                        <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 1)}>🗑️ Unarchive</a>                        
+                                        <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 1)}>🗑️ Unarchive</a>
                                     </>
                                 }
                             </div>
@@ -466,9 +465,9 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
             <div className="clear"></div>
 
             <div className="messagesMobileUX">  {/* MOBILE UX IN THIS DIV... */}
-                
+
                 <>
-            
+
                     { hasArchives ?
                         <>
                         <div className='msgTopControls'><span onClick={()=> toggleHideByClass('messageArchived')}>👀 Show/Hide Archived</span></div>
@@ -476,9 +475,9 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                     }
 
                     {passData.map( (thisMsg, index) => (
-                            
+
                             <div className={ getMessageWrapperClass(thisMsg['m_ST']) } style={{display:"block"}}>
-                            
+
                             <div key={index} className="msgAlertLeft">
                                 {avatarURLs && avatarURLs[index] ? (
                                     <img className='msgAvatar' src={avatarURLs[index]} alt='' />
@@ -498,13 +497,13 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                                 <p className="msgDate">
                                     <b>DATE:</b> <span className="CForange"> {thisMsg['m_DA']} </span>
                                 </p>
-                                { */ } 
+                                { */ }
 
                                 <div className="clear"></div>
-                                
+
                             { /* }
                                 { ( thisMsg['m_TXbExists'] == 1 ) ?
-                                    <> 
+                                    <>
                                         <div id={'briefMsg'+thisMsg['m_ID']} style={{display:"block"}}>
                                             <p className="msgText msgBrief"><b>MESSAGE:</b> {thisMsg['m_TXb']}</p>
                                         </div>
@@ -513,7 +512,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                                         </div>
                                     </>
                                     :
-                                    <> 
+                                    <>
                                         <div id={'briefMsg'+thisMsg['m_ID']} style={{display:"none"}}>
                                             <p className="msgText msgBrief"><b>MESSAGE:</b> {thisMsg['m_TXb']}</p>
                                         </div>
@@ -524,8 +523,8 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                                 }
                             { */ }
 
-                                { ( thisMsg['m_RS'] == 1 ) ?
-                                    <> 
+                                { ( thisMsg['m_RS'] === 1 ) ?
+                                    <>
                                         <p className="msgResponseInfo">(✅ You responded.)</p>
                                     </> :
                                     <>
@@ -542,7 +541,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                                 <p className="msgActions">
 
                                 <a href="###" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>📝</a>
-                                    
+
                                 </p>
                             </div>
 
@@ -556,16 +555,16 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                                     <p className="msgText msgFull">{thisMsg['m_TX']}</p>
                                 </div>
                             {*/}
-                            
+
                                 <textarea autoFocus placeholder="Write here..." id={'reply'+thisMsg['m_ID']}></textarea>
-                                
+
                                 <input value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-primary" style={{background:'green'}}></input>
                                 <button className="btn btn-info" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>CANCEL</button>
-                                
+
                                 <br></br>
                                     { /* }
                                     { ( thisMsg['m_TXbExists'] == 1 ) &&
-                                        <> 
+                                        <>
                                             <a href="###" onClick={()=> toggleMessages(thisMsg['m_ID'])}>👀 Show/Hide Full Message</a>
                                             &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
                                         </>
@@ -586,25 +585,25 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                                     }
 
                                 { */ }
-                                    
-                                    { (thisMsg['m_ST'] == 1) &&
+
+                                    { (thisMsg['m_ST'] === 1) &&
                                         <>
                                             <a href="###" onClick={()=> changeMessageStatus(thisMsg['m_ID'], 0)}>✅ Keep as new</a>
                                             &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
                                         </>
                                     }
 
-                                    { ( ( thisMsg['m_ST'] == 0 ) || ( thisMsg['m_ST'] == 1 ) ) &&
+                                    { ( ( thisMsg['m_ST'] === 0 ) || ( thisMsg['m_ST'] === 1 ) ) &&
                                         <>
                                             <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 2)}>🗑️ Archive</a>
                                         </>
                                     }
 
-                                    { (thisMsg['m_ST'] == 2) &&
+                                    { (thisMsg['m_ST'] === 2) &&
                                         <>
-                                            <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 1)}>🗑️ Unarchive</a>                        
+                                            <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 1)}>🗑️ Unarchive</a>
                                         </>
-                                    }                    
+                                    }
                             </div>
 
 

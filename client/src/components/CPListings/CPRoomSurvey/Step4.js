@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Card, Form } from 'react-bootstrap';
+import React from 'react';
+import { Card, Form } from 'react-bootstrap';
 
 export default function Step4({ roomInfo, setRoomInfo}) {
   const handleChange = () => {
@@ -8,13 +8,13 @@ export default function Step4({ roomInfo, setRoomInfo}) {
       roomDetails.push(t.id);
     });
     setRoomInfo({
-      ...roomInfo, 
+      ...roomInfo,
       roomDetails: roomDetails});
   }
 
-  
+
   const options = ["Private room", "Shared room", "Private bathroom", "Half bathroom", "Shared bathroom", "No bathroom (Comode in room)", "Community shower", "Standard door", "Large door"]
-  
+
   return (
     <>
       <Card className="claimProfileCard">
@@ -24,7 +24,7 @@ export default function Step4({ roomInfo, setRoomInfo}) {
           <Card.Title>Which of these apply to this room?</Card.Title>
           <Form>
               {options.map((option) => (
-                  <Form.Check 
+                  <Form.Check
                     key={option}
                     type='checkbox'
                     id={option}
@@ -35,7 +35,7 @@ export default function Step4({ roomInfo, setRoomInfo}) {
               ))}
           </Form>
         </Card.Body>
-        
+
       </Card>
 
     </>

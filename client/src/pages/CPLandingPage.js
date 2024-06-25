@@ -1,6 +1,5 @@
-import React, { useState } from 'react'
-import { Image } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { Image } from 'react-bootstrap';
 
 // THIS PAGE IS:  /care-provider
 import Accordion from 'react-bootstrap/Accordion';
@@ -15,8 +14,6 @@ import Footer from "../components/Footer";
 
 
 export default function CPLandingPage() {
-  const [error] = useState('')
-  const navigate = useNavigate();
 
   return (
     <>

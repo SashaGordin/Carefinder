@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Card, Form, Image} from 'react-bootstrap';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import FileUpload from '../FileUpload';
+import React from 'react';
+import { Card, Form } from 'react-bootstrap';
 
 export default function Step8({ listingInfo, setListingInfo }) {
   const options = ["Dementia", "Developmentally disabled", "Mental health"];
@@ -11,7 +9,7 @@ export default function Step8({ listingInfo, setListingInfo }) {
         options.push(t.id);
     });
     setListingInfo({
-      ...listingInfo, 
+      ...listingInfo,
       speciality: options});
   }
 
@@ -24,7 +22,7 @@ export default function Step8({ listingInfo, setListingInfo }) {
           <Card.Title>Select what you are licensed for?</Card.Title>
           <Form>
               {options.map((option) => (
-                  <Form.Check 
+                  <Form.Check
                     key={option}
                     type='checkbox'
                     id={option}

@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import { Button, Card, Form } from 'react-bootstrap';
+import React from 'react';
+import { Card, Form } from 'react-bootstrap';
 
 export default function Step2({ roomInfo, setRoomInfo}) {
   const handleChange = (e) => {
     setRoomInfo({
-      ...roomInfo, 
+      ...roomInfo,
       medicaidAccepted: e.target.id});
   }
 
-  
+
   const options = ["No", "Yes", "Conditional on approved daily rate", "Contingent upon the family agreeing to subsidize the cost."];
-  
+
   return (
     <>
       <Card className="claimProfileCard">
@@ -21,7 +21,7 @@ export default function Step2({ roomInfo, setRoomInfo}) {
 
           <Form>
               {options.map((option) => (
-                  <Form.Check 
+                  <Form.Check
                     key={option}
                     type='radio'
                     id={option}
@@ -34,7 +34,7 @@ export default function Step2({ roomInfo, setRoomInfo}) {
               ))}
             </Form>
         </Card.Body>
-        
+
       </Card>
 
     </>

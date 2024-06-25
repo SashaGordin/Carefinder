@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Card, Alert, Button } from 'react-bootstrap'
+import React from 'react';
+import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
 
@@ -9,7 +9,6 @@ import Accordion from 'react-bootstrap/Accordion';
 import YoutubeEmbed from "../components/YoutubeEmbed";
 
 export default function LandingPage() {
-  const [error, setError] = useState('');
 
 
 
@@ -17,7 +16,7 @@ export default function LandingPage() {
   return (
     <>
       <TopNav />
-  
+
       <div className="homeRow1 CFgrayBackground">
         <div className="contentContainer">
           <div className="left60">
@@ -29,28 +28,28 @@ export default function LandingPage() {
               <Button variant="primary">Find an AFH</Button>
             </Link>
           </div>
-  
+
           <div className="right40">
             <img src="cooking.jpg" alt="Cooking" />
           </div>
-  
+
           <div className="clear"></div>
         </div>
       </div>
-  
+
       <div className="homeRow2">
         <div className="contentContainer">
           <YoutubeEmbed embedId="dQw4w9WgXcQ" />
         </div>
       </div>
-  
+
 
       <div className="homeRow3">
 
           <div className="contentContainer CFgrayBackground">
 
                 <h2>Keep Our Seniors Safe</h2>
-          
+
                 <div className="checkBoxList">
                   <FaCheck />
                   <p>
@@ -58,7 +57,7 @@ export default function LandingPage() {
                   </p>
                 </div>
                 <div className="clear"></div>
-          
+
                 <div className="checkBoxList">
                   <FaCheck />
                   <p>
@@ -66,7 +65,7 @@ export default function LandingPage() {
                   </p>
                 </div>
                 <div className="clear"></div>
-          
+
                 <div className="checkBoxList">
                   <FaCheck />
                   <p>
@@ -74,7 +73,7 @@ export default function LandingPage() {
                   </p>
                 </div>
                 <div className="clear"></div>
-          
+
                 <div className="checkBoxList">
                   <FaCheck />
                   <p>
@@ -85,7 +84,7 @@ export default function LandingPage() {
             </div>
 
       </div>
-  
+
 
       <div className="homeRow4">
           <div className="contentContainer">
@@ -100,7 +99,7 @@ export default function LandingPage() {
                     <Button variant="primary">Chat</Button>
                   </Link>
                 </div>
-          
+
                 <div className="hr4Box CFgrayBackground">
                   [image]
                   <h3>Match with Licensed Care Providers</h3>
@@ -111,7 +110,7 @@ export default function LandingPage() {
                     <Button variant="primary">Start</Button>
                   </Link>
                 </div>
-          
+
                 <div className="hr4Box CFgrayBackground farRight">
                   [image]
                   <h3>Pre-vetted</h3>
@@ -166,7 +165,7 @@ export default function LandingPage() {
           </Accordion>
         </div>
       </div>
-  
+
       <div style={{height:60}}></div>
       <Footer />
     </>

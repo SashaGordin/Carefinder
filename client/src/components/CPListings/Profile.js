@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, Image } from 'react-bootstrap';
+import { Card, Image } from 'react-bootstrap';
 import FileUpload from './FileUpload';
 import EditableField from '../menu/EditableField';
 import { getStorage, ref, deleteObject } from "firebase/storage";
@@ -59,7 +59,7 @@ export default function Profile({ userData, handleUpdate }) {
 				<Card.Body>
 					<Card.Title><h2>Profile</h2></Card.Title>
 					<FileUpload controlId="profilePhotoUpload" handleNewFiles={handleNewProfilePic} folderPath={folderPath} uploadLabel="Upload profile photo (Headshot)" uploadType="Photo" />
-					{userData.profilePicPath && <Image style={{height: '150px'}} src={userData.profilePicPath} />}	
+					{userData.profilePicPath && <Image style={{height: '150px'}} src={userData.profilePicPath} />}
 					<hr />
 					<FileUpload controlId="profileVidUpload" handleNewFiles={handleNewProfileVid} uploadLabel="Upload introduction video" uploadType="Video" />
 					{userData.profileVidPath &&

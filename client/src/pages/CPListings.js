@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Alert, Navbar, Image, CardTitle, CardText } from 'react-bootstrap'
+import { Card } from 'react-bootstrap';
 import { firestore } from '../firebase'; // Assuming you have firebase.js setup
-import { useAuth } from "../contexts/AuthContext"
+import { useAuth } from "../contexts/AuthContext";
 import { getDoc, getDocs, doc, updateDoc, collection } from 'firebase/firestore';
 import TopNav from "../components/TopNav";
 import Footer from "../components/Footer";
-import Listings from '../components/CPListings/Listings';
 import PersonalInfo from '../components/menu/PersonalInfo';
 import Profile from '../components/CPListings/Profile';
 import ListingCard from '../components/CPListings/ListingCard';
@@ -35,7 +34,7 @@ export default function CPListings() {
           console.log(data);
           listings.push(data);
         });
-        if (listings.length == 0) {
+        if (listings.length === 0) {
           listings.push({
             facilityName: userData.FacilityName,
             licenseNumber: userData.LicenseNumber,
@@ -51,6 +50,7 @@ export default function CPListings() {
       }
     };
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleUpdate = async (updatedUserData) => {
@@ -79,9 +79,11 @@ export default function CPListings() {
 
         <TopNav userRole="provider" />
         <p>&nbsp;</p>
+        {error && <div>{error}</div>}
 
         <Card><PersonalInfo /></Card>
         <p>&nbsp;</p>
+
 
         <Profile userData={userData} handleUpdate={handleUpdate} />
         <p>&nbsp;</p>

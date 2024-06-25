@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { firestore } from '../firebase'; // Assuming you have firebase.js setup
 import { getDoc, doc, setDoc } from 'firebase/firestore';
-import { useAuth } from "../contexts/AuthContext";
 
 import Step1 from '../components/CPListings/CPRoomSurvey/Step1';
 import Step2 from '../components/CPListings/CPRoomSurvey/Step2';
@@ -14,8 +13,8 @@ import Step8 from '../components/CPListings/CPRoomSurvey/Step8';
 import Step9 from '../components/CPListings/CPRoomSurvey/Step9';
 
 
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Button, Card, Alert} from 'react-bootstrap';
+import { useNavigate, useLocation } from "react-router-dom";
+import { Button, Alert } from 'react-bootstrap';
 
 
 import TopNav from "../components/TopNav";
@@ -45,14 +44,14 @@ export default function CPRoomSurvey() {
   }
 
   const handleBack = () => {
-    if (currentStep == 1) //go back to listings page
+    if (currentStep === 1) //go back to listings page
 		navigate("/your-listings");
 	else
 		setCurrentStep(currentStep - 1);
   };
 
   const handleApprove = () => {
-    handleUpdate({...roomInfo, isAvailable:true}).then(() => {       
+    handleUpdate({...roomInfo, isAvailable:true}).then(() => {
        setCurrentStep(currentStep + 1);
     });
   }
@@ -62,7 +61,6 @@ export default function CPRoomSurvey() {
   }
 
 
-  const { currentUser } = useAuth();
 
   const handleUpdate = async (updatedRoomInfo) => {
     try {
@@ -101,13 +99,13 @@ export default function CPRoomSurvey() {
       {currentStep === 8 && <Step8 userData={userData} listingData={listingData} setRoomInfo={setRoomInfo} roomInfo={roomInfo}/>}
       {currentStep === 9 && <Step9 setRoomInfo={setRoomInfo} roomInfo={roomInfo}/>}
 
-		  <div className="SurveyBtnGroup d-flex justify-content-between">          
+		  <div className="SurveyBtnGroup d-flex justify-content-between">
 			  <Button onClick={handleBack}>Back</Button>
 			  {currentStep < 8 &&<Button onClick={handleNext}>Next</Button>}
-        {currentStep == 8 && <Button onClick={handleApprove}>Approve</Button>}
-        {currentStep == 9 && <Button onClick={handleDone}>Done</Button>}
+        {currentStep === 8 && <Button onClick={handleApprove}>Approve</Button>}
+        {currentStep === 9 && <Button onClick={handleDone}>Done</Button>}
       </div>
-      
+
     </div>
     <Footer />
     </>

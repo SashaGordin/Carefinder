@@ -3,7 +3,6 @@ import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { getDoc, doc } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
 import { firestore } from "../firebase";
-import firebase from 'firebase/compat/app';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { FaBars } from 'react-icons/fa';
 import { Link } from 'react-router-dom'; // Import for routing
@@ -59,17 +58,17 @@ export default function TopNav() {
     setActivePage(path);
   };
 
-  const navLinkStyle = (path) => ({
-    color: activePage === path ? "white" : "#777777",
-    fontWeight: activePage === path ? "bold" : "normal",
-  });
+  // const navLinkStyle = (path) => ({
+  //   color: activePage === path ? "white" : "#777777",
+  //   fontWeight: activePage === path ? "bold" : "normal",
+  // });
 
   if (loading) {
     // Display a loading indicator or spinner
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
-  return (    
+  return (
     <>
       <div id="CFNAV">
         <Navbar expand="lg" id="nav1">
@@ -99,11 +98,11 @@ export default function TopNav() {
                 </Nav>
               )}
 
-              {/** 
+              {/**
                *   ****************************************************************
                *   END GUEST ROLE MENU
                *   ****************************************************************
-               * 
+               *
                *   ****************************************************************
                *   BEGIN CLIENT ROLE == GUEST VISITOR LOGGED IN AS A CLIENT
                *   ****************************************************************
@@ -126,7 +125,7 @@ export default function TopNav() {
                *   ****************************************************************
                *   END CLIENT ROLE MENU
                *   ****************************************************************
-               * 
+               *
                *   ****************************************************************
                *   BEGIN PROVIDER ROLE == GUEST VISITOR LOGGED IN AS A PROVIDER
                *   ****************************************************************
@@ -150,7 +149,7 @@ export default function TopNav() {
                *   ****************************************************************
                *   END PROVIDER ROLE MENU
                *   ****************************************************************
-               * 
+               *
                *   ****************************************************************
                *   BEGIN ADMIN ROLE == GUEST VISITOR LOGGED IN AS AN ADMIN
                *   ****************************************************************

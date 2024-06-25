@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Card, Form, Image } from 'react-bootstrap';
-import { getStorage, ref, deleteObject, uploadBytes } from "firebase/storage";
+import React from 'react';
+import { Button, Card, Image } from 'react-bootstrap';
+import { getStorage, ref, deleteObject } from "firebase/storage";
 import FileUpload from '../FileUpload';
 
 export default function Step3({ roomInfo, setRoomInfo }) {

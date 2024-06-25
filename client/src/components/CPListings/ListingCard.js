@@ -28,6 +28,7 @@ export default function ListingCard({ userData, initialListingData }) {
 
   useEffect(() => {
     fetchRoomData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchRoomData = async () => {
@@ -107,7 +108,7 @@ export default function ListingCard({ userData, initialListingData }) {
     console.log(file);
 
     setModalTitle(file.name);
-    const body = <><iframe style={{ height: '70vh', width: '100%' }} src={file.path}></iframe></>;
+    const body = <><iframe title={file.name} style={{ height: '70vh', width: '100%' }} src={file.path}></iframe></>;
     setModalBody(body);
     setShowModal(true);
   }
@@ -157,6 +158,7 @@ export default function ListingCard({ userData, initialListingData }) {
       <Card>
         <Card.Body>
           <Card.Title><h1>My AFH</h1></Card.Title>
+          {error && <div className="alert alert-danger">{error}</div>}
           <div className="myAFHname">
             <h4>{listingData.facilityName}</h4>
             <EditableField title="Adult Family Home Name" value={listingData.facilityName || ''} onChange={(newValue) => handleUpdate({ ...listingData, facilityName: newValue })} />
@@ -187,6 +189,8 @@ export default function ListingCard({ userData, initialListingData }) {
             <FileUpload controlId="homeDocs" handleNewFiles={handleNewDocs} folderPath={folderPath} uploadType="Document" allowMultipleFiles={true} />
             {listingData?.homeDocs && listingData.homeDocs.map((file, i) => (
               <div key={i}>
+
+                {/* eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
                 <a role="button" onClick={() => { showDocModal(file) }}>{file.name}</a>
                 <Button onClick={() => { deleteDoc(file) }} className="text-danger">X</Button>
                 <br></br>
@@ -198,7 +202,7 @@ export default function ListingCard({ userData, initialListingData }) {
           <div>
             <h1>{listingData.facilityName}</h1>
             <div className="ml-auto" role="button" onClick={addRoom}>
-              <img src="circleplus.png" />
+              <img alt="" src="circleplus.png" />
               <p>Add room</p>
             </div>
             {roomsArr.map((roomData, i) => <RoomCard userData={userData} roomData={roomData} listingData={listingData} facilityPath={facilityPath} handleRoomUpdate={handleRoomUpdate} key={i} />)}

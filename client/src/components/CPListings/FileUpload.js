@@ -7,11 +7,12 @@ import { Button, Card, Form } from 'react-bootstrap';
 
 const FileUpload = ({controlId, handleNewFiles, folderPath, uploadLabel, uploadType, allowMultipleFiles}) => {
 
+  // eslint-disable-next-line no-unused-vars
   const [file, setFile] = useState(null);
-  let acceptedFileTypes = 
-    uploadType == "Photo" ? "image/*" : 
-    uploadType == "Video" ? "video/*" : 
-    uploadType == "Document" ? "application/pdf" : "";
+  let acceptedFileTypes =
+    uploadType === "Photo" ? "image/*" :
+    uploadType === "Video" ? "video/*" :
+    uploadType === "Document" ? "application/pdf" : "";
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -37,7 +38,7 @@ const FileUpload = ({controlId, handleNewFiles, folderPath, uploadLabel, uploadT
           if (type.startsWith(".")) //extension
             isAcceptedFileType |= file.name.endsWith(type);
           else //mime type
-            isAcceptedFileType |= file.type == type;
+            isAcceptedFileType |= file.type === type;
         }
       }
 

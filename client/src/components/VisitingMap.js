@@ -1,7 +1,6 @@
 import {
 	GoogleMap,
 	Marker,
-	DirectionsService,
 	DirectionsRenderer,
 } from "@react-google-maps/api";
 import React, { useState, useEffect } from "react";
@@ -18,8 +17,9 @@ export default function VisitingMap({ provider }) {
 
 	useEffect(() => {
 		calculateRoute();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [userAddress, map]);
-  
+
 
 	const calculateRoute = async () => {
 		if (!userAddress || !map) return;

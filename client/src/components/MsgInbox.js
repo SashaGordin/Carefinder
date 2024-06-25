@@ -3,8 +3,7 @@ import TopNav from "./TopNav";
 import Footer from "./Footer";
 
 import { useAuth } from "../contexts/AuthContext";
-import { getDoc, doc } from 'firebase/firestore';
-import { firestore } from '../firebase'; 
+import { firestore } from '../firebase';
 
 //import MsgTemplate from "./MsgTemplate";
 import MsgTemplateMVP from "./MsgTemplateMVP";
@@ -12,31 +11,30 @@ import MsgTemplateMVP from "./MsgTemplateMVP";
 //v20240430.837pm
 export default function MsgInbox() {
 
-    const [error, setError] = useState('');
-    const {login, currentUser } = useAuth()
-    const [userMessages, setUserMessages] = useState([]); 
-    const [loading, setLoading] = useState(false);
+    const { currentUser } = useAuth()
+    const [userMessages, setUserMessages] = useState([]);
     const [containsArchives, setContainsArchives] = useState(0);
     useEffect(() => { return; }, [containsArchives]);
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     useEffect(() => { fetchMessages(); }, []);
 
     const fetchMessages = async () => {
         let configs_msgTruncateLimit = 100;
-    
+
         const dbCollection = firestore.collection('messages');
         const response = await dbCollection
             .where('msgTo', '==', currentUser.uid)
             .orderBy('msgStatus', 'asc')
             .orderBy('msgDate', 'desc')
             .get();
-    
-        let messageAreaHTML = '';
-    
+
+        //let messageAreaHTML = '';
+
         if (!response.empty) {
             // Create a Map to store unique messages based on msgThreadID
             let uniqueMessagesMap = new Map();
-    
+
             response.forEach(thisMsg => {
                 const msgThreadID = thisMsg.data()['msgThreadID'];
                 if (!uniqueMessagesMap.has(msgThreadID)) {
@@ -58,28 +56,28 @@ export default function MsgInbox() {
                         m_DN: '',
                         m_RO: '',
                     });
-    
-                    if (thisMsg.data()['msgStatus'] == 2 && containsArchives == 0) {
+
+                    if (thisMsg.data()['msgStatus'] === 2 && containsArchives === 0) {
                         setContainsArchives(1);
                         console.log('SET ARCHIVE TO 1');
                     }
                 }
             });
-    
+
             let localResponseArray = Array.from(uniqueMessagesMap.values());
-    
+
             for (let i = 0; i < localResponseArray.length; i++) {
                 // Fetch additional details for each message
                 const lookupUserTable = firestore.collection('users').doc(localResponseArray[i]["m_FR"]);
                 const response2 = await lookupUserTable.get();
-    
+
                 if (response2.exists) {
                     const role = response2.data()['role'];
                     localResponseArray[i]["m_RO"] = role === 'client' ? 'a CF user' :
                                                     role === 'provider' ? 'a CF provider' :
                                                     role === 'admin' ? 'a CF admin' :
                                                     'a CF User';
-    
+
                     if (response2.data()['displayName']) {
                         localResponseArray[i]["m_DN"] = ' (' + response2.data()['displayName'] + ')';
                     }
@@ -88,13 +86,13 @@ export default function MsgInbox() {
                     console.log('No such document!');
                 }
             }
-    
+
             setUserMessages(localResponseArray);
         } else {
             console.log('No matching documents.');
         }
     };
-    
+
 
 
     return (

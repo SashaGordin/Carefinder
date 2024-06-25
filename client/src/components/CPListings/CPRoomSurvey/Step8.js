@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Card, Form, Image } from 'react-bootstrap';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import FileUpload from '../FileUpload';
+import React from 'react';
+import { Card, Image } from 'react-bootstrap';
 
 export default function Step8({userData, listingData, roomInfo, setRoomInfo }) {
 

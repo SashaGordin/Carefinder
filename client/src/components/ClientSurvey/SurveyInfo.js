@@ -52,6 +52,7 @@ const SurveyInfo = ({ onSelect, onNext, onBack }) => {
 		// works well, but what it people begin their ph with "1" or "+1"?
 		let sanitizedValue = value;
 		if (name === "phoneNumber") {
+			// eslint-disable-next-line no-useless-escape
 			sanitizedValue = value.replace(/[-\s\(\)]/g, '');
 		}
 

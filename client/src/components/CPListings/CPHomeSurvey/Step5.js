@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Card, Form } from 'react-bootstrap';
+import React from 'react';
+import { Card, Form } from 'react-bootstrap';
 
 export default function Step5({ listingInfo, setListingInfo}) {
   const handleChange = () => {
@@ -8,13 +8,13 @@ export default function Step5({ listingInfo, setListingInfo}) {
         pets.push(t.id);
     });
     setListingInfo({
-      ...listingInfo, 
+      ...listingInfo,
       pets: pets});
   }
 
-  
+
   const options = ["Cat", "Dog", "Other"];
-  
+
   return (
     <>
       <Card className="claimProfileCard">
@@ -24,7 +24,7 @@ export default function Step5({ listingInfo, setListingInfo}) {
           <Card.Title>Do you have pets in the home?</Card.Title>
             <Form>
               {options.map((option) => (
-                  <Form.Check 
+                  <Form.Check
                     key={option}
                     type='checkbox'
                     id={option}
@@ -35,7 +35,7 @@ export default function Step5({ listingInfo, setListingInfo}) {
               ))}
           </Form>
         </Card.Body>
-        
+
       </Card>
 
     </>

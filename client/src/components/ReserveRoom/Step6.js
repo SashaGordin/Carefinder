@@ -38,6 +38,7 @@ export default function Step6({ onNext, onBack, providerInfo }) {
 			}
 		};
 		fetchPayments();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	const options = {
 		mode: "setup",

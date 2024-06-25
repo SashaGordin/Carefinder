@@ -7,9 +7,6 @@ import { Alert } from 'react-bootstrap';
 
 import { Card } from 'react-bootstrap';
 
-import TopNav from "../TopNav";
-import Footer from '../Footer';
-
 
 const PersonalInfoPage = () => {
   const [userData, setUserData] = useState({});
@@ -29,6 +26,7 @@ const PersonalInfoPage = () => {
       }
     };
     fetchData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleUpdate = async (updatedUserData) => {
@@ -65,11 +63,11 @@ const PersonalInfoPage = () => {
                 <Card.Text>
 
                   <EditableField title="Provider Name" value={userData.FacilityPOC || ''} onChange={(newValue) => handleUpdate({ FacilityPOC: newValue })} />
-                  
+
                   <EditableField title="Email Address" value={userData.email || ''} onChange={(newValue) => handleUpdate({ email: newValue })} />
-                  
+
                   <EditableField title="Phone Number" value={userData.TelephoneNmbr || ''} onChange={(newValue) => handleUpdate({ TelephoneNmbr: newValue })} />
-                  
+
                 </Card.Text>
             </Card.Body>
       </Card>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Card, Form } from 'react-bootstrap';
+import React from 'react';
+import { Card, Form } from 'react-bootstrap';
 
 export default function Step4({ listingInfo, setListingInfo}) {
   const handleCredentialsChange = () => {
@@ -8,13 +8,13 @@ export default function Step4({ listingInfo, setListingInfo}) {
         credentials.push(t.id);
     });
     setListingInfo({
-      ...listingInfo, 
+      ...listingInfo,
       providerCredentials: credentials});
   }
 
-  
+
   const options = ["MD", "DO", "PA-C", "ARNP", "RN, BSN", "RN", "LPN", "EMT", "Other"]
-  
+
   return (
     <>
       <Card className="claimProfileCard">
@@ -25,11 +25,11 @@ export default function Step4({ listingInfo, setListingInfo}) {
 
           <Card.Text>
            Select all that apply
-            
+
           </Card.Text>
           <Form>
               {options.map((option) => (
-                  <Form.Check 
+                  <Form.Check
                     key={option}
                     type='checkbox'
                     id={option}
@@ -40,7 +40,7 @@ export default function Step4({ listingInfo, setListingInfo}) {
               ))}
           </Form>
         </Card.Body>
-        
+
       </Card>
 
     </>

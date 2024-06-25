@@ -1,29 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useAuth } from "../contexts/AuthContext";
-import { firestore } from '../firebase'; 
+import { firestore } from '../firebase';
 
 
 // NOTE: UPON LAUNCH, UPDATE 'validLinkSubstring' with something that will
 // prove that a link to an assessment is authentic.
 
 /**
- * 
- * Script is similar to MsgThread-bak.js, only 
- * this one (the live one) uses the onSnapshot method 
- * to listen to changes to the database, thus offering 
+ *
+ * Script is similar to MsgThread-bak.js, only
+ * this one (the live one) uses the onSnapshot method
+ * to listen to changes to the database, thus offering
  * realtime messaging. See:
  * https://firebase.google.com/docs/firestore/query-data/listen
- * 
- * 
- * 
- *  */ 
+ *
+ *
+ *
+ *  */
 
 function MsgThread({threadID, pageIteration}) {
 
     console.log('NOW IN... MsgThread');
     console.log('MsgThread Iteration: '+pageIteration);
 
-    const [entireThread, setEntireThread] = useState([]); 
+    const [entireThread, setEntireThread] = useState([]);
     const { currentUser } = useAuth();
     const msgThreadRef = useRef(null);
 
@@ -31,7 +31,7 @@ function MsgThread({threadID, pageIteration}) {
 
         // I want to ensure that all links that we present as links to users in the chat are
         // authentic. So, I will check to see that they contain the following substring:
-        const validLinkSubstring = 'https://firebasestorage.googleapis.com/v0/b/carefinder-development.appspot.com';
+        // const validLinkSubstring = 'https://firebasestorage.googleapis.com/v0/b/carefinder-development.appspot.com';
         // NOTE.. leaving this in for now, but we may not use it initially...
         // ... refactoring some stuff in messaging per micah...
 
@@ -46,23 +46,25 @@ function MsgThread({threadID, pageIteration}) {
 
                     // Process each document in the snapshot
                     let threadItemData = thisThreadItem.data();
-  
+
                     console.log('MessageThread Iteration: Quote request');
 
-                    const linkRegex = new RegExp(validLinkSubstring, 'i');
-                    const validLinkPresent = linkRegex.test(threadItemData.msgText);
-                    
+                    // COMMENTING THIS OUT FOR NOW -- SASHA CHECK THIS OUT
+
+                    // const linkRegex = new RegExp(validLinkSubstring, 'i');
+                    // const validLinkPresent = linkRegex.test(threadItemData.msgText);
+
                     // NEW PLAN ... I think we scan the message to find any links. Any that are not going to
                     // urls beginning with the validSubstring, we flash a warning... tbd...
 
-                    if (validLinkPresent){
-                        const urlRegex = /(https?:\/\/[^\s]+)/g;
-                        const tempURL = threadItemData.msgText.match(urlRegex)[0];
-                        // threadItemData.msgText = threadItemData.msgText.replace(urlRegex, `<a href="${tempURL}" target="_blank">💾 <b>DOWNLOAD ASSESSMENT</b></a>`);
-                        // REMOVING THIS FOR NOW, AS WE ARE CHANGING UP A LOT OF STUFF
-                        // RELATED TO THIS ITEM.
-                    }
-                    
+                    // if (validLinkPresent){
+                    //     const urlRegex = /(https?:\/\/[^\s]+)/g;
+                    //     const tempURL = threadItemData.msgText.match(urlRegex)[0];
+                    //     // threadItemData.msgText = threadItemData.msgText.replace(urlRegex, `<a href="${tempURL}" target="_blank">💾 <b>DOWNLOAD ASSESSMENT</b></a>`);
+                    //     // REMOVING THIS FOR NOW, AS WE ARE CHANGING UP A LOT OF STUFF
+                    //     // RELATED TO THIS ITEM.
+                    // }
+
                     // if there is no flag to hide this, then, add to array:
                     if (!threadItemData.hasOwnProperty('msgHide')) {
 
@@ -80,7 +82,7 @@ function MsgThread({threadID, pageIteration}) {
                     } else {
                         console.log('A system message was skipped here.');
                     }
-                    
+
                 });
                 setEntireThread(localThreadArray);
             } else {
@@ -108,8 +110,8 @@ function MsgThread({threadID, pageIteration}) {
                         <div className="msgThreadBox msgThreadRecipient">
                             <span dangerouslySetInnerHTML={{ __html: item.mt_TX }}></span>
                         </div>
-                        <div className="clear"></div>    
-                        </>                    
+                        <div className="clear"></div>
+                        </>
                     ) : (
                         <>
                         <div className="msgThreadDate msgThreadDateLeft"><b>THEM</b> @ {item.mt_DA}:</div>

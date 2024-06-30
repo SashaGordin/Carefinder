@@ -5,9 +5,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const axios = require("axios"); // Import axios
 const cors = require("cors"); // Import the cors package
-const path = require("path");
 const db = admin.firestore();
-const geohash = require("geohash");
 const geofire = require("geofire-common");
 
 const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY);
@@ -1177,31 +1175,6 @@ app.post("/cancel-payment", async (req, res) => {
 	}
 });
 
-async function findSpokaneHouse() {
-	const address = "8211 N Standard St"; // Specify the address you want to search for
-	console.log("hi");
-
-	// Query the collection for the document with the specified address
-	const snapshot = await admin
-		.firestore()
-		.collection("API_AFH_DATA")
-		.where("LocationAddress", "==", address)
-		.get();
-
-	// Check if any documents were found
-	if (snapshot.empty) {
-		console.log("No house found with the specified address.");
-		return;
-	}
-
-	// Log the data of the found house
-	snapshot.forEach((doc) => {
-		console.log("House data:", doc.data());
-	});
-}
-
-// Call the function to fetch data and store it in Firestore
-// fetchDataAndStoreInFirestore();
 
 app.listen(port, () => {
 	console.log(`Server is running on port ${port}`);

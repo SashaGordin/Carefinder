@@ -334,7 +334,7 @@ export default function ClientDashboard() {
 									onBoundsChanged={handleMapBoundsChanged}
 									options={mapOptions}
 								>
-									{providers.length > 0 &&
+									{providers && providers.length > 0 &&
 										providers.map((provider) => (
 											<Marker
 												key={provider.id}
@@ -369,7 +369,7 @@ export default function ClientDashboard() {
 										justifyContent: "center",
 									}}
 								>
-									{nearbyBigCities.map((city) => (
+									{nearbyBigCities && nearbyBigCities.map((city) => (
 										<li
 											key={city.name}
 											onClick={() => panToCity(city)}
@@ -395,7 +395,7 @@ export default function ClientDashboard() {
 							}}
 							ref={providerListRef}
 						>
-							{providers.length > 0 ? (
+							{providers && providers.length > 0 ? (
 								providers.map((provider) => (
 									<ProviderCard
 										key={provider.LicenseNumber}

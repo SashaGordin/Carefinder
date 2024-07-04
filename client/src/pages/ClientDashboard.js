@@ -13,6 +13,23 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import ProviderCard from "../components/ProviderCard";
 import { debounce } from "lodash";
+import { useLocation } from 'react-router-dom';
+
+
+/**
+ * TODO:  This page accepts a new param in the URL, sent here from the home page. Sample is:
+ * /client-dashboard?refLookup=Seattle%2C%20WA
+ * ...So, we need to grab that "refLookup" (if present), parse it as necessary, and then
+ * pass it to the script below so that people can see their search immediately.
+ * I imported useLocation, above to grab it, and then isolated it below as 'refLookup'
+ * But I'm not sure how to best pass it to the page as a default location.
+ * I think maybe we'd use a useEffect and, if the refLookup is present, we lookup its latitude/longitude using google Geocoder, and then set the lat/long as startingpoint instead of the existing default starting point. Since @sasha is most familiar here, I thought I'd leave it for you. 
+ * 
+ * 
+ * ALSO...
+ * Anyone can now search this page and see results (no login required.) BUT, Micah wants it so that, when the provider card comes up, you have to be logged in to be able to continue (e.g., messsage the provider or reserve a room). I wasn't sure what the final flow is, but I think basically if they're not logged in, then the reserve room and message buttons would maybe either just go to the signup / login page, or maybe flash an alert on screen first to tell people they need to join (for free) first before continuing. I didn't make this change as I wasn't sure what the final flow would be.
+ */
+
 
 export default function ClientDashboard() {
 	const [error, setError] = useState("");
@@ -38,6 +55,12 @@ export default function ClientDashboard() {
 	const [nearbyBigCities, setNearbyBigCities] = useState([]);
 
 	let delayDuration = 500;
+
+	// ADDED THIS TO GRAB a posible "refLookup" passed here.
+	// Need to make this autoload on the page somehow, if present and valic
+	const location = useLocation();
+	const searchParams = new URLSearchParams(location.search);
+	const refLookup = searchParams.get('refLookup');
 
 	const getProvidersFromBounds = () => {
 		setIsBoundsChanging(false);
@@ -283,12 +306,13 @@ export default function ClientDashboard() {
 							}
 						}}
 						style={{
-							padding: "10px",
-							borderRadius: "10px",
-							width: "60%",
+							padding: "20px 20px 20px 20px",
+							borderRadius: "30px",
+							width: "50%",
 							marginRight: "10px",
 							position: "relative",
-							top: 6
+							top: 6,
+							fontSize:'20px',
 						}}
 					/>
 					<button
@@ -323,7 +347,7 @@ export default function ClientDashboard() {
 				</div>
 			</div>
 
-			<div className="CFblackBackground" style={{ backgroundColor: "#1E1E1E" }}>
+			<div className="CFblackBackground">
 				<div className="contentContainer" style={{ padding: "20px" }}>
 					<div style={{ textAlign: "center", marginBottom: "20px" }}>
 						<h3>{city ? city : "Woodinville"}, WA</h3>

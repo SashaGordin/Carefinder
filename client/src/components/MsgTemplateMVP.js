@@ -143,16 +143,17 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
             const userData = snapshot.data();
             if (userData) {
                 const profilePicPath = userData.profilePicPath;
+                if (!profilePicPath) {profilePicPath='genericUser.jpg';}
                 console.log('Profile picture path:', profilePicPath);
                 return profilePicPath;
             } else {
                 console.log('No user data found for user ID:', theSenderID);
-                return 'defaultavatar.jpg';
+                return 'genericUser.jpg';
             }
         } catch (error) {
             console.error('Error getting user data:', error);
             // Handle error appropriately
-            return 'defaultavatar.jpg';
+            return 'genericUser.jpg';
         }
     }
     
@@ -421,12 +422,15 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
 
                             <textarea autoFocus placeholder="Write here..." id={'reply'+thisMsg['m_ID']} style={{marginTop:10,marginBottom:7}}></textarea>
 
-                            <input value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-primary" style={{background:'green', float:'right', marginLeft:10, marginRight:0}}></input>
-
+                            <input value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-primary" style={{background:'#ff9900', float:'right', marginLeft:10, marginRight:0}}></input>
+                            
+                            {/* 
                             <button className="btn btn-info" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>CANCEL</button>
-
+                            */}
+                            
                             <div className="clear"></div>
 
+                            {/* 
                             <div style={{float:'right', marginRight:20}}>
 
                                 { (thisMsg['m_ST'] == 1) &&
@@ -448,6 +452,8 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                                     </>
                                 }
                             </div>
+                            */}
+
                             <div className="clear"></div>
 
 
@@ -559,8 +565,11 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                             
                                 <textarea autoFocus placeholder="Write here..." id={'reply'+thisMsg['m_ID']}></textarea>
                                 
-                                <input value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-primary" style={{background:'green'}}></input>
+                                <input value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-primary" style={{background:'#ff9900'}}></input>
+
+                                {/* 
                                 <button className="btn btn-info" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>CANCEL</button>
+                                */}
                                 
                                 <br></br>
                                     { /* }
@@ -585,7 +594,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                                         </>
                                     }
 
-                                { */ }
+                                
                                     
                                     { (thisMsg['m_ST'] == 1) &&
                                         <>
@@ -604,7 +613,9 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
                                         <>
                                             <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 1)}>🗑️ Unarchive</a>                        
                                         </>
-                                    }                    
+                                    }   
+                                        
+                                { */ }
                             </div>
 
 

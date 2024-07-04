@@ -20,6 +20,10 @@ span.CFpink, span.CForange { padding-left: 10px; padding-right:10px; }
 .CFwhiteBackground { background:white; }
 .CForangeBackground { background:#ff9900; }
 
+#CF .center-button { background-color: #ff9900; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius:10px; }
+.center-button:hover { background-color: #000000; color: white; }
+  
+
 .outboxTextarea{width:90%; height:300px; }
 #CF .progress-bar {
     width: 100%;
@@ -156,6 +160,13 @@ body#CF input, textarea {
     margin-bottom:10px;
 }
 
+body#CF .homeLookup input {
+    border-radius: 30px; margin-right:10px; width:50%;  padding-left:15px; padding-bottom:6px;
+}
+body#CF .homeLookup button {
+    border-radius: 30px; padding:8px 20px 8px 20px; position:relative; top:-4px
+}
+
 /* LANDINGPAGE.JS */
 .CFdashboard { text-align:center; }
 body#CF .CFdashboard input { margin-left:10px; }
@@ -183,8 +194,10 @@ body#CF button#takeSurvey { background:orange; }
 
 /* CARE PROVIDER */
 .CProw1 h1, .homeRow1 h2 { font-size: 400%; font-weight: 700; }
-.CProw1 p, .CProw2 p, .CProw3 p, .CProw4 p, .CProw5 p { font-size: 175%; line-height: 125%; }
+.CProw1 p, .CProw2 p, .CProw3 p, .CProw4 p, .CProw5 p, .homeRow2 p { font-size: 175%; line-height: 125%; }
 .CProw1 .left60 { padding:30px; }
+
+.homeRow2 p {text-align: center; padding-left:50px; }
 
 .CProw2 .left40 { padding-top:10%; text-align:center; }
 .CProw2 .right60 { padding:60px; text-align:center; }
@@ -196,7 +209,10 @@ body#CF button#takeSurvey { background:orange; }
 #CF .modal-title {color:white; }
 #CF .provider-card {border-radius:10px; margin:10px; }
 
-.CPchoiceBox { width:30%; float:left; border-radius:10px; padding:20px; margin-right: 3%;  text-align: center;    display: inline-block;  vertical-align: top; margin-bottom:40px; position:relative; top: -80px;     min-height: 650px; }
+.CPchoiceBox { width:30%; float:left; border-radius:10px; padding:20px; margin-right: 3%;  text-align: center;    display: inline-block;  vertical-align: top; margin-bottom:40px; position:relative; top: -80px;     min-height: 780px; }
+.CPchoiceBox2 { width:64% !important; }
+.CPchoiceBox2 ul {text-align:left;}
+.CPchoiceBox button.button2 {padding:20px; margin-top:20px; }
 
 .CProw5 { margin-bottom:80px; }
 .mostPopular { float:right; margin-bottom:20px; }
@@ -223,12 +239,13 @@ p.CPboxText { text-align:left;}
 #CF .seniorSurvey h3 { margin-top:20px; }
 #CF .seniorSurvey select, #CF .seniorSurvey select#seniorSex { border-radius:10px !important; filter: drop-shadow(2px 3px 0px #000000); }
 
+#CF .accordion-body { font-size:135%; }
 
 #CF .personalInfo p.card-text label { font-weight: bold; margin-right:10px; }
 #CF .personalInfo p.card-text span { margin-right:10px; }
 #CF .personalInfo .card-title {font-weight: bold;}
 .CProw5 h2, .homeRow5 h2 { text-align:center; margin-bottom:20px; }
-body#CF .CProw5 button, body#CF .homeRow5 button  { background: #333333;
+body#CF .CProw5 button, body#CF .homeRow5 button  { background: #000000;
     font-weight: normal;
     font-size: 100%;margin-bottom: 3px;}
     
@@ -236,8 +253,7 @@ body#CF .CProw5 button, body#CF .homeRow5 button  { background: #333333;
     border: initial;
     color: white;}
 
-body#CF .CProw5 button, body#CF .homeRow5 button { border:initial; border-top: 1px white solid;
-    border-radius: initial; border-radius:10px; margin-bottom:10px; }
+body#CF .CProw5 button, body#CF .homeRow5 button { border:initial;  border-radius: initial; border-radius:10px; margin-bottom:10px; }
 
 body#CF .CProw5 .accordion-button:not(.collapsed), body#CF .homeRow5 .accordion-button:not(.collapsed) {
     background-color: initial;
@@ -246,17 +262,22 @@ body#CF .CProw5 .accordion-button:not(.collapsed), body#CF .homeRow5 .accordion-
 
 body#CF .CProw5 h2.accordion-header, body#CF .homeRow5 h2.accordion-header  { margin-bottom:0; }
 
+body#CF ul.custom-checkmark-list{     padding-left: 30px !important;
+    padding-right: 30px !important;
+    font-size: 150%;}
+
 .homeRow1, .homeRow2, .homeRow3, .homeRow4, .homerow5 { margin-bottom:60px; }
 .homeRow1 p { font-size: 175%; line-height: 125%; }
 .homeRow1 .left60 { padding: 30px; }
 .homeRow2 .video-responsive { max-width:800px; margin-left:auto; margin-right:auto; }
 .homeRow3 .contentContainer { padding:40px; border-radius:10px; }
+.homeRow3 h2 { text-align:center; margin-bottom:20px; }
 .homeRow5 .accordion { --bs-accordion-color: initial;  --bs-accordion-bg:initial;
     --bs-accordion-border-color: initial; }
 .homeRow4 .hr4Box {  width:30%; float:left; border-radius:10px; padding:20px; margin-right: 3%;  text-align: center;  
-      display: inline-block;  vertical-align: top; margin-bottom:40px;  min-height: 350px; }
+      display: inline-block;  vertical-align: top; margin-bottom:40px;  min-height: 270px; }
 .homeRow4 .hr4Box p { font-size:12px; text-align:left; }
-.homeRow4 .hr4Box button { width:100%; }
+.homeRow4 .hr4Box button { width:50%; }
 #CF .accordion button[aria-expanded="true"] { background: #ff6699 !important;  }
 
 #CF .accordion-button.collapsed::after {  /*filter: invert(0.5) sepia(1) saturate(5) hue-rotate(190deg);*/     filter: invert(0.27) sepia(1) saturate(10000%) hue-rotate(330deg) brightness(0.9); }
@@ -266,11 +287,13 @@ body#CF .CProw5 h2.accordion-header, body#CF .homeRow5 h2.accordion-header  { ma
     height: 0.7em; /* 80% of the original size */
 }
   
+.homeTopBackground { background: url(/client/public/homeback1.jpg);     background-size: cover;   padding: 30px; } 
 
 /* GLOBAL */
-.left60, .left40, .right60, .right40 {float:left;}
+.left60, .left40, .right60, .right40, .left50, .right50 {float:left;}
 .left60, .right60  { width:60%; }
 .left40, .right40 { width:40%; }
+.left50, .right50 { width:50%; }
 
 .contentContainer{ max-width:1200px; margin-left:auto; margin-right:auto; }
 
@@ -376,8 +399,8 @@ float:right
 .msgThreadDate { margin-top:15px; font-size:60%; }
 .msgThreadDateRight { text-align: right; padding-right:10px;  }
 .msgThreadDateLeft { padding-left:10px;  }
-.msgThreadSender{ text-align:left; background:blue;  }
-.msgThreadRecipient{ text-align:right; background:green; float:right; }
+.msgThreadSender{ text-align:left; background:#ff6699;  }
+.msgThreadRecipient{ text-align:right; background:#333333; float:right; }
 #CF .card-text input { margin-right:10px; }
 #CF .myAFHname button, #CF .myAFHname input { margin-left:10px; }
 body#CF .msgReplyArea input.btn.btn-primary { font-size: 100%;  margin-right: 10px; color:white; }
@@ -404,9 +427,9 @@ body#CF .msgReplyArea button.btn.btn-info {    font-size: 90%;
     border: 2px solid #ff6699;
   }
 
-  #CFNAV {border-bottom:2px solid #ff6699; }
+  #CFNAV {background: #1e1e1e !important;}
 
-nav { max-width:1200px; margin-left: auto; margin-right: auto; background: black !important;  }
+nav { max-width:1200px; margin-left: auto; margin-right: auto; background: #1e1e1e !important;  }
 nav a { color:white !important; }
 #CF .navbar-text { color:white; font-size:200%; font-weight:bold; margin-right: 10% !important; }
 #CFNAV a.nav-link { color:white; font-size:150%; font-weight:bold;  line-height: 25px;     padding-right: 50px;}
@@ -420,7 +443,7 @@ nav a { color:white !important; }
   nav .dropdown-menu a { color:black !important; }
 .nonhamburger{}
 
-.dropdown {margin-left: 5%;}
+.dropdown {/*margin-left: 5%;*/}
 
   .dropdown-menu {
     /* Reset default right positioning */
@@ -432,6 +455,8 @@ nav a { color:white !important; }
     /* Flip the dropdown on open */
     transform: translateX(-20%);
   }
+
+input#clientSearch::placeholder { color: black; }
 
  /* LISTINGS*/
  #CF .CFListingCard { width:350px; aspect-ratio: 1 /1; margin-right: 20px!important; margin-left: 0px!important; text-align:center; margin-bottom:20px !important;}
@@ -474,6 +499,9 @@ p.copyright { margin-top:40px; font-size:70%;}
 #CF .loginPage svg { display:initial !important; }
 .loginPasswordControl { font-size:80%; text-align:right; }
 
+.messagesDesktopUX{display:block;}
+.messagesMobileUX{ display:none;}
+
 /**
    RESPONSIVE MEDIA QUERIES:
    --allows us to tailor above rules for specific-width-range screens
@@ -513,16 +541,186 @@ p.copyright { margin-top:40px; font-size:70%;}
 
 }
 
-.messagesDesktopUX{display:block;}
-.messagesMobileUX{ display:none;}
+
+
+
+
+
+/* FOR NOW, ALL BELOW 768 will be singularly responsive... */
+
+/* PLUS SPECIAL REFINEMENTS */
+@media (max-width: 1100px) {
+    .left50 { width:75%; } .right50 { width:25%; }
+   
+}
 
 @media (max-width: 768px) {
 
     .messagesDesktopUX{display:none;}
     .messagesMobileUX{ display:block;}
     .messagesMobileUX { padding:15px; }
-
     #CF .singleRoomCard { width: 90%; }
+    .left60, .left40, .right60, .right40, .left50, .right50 { float:initial; width:100%; min-height: initial; }
+    .homeRow4 .hr4Box {width:100%; float:initial; min-height: initial;}
+    .providersRow { display:block !important; width:100%; min-height: initial; }
+    .clientLProw2right { width: 100% !important; float: initial; margin-bottom: 30px; min-height: initial;}
+    .CPchoiceBox, .CPchoiceBox2 { width: 100% !important; float: initial; min-height: initial; top:initial; }
+    .CProw1 p, .CProw2 p, .CProw3 p, .CProw4 p, .CProw5 p, .homeRow2 p {font-size: 125%; line-height: 117%; padding: initial; }
+    .CProw3 .contentContainer { padding:initial; padding:40px; margin-bottom:30px; }
+    .video-responsive iframe { left: initial; height: 330px; width: 90%; position: relative; margin-left: auto; margin-right: auto; }
+    #CFNAV img, #CFNAV .navbar > #CFNAV .container {display:inline !important; }
 }
 
 
+/* TESTING NEW MENU... */
+
+
+.CF2-navwrapper {
+  background-color: #1e1e1e;
+  position: relative; /* Ensure the navbar has a position */
+  z-index: 998; /* Set a high z-index for the navbar */
+}
+
+.CF2-navbar {
+  background-color: #333;
+  padding: 10px 20px;
+  overflow: visible; /* Changed to allow dropdowns to overflow */
+  position: relative; /* Ensure the navbar has a position */
+  z-index: 999; /* Set a high z-index for the navbar */
+}
+
+.CF2-logo-container {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.CF2-logo {
+  width: 100px;
+  vertical-align: middle;
+  display:inline;
+}
+
+.CF2-site-name {
+  color: #fff;
+  font-size: 40px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 10px;
+}
+
+.CF2-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  margin-top:28px;
+  float: right;
+}
+
+.CF2-menu-item {
+  display: inline-block;
+  position: relative; /* Ensure the menu item has a position */
+  z-index: 1000; /* Ensure the menu item has a high z-index */
+}
+
+.CF2-menu-item a {
+  color: #fff;
+  font-size: 30px;
+  text-decoration: none;
+  padding: 10px 20px;
+  display: block;
+}
+
+.CF2-menu-item a:hover,
+.CF2-menu-item a:focus {
+  background-color: #555;
+}
+
+.CF2-dropdown-toggle::after {
+  content: " ▾";
+  font-size: 20px;
+}
+
+.CF2-dropdown-menu {
+  opacity: 0;
+  visibility: hidden;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #ff9900;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 1001; /* Ensure the dropdown has a high z-index */
+  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out; /* Smooth transition for opacity and visibility */
+}
+
+.CF2-dropdown-menu li {
+  width: 100%;
+}
+
+.CF2-dropdown-menu li a {
+  padding: 10px 20px;
+  font-size: 20px;
+}
+
+.CF2-dropdown-menu li a:hover,
+.CF2-dropdown-menu li a:focus {
+  background-color: #555;
+}
+
+.CF2-menu-item:hover .CF2-dropdown-menu,
+.CF2-menu-item:focus .CF2-dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+}
+
+.CF2-dropdown-menu.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Responsive styling for screens 768px and below */
+@media screen and (max-width: 768px) {
+  .CF2-navbar {
+    text-align: center;
+  }
+
+  .CF2-menu {
+    float: none;
+    display: block;
+  }
+
+  .CF2-menu-item {
+    display: block;
+    text-align: left;
+  }
+
+  .CF2-menu-item a {
+    font-size: 20pt;
+  }
+
+  .CF2-dropdown-menu {    position: static; /* Change position to static */
+    z-index: 1001;
+    display:none;
+  }
+
+  .CF2-dropdown-menu.open {
+  }
+
+  .CF2-dropdown-menu li a {
+    font-size: 18pt;
+  }
+
+  .CF2-menu-item:hover .CF2-dropdown-menu,
+  .CF2-menu-item:focus .CF2-dropdown-menu {
+    position: static; 
+    transition: visibility 0.5s ease-in-out; 
+    display:block;
+  }
+
+}
+
+/* hot fixes */
+@media (min-width: 768px) and (max-width: 1062px) {
+  .CF2-navbar {    height: 250px;  }
+}

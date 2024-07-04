@@ -1,12 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { getDoc, doc } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
 import { firestore } from "../firebase";
-import firebase from 'firebase/compat/app';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { FaBars } from 'react-icons/fa';
-import { Link } from 'react-router-dom'; // Import for routing
 
 export default function TopNav() {
   const [role, setRole] = useState("");
@@ -18,7 +14,6 @@ export default function TopNav() {
 
   useEffect(() => {
     const fetchData = async () => {
-
       const userRole = localStorage.getItem('localStorageCurrentUserRole');
       if (userRole) {
         setRole(userRole);
@@ -39,7 +34,7 @@ export default function TopNav() {
       }
     };
     if (currentUser) {
-      fetchData(); // Call the async function immediately
+      fetchData();
     } else {
       setLoading(false);
     }
@@ -65,132 +60,136 @@ export default function TopNav() {
   });
 
   if (loading) {
-    // Display a loading indicator or spinner
     return <div>Loading...</div>; 
   }
 
-  return (    
-    <>
-      <div id="CFNAV">
-        <Navbar expand="lg" id="nav1">
-          <Container>
-            <Navbar.Brand as={Link} to="/">
-              <img src="cflogo.png" alt="Company Logo" />
-            </Navbar.Brand>
-            <Navbar.Text as={Link} to="/" className="me-auto">Carefinder</Navbar.Text>
-            <div className="ml-auto"> {/* Add this div with ml-auto class */}
-              {/**
-               *   ****************************************************************
-               *   NO ROLE == GUEST VISITOR NOT LOGGED IN
-               *   ****************************************************************
-               */}
-              {!role && (
-                <Nav className="me-auto">
-                  <Nav.Link as={Link} to="/login">Find a Home</Nav.Link>
-                  <Nav.Link as={Link} to="/claim-profile">For AFH Providers</Nav.Link>
-                  <Nav.Item>
-                    <button onClick={() => navigate('/login')} style={{ backgroundColor: "#4CAF50",
-                      color: "white", border: "none",
-                      padding: "10px 20px",
-                      cursor: "pointer",
-                      borderRadius: "5px"
-                    }}>Login</button>
-                  </Nav.Item>
-                </Nav>
-              )}
+  return (
+    <div className="CF2-navwrapper">
+      <nav className="CF2-navbar">
+        <div className="CF2-logo-container">
+          <img src="cflogo.png" alt="Carefinder Logo" className="CF2-logo" />
+          <span className="CF2-site-name"><a href="/"><b>CareFinder</b></a></span>
+        </div>
 
-              {/** 
-               *   ****************************************************************
-               *   END GUEST ROLE MENU
-               *   ****************************************************************
-               * 
-               *   ****************************************************************
-               *   BEGIN CLIENT ROLE == GUEST VISITOR LOGGED IN AS A CLIENT
-               *   ****************************************************************
-               */}
-              {role === "client" && (
-                <Nav className="me-auto">
-                  <Nav.Link as={Link} to="/client-dashboard">Browse</Nav.Link>
-                  <Nav.Link as={Link} to="/msg-inbox">Inbox</Nav.Link>
-                  <NavDropdown title={<FaBars />} className="hamburger-menu">
-                    <NavDropdown.Item href="/client-dashboard" title="Client Dashboard" onClick={() => handleNavClick("/client-dashboard")} style={{ color: activePage === "/client-dashboard" ? "white" : "#777777" }}>Client Dashboard</NavDropdown.Item>
-                    <NavDropdown.Item href="/client-menu" title="Client Menu" onClick={() => handleNavClick("/client-menu")} style={{ color: activePage === "/client-menu" ? "white" : "#777777" }}>Client Menu</NavDropdown.Item>
-                    <NavDropdown.Item>
-                      <button onClick={handleLogout} style={{ backgroundColor: "#F44336", color: "white",  border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </Nav>
-              )}
+        {/**
+         *   ****************************************************************
+         *   NO ROLE == GUEST VISITOR NOT LOGGED IN
+         *   ****************************************************************
+         */}
 
-              {/**
-               *   ****************************************************************
-               *   END CLIENT ROLE MENU
-               *   ****************************************************************
-               * 
-               *   ****************************************************************
-               *   BEGIN PROVIDER ROLE == GUEST VISITOR LOGGED IN AS A PROVIDER
-               *   ****************************************************************
-               */}
-              {role === "provider" && (
-                <Nav className="me-auto w-100 d-flex justify-content-between">
-                  <Nav.Link as={Link} to="/care-provider-dashboard">Dashboard</Nav.Link>
-                  <Nav.Link as={Link} to="/msg-inbox">Inbox</Nav.Link>
-                  <NavDropdown title={<FaBars />} className="hamburger-menu">
-                    <NavDropdown.Item href="/provider-menu" title="Provider Menu" onClick={() => handleNavClick("/provider-menu")} style={{ color: activePage === "/provider-menu" ? "white" : "#777777" }}>Provider Menu</NavDropdown.Item>
-                    <NavDropdown.Item href="/care-provider-dashboard" title="Provider Dashboard" onClick={() => handleNavClick("/care-provider-dashboard")} style={{ color: activePage === "/care-provider-dashboard" ? "white" : "#777777" }}>Provider Dashboard</NavDropdown.Item>
-                    <NavDropdown.Item href="/your-listings" title="Provider Listings" onClick={() => handleNavClick("/your-listings")} style={{ color: activePage === "/your-listings" ? "white" : "#777777" }}>Provider Listings</NavDropdown.Item>
-                    <NavDropdown.Item>
-                      <button onClick={handleLogout} style={{ backgroundColor: "#F44336", color: "white",  border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </Nav>
-              )}
+        {!role && (
+          <ul className="CF2-menu">
+            <li className="CF2-menu-item"><a href="/client-dashboard">Find a Home</a></li>
+            <li className="CF2-menu-item"><a href="/care-provider">For AFH Providers</a></li>
+            <button onClick={() => navigate('/login')} style={{ backgroundColor: "#4CAF50", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "10px", position:'relative', top:'-5px', marginLeft:10 }}>Login</button>
+          </ul>
+        )}
 
-              {/**
-               *   ****************************************************************
-               *   END PROVIDER ROLE MENU
-               *   ****************************************************************
-               * 
-               *   ****************************************************************
-               *   BEGIN ADMIN ROLE == GUEST VISITOR LOGGED IN AS AN ADMIN
-               *   ****************************************************************
-               */}
-              {role === "admin" && (
-                <>
-                  <NavDropdown title="Admin Utils" id="admin-utils" style={{ color: activePage.startsWith("/admin") ? "white" : "#777777" }}>
-                    <NavDropdown.Item href="/msg-admin" title="Message Anyone from YOU" onClick={() => handleNavClick("/msg-admin")} style={{ color: activePage === "/msg-admin" ? "white" : "#777777" }}> Admin Messager </NavDropdown.Item>
-                    <NavDropdown.Item href="/msg-admin-spoof" title="Message Anyone from ANYONE" onClick={() => handleNavClick("/msg-admin-spoof")} style={{ color: activePage === "/msg-admin-spoof" ? "white" : "#777777" }}> Admin Messager Spoof </NavDropdown.Item>
-                    <NavDropdown.Item href="/admin-client-viewer" title="User Viewer" onClick={() => handleNavClick("/admin-client-viewer")} style={{ color: activePage === "/admin-client-viewer" ? "white" : "#777777" }}> User Viewer </NavDropdown.Item>
-                  </NavDropdown>
-                  <NavDropdown title="Clients" id="client-dropdown" style={{ color: activePage.startsWith("/client") ? "white" : "#777777" }}>
-                    <NavDropdown.Item href="/client-dashboard" title="Client Dashboard" onClick={() => handleNavClick("/client-dashboard")} style={{ color: activePage === "/client-dashboard" ? "white" : "#777777" }}>Client Dashboard</NavDropdown.Item>
-                    <NavDropdown.Item href="/client-menu" title="Client Menu" onClick={() => handleNavClick("/client-menu")} style={{ color: activePage === "/client-menu" ? "white" : "#777777" }}> Client Menu</NavDropdown.Item>
-                  </NavDropdown>
-                  <NavDropdown title="Providers" id="provider-dropdown" style={{ color: activePage.startsWith("/provider") ? "white" : "#777777" }}>
-                    <NavDropdown.Item href="/provider-menu" title="Provider Menu" onClick={() => handleNavClick("/provider-menu")} style={{ color: activePage === "/provider-menu" ? "white" : "#777777" }}>Provider Menu</NavDropdown.Item>
-                    <NavDropdown.Item href="/care-provider-dashboard" title="Provider Dashboard" onClick={() => handleNavClick("/care-provider-dashboard")} style={{ color: activePage === "/care-provider-dashboard" ? "white" : "#777777" }}>Provider Dashboard</NavDropdown.Item>
-                    <NavDropdown.Item href="/your-listings" title="Provider Listings" onClick={() => handleNavClick("/your-listings")} style={{ color: activePage === "/your-listings" ? "white" : "#777777" }}>Provider Listings</NavDropdown.Item>
-                  </NavDropdown>
-                  <NavDropdown title="Messaging" id="admin-utils" style={{ color: activePage.startsWith("/msg") ? "white" : "#777777" }}>
-                    <NavDropdown.Item href="/msg-inbox" title="Message Anyone" onClick={() => handleNavClick("/msg-inbox")} style={{ color: activePage === "/msg-inbox" ? "white" : "#777777" }}>Inbox</NavDropdown.Item>
-                    <NavDropdown.Item href="/msg-outbox" title="User Viewer" onClick={() => handleNavClick("/msg-outbox")} style={{ color: activePage === "/msg-outbox" ? "white" : "#777777" }}>Outbox</NavDropdown.Item>
-                  </NavDropdown>
-                  <NavDropdown title={<FaBars />} className="hamburger-menu">
-                    <NavDropdown.Item>
-                      <button onClick={handleLogout} style={{ backgroundColor: "#F44336", color: "white",  border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
-                    </NavDropdown.Item>
-                  </NavDropdown>
-                </>
-              )}
-              {/**
-               *   ****************************************************************
-               *   END ADMIN ROLE MENU
-               *   ****************************************************************
-               */}
-            </div> {/* Close the div with ml-auto class */}
-          </Container>
-        </Navbar>
-      </div>
-    </>
+        {/** 
+         *   ****************************************************************
+         *   END GUEST ROLE MENU
+         *   ****************************************************************
+         * 
+         *   ****************************************************************
+         *   BEGIN CLIENT ROLE == GUEST VISITOR LOGGED IN AS A CLIENT
+         *   ****************************************************************
+         */}
+
+        {role === "client" && (
+          <ul className="CF2-menu">
+            <li className="CF2-menu-item"><a href="/client-dashboard">Browse</a></li>
+            <li className="CF2-menu-item"><a href="/msg-inbox">Inbox</a></li>
+            <li className="CF2-menu-item CF2-dropdown">
+              <a href="#about" className="CF2-dropdown-toggle">Client Dashboard</a>
+              <ul className="CF2-dropdown-menu">
+                <li><a href="/client-dashboard">Client Dashboard</a></li>
+                <li><a href="/client-menu">Client Menu</a></li>
+                <button onClick={handleLogout} style={{ backgroundColor: "#F44336", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
+              </ul>
+            </li>
+          </ul>
+        )}
+
+        {/**
+         *   ****************************************************************
+         *   END CLIENT ROLE MENU
+         *   ****************************************************************
+         * 
+         *   ****************************************************************
+         *   BEGIN PROVIDER ROLE == GUEST VISITOR LOGGED IN AS A PROVIDER
+         *   ****************************************************************
+         */}
+
+        {role === "provider" && (
+          <ul className="CF2-menu">
+            <li className="CF2-menu-item"><a href="/care-provider-dashboard">Dashboard</a></li>
+            <li className="CF2-menu-item"><a href="/msg-inbox">Inbox</a></li>
+            <li className="CF2-menu-item CF2-dropdown">
+              <a href="#about" className="CF2-dropdown-toggle">Provider Dashboard</a>
+              <ul className="CF2-dropdown-menu">
+                <li><a href="/care-provider-dashboard">Provider Dashboard</a></li>
+                <li><a href="/provider-menu">Provider Menu</a></li>
+                <li><a href="/your-listings">Provider Listings</a></li>
+                <button onClick={handleLogout} style={{ backgroundColor: "#F44336", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
+              </ul>
+            </li>
+          </ul>
+        )}
+
+        {/**
+         *   ****************************************************************
+         *   END PROVIDER ROLE MENU
+         *   ****************************************************************
+         * 
+         *   ****************************************************************
+         *   BEGIN ADMIN ROLE == GUEST VISITOR LOGGED IN AS AN ADMIN
+         *   ****************************************************************
+         */}
+
+        {role === "admin" && (
+          <ul className="CF2-menu">
+            <li className="CF2-menu-item CF2-dropdown">
+              <a href="#about" className="CF2-dropdown-toggle">Admin Utils</a>
+              <ul className="CF2-dropdown-menu">
+                <li><a href="/msg-admin">Admin Messenger</a></li>
+                <li><a href="/msg-admin-spoof">Admin Messenger Spoof</a></li>
+                <li><a href="/admin-client-viewer">User Viewer</a></li>
+              </ul>
+            </li>
+
+            <li className="CF2-menu-item CF2-dropdown">
+              <a href="#about" className="CF2-dropdown-toggle">Clients</a>
+              <ul className="CF2-dropdown-menu">
+                <li><a href="/client-dashboard">Client Dashboard</a></li>
+                <li><a href="/client-menu">Client Menu</a></li>
+              </ul>
+            </li>
+
+            <li className="CF2-menu-item CF2-dropdown">
+              <a href="#about" className="CF2-dropdown-toggle">Providers</a>
+              <ul className="CF2-dropdown-menu">
+                <li><a href="/care-provider-dashboard">Provider Dashboard</a></li>
+                <li><a href="/provider-menu">Provider Menu</a></li>
+                <li><a href="/your-listings">Provider Listings</a></li>
+              </ul>
+            </li>
+
+            <li className="CF2-menu-item CF2-dropdown">
+              <a href="#about" className="CF2-dropdown-toggle">Logout</a>
+              <ul className="CF2-dropdown-menu">
+                <button onClick={handleLogout} style={{ backgroundColor: "#F44336", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
+              </ul>
+            </li>
+          </ul>
+        )}
+
+        {/**
+         *   ****************************************************************
+         *   END ADMIN ROLE MENU
+         *   ****************************************************************
+         */}
+
+      </nav>
+    </div>
   );
 }

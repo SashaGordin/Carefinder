@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { FaCheck } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 import TopNav from "../components/TopNav";
 import Footer from "../components/Footer";
@@ -11,7 +12,17 @@ import YoutubeEmbed from "../components/YoutubeEmbed";
 export default function LandingPage() {
 
 
+  const [query, setQuery] = useState('');
+  const navigate = useNavigate();
 
+  const handleSearch = () => {
+    const encodedQuery = encodeURIComponent(query);
+    navigate(`/client-dashboard?refLookup=${encodedQuery}`);
+  };
+
+  const listStyle = { listStyleType: 'none', padding: 0 };
+  const listItemStyle = { position: 'relative', paddingLeft: '40px', marginBottom: '20px' };
+  const checkmarkStyle = { content: '"\\2713"',  position: 'absolute', left: 0, color: '#ff6699' };
 
   return (
     <>
@@ -39,7 +50,15 @@ export default function LandingPage() {
 
       <div className="homeRow2">
         <div className="contentContainer">
+        <div className="left40">
           <YoutubeEmbed embedId="dQw4w9WgXcQ" />
+          </div>
+          <div className="right60">
+            <p>Thanks to modern technology, families don't need senior advisors to determine cost of care, search for homes, or find comparable options.</p>
+            <p>Yet traditional senior advisors still want you to pay 100% of the first month's rent like you did before the internet.</p>
+            <p>At Carefinder, we want you to keep what you've earned, have a better experience, and get all the benefits that come with an advisor.</p>
+          </div>
+          <div className="clear"></div>
         </div>
       </div>
 
@@ -90,7 +109,6 @@ export default function LandingPage() {
           <div className="contentContainer">
 
                 <div className="hr4Box CFgrayBackground farLeft">
-                  [image]
                   <h3>Zero Commission Community Partner</h3>
                   <p>
                     Chat with a local advisor you can trust. 100% unbiased, unincentivized guidance. A reliable partner who's well-versed in the communities and resources near you. Count on your advisor for as much or as little as you need.
@@ -101,7 +119,6 @@ export default function LandingPage() {
                 </div>
 
                 <div className="hr4Box CFgrayBackground">
-                  [image]
                   <h3>Match with Licensed Care Providers</h3>
                   <p>
                     We make it incredibly easy for you to browse local options who have current availability or match with the most compatible options. All care providers are licensed with the state.
@@ -112,7 +129,6 @@ export default function LandingPage() {
                 </div>
 
                 <div className="hr4Box CFgrayBackground farRight">
-                  [image]
                   <h3>Pre-vetted</h3>
                   <p>
                     Our dedicated team personally visits each facility, fostering relationships with provider & staff. We're focused on trust and transparency, we go the extra mile to provide families with peace of mind, knowing that their loved ones are in good hands.

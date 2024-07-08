@@ -17,7 +17,7 @@ const API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 const client = require("twilio")(accountSid, authToken);
 
 const app = express();
-const port = 3001; // Choose a port for your server
+const port = 3001 || 8080; // Choose a port for your server
 
 app.use(bodyParser.json());
 app.use(cors());

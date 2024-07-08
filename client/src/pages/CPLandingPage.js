@@ -6,14 +6,16 @@ import Accordion from 'react-bootstrap/Accordion';
 import YoutubeEmbed from "../components/YoutubeEmbed";
 import TopNav from "../components/TopNav";
 import Footer from "../components/Footer";
+import { useNavigate } from 'react-router-dom';
 
 
 export default function CPLandingPage() {
+  const navigate = useNavigate();
 
   const listStyle = { listStyleType: 'none', padding: 0 };
   const listItemStyle = { position: 'relative', paddingLeft: '40px', marginBottom: '10px' };
   const checkmarkStyle = { content: '"\\2713"',  position: 'absolute', left: 0, color: '#ff6699' };
-  
+
   const handleButtonClick = () => {
     navigate('/claim-profile');
   };

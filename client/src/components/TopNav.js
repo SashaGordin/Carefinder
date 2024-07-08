@@ -3,6 +3,10 @@ import { getDoc, doc } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
 import { firestore } from "../firebase";
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
+import { FaBars } from 'react-icons/fa';
+import { Link } from 'react-router-dom'; // Import for routing
+
 
 export default function TopNav() {
   const [role, setRole] = useState("");

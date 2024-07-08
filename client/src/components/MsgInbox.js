@@ -4,6 +4,8 @@ import Footer from "./Footer";
 
 import { useAuth } from "../contexts/AuthContext";
 import { firestore } from '../firebase';
+import { Card, Button } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 
 //import MsgTemplate from "./MsgTemplate";
 import MsgTemplateMVP from "./MsgTemplateMVP";
@@ -11,8 +13,15 @@ import MsgTemplateMVP from "./MsgTemplateMVP";
 //v20240430.837pm
 export default function MsgInbox() {
 
-    const { currentUser } = useAuth()
+    const {login, currentUser } = useAuth()
     const [userMessages, setUserMessages] = useState([]);
+    const [hasMessages, setHasMessages] = useState(0);
+
+    const navigate = useNavigate();
+    const handleButtonClick = () => {
+        navigate('/');
+      };
+
     const [containsArchives, setContainsArchives] = useState(0);
     useEffect(() => { return; }, [containsArchives]);
 
@@ -32,6 +41,7 @@ export default function MsgInbox() {
         //let messageAreaHTML = '';
 
         if (!response.empty) {
+            setHasMessages(1);
             // Create a Map to store unique messages based on msgThreadID
             let uniqueMessagesMap = new Map();
 
@@ -100,9 +110,39 @@ export default function MsgInbox() {
         <TopNav />
         <div className="contentContainer utilityPage">
 
+            { hasMessages &&
+                <>
                 <MsgTemplateMVP passData={userMessages} hasArchives={containsArchives} />
-
                 <div className="clear"></div>
+                </>
+            }
+
+            { !hasMessages &&
+                <>
+            <div className="contentContainer utilityPage">
+
+            <Card>
+                <Card.Body>
+                    <Card.Title style={{ textAlign: "center" }}>
+                    <span style={{ fontSize: "40px" }}>You don't have any messages.</span>
+                    </Card.Title>
+                    <Card.Text style={{ textAlign: "center" }}>Try again later. 🙏</Card.Text>
+                    <div style={{ textAlign: "center" }}>
+                    <button
+                        type="button"
+                        className="center-button"
+                        onClick={handleButtonClick}
+                    >
+                        Okay
+                    </button>
+                    </div>
+                </Card.Body>
+            </Card>
+
+            </div>
+    </>
+            }
+
 
         </div>
         <Footer />

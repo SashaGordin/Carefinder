@@ -6,14 +6,20 @@ import Accordion from 'react-bootstrap/Accordion';
 import YoutubeEmbed from "../components/YoutubeEmbed";
 import TopNav from "../components/TopNav";
 import Footer from "../components/Footer";
-
-// NOTE: This page imports Footer.js, which I think we should import on all pages. I think we should handle the nav bar in this same way, so that we can have a Navbar file that can do the menu system, and we can then import it into all pages in a tidy mnner.
-
-// import logo from '../assets/Group.png';
-// import background from '../assets/Rectangle_7.png';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function CPLandingPage() {
+  const navigate = useNavigate();
+
+  const listStyle = { listStyleType: 'none', padding: 0 };
+  const listItemStyle = { position: 'relative', paddingLeft: '40px', marginBottom: '10px' };
+  const checkmarkStyle = { content: '"\\2713"',  position: 'absolute', left: 0, color: '#ff6699' };
+
+  const handleButtonClick = () => {
+    navigate('/claim-profile');
+  };
+
 
   return (
     <>
@@ -25,7 +31,7 @@ export default function CPLandingPage() {
           <div className="left60">
             <h1 className='CFpink'>Don't overpay for senior referrals</h1>
             <p>No commission, no absurd placement fees. Built by care providers for care providers.</p>
-            <button type="button" className="btn btn-dark">Claim Profile</button>
+            <button type="button" className="btn btn-dark" onClick={handleButtonClick}>Claim Profile</button>
           </div>
           <div className="right40">
             <Image src='cooking.jpg' alt="Welcome to CareFinder" />
@@ -43,7 +49,7 @@ export default function CPLandingPage() {
             <p>Thanks to modern technology, families don't need senior advisors to determine cost of care, search for homes, or find comparable options.</p>
             <p>Yet traditional senior advisors still want you to pay 100% of the first month's rent like you did before the internet.</p>
             <p>At Carefinder, we want you to keep what you've earned, have a better experience, and get all the benefits that come with an advisor -- all for a low flar annual membership fee.</p>
-            <button type="button" className="btn btn-secondary">Claim Profile</button>
+            <button type="button" className="btn btn-secondary" onClick={handleButtonClick}>Claim Profile</button>
           </div>
           <div className="clear"></div>
         </div>
@@ -51,7 +57,7 @@ export default function CPLandingPage() {
 
       <div className="CProw3 CFpinkBackground">
         <div className="contentContainer">
-          <p>Your membership fee is not due until you land your first resident who stays more than 30 days!</p>
+          <p>Your subscription fee is not due until you land your first resident who stays more than 30 days!</p>
         </div>
       </div>
 
@@ -59,30 +65,34 @@ export default function CPLandingPage() {
         <div className="contentContainer">
 
           <div className="CPchoiceBox CFgrayBackground">
-            <button type="button" className="btn mostPopular">Most popular</button>
+            <button type="button" className="btn mostPopular">Start here</button>
             <div className="clear"></div>
             <p className="CPchoiceLevel">Try us out</p>
             <p className="CPchoicePrice">List your AFH</p>
-            <p className="CPchoiceSubhead">Risk-free</p>
-            <p className="CPboxText">By listing your AFH, make it visible to all seniors seeking care at no cost. Once you've welcomed your first private pay resident, your premium membership will be activated.</p>
-            <button type="button" className="btn btn btn-dark">Review agreement</button>
+            <p className="CPchoiceSubhead">Free</p>
+            <p className="CPboxText">By listing your AFH, make it visible to all seniors seeking care at no cost. Once you've welcomed your first private pay resident, your subscription will be activated.</p>
+            <button type="button" className="btn btn btn-dark button2">Review agreement</button>
           </div>
 
-          <div className="CPchoiceBox CFgrayBackground">
-            <p className="CPchoiceLevel CForange">Premium Membership</p>
-            <p className="CPchoicePrice">$150/month</p>
-            <p className="CPchoiceSubhead">Unlimited access</p>
-            <p className="CPboxText">Regardless if you need one room filled of the entire house. Our annual membership fee covers it all (per license).</p>
-            <p className="CPchoiceTerms">Membership fee is an annual agreement of $1,800 broken up over 12 months.</p>
+          <div className="CPchoiceBox CPchoiceBox2 CFgrayBackground">
+            <p className="CPchoiceLevel CForange">Subscription</p>
+            <p className="CPchoicePrice">$100/month</p>
+            <p className="CPboxText">Secure a private pay resident, after 30 days your subscription activates. We charge $100/month for 24 months per successful booking. ($2,400 max)</p>
+            <p style={{textAlign:'left',fontWeight:'bold'}}>Pro's:</p>
+
+            <style> {`.custom-checkmark-list li::before { content: '\\2713'; position: absolute; left: 0; color: #ff6699;}`}</style>
+                <ul style={listStyle} className="custom-checkmark-list">
+                  <li style={listItemStyle}>No large upfront fees or commission.</li>
+                  <li style={listItemStyle}>Spread your payments over 24 months, reducing financial strain.</li>
+                  <li style={listItemStyle}>Start paying only after the resident has stayed for at least 30 days.</li>
+                  <li style={listItemStyle}>Payments stop if the resident leaves, moves out, or passes away.</li>
+                  <li style={listItemStyle}>Secure $1,500 non-refundable deposit for room reservation.</li>
+                  <li style={listItemStyle}>Warm fuzzzy feeling :-)</li>
+                </ul>
+
           </div>
 
-          <div className="CPchoiceBox CFgrayBackground allGrayText">
-            <p className="CPchoiceLevel">Traditional Model</p>
-            <p className="CPchoicePrice">100% of first month's rent</p>
-            <p className="CPchoiceSubhead">Never again</p>
-            <p className="CPboxText">Nobody wants to work an entire month for free.</p>
-            <p className="CPchoiceTerms">Fun fact: On average, it would take roughly 5.5 years of paying for a Carefinder membership to equal one transaction with the traditional options.</p>
-          </div>
+
 
           <div className="clear"></div>
 
@@ -133,20 +143,6 @@ export default function CPLandingPage() {
 
     <Footer />
 
-     {/*
-      <Card>
-        <Card.Body>
-          <h2 className="text-center mb-4">Dashboard</h2>
-          {error && <Alert variant="danger">{error}</Alert>}
-          <strong>Email:</strong>
-        </Card.Body>
-      </Card>
-      <div className="w-100 text-center mt-2">
-        <Button variant="link" onClick={() => navigate('/claim-profile')}>
-          Claim Profile
-        </Button>
-      </div>
-       */}
     </>
   )
 };

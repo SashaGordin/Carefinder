@@ -80,18 +80,8 @@ function App() {
               <Route path="/sitemap" element={<CareFinderSitemap />} />
               <Route path="/privacy-policy" element={<CareFinderPrivacy />} />
               <Route path="/terms-of-service" element={<CareFinderTerms />} />
-              <Route
-                path="/client-dashboard"
-                element={
-                  <PrivateRoute
-                  redirectPath="/login"
-                    allowedRoles={
-                       ['client','admin']
-                    }>
-                      <ClientDashboard />
-                  </PrivateRoute>
-                }
-              />
+              
+              <Route path="/client-dashboard" element={<ClientDashboard />} />
 
               <Route
                 path="/msg-admin"

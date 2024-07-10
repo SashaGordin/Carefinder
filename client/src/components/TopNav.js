@@ -10,7 +10,6 @@ export default function TopNav() {
   const { currentUser, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const [activePage, setActivePage] = useState(location.pathname);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,14 +49,6 @@ export default function TopNav() {
     }
   };
 
-  const handleNavClick = (path) => {
-    setActivePage(path);
-  };
-
-  // const navLinkStyle = (path) => ({
-  //   color: activePage === path ? "white" : "#777777",
-  //   fontWeight: activePage === path ? "bold" : "normal",
-  // });
 
   if (loading) {
     return <div>Loading...</div>; 
@@ -149,8 +140,9 @@ export default function TopNav() {
         {role === "admin" && (
           <ul className="CF2-menu">
             <li className="CF2-menu-item CF2-dropdown">
-              <a href="#about" className="CF2-dropdown-toggle">Admin Utils</a>
+              <a href="#about" className="CF2-dropdown-toggle">Admin</a>
               <ul className="CF2-dropdown-menu">
+                <li><a href="/msg-inbox">Inbox</a></li>
                 <li><a href="/msg-admin">Admin Messenger</a></li>
                 <li><a href="/msg-admin-spoof">Admin Messenger Spoof</a></li>
                 <li><a href="/admin-client-viewer">User Viewer</a></li>

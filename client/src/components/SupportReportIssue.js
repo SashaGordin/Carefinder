@@ -14,7 +14,6 @@ import { Timestamp } from 'firebase/firestore';
 
 export default function SupportReportIssue() {
 
-    const [error, setError] = useState('');
     const [messageSent, setMessageSent] = useState(false);
 
     const handleSubmit = async () => {

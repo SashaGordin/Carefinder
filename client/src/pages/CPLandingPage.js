@@ -1,5 +1,4 @@
 import React from 'react';
-import { Image } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 // THIS PAGE IS:  /care-provider
@@ -13,7 +12,6 @@ export default function CPLandingPage() {
 
   const listStyle = { listStyleType: 'none', padding: 0 };
   const listItemStyle = { position: 'relative', paddingLeft: '40px', marginBottom: '10px' };
-  const checkmarkStyle = { content: '"\\2713"',  position: 'absolute', left: 0, color: '#ff6699' };
 
   const navigate = useNavigate();
   const handleButtonClick = () => {

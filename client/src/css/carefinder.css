@@ -288,6 +288,7 @@ body#CF ul.custom-checkmark-list{     padding-left: 30px !important;
 }
   
 .homeTopBackground { background: url(/client/public/homeback1.jpg);     background-size: cover;   padding: 30px; } 
+.CPhomeTopBackground { background: url(/client/public/pageback1.jpg);     background-size: cover;   padding: 30px; } 
 
 /* GLOBAL */
 .left60, .left40, .right60, .right40, .left50, .right50 {float:left;}

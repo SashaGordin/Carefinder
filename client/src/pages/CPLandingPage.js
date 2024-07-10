@@ -29,15 +29,25 @@ export default function CPLandingPage() {
 
       <div className="CProw1 CFgrayBackground">
         <div className="contentContainer">
-          <div className="left60">
-            <h1 className='CFpink'>Don't overpay for senior referrals</h1>
-            <p>No commission, no absurd placement fees. Built by care providers for care providers.</p>
-            <button type="button" className="btn btn-dark" onClick={handleButtonClick}>Claim Profile</button>
-          </div>
-          <div className="right40">
-            <Image src='cooking.jpg' alt="Welcome to CareFinder" />
-          </div>
-          <div className="clear"></div>
+
+        <div className="CPhomeTopBackground">
+
+            <div className="left60">
+
+              <h1 className='CFpink'>Don't overpay for senior referrals</h1>
+              <p>No absurd placement fees. Built by and for AFDH care providers. Land private pay seniors, risk free.</p>
+              <button type="button" className="btn btn-dark" onClick={handleButtonClick}>Claim Profile</button>
+
+            </div>
+
+            <div className="right40">
+              &nbsp;
+            </div>
+
+            <div className="clear"></div>
+
+            </div>
+
         </div>
       </div>
 

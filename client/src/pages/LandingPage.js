@@ -35,8 +35,8 @@ export default function LandingPage() {
 
               <div className="homeTopBackground">
 
-                  <div className="left50">
-                    <h2 className="CFpink">Match with Adult Family Homes</h2>
+                  <div className="left60">
+                    <h2>Adult Family Homes,<br></br>King County, WA</h2>
                     <p style={{ textShadow: '2px 2px 0 black' }}>The easy way to reserve a room and book care within an Adult Family Home for 24/7 senior care.</p>
 
                         <div className="homeLookup">
@@ -51,7 +51,7 @@ export default function LandingPage() {
 
                   </div>
           
-                  <div className="right50">
+                  <div className="right40">
                     &nbsp;
                   </div>
         

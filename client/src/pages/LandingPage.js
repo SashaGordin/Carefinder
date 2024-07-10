@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { Card, Alert, Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
 import { Link } from 'react-router-dom';
-import { FaCheck } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 import TopNav from "../components/TopNav";
@@ -10,8 +9,6 @@ import Accordion from 'react-bootstrap/Accordion';
 import YoutubeEmbed from "../components/YoutubeEmbed";
 
 export default function LandingPage() {
-
-  const [error, setError] = useState('');
 
   const [query, setQuery] = useState('');
   const navigate = useNavigate();
@@ -23,7 +20,6 @@ export default function LandingPage() {
 
   const listStyle = { listStyleType: 'none', padding: 0 };
   const listItemStyle = { position: 'relative', paddingLeft: '40px', marginBottom: '20px' };
-  const checkmarkStyle = { content: '"\\2713"',  position: 'absolute', left: 0, color: '#ff6699' };
 
   return (
     <>

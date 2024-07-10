@@ -168,8 +168,9 @@ export default function TopNav() {
             <li className="CF2-menu-item CF2-dropdown">
               <a href="#about" className="CF2-dropdown-toggle">Providers</a>
               <ul className="CF2-dropdown-menu">
-                <li><a href="/care-provider-dashboard">Provider Dashboard</a></li>
-                <li><a href="/provider-menu">Provider Menu</a></li>
+              <li><a href="/care-provider">Provider Info</a></li>
+              <li><a href="/care-provider-dashboard">Provider Dashboard</a></li>
+              <li><a href="/provider-menu">Provider Menu</a></li>
                 <li><a href="/your-listings">Provider Listings</a></li>
               </ul>
             </li>

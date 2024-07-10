@@ -627,7 +627,7 @@ p.copyright { margin-top:40px; font-size:70%;}
   font-size: 30px;
   text-decoration: none;
   padding: 10px 20px;
-  display: block;
+  display: block;font-weight:bold;
 }
 
 .CF2-menu-item a:hover,

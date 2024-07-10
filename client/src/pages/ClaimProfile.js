@@ -71,6 +71,7 @@ export default function ClaimProfile() {
 		<>
 			<TopNav />
 			<div className="contentContainer utilityPage">
+				{error && <div>{error}</div>}
 				{currentStep === 1 && (
 					<Step1 onNext={handleNext} setProviderInfo={setProviderInfo} />
 				)}

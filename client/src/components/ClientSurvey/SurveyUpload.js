@@ -1,8 +1,7 @@
 import React from "react";
 import { Button, Container, Row, Col, Form } from "react-bootstrap";
-import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
-import { getDoc, doc } from 'firebase/firestore';
-import { firestore } from '../../firebase'; 
+import { getStorage, ref, uploadBytes, deleteObject } from "firebase/storage";
+import { firestore } from '../../firebase';
 
 /**
  * HIPAA COMPLIANCE NOTES: We originally were encrypting when taking in PDF assessments.
@@ -32,7 +31,7 @@ const SurveyUpload = ({ assessment, description, onNext, onBack }) => {
 		const storage = getStorage();
 		const fileList = document.getElementById("formPDFupload").files;
 		const acceptableMimeTypes = ['application/pdf'];
-	
+
 		for (const file of fileList) {
 
 			if (acceptableMimeTypes.includes(file.type)) {
@@ -42,10 +41,10 @@ const SurveyUpload = ({ assessment, description, onNext, onBack }) => {
 					const fileData = await readFileAsync(file);
 
 					if (fileData) {
-	
+
 						// get userID from localstorage
 						const localStorageCurrentUserID = localStorage.getItem('localStorageCurrentUserID');
-						
+
 						// Lookup if this person has an assessment on file already
                         const userRef = firestore.collection('users').doc(localStorageCurrentUserID);
                         const userDoc = await userRef.get();
@@ -61,11 +60,11 @@ const SurveyUpload = ({ assessment, description, onNext, onBack }) => {
                                 console.log('File deleted successfully!');
                             }
                         }
-						
+
 						// Make new filename including the person's userID.
-						// I think, for HIPAA purposes, this could come in handy as a double-check, 
+						// I think, for HIPAA purposes, this could come in handy as a double-check,
 						// where, if a user is requesting a PDF that he/she uploaded, we can double check
-						// that his/her userID is in the filename as a substring, ensuring that we never 
+						// that his/her userID is in the filename as a substring, ensuring that we never
 						// accidentally show someone another person's assessment.
 						const assessmentNewFileName = localStorageCurrentUserID + '-' + Date.now().toString() + '.pdf';
 						const storageRef = ref(storage, `assessments/${assessmentNewFileName}`);
@@ -75,7 +74,7 @@ const SurveyUpload = ({ assessment, description, onNext, onBack }) => {
 
 							await uploadBytes(storageRef, fileData);
 							console.log('Okay, uploaded ' + file.name + ' ... as: ' + assessmentNewFileName + '!');
-		
+
 							// Update the user document with the new data
 							console.log ('Update user record: '+localStorageCurrentUserID + '...');
 							const userRef = firestore.collection('users').doc(localStorageCurrentUserID);
@@ -115,7 +114,7 @@ const SurveyUpload = ({ assessment, description, onNext, onBack }) => {
 		}
 
 	};
-	
+
 	const readFileAsync = (file) => {
 		return new Promise((resolve, reject) => {
 			const reader = new FileReader();
@@ -129,7 +128,7 @@ const SurveyUpload = ({ assessment, description, onNext, onBack }) => {
 				reject(error);
 			};
 		});
-	};  
+	};
 
 	return (
 		<>

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Card } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 export default function RoomCard({ userData, roomData, listingData, handleRoomUpdate, facilityPath}) {
   const navigate = useNavigate();
 
- 
+
   const [isAvailable, setIsAvailable] = useState(roomData.isAvailable);
   let listingStatus = isAvailable ? "Listing is on" : "Listing is off";
   let toggleImg = isAvailable ? "toggleon.png" : "toggleoff.png";
@@ -22,17 +22,17 @@ export default function RoomCard({ userData, roomData, listingData, handleRoomUp
   return (
 
     <>
-    
+
       <div className="singleRoomCard">
 
         <div className='CFListingCardHeader2'>
 
           <div className="CFListingStatus2">
             {listingStatus}
-            <img onClick={toggleListing} src={toggleImg}/>
+            <img alt="" onClick={toggleListing} src={toggleImg}/>
           </div>
 
-          
+
           <div className="clear"></div>
 
         </div>
@@ -41,7 +41,7 @@ export default function RoomCard({ userData, roomData, listingData, handleRoomUp
 
         <div className="CFListingImgContainer2">
 
-          <div className="CFPlaceholderImg2"><img height='100px' src={(roomData.roomPhotos && roomData.roomPhotos[0]) ?? defaultListingImg}/></div>
+          <div className="CFPlaceholderImg2"><img alt="" height='100px' src={(roomData.roomPhotos && roomData.roomPhotos[0]) ?? defaultListingImg}/></div>
 
           <Button onClick={editListing}>Edit listing</Button>
 

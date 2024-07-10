@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
-import { Button, Card } from 'react-bootstrap';
-import axios from 'axios';
+import React from 'react';
+import { Card } from 'react-bootstrap';
 
-export default function Step1({}) {
+export default function Step1() {
   return (
 
     <>

@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Button, Card, Form } from "react-bootstrap";
+import React from "react";
+import { Button, Card } from "react-bootstrap";
 
 export default function Step8({ onNext, onBack }) {
-  const [agreed, setAgreed] = useState(false);
+  // const [agreed, setAgreed] = useState(false);
 
-  const handleChange = () => {
-    setAgreed(!agreed);
-  };
+  // const handleChange = () => {
+  //   setAgreed(!agreed);
+  // };
 
   return (
     <>

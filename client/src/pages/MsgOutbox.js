@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { firestore } from '../firebase'; 
+import { firestore } from '../firebase';
 import { Timestamp } from 'firebase/firestore';
-import { useLocation } from 'react-router-dom'; 
+import { useLocation } from 'react-router-dom';
 import TopNav from "../components/TopNav";
 import Footer from "../components/Footer";
 import { Alert } from 'react-bootstrap';
@@ -9,7 +9,7 @@ import firebase from 'firebase/compat/app';
 import 'firebase/compat/storage';
 
 // TODOs:
-// Not sure if we're doing any Calendly integration on the Provider or User side, 
+// Not sure if we're doing any Calendly integration on the Provider or User side,
 // but we may need to do some adjustments here if so.
 
 /**
@@ -17,8 +17,8 @@ import 'firebase/compat/storage';
  *  Access to this page s/b done as follows:
  *         [root]/msg-outbox?ref=[userID]&type=[type]&property=[propertyID]
  *  'ref' is the userID of the message recipient
- *  'propertyID' -- not required, but if it is there it s/b the "LicenseNumber" 
- *      on record for the recipient (provider). If present, we can lookup the 
+ *  'propertyID' -- not required, but if it is there it s/b the "LicenseNumber"
+ *      on record for the recipient (provider). If present, we can lookup the
  *      'FacilityName' tp pass along to the provider in the message
  *  'type' is optional, but can be:
  *      [blank] == message is a standard message (text message)
@@ -36,7 +36,7 @@ const MsgOutbox = () => {
   const [messageSent, setMessageSent] = useState(false);
   const location = useLocation();
 
-  const [currentUserID, setCurrentUserID] = useState(localStorage.getItem('localStorageCurrentUserID') || '');
+  const currentUserID = localStorage.getItem('localStorageCurrentUserID') || '';
 
   const [messageType, setMessageType] = useState('');
   const [messagePrepend, setMessagePrepend] = useState('');
@@ -108,7 +108,7 @@ const MsgOutbox = () => {
     const type = params.get('type');
 
     if (type && possibleMessageTypes.includes(type)) {
-      
+
       setMessageType(type);
 
       switch(type) {
@@ -133,12 +133,12 @@ const MsgOutbox = () => {
 
         default:
           setMessageExplanation('🧿 You are sending a normal text message to this user.');
-      }      
+      }
 
     } else {
       console.log('Invalid request for *type*. Kthx.');
-      setMessageType(null); 
-    }    
+      setMessageType(null);
+    }
 
       // Check if senderAssessmentFile exists in Firebase Storage
       if (senderAssessmentFile) {
@@ -155,14 +155,15 @@ const MsgOutbox = () => {
           });
       } else {
         console.log('No assessment on file');
-      }       
+      }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.search, senderAssessmentFile, messageAppend]);
 
   const sendMessage = async () => {
     if (recipientID === currentUserID) {
       alert('You cannot send yourself a message. Kthx. :-)');
-      return; 
+      return;
     }
 
 // TO: LXxo4pjrsSYgb3xmOfC4Loco8L03
@@ -181,7 +182,7 @@ const MsgOutbox = () => {
 
     const currentTimestamp = Timestamp.now();
 
-    await dbCollection.add({ 
+    await dbCollection.add({
       msgDate: currentTimestamp,
       msgTo: recipientID,
       msgFrom: currentUserID,
@@ -191,22 +192,22 @@ const MsgOutbox = () => {
       msgStatus: 0,
       msgResponseSent: 0,
       msgType: messageType
-    }); 
+    });
 
     setMessageSent(true);
     document.getElementById('messageTextArea').value = '';
 
-    /* 
+    /*
       Drop a note that this convo is initiated... OKAY,so WHY do we leave this message from the system?  Yes, good question, lol...
       It's actually a long, convuluted tale. Basically, it's because we can't really do complex queries in Firebase (multiple WHERE/OR clauses, which is what I'd planned for b/c you can do that fairly readily in MySQL). Anyway, the inbox script does an initial query of all messages sent TO a user (the current user). However, in some cases like this, the initial request is technically an OUTGOING one -- i.e. user X sends a message out TO provider Y. This makes for a problem because the request would not be shown in the User X Inbox, as there is no incoming message to User X. The refactoring required to fix this seemed even more convoluted than this simple solution which is to force a reply, thus allowing the MsgThread component to automatically pick up the fact that a conversation is ongoing.
 
       UPDATE: I decided to expand on this solution a bit... will HIDE this message by passing a value of 1 to msgHide in the DB.
-    */    
+    */
     let followUpMessage = '(System note: Your '+messageTypeDisplay+' was sent. Check back here for replies. This message will be hidden in the inbox.)';
-     
+
     const futureTimestamp = new Timestamp(currentTimestamp.seconds + 5, currentTimestamp.nanoseconds);
 
-    await dbCollection.add({ 
+    await dbCollection.add({
       msgDate: futureTimestamp,
       msgTo: currentUserID,
       msgFrom: recipientID,
@@ -217,11 +218,11 @@ const MsgOutbox = () => {
       msgResponseSent: 0,
       msgType: messageType,
       msgHide: 1
-    });   
+    });
 
 
     // Hide message sent alert after 10 seconds
-    setTimeout(() => setMessageSent(false), 10000); 
+    setTimeout(() => setMessageSent(false), 10000);
   };
 
   return (
@@ -229,7 +230,7 @@ const MsgOutbox = () => {
       <TopNav />
       <div className="contentContainer utilityPage">
 
-        {!recipientID && 
+        {!recipientID &&
           <Alert variant="warning">⚠️WARNING:  To use this page, you must access it with a valid userID in the URL, such as "?ref=12345"! If you are seeing this, you should navigate elsewhere and follow a link here. Thanks. </Alert>
         }
 

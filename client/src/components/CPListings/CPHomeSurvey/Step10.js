@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
-import { Button, Card, Form, Image} from 'react-bootstrap';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import FileUpload from '../FileUpload';
+import React from 'react';
+import { Card, Form} from 'react-bootstrap';
 
 export default function Step10({ listingInfo, setListingInfo }) {
-  const options = ["Seniors only", "Women only", "Men only", "Developmentally disabled only", "Other"]; 
+  const options = ["Seniors only", "Women only", "Men only", "Developmentally disabled only", "Other"];
   const handleChange = () => {
     let options = [];
     document.querySelectorAll("[type='checkbox']:checked").forEach((t) => {
         options.push(t.id);
     });
     setListingInfo({
-      ...listingInfo, 
+      ...listingInfo,
       demographics: options});
   }
 
@@ -24,7 +22,7 @@ export default function Step10({ listingInfo, setListingInfo }) {
           <Card.Title>What are the current demographics of your home?</Card.Title>
           <Form>
               {options.map((option) => (
-                  <Form.Check 
+                  <Form.Check
                     key={option}
                     type='checkbox'
                     id={option}

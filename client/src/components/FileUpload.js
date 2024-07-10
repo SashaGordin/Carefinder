@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { Button, Card, Form } from 'react-bootstrap';
 
@@ -6,12 +6,12 @@ import { Button, Card, Form } from 'react-bootstrap';
 // import axios from 'axios';
 
 const FileUpload = () => {
-  
-  const [file, setFile] = useState(null);
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
-  };
+  // const [file, setFile] = useState(null);
+
+  // const handleFileChange = (e) => {
+  //   setFile(e.target.files[0]);
+  // };
 
   const handleUploadFiles = () => {
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { firestore } from '../firebase'; // Assuming you have firebase.js setup
 import { getDoc, doc, setDoc } from 'firebase/firestore';
-import { useAuth } from "../contexts/AuthContext";
 
 import Step1 from '../components/CPListings/CPHomeSurvey/Step1';
 import Step2 from '../components/CPListings/CPHomeSurvey/Step2';
@@ -22,8 +21,8 @@ import Step14 from '../components/CPListings/CPHomeSurvey/Step14';
 
 
 
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import { Button, Card, Alert} from 'react-bootstrap';
+import { useNavigate, useLocation } from "react-router-dom";
+import { Button, Alert } from 'react-bootstrap';
 
 
 import TopNav from "../components/TopNav";
@@ -53,14 +52,14 @@ export default function CPHomeSurvey() {
   }
 
   const handleBack = () => {
-    if (currentStep == 1) //go back to listings page
+    if (currentStep === 1) //go back to listings page
 		navigate("/your-listings");
 	else
 		setCurrentStep(currentStep - 1);
   };
 
   const handleSubmit = () => {
-    handleUpdate(listingInfo).then(() => {       
+    handleUpdate(listingInfo).then(() => {
        navigate("/your-listings");
     });
   }
@@ -109,10 +108,10 @@ export default function CPHomeSurvey() {
       {currentStep === 14 && <Step14 setListingInfo={setListingInfo} listingInfo={listingInfo}/>}
 
 
-		  <div className="SurveyBtnGroup d-flex justify-content-between">          
+		  <div className="SurveyBtnGroup d-flex justify-content-between">
 			  <Button onClick={handleBack}>Back</Button>
 			  {currentStep < 14 &&<Button onClick={handleNext}>Next</Button>}
-        {currentStep == 14 && <Button onClick={handleSubmit}>Submit</Button>}
+        {currentStep === 14 && <Button onClick={handleSubmit}>Submit</Button>}
       </div>
     </div>
     <Footer />

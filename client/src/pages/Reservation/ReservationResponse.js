@@ -47,6 +47,7 @@ export default function ReservationResponse() {
 
 		fetchUserData();
 		fetchProviderData();
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	let messageProviderID = currentUser.uid;

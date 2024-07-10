@@ -3,8 +3,6 @@ import React, { useState, useEffect } from "react";
 import {
 	updateDoc,
 	doc,
-	getDocs,
-	collection,
 	getDoc,
 } from "firebase/firestore";
 import ToggleOption from "./ToggleOptions/ToggleOption";

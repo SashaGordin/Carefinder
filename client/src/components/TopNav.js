@@ -54,10 +54,10 @@ export default function TopNav() {
     setActivePage(path);
   };
 
-  const navLinkStyle = (path) => ({
-    color: activePage === path ? "white" : "#777777",
-    fontWeight: activePage === path ? "bold" : "normal",
-  });
+  // const navLinkStyle = (path) => ({
+  //   color: activePage === path ? "white" : "#777777",
+  //   fontWeight: activePage === path ? "bold" : "normal",
+  // });
 
   if (loading) {
     return <div>Loading...</div>; 

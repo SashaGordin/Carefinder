@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
-import { Button, Card, Form, Image} from 'react-bootstrap';
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import FileUpload from '../FileUpload';
+import React from 'react';
+import { Card, Form } from 'react-bootstrap';
 
 export default function Step7({ listingInfo, setListingInfo }) {
   const options = ["French", "Spanish", "German"]; //TODO add comprehesnive list of languages
@@ -11,7 +9,7 @@ export default function Step7({ listingInfo, setListingInfo }) {
         options.push(t.id);
     });
     setListingInfo({
-      ...listingInfo, 
+      ...listingInfo,
       languages: options});
   }
 
@@ -25,7 +23,7 @@ export default function Step7({ listingInfo, setListingInfo }) {
           <Card.Text>Do you or the staff speak any languages other than English?</Card.Text>
           <Form>
               {options.map((option) => (
-                  <Form.Check 
+                  <Form.Check
                     key={option}
                     type='checkbox'
                     id={option}

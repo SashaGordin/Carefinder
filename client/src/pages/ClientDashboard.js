@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Card, Button, Alert } from "react-bootstrap";
-import { useAuth } from "../contexts/AuthContext";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
 	GoogleMap,
 	useLoadScript,
@@ -32,23 +30,15 @@ import { useLocation } from 'react-router-dom';
 
 
 export default function ClientDashboard() {
-	const [error, setError] = useState("");
-	const [open, setOpen] = useState(false);
+
 	const [searchQuery, setSearchQuery] = useState("");
-	const { logout, currentUser } = useAuth();
-	const navigate = useNavigate();
 	const [providers, setProviders] = useState([]);
-	const [map, setMap] = useState(null);
 	const [mapBounds, setMapBounds] = useState(null);
-	const isMounted = useRef(false);
 	const [selectedMarker, setSelectedMarker] = useState(null); // State to track selected marker
 	const mapRef = useRef(null); // useRef to store the map instance
 	const boundsRef = useRef(null); // useRef to store the boundaries
 	const providerListRef = useRef(null);
-	const [isScrolling, setIsScrolling] = useState(false);
 	const [isBoundsChanging, setIsBoundsChanging] = useState(false);
-	const [prevBounds, setPrevBounds] = useState(null);
-	const [isMapDraggable, setIsMapDraggable] = useState(true);
 	const [initialLoad, setInitialLoad] = useState(true);
 	const [zip, setZip] = useState(null);
 	const [city, setCity] = useState(null);
@@ -130,6 +120,7 @@ export default function ClientDashboard() {
 			handleMapBoundsChanged();
 			setInitialLoad(false); // Set initialLoad to false after the initial load
 		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const handleSearch = async () => {
@@ -367,7 +358,7 @@ export default function ClientDashboard() {
 									onBoundsChanged={handleMapBoundsChanged}
 									options={mapOptions}
 								>
-									{providers.length > 0 &&
+									{providers && providers.length > 0 &&
 										providers.map((provider) => (
 											<Marker
 												key={provider.id}
@@ -402,7 +393,7 @@ export default function ClientDashboard() {
 										justifyContent: "center",
 									}}
 								>
-									{nearbyBigCities.map((city) => (
+									{nearbyBigCities && nearbyBigCities.map((city) => (
 										<li
 											key={city.name}
 											onClick={() => panToCity(city)}
@@ -428,7 +419,7 @@ export default function ClientDashboard() {
 							}}
 							ref={providerListRef}
 						>
-							{providers.length > 0 ? (
+							{providers && providers.length > 0 ? (
 								providers.map((provider) => (
 									<ProviderCard
 										key={provider.LicenseNumber}

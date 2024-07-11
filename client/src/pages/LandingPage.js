@@ -10,11 +10,23 @@ import YoutubeEmbed from "../components/YoutubeEmbed";
 
 export default function LandingPage() {
 	const [query, setQuery] = useState("");
+	const [errorMessage, setErrorMessage] = useState("");
 	const navigate = useNavigate();
 
 	const handleSearch = () => {
-		const encodedQuery = encodeURIComponent(query);
-		navigate(`/client-dashboard?refLookup=${encodedQuery}`);
+		const trimmedQuery = query.trim();
+		const isZipCode = /^\d{5}$/.test(trimmedQuery);
+		const hasCityAndState = /\w+,\s*\w{2}/.test(trimmedQuery);
+
+		if (isZipCode || hasCityAndState) {
+			setErrorMessage(""); // Clear any previous error message
+			const encodedQuery = encodeURIComponent(trimmedQuery);
+			navigate(`/client-dashboard?refLookup=${encodedQuery}`);
+		} else {
+			setErrorMessage(
+				"Please enter a valid city and state (e.g., City, State) or a valid 5-digit zipcode."
+			);
+		}
 	};
 
 	const listStyle = { listStyleType: "none", padding: 0 };
@@ -49,6 +61,19 @@ export default function LandingPage() {
 								/>
 								<button onClick={handleSearch}>Search</button>
 							</div>
+
+							{errorMessage && (
+								<div
+									style={{
+										color: "red",
+										marginTop: "10px",
+										textAlign: "left",
+										fontSize: "14px",
+									}}
+								>
+									{errorMessage}
+								</div>
+							)}
 						</div>
 
 						<div className="right40">&nbsp;</div>

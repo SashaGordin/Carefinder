@@ -11,8 +11,7 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import ProviderCard from "../components/ProviderCard";
 import { debounce } from "lodash";
-// import { useLocation } from 'react-router-dom';
-
+import { useLocation } from "react-router-dom";
 
 /**
  * TODO:  This page accepts a new param in the URL, sent here from the home page. Sample is:
@@ -21,16 +20,14 @@ import { debounce } from "lodash";
  * pass it to the script below so that people can see their search immediately.
  * I imported useLocation, above to grab it, and then isolated it below as 'refLookup'
  * But I'm not sure how to best pass it to the page as a default location.
- * I think maybe we'd use a useEffect and, if the refLookup is present, we lookup its latitude/longitude using google Geocoder, and then set the lat/long as startingpoint instead of the existing default starting point. Since @sasha is most familiar here, I thought I'd leave it for you. 
- * 
- * 
+ * I think maybe we'd use a useEffect and, if the refLookup is present, we lookup its latitude/longitude using google Geocoder, and then set the lat/long as startingpoint instead of the existing default starting point. Since @sasha is most familiar here, I thought I'd leave it for you.
+ *
+ *
  * ALSO...
  * Anyone can now search this page and see results (no login required.) BUT, Micah wants it so that, when the provider card comes up, you have to be logged in to be able to continue (e.g., messsage the provider or reserve a room). I wasn't sure what the final flow is, but I think basically if they're not logged in, then the reserve room and message buttons would maybe either just go to the signup / login page, or maybe flash an alert on screen first to tell people they need to join (for free) first before continuing. I didn't make this change as I wasn't sure what the final flow would be.
  */
 
-
 export default function ClientDashboard() {
-
 	const [searchQuery, setSearchQuery] = useState("");
 	const [providers, setProviders] = useState([]);
 	const [mapBounds, setMapBounds] = useState(null);
@@ -43,8 +40,15 @@ export default function ClientDashboard() {
 	const [zip, setZip] = useState(null);
 	const [city, setCity] = useState(null);
 	const [nearbyBigCities, setNearbyBigCities] = useState([]);
+	const [errorMessage, setErrorMessage] = useState("");
+
+
 
 	let delayDuration = 500;
+
+	const location = useLocation();
+	const searchParams = new URLSearchParams(location.search);
+	const refLookup = searchParams.get("refLookup");
 
 	// ADDED THIS TO GRAB a posible "refLookup" passed here.
 	// Need to make this autoload on the page somehow, if present and valic
@@ -117,17 +121,28 @@ export default function ClientDashboard() {
 
 	useEffect(() => {
 		if (initialLoad) {
-			handleMapBoundsChanged();
+			if (refLookup) {
+				setSearchQuery(refLookup);
+				handleSearch(refLookup);
+			} else {
+				handleMapBoundsChanged();
+			}
 			setInitialLoad(false); // Set initialLoad to false after the initial load
 		}
-	// eslint-disable-next-line react-hooks/exhaustive-deps
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const handleSearch = async () => {
-		const query = searchQuery.trim();
+	const handleSearch = async (refQuery) => {
+		let query;
+		if (refQuery) {
+			query = refQuery.trim();
+		} else {
+			query = searchQuery.trim();
+		}
 		const isZipCode = /^\d{5}$/.test(query); // Check if the query is a 5-digit zipcode
 		const hasCityAndState = /\w+,\s*\w{2}/.test(query);
 		if (isZipCode || hasCityAndState) {
+			setErrorMessage("");
 			try {
 				const response = await axios.post(
 					`${process.env.REACT_APP_ENDPOINT}/getAddress`,
@@ -149,13 +164,12 @@ export default function ClientDashboard() {
 				boundsRef.current = newBounds;
 				getProvidersFromBounds();
 			} catch (error) {
-				console.error("Error searching:", error);
+				setErrorMessage("An error occurred while searching. Please try again.");
 			}
 		} else {
 			// If the query doesn't contain a valid zipcode or city, prompt the user to enter a valid input
-			alert(
-				"Please enter a valid city and state (e.g., City, State) or a valid 5-digit zipcode."
-			);
+			setErrorMessage("Please enter a valid city and state (City, State) or a valid 5-digit zipcode.");
+
 		}
 	};
 
@@ -303,7 +317,7 @@ export default function ClientDashboard() {
 							marginRight: "10px",
 							position: "relative",
 							top: 6,
-							fontSize:'20px',
+							fontSize: "20px",
 						}}
 					/>
 					<button
@@ -338,6 +352,19 @@ export default function ClientDashboard() {
 				</div>
 			</div>
 
+			{errorMessage && (
+      <div
+        style={{
+          color: "red",
+          marginTop: "10px",
+          textAlign: "center",
+          width: "100%",
+        }}
+      >
+        {errorMessage}
+      </div>
+    )}
+
 			<div className="CFblackBackground">
 				<div className="contentContainer" style={{ padding: "20px" }}>
 					<div style={{ textAlign: "center", marginBottom: "20px" }}>
@@ -353,12 +380,17 @@ export default function ClientDashboard() {
 								<GoogleMap
 									zoom={zoomRef.current}
 									center={startingPosition.current}
-									mapContainerStyle={{ width: "100%", height: "500px", borderRadius:10 }}
+									mapContainerStyle={{
+										width: "100%",
+										height: "500px",
+										borderRadius: 10,
+									}}
 									onLoad={handleMapLoad}
 									onBoundsChanged={handleMapBoundsChanged}
 									options={mapOptions}
 								>
-									{providers && providers.length > 0 &&
+									{providers &&
+										providers.length > 0 &&
 										providers.map((provider) => (
 											<Marker
 												key={provider.id}
@@ -393,16 +425,17 @@ export default function ClientDashboard() {
 										justifyContent: "center",
 									}}
 								>
-									{nearbyBigCities && nearbyBigCities.map((city) => (
-										<li
-											key={city.name}
-											onClick={() => panToCity(city)}
-											style={{ listStyle: "none", textAlign: "center" }}
-										>
-											{/* <img src={city.image} alt={city.name} style={{ width: "50px", height: '50px', objectFit: "cover", borderRadius: "5px", margin: '0 auto' }} /> */}
-											<div>{city.name}</div>
-										</li>
-									))}
+									{nearbyBigCities &&
+										nearbyBigCities.map((city) => (
+											<li
+												key={city.name}
+												onClick={() => panToCity(city)}
+												style={{ listStyle: "none", textAlign: "center" }}
+											>
+												{/* <img src={city.image} alt={city.name} style={{ width: "50px", height: '50px', objectFit: "cover", borderRadius: "5px", margin: '0 auto' }} /> */}
+												<div>{city.name}</div>
+											</li>
+										))}
 								</ul>
 							</div>
 						</div>

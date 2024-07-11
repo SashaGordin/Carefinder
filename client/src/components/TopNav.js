@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { getDoc, doc } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
 import { firestore } from "../firebase";
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 export default function TopNav() {
   const [role, setRole] = useState("");
   const [loading, setLoading] = useState(true);
   const { currentUser, logout } = useAuth();
-  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,7 +50,7 @@ export default function TopNav() {
 
 
   if (loading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   return (
@@ -76,11 +75,11 @@ export default function TopNav() {
           </ul>
         )}
 
-        {/** 
+        {/**
          *   ****************************************************************
          *   END GUEST ROLE MENU
          *   ****************************************************************
-         * 
+         *
          *   ****************************************************************
          *   BEGIN CLIENT ROLE == GUEST VISITOR LOGGED IN AS A CLIENT
          *   ****************************************************************
@@ -105,7 +104,7 @@ export default function TopNav() {
          *   ****************************************************************
          *   END CLIENT ROLE MENU
          *   ****************************************************************
-         * 
+         *
          *   ****************************************************************
          *   BEGIN PROVIDER ROLE == GUEST VISITOR LOGGED IN AS A PROVIDER
          *   ****************************************************************
@@ -131,7 +130,7 @@ export default function TopNav() {
          *   ****************************************************************
          *   END PROVIDER ROLE MENU
          *   ****************************************************************
-         * 
+         *
          *   ****************************************************************
          *   BEGIN ADMIN ROLE == GUEST VISITOR LOGGED IN AS AN ADMIN
          *   ****************************************************************

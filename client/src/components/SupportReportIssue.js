@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react'
 import { Card } from 'react-bootstrap';
 import TopNav from "./TopNav";
 import Footer from "./Footer";
@@ -14,7 +14,6 @@ import { Timestamp } from 'firebase/firestore';
 
 export default function SupportReportIssue() {
 
-    const [error, setError] = useState('');
     const [messageSent, setMessageSent] = useState(false);
 
     const handleSubmit = async () => {

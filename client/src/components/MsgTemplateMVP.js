@@ -141,7 +141,7 @@ export default function MsgTemplateMVP({passData, hasArchives}) {
             const snapshot = await dbDocument.get();
             const userData = snapshot.data();
             if (userData) {
-                const profilePicPath = userData.profilePicPath;
+                let profilePicPath = userData.profilePicPath;
                 if (!profilePicPath) {profilePicPath='genericUser.jpg';}
                 console.log('Profile picture path:', profilePicPath);
                 return profilePicPath;

@@ -11,7 +11,7 @@ import Footer from "../components/Footer";
 import axios from "axios";
 import ProviderCard from "../components/ProviderCard";
 import { debounce } from "lodash";
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 
 
 /**
@@ -48,9 +48,9 @@ export default function ClientDashboard() {
 
 	// ADDED THIS TO GRAB a posible "refLookup" passed here.
 	// Need to make this autoload on the page somehow, if present and valic
-	const location = useLocation();
-	const searchParams = new URLSearchParams(location.search);
-	const refLookup = searchParams.get('refLookup');
+	// const location = useLocation();
+	// const searchParams = new URLSearchParams(location.search);
+	// const refLookup = searchParams.get('refLookup');
 
 	const getProvidersFromBounds = () => {
 		setIsBoundsChanging(false);

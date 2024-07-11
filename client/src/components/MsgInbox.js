@@ -3,9 +3,8 @@ import TopNav from "./TopNav";
 import Footer from "./Footer";
 
 import { useAuth } from "../contexts/AuthContext";
-import { getDoc, doc } from 'firebase/firestore';
 import { firestore } from '../firebase'; 
-import { Card, Button } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 //import MsgTemplate from "./MsgTemplate";
@@ -14,8 +13,7 @@ import MsgTemplateMVP from "./MsgTemplateMVP";
 //v20240430.837pm
 export default function MsgInbox() {
 
-    const [error, setError] = useState('');
-    const {login, currentUser } = useAuth()
+    const { currentUser } = useAuth()
     const [userMessages, setUserMessages] = useState([]); 
     const [hasMessages, setHasMessages] = useState(0); 
 
@@ -24,7 +22,6 @@ export default function MsgInbox() {
         navigate('/');
       };
     
-    const [loading, setLoading] = useState(false);
     const [containsArchives, setContainsArchives] = useState(0);
     useEffect(() => { return; }, [containsArchives]);
 

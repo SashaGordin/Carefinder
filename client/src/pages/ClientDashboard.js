@@ -324,7 +324,7 @@ export default function ClientDashboard() {
 						id="findMatches"
 						type="button"
 						className="btn"
-						onClick={handleSearch}
+						onClick={() => handleSearch()}
 						style={{
 							padding: "10px 20px",
 							borderRadius: "10px",

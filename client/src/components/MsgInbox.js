@@ -29,7 +29,7 @@ export default function MsgInbox() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		fetchMessages();
-	}, []);
+	});
 
 	const fetchMessages = async () => {
 		let configs_msgTruncateLimit = 100;

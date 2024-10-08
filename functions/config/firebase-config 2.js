@@ -4,7 +4,7 @@ const serviceAccount = require("./serviceAccount.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://carefinder-4c036-default-rtdb.firebaseio.com",
+  storageBucket: "gs://carefinder-4c036.appspot.com",
 });
 
 module.exports = admin;

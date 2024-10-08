@@ -31,7 +31,7 @@ function MsgThread({threadID, pageIteration}) {
 
         // I want to ensure that all links that we present as links to users in the chat are
         // authentic. So, I will check to see that they contain the following substring:
-        // const validLinkSubstring = 'https://firebasestorage.googleapis.com/v0/b/carefinder-development.appspot.com';
+        // const validLinkSubstring = 'https://firebasestorage.googleapis.com/v0/b/carefinder-4c036.appspot.com';
         // NOTE.. leaving this in for now, but we may not use it initially...
         // ... refactoring some stuff in messaging per micah...
 

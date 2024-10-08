@@ -9,3 +9,5 @@
 .vscode
 
 /server/config/serviceAccount.json
+/functions/congig/serviceAccount.json
+ 

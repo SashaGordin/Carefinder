@@ -12,6 +12,8 @@ import CPDashboard from '../pages/CPDashboard';
 import CPListings from '../pages/CPListings';
 import CPHomeSurvey from '../pages/CPHomeSurvey';
 import CPRoomSurvey from '../pages/CPRoomSurvey';
+import CPSelectGreeting from '../pages/CPSelectGreeting';
+
 import ClientDashboard from '../pages/ClientDashboard';
 import { AuthProvider } from "../contexts/AuthContext"
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom"
@@ -200,6 +202,18 @@ function App() {
                       ['provider','admin']
                     }>
                       <CPRoomSurvey />
+                  </PrivateRoute>
+                }
+              />
+               <Route
+                path="/provider-greeting"
+                element={
+                  <PrivateRoute
+                    redirectPath="/signup"
+                    allowedRoles={
+                      ['provider','admin']
+                    }>
+                      <CPSelectGreeting />
                   </PrivateRoute>
                 }
               />

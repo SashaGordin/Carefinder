@@ -1,23 +1,25 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { Button, Card, Form } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 
 // to do later -- use server.js
 // import axios from 'axios';
 
-const FileUpload = ({controlId, handleNewFiles, folderPath, uploadLabel, uploadType, allowMultipleFiles}) => {
+const FileUpload = ({ controlId, handleNewFiles, folderPath, uploadLabel, uploadType, allowMultipleFiles }) => {
 
   // eslint-disable-next-line no-unused-vars
-  const [file, setFile] = useState(null);
   let acceptedFileTypes =
     uploadType === "Photo" ? "image/*" :
-    uploadType === "Video" ? "video/*" :
-    uploadType === "Document" ? "application/pdf" : "";
+      uploadType === "Video" ? "video/*" :
+        uploadType === "Document" ? "application/pdf" : "";
 
-  const handleFileChange = (e) => {
-    setFile(e.target.files[0]);
+  const hiddenFileInput = useRef(null);
+
+  // Programatically click the hidden file input element
+  // when the Button component is clicked
+  const handleClick = event => {
+    hiddenFileInput.current.click();
   };
-
   const handleUploadFiles = () => {
 
     const storage = getStorage();
@@ -53,8 +55,9 @@ const FileUpload = ({controlId, handleNewFiles, folderPath, uploadLabel, uploadT
           console.log("getting download url");
           return getDownloadURL(storageRef).then((url) => {
             let thisFileName = file.name;
-            return {name: thisFileName, path: url};
-          })});
+            return { name: thisFileName, path: url };
+          })
+        });
         console.log(uploadPromise);
         promises.push(uploadPromise);
       } else {
@@ -70,16 +73,14 @@ const FileUpload = ({controlId, handleNewFiles, folderPath, uploadLabel, uploadT
 
   return (
     <>
-      <Card className="claimProfileCard">
-        <Card.Body>
-          <Card.Title>{uploadLabel}</Card.Title>
-          <Form.Group controlId={controlId} className="mb-3 CFgrayBackground">
-            <Form.Control type="file" accept={acceptedFileTypes} multiple={allowMultipleFiles} onChange={handleFileChange}/>
-          </Form.Group>
-          <Button onClick={handleUploadFiles}>Upload</Button>
-        </Card.Body>
-      </Card>
 
+      <div>{uploadLabel}</div>
+      
+      <Form.Group controlId={controlId} className="d-none">
+        <Form.Control type="file" accept={acceptedFileTypes} multiple={allowMultipleFiles} ref={hiddenFileInput}
+          onChange={handleUploadFiles} />
+      </Form.Group>
+      <Button onClick={handleClick}>Upload</Button>
     </>
   );
 

@@ -17,4 +17,4 @@ jobs:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CAREFINDER_DEVELOPMENT }}
           channelId: live
-          projectId: carefinder-development
+          projectId: carefinder-4c036

@@ -12,12 +12,9 @@ export default function ProviderMenu() {
   const menuItems = [
     { title: 'Personal Info', icon: 'personal_info.png', description: 'Provide personal info so we can reach you', link: "/personal-info"},
     { title: 'Login & Security', icon: 'login.png', description: 'Update password and secure account' },
-    { title: 'Payment and Payout', icon: 'payment.png' },
-    { title: 'Policies', icon: 'policies.png', description: 'Update password and secure account' },
-    { title: 'Privacy', icon: 'privacy.png', description: 'Provide personal info so we can reach you', link: "/privacy"},
+    { title: 'Payment and Payout', icon: 'payment.png', description: 'Update your payment information' },
     { title: 'My Profile', icon: 'profile.png', description: 'Provide personal info so we can reach you' },
-    { title: 'Delete Account'},
-
+    { title: 'Delete Account', icon: 'profile.png', description: 'Delete your CareFinder account'},
 
     // Add more menu items as needed
   ];

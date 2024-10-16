@@ -89,7 +89,7 @@ body#CF {
 body#CF .fixed-top {position:initial; }
 
 body#CF a { color:#ff6699; text-decoration: none; }
-
+body#CF .msgThreadBox a { color:black; text-decoration:underline;}
 body#CF button {
     background:#ff6699;
     color:white;
@@ -105,12 +105,19 @@ body#CF .accordion button {
     border-radius: 10px;
 }
 
-#CF .card-body {
-    padding: 50px;
-    border-radius: 10px; }
-#CF .providerCard .card-body {
-    padding:10px;
-}
+.providerButton{text-align: right; margin-bottom: 20px;}
+body#CF .providerButton button {background: initial; border: 1px solid white;  padding: 5px 10px 5px 10px; }
+
+
+.welcomeProviderPage{ background: url(/client/public/pageback1.jpg); padding:40px; }
+
+.welcomeProviderPageBox {background:black; padding:60px; }
+
+#CF .card-body { padding: 50px; border-radius: 10px; }
+#CF .providerCard .card-body { padding:10px; }
+#CF .Pcard .card-body { padding:0px; }
+
+body#CF .CPlistings button {padding: 4px 9px 4px 9px; }
 
 body#CF button:hover {
     background:#000000;
@@ -129,23 +136,11 @@ body#CF button.btn-secondary:hover { background:#000000;}
     margin-right:auto;
 }
 
-#CF .card {
-    background:#333333;
-    color:white;
-    border-radius: 10px;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-#CF .clientLProw2right .card {
-    background:#333333;
-    color:white;
-    border-radius: 10px;
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-}
+#CF .card {  background:#333333;  color:white;  border-radius: 10px;  max-width: 500px; margin-left: auto;  margin-right: auto; }
+#CF .pcards_right .card{    background:#333333; color:white; border-radius: 10px; max-width: initial; margin-left: auto; margin-right: auto; }
+#CF .pcards_right .card button{  background: #333333; color: white; text-decoration: none; border: 1px solid white; border-radius: 10px; font-size: 90%; padding: 3px 10px 5px 10px; margin-top: 20px; float: right; }
+.cardPicLeft { width:50%; height: fit-content; }
+#CF .clientLProw2right .card { background:#333333; color:white; border-radius: 10px; max-width: 100%; margin-left: auto; margin-right: auto; }
 #CF .CPlistings .card { max-width:800px; }
 #CF .CPlistings .utilityPage { padding:initial; }
 
@@ -175,6 +170,7 @@ body#CF .CFdashboard input { margin-left:10px; }
 
 .clientLProw2left { width:40%; float:left; padding:15px; }
 .clientLProw2right { width:60%; float:left; padding:15px; }
+.pcards_right { width:60%; float:left; }
 
 .clientDashboard button, #CF .claimProfileCard button { margin-right:10px; }
 
@@ -204,13 +200,37 @@ body#CF button#takeSurvey { background:orange; }
 
 .CProw3 .contentContainer { font-size:250%; font-weight:700; text-align:center;     padding-top: 2%; padding-bottom: 10%; }
 
-#CF .modal-content{ background: black;  border: 3px solid #ff6699;  border-radius: 10px !important; }
-#CF .modal-header { padding-top:10px; padding-bottom:10px;}
+#CF .modal-content{ background: black;  border: 10px solid #333333; border-radius: 10px !important; }
+#CF .modal-header { padding-top:0; padding-bottom:0; border:initial; }
 #CF .modal-title {color:white; }
-#CF .provider-card {border-radius:10px; margin:10px; }
+#CF .provider-card {border-radius:10px; margin:0; padding:0; }
+ 
+#CF .modal-backdrop.show {  background: black !important;  opacity: initial !important; }
+#CF button.providerModalBackButton { background:initial; }
+#CF .modal-body {padding-top:0; }
+#CF .providerModalCardHomePics {
+  width:100%; height:50%; border-radius: 10px; margin-bottom:10px; cursor: pointer;
+}
 
-.CPchoiceBox { width:30%; float:left; border-radius:10px; padding:20px; margin-right: 3%;  text-align: center;    display: inline-block;  vertical-align: top; margin-bottom:40px; position:relative; top: -80px;     min-height: 780px; }
-.CPchoiceBox2 { width:64% !important; }
+.rubik500 {
+  font-family: "Rubik", sans-serif;
+  font-optical-sizing: auto;
+  font-weight:500;
+  font-style: normal;
+}
+
+#CF input:focus,
+#CF textarea:focus,
+#CF select:focus,
+#CF button:focus {
+  /* Reset or apply your desired focus styles here */
+  outline: none;
+  box-shadow: none;
+  border-color: initial;
+}
+
+.CPchoiceBox { width:35%; float:left; border-radius:50px; padding:30px; margin-right: 3%;  text-align: center;    display: inline-block;  vertical-align: top; margin-bottom:40px; position:relative; top: -80px;     min-height: 670px; }
+.CPchoiceBox2 { width:59% !important; }
 .CPchoiceBox2 ul {text-align:left;}
 .CPchoiceBox button.button2 {padding:20px; margin-top:20px; }
 
@@ -221,7 +241,73 @@ p.CPchoicePrice{font-weight:700;font-size: 260%;}
 p.CPchoiceSubhead{font-weight:700;font-size: 225%;}
 p.CPchoiceTerms{ font-size:70%; font-weight:normal; }
 .allGrayText p {color:#8a8888;}
-p.CPboxText { text-align:left;}
+
+
+body#CF button.hamburger {
+  background:#1e1e1e;
+  color:white;
+  text-decoration: none;
+  border:none;
+  border-radius: 10px;position: relative;
+  top: 5px;
+}
+
+.CF2-hamburger {
+  position: relative;
+}
+
+.hamburger {
+  display: inline-block;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.hamburger .bar {
+  display: block;
+  width: 25px;
+  height: 3px;
+  margin: 5px auto;
+  background-color: white;
+  transition: 0.4s;
+}
+
+.CF2-hamburger-menu {
+  display: none; /* Initially hidden */
+  opacity: 0; /* Hidden opacity */
+  transform: translateY(-10px); /* Optional for a nice slide effect */
+  transition: opacity 1s ease, transform 1s ease; /* Transition for opacity and transform */
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background-color: #ff9900;
+  list-style: none;
+  padding: 0px;
+  width: 150px;
+  z-index: 1000;
+}
+
+.CF2-hamburger-menu.show {
+  display: block; /* Show the menu */
+  opacity: 1; /* Fully visible */
+  transform: translateY(0); /* Reset transform */
+}
+
+.CF2-hamburger-menu li {
+  padding: 0;
+}
+
+.CF2-hamburger-menu li a {
+  text-decoration: none;
+  color: black;
+  display: block;
+  font-size:20px;
+}
+
+.CF2-hamburger-menu li a:hover {
+  background-color: #555;
+}
 
 
 .providerDashboardCard { margin-bottom:40px; }
@@ -270,7 +356,7 @@ body#CF ul.custom-checkmark-list{     padding-left: 30px !important;
 .homeRow1 p { font-size: 175%; line-height: 125%; }
 .homeRow1 .left60 { padding: 30px; }
 .homeRow2 .video-responsive { max-width:800px; margin-left:auto; margin-right:auto; }
-.homeRow3 .contentContainer { padding:40px; border-radius:10px; }
+.homeRow3 .contentContainer { padding:40px; border-radius:50px; max-width: 750px; }
 .homeRow3 h2 { text-align:center; margin-bottom:20px; }
 .homeRow5 .accordion { --bs-accordion-color: initial;  --bs-accordion-bg:initial;
     --bs-accordion-border-color: initial; }
@@ -280,15 +366,16 @@ body#CF ul.custom-checkmark-list{     padding-left: 30px !important;
 .homeRow4 .hr4Box button { width:50%; }
 #CF .accordion button[aria-expanded="true"] { background: #ff6699 !important;  }
 
-#CF .accordion-button.collapsed::after {  /*filter: invert(0.5) sepia(1) saturate(5) hue-rotate(190deg);*/     filter: invert(0.27) sepia(1) saturate(10000%) hue-rotate(330deg) brightness(0.9); }
+#CF .accordion-button.collapsed::after {  filter: invert(1); }
 
 .checkBoxList svg { 
     width: 0.7em; /* 80% of the original size */
     height: 0.7em; /* 80% of the original size */
-}
+} 
   
 .homeTopBackground { background: url(/client/public/homeback1.jpg);     background-size: cover;   padding: 30px; } 
 .CPhomeTopBackground { background: url(/client/public/pageback1.jpg);     background-size: cover;   padding: 30px; } 
+#CF .accordion-button:focus { border-color:initial !important; box-shadow:initial !important;  }
 
 /* GLOBAL */
 .left60, .left40, .right60, .right40, .left50, .right50 {float:left;}
@@ -355,13 +442,21 @@ float:right
 .msgAlertRight { width:7%; float:left; }
 
 .msgDesktopRight .msgAlertLeft { width:13%; float:left; }
-.msgDesktopRight .msgAlertMiddle { width:87%; float:left; }
+.msgDesktopRight .msgAlertMiddle {width: 87%;
+  float: left;
+  position: relative;
+  top: 20px;
+  left: 10px;}
 .msgDesktopRight .msgAlertRight { width:0%; float:left; }
 
 
 .msgResponseInfo { font-size:60%; margin:0;  padding-right: 5px; margin-bottom: 2px;}
 .messageWrapper.messageArchived .msgResponseInfo { font-size: 90%;    padding-right: 0;}
 .messageWrapper.messageArchived .msgActions { background:initial; }
+
+#CF .messageWrapper .msgAlertMiddle {padding-left: 3%;
+  width: 87%;
+  float: left;}
 
 .msgReplyArea { background:black; padding:15px; margin-bottom:10px; border-radius:10px; }
 .msgReplyArea button { margin-bottom:15px;  }
@@ -502,6 +597,11 @@ p.copyright { margin-top:40px; font-size:70%;}
 
 .messagesDesktopUX{display:block;}
 .messagesMobileUX{ display:none;}
+
+
+
+
+
 
 /**
    RESPONSIVE MEDIA QUERIES:

@@ -40,46 +40,44 @@ export default function LandingPage() {
 		<>
 			<TopNav />
 
-			<div className="homeRow1 CFgrayBackground">
+			<div className="homeRow1 homeTopBackground">
 				<div className="contentContainer">
-					<div className="homeTopBackground">
-						<div className="left60">
-							<h2>
-								Adult Family Homes,<br></br>King County, WA
-							</h2>
-							<p style={{ textShadow: "2px 2px 0 black" }}>
-								The easy way to reserve a room and book care within an Adult
-								Family Home for 24/7 senior care.
-							</p>
+					<div className="left60">
+						<h2>
+							Adult Family Homes,<br></br>King County, WA
+						</h2>
+						<p style={{ textShadow: "2px 2px 0 black" }}>
+							The easy way to reserve a room and book care within an Adult
+							Family Home for 24/7 senior care.
+						</p>
 
-							<div className="homeLookup">
-								<input
-									type="text"
-									placeholder="Search city, zip code, etc."
-									value={query}
-									onChange={(e) => setQuery(e.target.value)}
-								/>
-								<button onClick={handleSearch}>Search</button>
-							</div>
-
-							{errorMessage && (
-								<div
-									style={{
-										color: "red",
-										marginTop: "10px",
-										textAlign: "left",
-										fontSize: "14px",
-									}}
-								>
-									{errorMessage}
-								</div>
-							)}
+						<div className="homeLookup">
+							<input
+								type="text"
+								placeholder="Search city, zip code, etc."
+								value={query}
+								onChange={(e) => setQuery(e.target.value)}
+							/>
+							<button onClick={handleSearch}>Search</button>
 						</div>
 
-						<div className="right40">&nbsp;</div>
-
-						<div className="clear"></div>
+						{errorMessage && (
+							<div
+								style={{
+									color: "red",
+									marginTop: "10px",
+									textAlign: "left",
+									fontSize: "14px",
+								}}
+							>
+								{errorMessage}
+							</div>
+						)}
 					</div>
+
+					<div className="right40">&nbsp;</div>
+
+					<div className="clear"></div>
 				</div>
 			</div>
 
@@ -90,19 +88,12 @@ export default function LandingPage() {
 					</div>
 					<div className="right60">
 						<p>
-							Thanks to modern technology, families don't need senior advisors
-							to determine cost of care, search for homes, or find comparable
-							options.
+							Thanks to modern technology, families no longer need senior advisors to determine cost of care, search for homes, or find comparable options. You just use Carefinder.
 						</p>
 						<p>
-							Yet traditional senior advisors still want you to pay 100% of the
-							first month's rent like you did before the internet.
+							All options on Carefinder are pre-vetted, meet high standards for providing quiality care and are highly recommendable.
 						</p>
-						<p>
-							At Carefinder, we want you to keep what you've earned, have a
-							better experience, and get all the benefits that come with an
-							advisor.
-						</p>
+
 					</div>
 					<div className="clear"></div>
 				</div>
@@ -110,7 +101,7 @@ export default function LandingPage() {
 
 			<div className="homeRow3">
 				<div className="contentContainer CFgrayBackground">
-					<h2>Keep Our Seniors Safe</h2>
+					<h2>Keep Your Senior Safe</h2>
 
 					<style>
 						{" "}
@@ -137,46 +128,6 @@ export default function LandingPage() {
 							paperwork.
 						</li>
 					</ul>
-				</div>
-			</div>
-
-			<div className="homeRow4">
-				<div className="contentContainer">
-					<div className="hr4Box CFgrayBackground farLeft">
-						<h3>Zero Commission Community Partner</h3>
-						<p>
-							Chat with a local advisor you can trust. 100% unbiased,
-							unincentivized guidance. A reliable partner who's well-versed in
-							the communities and resources near you. Count on your advisor for
-							as much or as little as you need.
-						</p>
-						<Link to="/###">
-							<Button variant="primary">Chat</Button>
-						</Link>
-					</div>
-
-					<div className="hr4Box CFgrayBackground">
-						<h3>Match with Licensed Care Providers</h3>
-						<p>
-							We make it incredibly easy for you to browse local options who
-							have current availability or match with the most compatible
-							options. All care providers are licensed with the state.
-						</p>
-						<Link to="/###">
-							<Button variant="primary">Start</Button>
-						</Link>
-					</div>
-
-					<div className="hr4Box CFgrayBackground farRight">
-						<h3>Pre-vetted</h3>
-						<p>
-							Our dedicated team personally visits each facility, fostering
-							relationships with provider & staff. We're focused on trust and
-							transparency, we go the extra mile to provide families with peace
-							of mind, knowing that their loved ones are in good hands.
-						</p>
-					</div>
-					<div className="clear"></div>
 				</div>
 			</div>
 

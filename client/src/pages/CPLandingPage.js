@@ -19,33 +19,31 @@ export default function CPLandingPage() {
 	const handleButtonClick = () => {
 		navigate("/claim-profile");
 	};
-
+ 
 	return (
 		<>
 			<TopNav />
 
-			<div className="CProw1 CFgrayBackground">
+			<div className="CProw1 CPhomeTopBackground">
 				<div className="contentContainer">
-					<div className="CPhomeTopBackground">
-						<div className="left60">
-							<h1 className="CFpink">Don't overpay for senior referrals</h1>
-							<p>
-								No absurd placement fees. Built by and for AFDH care providers.
-								Land private pay seniors, risk free.
-							</p>
-							<button
-								type="button"
-								className="btn btn-dark"
-								onClick={handleButtonClick}
-							>
-								Claim Profile
-							</button>
-						</div>
-
-						<div className="right40">&nbsp;</div>
-
-						<div className="clear"></div>
+					<div className="left60">
+						<h1 className="CFpink">Don't overpay for senior referrals</h1>
+						<p>
+							No absurd placement fees. Built by and for AFDH care providers.
+							Land private pay seniors, risk free.
+						</p>
+						<button
+							type="button"
+							className="btn btn-dark"
+							onClick={handleButtonClick}
+						>
+							Claim Profile
+						</button>
 					</div>
+
+					<div className="right40">&nbsp;</div>
+
+					<div className="clear"></div>
 				</div>
 			</div>
 
@@ -93,7 +91,7 @@ export default function CPLandingPage() {
 			<div className="CProw4 CFblackBackground">
 				<div className="contentContainer">
 					<div className="CPchoiceBox CFgrayBackground">
-						<button type="button" className="btn mostPopular">
+						<button type="button" className="btn mostPopular" onClick={handleButtonClick}>
 							Start here
 						</button>
 						<div className="clear"></div>
@@ -105,7 +103,7 @@ export default function CPLandingPage() {
 							at no cost. Once you've welcomed your first private pay resident,
 							your subscription will be activated.
 						</p>
-						<button type="button" className="btn btn btn-dark button2">
+						<button type="button" className="btn btn btn-dark button2" onClick={handleButtonClick}>
 							Review agreement
 						</button>
 					</div>
@@ -138,10 +136,7 @@ export default function CPLandingPage() {
 							<li style={listItemStyle}>
 								Payments stop if the resident leaves, moves out, or passes away.
 							</li>
-							<li style={listItemStyle}>
-								Secure $1,500 non-refundable deposit for room reservation.
-							</li>
-							<li style={listItemStyle}>Warm fuzzzy feeling :-)</li>
+
 						</ul>
 					</div>
 

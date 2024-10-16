@@ -9,6 +9,8 @@ export default function TopNav() {
   const [loading, setLoading] = useState(true);
   const { currentUser, logout } = useAuth();
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
+  const [otherDropdownOpen, setOtherDropdownOpen] = useState(false); // Track other dropdowns
 
   useEffect(() => {
     const fetchData = async () => {
@@ -37,6 +39,42 @@ export default function TopNav() {
       setLoading(false);
     }
   }, [currentUser]);
+
+  const toggleHamburgerMenu = () => {
+    setIsOpen(!isOpen);
+  };
+  
+  const handleClickOutside = (event) => {
+    // Check if the click is outside the hamburger menu or any other dropdown
+    if (!event.target.closest('.CF2-hamburger') && isOpen) {
+      setIsOpen(false);
+    }
+
+    // Assuming you have another dropdown with a class like 'CF2-dropdown-menu'
+    if (otherDropdownOpen && !event.target.closest('.CF2-dropdown-menu')) {
+      setIsOpen(false); // Close hamburger menu if another dropdown is open
+      setOtherDropdownOpen(false); 
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, [isOpen, otherDropdownOpen]);
+
+  // Function to open other dropdowns
+  const openOtherDropdown = () => {
+    setOtherDropdownOpen(true);
+    setIsOpen(false); // Close hamburger menu if another dropdown is opened
+  };
+
+  // Function to close other dropdowns
+  const closeOtherDropdown = () => {
+    setOtherDropdownOpen(false);
+  };
+
 
   const handleLogout = async () => {
     try {
@@ -90,13 +128,24 @@ export default function TopNav() {
             <li className="CF2-menu-item"><a href="/client-dashboard">Browse</a></li>
             <li className="CF2-menu-item"><a href="/msg-inbox">Inbox</a></li>
             <li className="CF2-menu-item CF2-dropdown">
-              <a href="#about" className="CF2-dropdown-toggle">Client Dashboard</a>
-              <ul className="CF2-dropdown-menu">
+              <a onMouseEnter={openOtherDropdown} className="CF2-dropdown-toggle" onMouseLeave={closeOtherDropdown}>Client Dashboard</a>
+              <ul className={`CF2-dropdown-menu ${otherDropdownOpen ? 'show' : ''}`}>
                 <li><a href="/client-dashboard">Client Dashboard</a></li>
-                <li><a href="/client-menu">Client Menu</a></li>
-                <button onClick={handleLogout} style={{ backgroundColor: "#F44336", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
+                <li><a href="/###">Edit Survey</a></li>
               </ul>
             </li>
+
+            <li className="CF2-menu-item CF2-hamburger">
+              <a onClick={toggleHamburgerMenu}>☰</a>
+              <ul className={`CF2-hamburger-menu ${isOpen ? 'show' : ''}`}>
+                <li><a href="/personal-info">Personal Info</a></li>
+                <li><a href="/###">Login & Security</a></li>
+                <li><a href="/###">Payment & Payout</a></li>
+                <li><a href="/###">Delete Account</a></li>
+                <button onClick={handleLogout} style={{ backgroundColor: "#F44336", width:"100%", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
+              </ul>
+            </li>
+
           </ul>
         )}
 
@@ -112,17 +161,28 @@ export default function TopNav() {
 
         {role === "provider" && (
           <ul className="CF2-menu">
-            <li className="CF2-menu-item"><a href="/care-provider-dashboard">Dashboard</a></li>
-            <li className="CF2-menu-item"><a href="/msg-inbox">Inbox</a></li>
+            <li className="CF2-menu-item"><a href="/">Home</a></li>
             <li className="CF2-menu-item CF2-dropdown">
-              <a href="#about" className="CF2-dropdown-toggle">Provider Dashboard</a>
-              <ul className="CF2-dropdown-menu">
-                <li><a href="/care-provider-dashboard">Provider Dashboard</a></li>
-                <li><a href="/provider-menu">Provider Menu</a></li>
-                <li><a href="/your-listings">Provider Listings</a></li>
-                <button onClick={handleLogout} style={{ backgroundColor: "#F44336", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
+              <a onMouseEnter={openOtherDropdown} className="CF2-dropdown-toggle" onMouseLeave={closeOtherDropdown}>Dashboard</a>
+              <ul className={`CF2-dropdown-menu ${otherDropdownOpen ? 'show' : ''}`}>
+                <li><a href="/care-provider-dashboard">Dashboard</a></li>
+                <li><a href="/your-listings">My Listings</a></li>
               </ul>
             </li>
+            <li className="CF2-menu-item"><a href="/msg-inbox">Inbox</a></li>
+
+            <li className="CF2-menu-item CF2-hamburger">
+              <a onClick={toggleHamburgerMenu}>☰</a>
+              <ul className={`CF2-hamburger-menu ${isOpen ? 'show' : ''}`}>
+                <li><a href="/personal-info">Personal Info</a></li>
+                <li><a href="/provider-menu">Login & Security</a></li>
+                <li><a href="/provider-menu">Payment & Payout</a></li>
+                <li><a href="/provider-menu">My Profle</a></li>
+                <li><a href="/provider-menu">Delete Account</a></li>
+                <button onClick={handleLogout} style={{ backgroundColor: "#F44336", width:"100%", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
+              </ul>
+            </li>
+
           </ul>
         )}
 
@@ -139,8 +199,8 @@ export default function TopNav() {
         {role === "admin" && (
           <ul className="CF2-menu">
             <li className="CF2-menu-item CF2-dropdown">
-              <a href="#about" className="CF2-dropdown-toggle">Admin</a>
-              <ul className="CF2-dropdown-menu">
+            <a onMouseEnter={openOtherDropdown} className="CF2-dropdown-toggle" onMouseLeave={closeOtherDropdown}>Admin</a>
+              <ul className={`CF2-dropdown-menu ${otherDropdownOpen ? 'show' : ''}`}>
                 <li><a href="/msg-inbox">Inbox</a></li>
                 <li><a href="/msg-admin">Admin Messenger</a></li>
                 <li><a href="/msg-admin-spoof">Admin Messenger Spoof</a></li>
@@ -149,16 +209,16 @@ export default function TopNav() {
             </li>
 
             <li className="CF2-menu-item CF2-dropdown">
-              <a href="#about" className="CF2-dropdown-toggle">Clients</a>
-              <ul className="CF2-dropdown-menu">
+            <a onMouseEnter={openOtherDropdown} className="CF2-dropdown-toggle" onMouseLeave={closeOtherDropdown}>Clients</a>
+              <ul className={`CF2-dropdown-menu ${otherDropdownOpen ? 'show' : ''}`}>
                 <li><a href="/client-dashboard">Client Dashboard</a></li>
                 <li><a href="/client-menu">Client Menu</a></li>
               </ul>
             </li>
 
             <li className="CF2-menu-item CF2-dropdown">
-              <a href="#about" className="CF2-dropdown-toggle">Providers</a>
-              <ul className="CF2-dropdown-menu">
+            <a onMouseEnter={openOtherDropdown} className="CF2-dropdown-toggle" onMouseLeave={closeOtherDropdown}>Providers</a>
+              <ul className={`CF2-dropdown-menu ${otherDropdownOpen ? 'show' : ''}`}>
               <li><a href="/care-provider">Provider Info</a></li>
               <li><a href="/care-provider-dashboard">Provider Dashboard</a></li>
               <li><a href="/provider-menu">Provider Menu</a></li>
@@ -166,12 +226,16 @@ export default function TopNav() {
               </ul>
             </li>
 
-            <li className="CF2-menu-item CF2-dropdown">
-              <a href="#about" className="CF2-dropdown-toggle">Logout</a>
-              <ul className="CF2-dropdown-menu">
-                <button onClick={handleLogout} style={{ backgroundColor: "#F44336", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
+
+            <li className="CF2-menu-item CF2-hamburger">
+              <a onClick={toggleHamburgerMenu}>☰</a>
+              <ul className={`CF2-hamburger-menu ${isOpen ? 'show' : ''}`}>
+                <li><a href="/###">Link 1</a></li>
+                <li><a href="/###">Link 2</a></li>
+                <button onClick={handleLogout} style={{ backgroundColor: "#F44336", width:"100%", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
               </ul>
             </li>
+
           </ul>
         )}
 

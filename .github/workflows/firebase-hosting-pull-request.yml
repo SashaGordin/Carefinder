@@ -18,4 +18,4 @@ jobs:
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_CAREFINDER_DEVELOPMENT }}
-          projectId: carefinder-development
+          projectId: carefinder-4c036

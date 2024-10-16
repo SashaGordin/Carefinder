@@ -29,8 +29,8 @@ export default function MsgInbox() {
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	useEffect(() => {
 		fetchMessages();
-	});
-
+	  }, []);  // added that empty array, as it was causing issues without!
+	  
 	const fetchMessages = async () => {
 		let configs_msgTruncateLimit = 100;
 
@@ -96,6 +96,8 @@ export default function MsgInbox() {
 
 				if (response2.exists) {
 					const role = response2.data()["role"];
+
+					// SET m_RO to something generic
 					localResponseArray[i]["m_RO"] =
 						role === "client"
 							? "a CF user"
@@ -105,10 +107,16 @@ export default function MsgInbox() {
 							? "a CF admin"
 							: "a CF User";
 
+					// UPDATE: but now we actually want a name here... (using POC for Providers)
+					if (response2.data()["FacilityPOC"]) {
+						localResponseArray[i]["m_RO"] = response2.data()["FacilityPOC"];
+					}
+
 					if (response2.data()["displayName"]) {
 						localResponseArray[i]["m_DN"] =
 							" (" + response2.data()["displayName"] + ")";
 					}
+
 				} else {
 					localResponseArray[i]["m_DN"] = "a CF User";
 					console.log("No such document!");
@@ -125,7 +133,8 @@ export default function MsgInbox() {
 		<>
 			<TopNav />
 			<div className="contentContainer utilityPage">
-				{hasMessages && (
+				
+				{hasMessages === 1 && (
 					<>
 						<MsgTemplateMVP
 							passData={userMessages}
@@ -135,7 +144,7 @@ export default function MsgInbox() {
 					</>
 				)}
 
-				{!hasMessages && (
+				{hasMessages === 0 && (
 					<>
 						<div className="contentContainer utilityPage">
 							<Card>

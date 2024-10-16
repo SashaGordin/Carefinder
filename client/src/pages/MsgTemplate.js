@@ -30,8 +30,10 @@ import { firestore } from '../firebase';
  */
 
 // TESTING NOTES:
-// JIM USER:      LXxo4pjrsSYgb3xmOfC4Loco8L03
-// OTHER USERS:   LV6IbCIwMdbs5rMAp5Hb, EEQWegKrxbVQDZ4Ns0qEHDBar8J2, 0CFJRjjE8IcFmyJ11tT9cFq3UIV2
+// NEW USER NOTES:
+// SASHA:  8Lz4ODOcGIMGHZaPS5L3Rk7Jt2p1
+// JIM:    MMP8B4MGk4cIyBJt7PtMGjfdQzg2   ( jim@arraywebdevelopment.com  |  dogcat12345## )
+
 // M1: new Date('March 6, 2024 05:05:31').getTime() -- 1709730331000.
 // M2: new Date('March 5, 2024 07:31:22').getTime() -- 1709652682000.
 // M3: new Date('March 4, 2024 09:37:11').getTime() -- 1709573831000.

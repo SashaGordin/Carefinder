@@ -46,9 +46,10 @@ const FileUpload = ({controlId, handleNewFiles, folderPath, uploadLabel, uploadT
 
         fileIndex++;
         newFileName = Date.now() + '-' + fileIndex; //this needs to have the correct extension at the end of the name
-        let newFilePath = `${folderPath}/${newFileName}`
+        let newFilePath = `${folderPath}/${newFileName}`;
         const storageRef = ref(storage, newFilePath);
-        console.log("Uploading " + file.name + "...");
+        console.log("Uploading... " + file.name + "...");
+        console.log('file path: ', newFilePath);
         var uploadPromise = uploadBytes(storageRef, file).then(() => {
           console.log("getting download url");
           return getDownloadURL(storageRef).then((url) => {

@@ -22,7 +22,7 @@ export default function Step1({ onNext, setProviderInfo }) {
               console.log('Confirmation text sent successfully.');
             })
             .catch(error => {
-              console.error('Error sending confirmation text:', error);
+              console.error('Error sending confirmation text >>> :', error);
             });
 
           onNext();

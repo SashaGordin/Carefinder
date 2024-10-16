@@ -618,6 +618,7 @@ app.post("/sendConfirmationText", async (req, res) => {
 	// Prepend +1 to the numeric phone number
 	const formattedPhoneNumber = "+1" + numericPhoneNumber;
 	let phoneNumber = debugMode ? debugNumber : formattedPhoneNumber;
+	console.log('TWILIO TO: ', phoneNumber);
 
 	const serviceSid = await getServiceSid();
 
@@ -630,7 +631,7 @@ app.post("/sendConfirmationText", async (req, res) => {
 			res.status(200).send("Confirmation text sent successfully");
 		})
 		.catch((error) => {
-			console.error("Error sending confirmation text:", error);
+			console.error("Error sending confirmation text..... :", error);
 			res.status(500).send("Error sending confirmation text");
 		});
 });

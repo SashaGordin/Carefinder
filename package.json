@@ -83,7 +83,7 @@
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
     "serve": "nodemon functions/index.js",
-    "serve1": "node functions/index.js",
+    "serve1": "node server/server.js",
     "deploy": "firebase deploy",
     "ci": "npm install && npm run build"
   },

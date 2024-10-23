@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Image } from 'react-bootstrap';
+import { Button, Card, Image, Accordion } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import EditableField from '../menu/EditableField';
 import RoomCard from './RoomCard';
 import FileUpload from './FileUpload';
+import ProviderQuestionaire from './ProviderQuestionaire';
 
 import { firestore } from '../../firebase'; // Assuming you have firebase.js setup
 import { getDoc, getDocs, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
@@ -28,7 +29,7 @@ export default function ListingCard({ userData, initialListingData }) {
 
   useEffect(() => {
     fetchRoomData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const fetchRoomData = async () => {
@@ -157,33 +158,54 @@ export default function ListingCard({ userData, initialListingData }) {
 
       <Card>
         <Card.Body>
-          <Card.Title><h1>My AFH</h1></Card.Title>
+          <Card.Title><h2>My AFH:</h2></Card.Title>
+          <h2>{listingData.facilityName}</h2>
           {error && <div className="alert alert-danger">{error}</div>}
           <div className="myAFHname">
-            <h4>{listingData.facilityName}</h4>
-            <EditableField title="Adult Family Home Name" value={listingData.facilityName || ''} onChange={(newValue) => handleUpdate({ ...listingData, facilityName: newValue })} />
-            <p>License Number: {listingData.licenseNumber}</p>
+            <div>License Number: {listingData.licenseNumber}</div>
+            <div className="row">
+              <div className='col-8'>AFH name: {listingData.facilityName}</div>
+              <div className='col-4'>Year licensed: {listingData.licenseYear}</div>
+            </div>
+            <div>Home Location: {listingData.listingAddress}</div>
+
           </div>
           <hr />
           <div>
-            <h4>Upload home photos</h4>
-            <p>Upload in the following order<br />
-              1.Exterior front of house. 2. Interior common area. 3. Interior common area.<br />
-              Upload up to 20 photos. DO NOT POST ROOM PHOTOS here. :)
-            </p>
-            <FileUpload controlId="homePhotos" handleNewFiles={handleNewPics} folderPath={folderPath} uploadType="Photo" allowMultipleFiles={true} />
-            {listingData?.homePhotos && listingData.homePhotos.map((path, i) => (
-              <div  key={i}><Image height="50px" src={path} />
-              <Button onClick={() => { deletePhoto(path, 'homePhotos') }} className="text-danger">X</Button>
-              </div>
-            ))}
+            <div className="mb-3"><h4>Upload home photos</h4>
+              <FileUpload controlId="homePhotos" handleNewFiles={handleNewPics} folderPath={folderPath} uploadType="Photo" allowMultipleFiles={true} />
+            </div>
+            <div className="row">
+              {listingData?.homePhotos && listingData.homePhotos.map((path, i) => (
+                <div key={i} className="col-4"><Image src={path} />
+                  <Button onClick={() => { deletePhoto(path, 'homePhotos') }} className="text-danger">X</Button>
+                </div>
+              ))}
+            </div>
           </div>
           <hr />
-          <div>
+          {/*    <div>
             <h4>Complete home survey</h4>
             <Button onClick={gotoHomeSurvey}>Take survey</Button>
           </div>
-          <hr />
+          <hr />*/}
+          <div className="mb-3">
+            <Accordion defaultActiveKey="0">
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>Provider Questionaire</Accordion.Header>
+                <Accordion.Body>
+                  <ProviderQuestionaire listingInfo={listingData} setListingInfo={setListingData} handleUpdate={handleUpdate}/> 
+                </Accordion.Body>
+              </Accordion.Item>
+              <Accordion.Item eventKey="1">
+                <Accordion.Header>Estimated cost of care</Accordion.Header>
+                <Accordion.Body>
+                  TODO
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+          </div>
+          <hr></hr>
           <div>
             <h4>Upload facility contract, house rules, and other client facing documents</h4>
             <FileUpload controlId="homeDocs" handleNewFiles={handleNewDocs} folderPath={folderPath} uploadType="Document" allowMultipleFiles={true} />
@@ -209,7 +231,7 @@ export default function ListingCard({ userData, initialListingData }) {
           </div>
 
         </Card.Body>
-      </Card>
+      </Card >
     </>
 
   );

@@ -5,7 +5,9 @@ import EditableField from '../menu/EditableField';
 import { getStorage, ref, deleteObject } from "firebase/storage";
 
 export default function Profile({ userData, handleUpdate }) {
-	const folderPath = `users/${userData.LicenseNumber}`;
+	//const folderPath = `users/${userData.LicenseNumber}`;
+	const folderPath = `users/${userData.userId}`;
+	console.log('FOLDER PATH: ', folderPath);
 	const [error, setError] = useState('');
 	const storage = getStorage();
 

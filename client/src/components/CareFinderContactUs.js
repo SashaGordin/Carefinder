@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import { Card } from 'react-bootstrap';
 import TopNav from "./TopNav";
 import Footer from "./Footer";
-import { firestore } from '../firebase'; 
+import { firestore } from '../firebase';
 import { Timestamp } from 'firebase/firestore';
 
 /**
  * TODO:  Determine sender and recipient.
  * SENDER s/b some permanent admin address that we will not use, but need for a sender address
  * RECIPIENT s/b MICAH's permanent account address so that he gets the messages, for now.
- * 
+ *
  */
 
 export default function CareFinderContactUs() {
@@ -24,11 +24,11 @@ export default function CareFinderContactUs() {
         const messageText = messagePrepend + document.getElementById('theMessage').value;
         const messageParentID = '12345';
         const messageType = 'default';
-        let messageThreadID = new Date().getTime(); 
+        let messageThreadID = new Date().getTime();
         console.log('SENDING MESSAGE: TO:', messageReceiverID, 'FROM:', messageSenderID, 'TXT:', messageText);
-    
+
         const dbCollection = firestore.collection('messages');
-        await dbCollection.add({ 
+        await dbCollection.add({
           msgDate: Timestamp.now(),
           msgTo: messageReceiverID,
           msgFrom: messageSenderID,
@@ -40,7 +40,6 @@ export default function CareFinderContactUs() {
           msgParentID: messageParentID,
           msgType: messageType
         });
-    
         setMessageSent(true);
         document.getElementById('theMessage').value = '';
       };

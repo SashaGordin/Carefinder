@@ -14,25 +14,37 @@ const {onRequest} = require("firebase-functions/v2/https");
 // const logger = require("firebase-functions/logger");
 const express = require("express");
 
+
 const app = express();
 
-const admin = require("../server/config/firebase-config");
+const admin = require("./config/firebase-config");
 require("dotenv").config({path: ".env.local"});
 const bodyParser = require("body-parser");
 const axios = require("axios"); // Import axios
 const cors = require("cors"); // Import the cors package
 const db = admin.firestore();
 const geofire = require("geofire-common");
-const functions = require("firebase-functions");
+// const functions = require("firebase-functions");
+const {defineSecret} = require("firebase-functions/params");
+const stripeTestSecretKey = defineSecret("STRIPE_TEST_SECRET_KEY");
+const twilioAccountSid = defineSecret("TWILIO_ACCOUNT_SID");
+const twilioAuthToken = defineSecret("TWILIO_AUTH_TOKEN");
+const googleMapsApiKey = defineSecret("GOOGLE_MAPS_API_KEY");
+const {onInit} = require("firebase-functions/v2/core");
 
 
-const stripe = require("stripe")(functions.config().stripe.test_secret_key);
+// const stripe = require("stripe")(stripeTestSecretKey.value());
 
-const accountSid = functions.config().twilio.account_sid;
-const authToken = functions.config().twilio.auth_token;
-const API_KEY = functions.config().googlemaps.api_key;
+// const accountSid = functions.config().twilio.account_sid;
+// const authToken = functions.config().twilio.auth_token;
+// const API_KEY = functions.config().googlemaps.api_key;
 
-const client = require("twilio")(accountSid, authToken);
+let stripe;
+let client;
+onInit(() => {
+  stripe = require("stripe")(stripeTestSecretKey.value());
+  client = require("twilio")(twilioAccountSid.value(), twilioAuthToken.value());
+});
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
@@ -54,6 +66,32 @@ const formatPhoneNumber = (phone) => {
   }
   return phone.replace(/\D/g, "");
 };
+// eslint-disable-next-line require-jsdoc
+// async function createTwilioClient() {
+//   const accountSid = await twilioAccountSid();
+//   const authToken = await twilioAuthToken();
+//   return require("twilio")(accountSid, authToken);
+// }
+
+// // eslint-disable-next-line require-jsdoc
+// async function getGoogleMapsApiKey() {
+//   try {
+//     return await googleMapsApiKey.value();
+//   } catch (error) {
+//     console.error("Error getting Google Maps API key:", error);
+//     throw new Error("Failed to retrieve Google Maps API key.");
+//   }
+// }
+
+// // eslint-disable-next-line require-jsdoc
+// async function getStripeTestSecretKey() {
+//   try {
+//     return await stripeTestSecretKey();
+//   } catch (error) {
+//     console.error("Error getting Stripe Test Secret Key:", error);
+//     throw new Error("Failed to retrieve Stripe Test Secret Key.");
+//   }
+// }
 
 // Function to handle new messages:
 const handleNewMessage = async (doc) => {
@@ -61,29 +99,29 @@ const handleNewMessage = async (doc) => {
     const messageData = doc.data();
     const msgTo = messageData.msgTo;
     const docId = doc.id;
-    console.log(`SERVER: Work w/ document ID: ${docId}`);
+    // console.log(`SERVER: Work w/ document ID: ${docId}`);
 
     // ********** BEGIN VALIDATIONS **********
 
     // Validation:  Check if msgTo is null
     if (!msgTo) {
-      console.log(
-          "SERVER: `msgTo` is null for msgID " + docId + ". Skipping message!",
-      );
+      // console.log(
+      //     "SERVER: `msgTo` is null for msgID " + docId + ". Skipping message!",
+      // );
       return;
     }
 
     // Validation:  Skip any already notified...
     const SMSsent = messageData.msgNotified;
     if (SMSsent === 1) {
-      console.log("SERVER: Response already sent to: ", docId);
+      // console.log("SERVER: Response already sent to: ", docId);
       return;
     }
 
     // Validation:  Message recipient must be a valid user...
     const userSnapshot = await db.collection("users").doc(msgTo).get();
     if (!userSnapshot.exists) {
-      console.log("SERVER: User not found: ", msgTo);
+      // console.log("SERVER: User not found: ", msgTo);
       return;
     }
 
@@ -92,17 +130,17 @@ const handleNewMessage = async (doc) => {
 
     // Validation:  Recipient cannot be a "client" role...
     if (userRole === "client") {
-      console.log(
-          "SERVER: We are not sending notifications to role: ",
-          userRole,
-      );
+      // console.log(
+      //     "SERVER: We are not sending notifications to role: ",
+      //     userRole,
+      // );
       return;
     }
 
     // Validation:  Recipient needs to have phone on file...
     let userPhone = userData.TelephoneNmbr;
     if (!userPhone) {
-      console.log("SERVER: User phone number not found.");
+      // console.log("SERVER: User phone number not found.");
       return;
     }
     // Validation:  Format the phone number to E.164
@@ -117,9 +155,10 @@ const handleNewMessage = async (doc) => {
 			"You have a new message on CareFinder! Visit https://www.carefinder.com to read/respond.";
 
     // Fetch or create the Messaging Service SID
-    console.log("SERVER: FETCH TRILIO SERVICE ID...");
+    // console.log("SERVER: FETCH TRILIO SERVICE ID...");
     const msgSvcSID = await getMessagingServiceSid();
-    console.log(`SERVER: Using Twilio Service SID: ${msgSvcSID}`);
+    // console.log(`SERVER: Using Twilio Service SID: ${msgSvcSID}`);
+
 
     client.messages
         .create({
@@ -128,17 +167,17 @@ const handleNewMessage = async (doc) => {
           messagingServiceSid: msgSvcSID,
         })
         .then(async (message) => {
-          console.log(
-              "SERVER: SMS sent to phone# " + userPhone + ", ID: ",
-              message.sid,
-          );
+          // console.log(
+          //     "SERVER: SMS sent to phone# " + userPhone + ", ID: ",
+          //     message.sid,
+          // );
 
           // Update the msgNotified field to 1...
           // I think we definitely need to do this, as sometimes Firestore initially sends ALL
           // messages here. So, we want to skip any already-notified ones.
-          console.log(`SERVER: Updating msgNotified for document ID: ${docId}`);
+          // console.log(`SERVER: Updating msgNotified for document ID: ${docId}`);
           await db.collection("messages").doc(docId).update({msgNotified: 1});
-          console.log("SERVER: msgNotified field updated to 1");
+          // console.log("SERVER: msgNotified field updated to 1");
         })
         .catch((error) =>
           console.error(
@@ -248,7 +287,7 @@ app.post("/getProviders", async (req, res) => {
   const center = req.body.center;
   const radius = req.body.radius;
   const centerArray = Array.isArray(center) ? center : [center.lat, center.lng];
-  const apiKey = API_KEY; // Replace with your Google Maps API key
+  const apiKey = googleMapsApiKey.value(); // Replace with your Google Maps API key
 
   try {
     // Query the users collection for providers within the specified bounds
@@ -403,7 +442,7 @@ app.post("/getProviders", async (req, res) => {
         });
       } catch (error) {
         console.error("Error getting providers:", error);
-        res.status(500).send("Internal Server Error");
+        res.status(500).send("Internal Server Error", error);
       }
     } else {
       // If there are no providers from the users collection, query the API_AFH_DATA collection
@@ -446,7 +485,7 @@ app.post("/getProviders", async (req, res) => {
     }
   } catch (error) {
     console.error("Error getting providers:", error);
-    res.status(500).send("Internal Server Error");
+    res.status(500).send("Internal Server Error", error);
   }
 });
 
@@ -585,6 +624,7 @@ app.post("/verifyConfirmationCode", async (req, res) => {
   const {phoneNumber, code} = req.body;
   const numericPhoneNumber = phoneNumber.replace(/\D/g, "");
 
+
   // Prepend +1 to the numeric phone number
   const formattedPhoneNumber = "+1" + numericPhoneNumber;
   const phone = debugMode ? debugNumber : formattedPhoneNumber;
@@ -612,7 +652,7 @@ app.post("/verifyConfirmationCode", async (req, res) => {
 // eslint-disable-next-line require-jsdoc
 async function geocodeAddress(address) {
   try {
-    const apiKey = API_KEY; // Replace with your Google Maps API key
+    const apiKey = googleMapsApiKey.value(); // Replace with your Google Maps API key
     const encodedAddress = encodeURIComponent(address);
     console.log("address in geofunc", address);
     const response = await axios.get(
@@ -691,7 +731,6 @@ app.post("/create-reservation", async (req, res) => {
 
 app.post("/create-setup-intent", async (req, res) => {
   const {paymentMethodId, userId} = req.body;
-
   const user = await db.collection("users").doc(userId).get();
   let stripeCustomerId;
   console.log("cusotmerId", user.stripeCustomerId);
@@ -738,7 +777,6 @@ app.post("/create-setup-intent", async (req, res) => {
 
 app.post("/create-provider-setup-intent", async (req, res) => {
   const {paymentMethodId, displayName, email} = req.body;
-
   const stripeCustomerId = await stripe.customers
       .create({
         // Replace with the user's email
@@ -775,7 +813,6 @@ app.post("/create-provider-setup-intent", async (req, res) => {
 app.post("/confirm-setup-intent", async (req, res) => {
   const {setupIntentId, userId} = req.body;
   const setup = await stripe.setupIntents.retrieve(setupIntentId);
-
   const customerId = await db
       .collection("users")
       .doc(userId)
@@ -807,7 +844,6 @@ app.post("/confirm-setup-intent", async (req, res) => {
 
 app.post("/create-subscription", async (req, res) => {
   const {userId, priceId} = req.body;
-
   try {
     const userDoc = await db.collection("users").doc(userId).get();
     const user = userDoc.data();
@@ -841,11 +877,9 @@ app.post("/create-subscription", async (req, res) => {
 app.post("/confirm-provider-setup-intent", async (req, res) => {
   const {setupIntentId, customerId} = req.body;
   const setup = await stripe.setupIntents.retrieve(setupIntentId);
-
   if (!customerId) {
     res.status(400).json({error: "No customer ID found for user"});
   }
-
   await stripe.paymentMethods.attach(setup.payment_method, {
     customer: customerId,
   });
@@ -883,7 +917,6 @@ app.post("/get-list-of-payments", async (req, res) => {
 
 app.post("/charge-customer", async (req, res) => {
   const {amount, currency, userId} = req.body;
-
   try {
     const userDoc = await db.collection("users").doc(userId).get();
     const user = userDoc.data();
@@ -919,7 +952,6 @@ app.post("/charge-customer", async (req, res) => {
 app.post("/capture-payment", async (req, res) => {
   try {
     const {paymentIntentId} = req.body;
-
     // Capture the payment
     const paymentIntent = await stripe.paymentIntents.capture(paymentIntentId);
 
@@ -934,7 +966,6 @@ app.post("/capture-payment", async (req, res) => {
 app.post("/cancel-payment", async (req, res) => {
   try {
     const {paymentIntentId} = req.body;
-
     // Cancel the payment
     const paymentIntent = await stripe.paymentIntents.cancel(paymentIntentId);
 
@@ -946,8 +977,10 @@ app.post("/cancel-payment", async (req, res) => {
   }
 });
 
-exports.app = onRequest(app);
-
+exports.api = onRequest(
+    {secrets: [googleMapsApiKey, stripeTestSecretKey, twilioAccountSid, twilioAuthToken]}, // Bind secrets here
+    app,
+);
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
 

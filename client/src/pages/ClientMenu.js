@@ -14,7 +14,6 @@ export default function ClientMenu() {
     { title: 'Login & Security', icon: 'login.png', description: 'Update password and secure account', link:'../msg-inbox' },
     { title: 'Payment & Payout', icon: 'payment.png', description: 'Payment and billing area', link:'../msg-inbox' },
     { title: 'Edit Survey', icon: 'personal_info.png', description: 'Edit your survey answers', link:'../msg-inbox'  },
-    { title: 'Privacy', icon: 'privacy.png', description: 'Provide personal info so we can reach you', link:'../msg-inbox'  },
 
     // Add more menu items as needed
   ];

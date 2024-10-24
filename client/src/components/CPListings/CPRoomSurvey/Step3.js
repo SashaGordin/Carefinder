@@ -5,6 +5,7 @@ import FileUpload from '../FileUpload';
 
 export default function Step3({ roomInfo, setRoomInfo }) {
   const storage = getStorage();
+    //folder path should be userid not license number. This file is deprecated so ignore for now
   const folderPath = `users/${roomInfo.LicenseNumber}`;
   const handleNewPics = (arrNewFiles) => {
     let roomPhotos = roomInfo?.roomPhotos ?? [];

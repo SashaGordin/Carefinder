@@ -5,7 +5,8 @@ import FileUpload from '../FileUpload';
 
 export default function Step6({ listingInfo, setListingInfo }) {
   const storage = getStorage();
-  const folderPath = `users/${listingInfo.LicenseNumber}`;
+  //folder path should be userid not license number. This file is deprecated so ignore for now
+  const folderPath = `users/${listingInfo.LicenseNumber}`; 
 	const handleNewPics = (arrNewFiles) => {
 		let petPics = listingInfo?.petPics ?? [];
     petPics.push(...arrNewFiles);

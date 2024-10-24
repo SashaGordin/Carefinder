@@ -9,9 +9,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 
 const PersonalInfoPage = ({ userData, handleUpdate }) => {
-  // const { currentUser } = useAuth()
   const [error, setError] = useState('');
-  const folderPath = `users/${userData.LicenseNumber}`;
+	const folderPath = `users/${userData.userId}`;
   const storage = getStorage();
   const navigate = useNavigate();
 

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Card, Image, Accordion } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import EditableField from '../menu/EditableField';
 import RoomCard from './RoomCard';
 import FileUpload from './FileUpload';
 import ProviderQuestionaire from './ProviderQuestionaire';
+import CostOfCare from './CostOfCare';
+
 
 import { firestore } from '../../firebase'; // Assuming you have firebase.js setup
 import { getDoc, getDocs, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
@@ -190,7 +191,7 @@ export default function ListingCard({ userData, initialListingData }) {
           </div>
           <hr />*/}
           <div className="mb-3">
-            <Accordion defaultActiveKey="0">
+            <Accordion>
               <Accordion.Item eventKey="0">
                 <Accordion.Header>Provider Questionaire</Accordion.Header>
                 <Accordion.Body>
@@ -200,7 +201,7 @@ export default function ListingCard({ userData, initialListingData }) {
               <Accordion.Item eventKey="1">
                 <Accordion.Header>Estimated cost of care</Accordion.Header>
                 <Accordion.Body>
-                  TODO
+                <CostOfCare listingInfo={listingData} setListingInfo={setListingData} handleUpdate={handleUpdate}/> 
                 </Accordion.Body>
               </Accordion.Item>
             </Accordion>

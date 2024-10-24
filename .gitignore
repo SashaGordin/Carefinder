@@ -8,6 +8,6 @@
 .env.local
 .vscode
 
-/server/config/serviceAccount.json
-/functions/congig/serviceAccount.json
- 
+**/serviceAccount.json
+
+

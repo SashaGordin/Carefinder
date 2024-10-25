@@ -86,14 +86,8 @@ export default function CPListings() {
         <PersonalInfo userData={userData} handleUpdate={handleUpdate}/>
         <p>&nbsp;</p>
         {listingsData.map((data, i) => (<ListingCard userData={userData} initialListingData={data} key={i} />))}
-
-        <p>&nbsp;</p>
-
-        <AddAFH uid={currentUser.uid}/>
-
-        <p>&nbsp;</p>
-
       </div>
+      <p>&nbsp;</p>
 
       <Footer />
     </>

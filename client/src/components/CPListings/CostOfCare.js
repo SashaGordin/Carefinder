@@ -16,7 +16,7 @@ export default function CostOfCare({ listingInfo, setListingInfo, handleUpdate }
 		if (e.target.type == "checkbox") {
 			val = [];
 			document.querySelectorAll(`[name='${name}']:checked`).forEach((t) => {
-				val.push(t.id);
+				val.push(t.value);
 			});
 		}
 		else
@@ -45,6 +45,8 @@ export default function CostOfCare({ listingInfo, setListingInfo, handleUpdate }
 									<option>Light care</option>
 									<option>Medium care</option>
 									<option>Heavy care</option>
+									<option>Total care</option>
+
 								</Form.Select>
 							</Card.Title>
 

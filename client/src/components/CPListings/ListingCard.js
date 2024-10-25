@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Image, Accordion } from 'react-bootstrap';
+import { Button, Card, Image, Accordion, NavLink } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
-import RoomCard from './RoomCard';
 import FileUpload from './FileUpload';
 import ProviderQuestionaire from './ProviderQuestionaire';
 import CostOfCare from './CostOfCare';
-
+import HighlightedFeatures from'./HighlightedFeatures';
+import MedicalQuestionaire from './MedicalQuestionaire';
+import EnrollmentAdmissions from './EnrollmentAdmissions';
+import RoomListings from './RoomListings';
 
 import { firestore } from '../../firebase'; // Assuming you have firebase.js setup
 import { getDoc, getDocs, collection, doc, setDoc, updateDoc } from 'firebase/firestore';
@@ -17,7 +19,6 @@ import DynamicModal from '../DynamicModal';
 export default function ListingCard({ userData, initialListingData }) {
   const navigate = useNavigate();
   const [error, setError] = useState('');
-  const [roomsArr, setRoomsArr] = useState([]);
   const [listingData, setListingData] = useState(initialListingData);
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
@@ -27,24 +28,6 @@ export default function ListingCard({ userData, initialListingData }) {
 
   const { currentUser } = useAuth();
   const facilityPath = `users/${currentUser.uid}/listings/${listingData.licenseNumber}`;
-
-  useEffect(() => {
-    fetchRoomData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  const fetchRoomData = async () => {
-    const roomsSnapshot = await getDocs(collection(firestore, facilityPath, 'rooms'));
-    //get data for all rooms for this listing
-    const rooms = [];
-    roomsSnapshot.forEach((room) => {
-      const data = room.data();
-      console.log(data);
-      rooms.push(data);
-    });
-    console.log("roomsLength=" + rooms.length);
-    setRoomsArr([...rooms]);
-  };
 
   const folderPath = `users/${currentUser.uid}`;
 
@@ -66,11 +49,7 @@ export default function ListingCard({ userData, initialListingData }) {
     navigate('/home-survey', { state: { listingData, facilityPath } });
   }
 
-  const addRoom = () => {
-    const roomNumber = roomsArr.length + 1;
-    const roomData = { roomName: "Room # " + roomNumber, roomId: "Room" + roomNumber };
-    navigate('/room-survey', { state: { userData, roomData, listingData, facilityPath } });
-  }
+ 
 
   const handleUpdate = async (updatedListingData) => {
     try {
@@ -90,18 +69,6 @@ export default function ListingCard({ userData, initialListingData }) {
       }
     } catch (error) {
       setError('Error updating listing data: ' + error.message);
-    }
-  };
-
-  const handleRoomUpdate = async (updatedRoomInfo, roomId) => {
-    try {
-      const roomDocRef = doc(firestore, facilityPath, 'rooms', roomId);
-      await updateDoc(roomDocRef, updatedRoomInfo);
-      console.log('Room data updated successfully');
-
-      await fetchRoomData();
-    } catch (error) {
-      setError('Error updating user data: ' + error.message);
     }
   };
 
@@ -204,10 +171,33 @@ export default function ListingCard({ userData, initialListingData }) {
                 <CostOfCare listingInfo={listingData} setListingInfo={setListingData} handleUpdate={handleUpdate}/> 
                 </Accordion.Body>
               </Accordion.Item>
+              <Accordion.Item eventKey="2">
+                <Accordion.Header>Highlighted features</Accordion.Header>
+                <Accordion.Body>
+                  <HighlightedFeatures listingInfo={listingData} setListingInfo={setListingData} handleUpdate={handleUpdate}/> 
+                </Accordion.Body>
+              </Accordion.Item>
+              <Accordion.Item eventKey="3">
+                <Accordion.Header>Medical questionaire</Accordion.Header>
+                <Accordion.Body>
+                <MedicalQuestionaire listingInfo={listingData} setListingInfo={setListingData} handleUpdate={handleUpdate}/> 
+                </Accordion.Body>
+              </Accordion.Item>
+              <Accordion.Item eventKey="4">
+                <Accordion.Header>Enrollment & admissions</Accordion.Header>
+                <Accordion.Body>
+                  <EnrollmentAdmissions listingInfo={listingData} setListingInfo={setListingData} handleUpdate={handleUpdate}/> 
+                </Accordion.Body>
+              </Accordion.Item>
+              <Accordion.Item eventKey="5">
+                <Accordion.Header>My listings</Accordion.Header>
+                <Accordion.Body>
+                <RoomListings userData={userData} listingData={listingData} setListingInfo={setListingData} facilityPath={facilityPath}/> 
+                </Accordion.Body>
+              </Accordion.Item>
             </Accordion>
           </div>
-          <hr></hr>
-          <div>
+          <div className="d-none">
             <h4>Upload facility contract, house rules, and other client facing documents</h4>
             <FileUpload controlId="homeDocs" handleNewFiles={handleNewDocs} folderPath={folderPath} uploadType="Document" allowMultipleFiles={true} />
             {listingData?.homeDocs && listingData.homeDocs.map((file, i) => (
@@ -221,16 +211,8 @@ export default function ListingCard({ userData, initialListingData }) {
             ))}
             <DynamicModal showModal={showModal} modalTitle={modalTitle} modalBody={modalBody} handleCloseModal={handleCloseModal} />
           </div>
-          <hr />
-          <div>
-            <h1>{listingData.facilityName}</h1>
-            <div className="ml-auto" role="button" onClick={addRoom}>
-              <img alt="" src="circleplus.png" />
-              <p>Add room</p>
-            </div>
-            {roomsArr.map((roomData, i) => <RoomCard userData={userData} roomData={roomData} listingData={listingData} facilityPath={facilityPath} handleRoomUpdate={handleRoomUpdate} key={i} />)}
-          </div>
-
+          
+            <NavLink className="text-center">View profile</NavLink>
         </Card.Body>
       </Card >
     </>

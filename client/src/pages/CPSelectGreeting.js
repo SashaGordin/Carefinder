@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { firestore } from '../firebase'; // Assuming you have firebase.js setup
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import { useNavigate, useLocation } from "react-router-dom";
-import { Button, Card, Alert } from 'react-bootstrap';
+import { Button, Card, Form, Alert } from 'react-bootstrap';
 
 
 import TopNav from "../components/TopNav";
@@ -16,7 +16,9 @@ export default function CPSelectGreeting() {
   const { userData } = state || {};
   const [userInfo, setUserInfo] = useState(userData);
   const [error, setError] = useState('');
-
+ 
+  const options = ["Hi, Thanks for connecting, if you have any questions let me know! Feel free to send a message or schedule a meet.", "Greeting 2", "Greeting 3"];
+ 
   const validateInputs = () => {
     let inputElements = document.querySelectorAll("input, textarea");
     let allValid = true;
@@ -69,7 +71,13 @@ export default function CPSelectGreeting() {
 
         <div>
           <h3>Select welcoming greeting message</h3>
-          <textarea className="small" rows="3" cols="75" placeholder="Type here" value={userInfo.greeting ?? ""} onChange={handleChange} />
+          <Form.Select value={userInfo.greeting ?? ""} onChange={handleChange}>
+              {
+                options.map((option, i) => {
+                  return <option key={i} className="small" value={option} >{option}</option>
+                })
+              }
+          </Form.Select>
 
         </div>
 

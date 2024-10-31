@@ -4,14 +4,20 @@ import { Row, Col, Form, Button, Fade, Alert, Card, ToggleButton, ToggleButtonGr
 
 export default function CostOfCare({ listingInfo, setListingInfo, handleUpdate }) {
 	const [justSaved, setJustSaved] = useState(false);
+	const [careLevel, setCareLevel] = useState('L');
 
-	const services = ["Transportation", "Special diets", "Wound care", "Manicures", "Physical therapy", "House keeping", "Laundry"];
-
+	const careDescriptions = { "L": "Supervised but can accomplish most ADL's by themselves", "M": "Medium care description", "H": "Heavy care description", "T": "Total care description" };
+	const defaultServiceList = ["Transportation", "Special diets", "Wound care", "Manicures", "Physical therapy", "House keeping", "Laundry"];
+	const fullServiceList = listingInfo.costOfCare?.fullServiceList ?? defaultServiceList;
 	const toggleButton = (val, e) => {
 		handleChange(e);
 	}
 	const handleChange = (e) => {
 		let val;
+		//how to handle multi-tiered approach to this
+		//listingInfo.costOfCare.L.services??
+
+
 		let name = e.target.name;
 		if (e.target.type == "checkbox") {
 			val = [];
@@ -40,60 +46,52 @@ export default function CostOfCare({ listingInfo, setListingInfo, handleUpdate }
 			<Row>
 				<Col>
 					<Card>
-							<Card.Title>
-								<Form.Select>
-									<option>Light care</option>
-									<option>Medium care</option>
-									<option>Heavy care</option>
-									<option>Total care</option>
+						<Card.Title>
+							<Form.Select name="careLevel" value={careLevel} onChange={(e) => (setCareLevel(e.target.value))}>
+								<option value="L">Light care</option>
+								<option value="M">Medium care</option>
+								<option value="H">Heavy care</option>
+								<option value="T">Total care</option>
+							</Form.Select>
+						</Card.Title>
 
-								</Form.Select>
-							</Card.Title>
-
-							<div>Supervised but can accomplish most ADL's by themselves</div>
-							<Row className="small">
-								<Col>Monthly price:</Col>
-								<Col>
-									<label>From</label>
-									<input type="text" required name="lowPrice" value={listingInfo.lightCare?.lowPrice ?? ""} onChange={handleChange} />
-								</Col>
-								<Col>
-									<label>To</label>
-									<input type="text" required name="highPrice" value={listingInfo.lightCare?.highPrice ?? ""} onChange={handleChange} />
-								</Col>
-							</Row>
-							<div className="small">
-								Base Price:
-								Breakfast, Lunch and Dinner
-								Tea, Coffee and Snacks any time
-								Medications Management
-								Blood pressure / Weight checks
-								Housekeeping and Flat Linens Laundry
-								Personal Laundry
-								Social and Recreational activities
-								24 / 7 Emergency care
-								Light support on toileting
-								No special diet required
-							</div>
+						<div>{careDescriptions[`${careLevel}`]}</div>
+						<Row className="small">
+							<Col>Monthly price:</Col>
+							<Col>
+								<label>From</label>
+								<input type="text" required name="lowPrice" value={listingInfo.costOfCare?.[`${careLevel}`]?.lowPrice ?? ""} onChange={handleChange} />
+							</Col>
+							<Col>
+								<label>To</label>
+								<input type="text" required name="highPrice" value={listingInfo.costOfCare?.[`${careLevel}`]?.highPrice ?? ""} onChange={handleChange} />
+							</Col>
+						</Row>
+						<div className="small">
+							Base Price:
+							{listingInfo.costOfCare?.[`${careLevel}`]?.services.map((option, i) => (
+								<div key={i}>{option}</div>
+							))}
+						</div>
 					</Card>
 				</Col>
 				<Col>
 					<h6>Select services that are included in this tier</h6>
 					<Card>
 						<Card.Body>
-							<ToggleButtonGroup type="checkbox" name="services" vertical value={listingInfo.lightCare?.services} onChange={toggleButton}>
-								{services.map((option, i) => (
-								  <ToggleButton className={"mb-3"} id={`services-${i}`} key={i} value={option}>
-									{option}
-								  </ToggleButton>
+							<ToggleButtonGroup type="checkbox" name="services" vertical value={listingInfo.costOfCare?.[`${careLevel}`]?.services} onChange={toggleButton}>
+								{fullServiceList.map((service, i) => (
+									<ToggleButton className={"mb-3"} id={`services-${i}`} key={i} value={service}>
+										{service}
+									</ToggleButton>
 								))}
 							</ToggleButtonGroup>
 						</Card.Body>
 					</Card>
 					<div>
-					<input type="text" placeholder="Add service" />
-					<Button>Add</Button>
-				</div>
+						<input type="text" placeholder="Add service" />
+						<Button>Add</Button>
+					</div>
 				</Col>
 			</Row>
 		</>

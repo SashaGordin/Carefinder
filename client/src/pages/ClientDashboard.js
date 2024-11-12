@@ -415,14 +415,15 @@ export default function ClientDashboard() {
 								<div>Loading ...</div>
 							)}
 							<div>
-								<h6 style={{ textAlign: "center" }}>
+								<h6 style={{ textAlign: "left", marginTop:"4px", marginBottom:"2px" }}>
 									Neighboring cities near {zip}
 								</h6>
 								<ul
 									style={{
 										display: "flex",
 										gap: "20px",
-										justifyContent: "center",
+										justifyContent: "left",
+										paddingLeft:0
 									}}
 								>
 									{nearbyBigCities &&
@@ -430,7 +431,7 @@ export default function ClientDashboard() {
 											<li
 												key={city.name}
 												onClick={() => panToCity(city)}
-												style={{ listStyle: "none", textAlign: "center" }}
+												style={{ listStyle: "none", textAlign: "left", cursor: "pointer" }}
 											>
 												{/* <img src={city.image} alt={city.name} style={{ width: "50px", height: '50px', objectFit: "cover", borderRadius: "5px", margin: '0 auto' }} /> */}
 												<div>{city.name}</div>
@@ -441,14 +442,12 @@ export default function ClientDashboard() {
 						</div>
 
 						<div
-							className="clientLProw2right CFblackBackground"
+							className="pcards_right CFblackBackground"
 							style={{
 								flex: 1,
 								maxHeight: "500px",
 								overflowY: "auto",
-								backgroundColor: "#282828",
 								borderRadius: "15px",
-								padding: "15px",
 							}}
 							ref={providerListRef}
 						>

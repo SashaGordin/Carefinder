@@ -41,9 +41,9 @@ export default function RoomCard({ userData, roomData, listingData, handleRoomUp
 
         <div className="CFListingImgContainer2">
 
-          <div className="CFPlaceholderImg2"><img alt="" height='100px' src={(roomData.roomPhotos && roomData.roomPhotos[0]) ?? defaultListingImg}/></div>
+          <div className="CFPlaceholderImg2"><img style={{borderRadius:"10px"}} alt="" height='100px' src={(roomData.roomPhotos && roomData.roomPhotos[0]) ?? defaultListingImg}/></div>
 
-          <Button onClick={editListing}>Edit listing</Button>
+          <Button style={{marginTop:"10px"}}onClick={editListing}>Edit listing</Button>
 
         </div>
 

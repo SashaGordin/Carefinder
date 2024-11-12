@@ -40,7 +40,6 @@ export default function CareFinderContactUs() {
           msgParentID: messageParentID,
           msgType: messageType
         });
-
         setMessageSent(true);
         document.getElementById('theMessage').value = '';
       };

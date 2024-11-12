@@ -54,6 +54,7 @@ export default function CPListings() {
   }, []);
 
   const handleUpdate = async (updatedUserData) => {
+
     try {
       const userDocRef = doc(firestore, 'users', currentUser.uid);
       await updateDoc(userDocRef, updatedUserData);
@@ -78,18 +79,27 @@ export default function CPListings() {
       <div className="CPlistings">
 
         <TopNav userRole="provider" />
+
         <p>&nbsp;</p>
+
         {error && <div>{error}</div>}
 
         <Card><PersonalInfo /></Card>
-        <p>&nbsp;</p>
 
+        <p>&nbsp;</p>
 
         <Profile userData={userData} handleUpdate={handleUpdate} />
+
         <p>&nbsp;</p>
+
         {listingsData.map((data, i) => (<ListingCard userData={userData} initialListingData={data} key={i} />))}
+
         <p>&nbsp;</p>
+
         <AddAFH uid={currentUser.uid}/>
+
+        <p>&nbsp;</p>
+
       </div>
 
       <Footer />

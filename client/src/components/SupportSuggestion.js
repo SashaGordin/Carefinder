@@ -4,12 +4,10 @@ import TopNav from "./TopNav";
 import Footer from "./Footer";
 import { firestore } from "../firebase";
 import { Timestamp } from "firebase/firestore";
-
 /**
  * TODO:  Determine sender and recipient.
  * SENDER s/b some permanent admin address that we will not use, but need for a sender address
  * RECIPIENT s/b MICAH's permanent account address so that he gets the messages, for now.
- *
  */
 
 export default function SupportSuggestion() {
@@ -80,7 +78,6 @@ export default function SupportSuggestion() {
 						</div>
 					</Card.Body>
 				</Card>
-
 				{messageSent && (
 					<div
 						style={{ marginTop: 20, fontSize: "30px" }}

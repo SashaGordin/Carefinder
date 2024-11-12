@@ -383,6 +383,7 @@ export default function MsgTemplateMVP({ passData, hasArchives }) {
 							<div
 								className={getMessageWrapperClass(thisMsg["m_ST"])}
 								style={{ display: "block" }}
+								onClick={() => toggleHideDivID(thisMsg["m_ID"])}
 							>
 								<div key={index} className="msgAlertLeft">
 									{avatarURLs && avatarURLs[index] ? (
@@ -410,7 +411,7 @@ export default function MsgTemplateMVP({ passData, hasArchives }) {
 										</>
 									)}
 								</div>
-								<div className="msgAlertRight">
+								{/* <div className="msgAlertRight">
 									<p className="msgActions">
 										<a
 											href="###"
@@ -419,7 +420,7 @@ export default function MsgTemplateMVP({ passData, hasArchives }) {
 											📝
 										</a>
 									</p>
-								</div>
+								</div> */}
 								<div className="clear"></div>
 							</div>
 

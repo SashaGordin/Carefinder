@@ -8,4 +8,7 @@
 .env.local
 .vscode
 
-/server/config/serviceAccount.json
+**/serviceAccount.json
+
+
+

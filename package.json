@@ -82,11 +82,7 @@
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
     "test": "node scripts/test.js",
-<<<<<<< HEAD
     "serve": "nodemon server/server.js",
-=======
-    "serve": "nodemon functions/index.js",
->>>>>>> 96fd01bcdd9c9e564a6c20d4d3c9da702a6daabd
     "serve1": "node server/server.js",
     "deploy": "firebase deploy",
     "ci": "npm install && npm run build"

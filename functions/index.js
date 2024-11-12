@@ -976,6 +976,10 @@ app.post("/cancel-payment", async (req, res) => {
     res.status(500).json({error: error.message});
   }
 });
+const port = 8080;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
 
 exports.api = onRequest(
     {secrets: [googleMapsApiKey, stripeTestSecretKey, twilioAccountSid, twilioAuthToken]}, // Bind secrets here

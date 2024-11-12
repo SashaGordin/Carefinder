@@ -23,7 +23,6 @@ export default function CPLandingPage() {
 	return (
 		<>
 			<TopNav />
-
 			<div className="CProw1 CPhomeTopBackground">
 				<div className="contentContainer">
 					<div className="left60">
@@ -136,7 +135,6 @@ export default function CPLandingPage() {
 							<li style={listItemStyle}>
 								Payments stop if the resident leaves, moves out, or passes away.
 							</li>
-
 						</ul>
 					</div>
 

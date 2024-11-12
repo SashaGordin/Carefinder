@@ -39,7 +39,6 @@ export default function LandingPage() {
 	return (
 		<>
 			<TopNav />
-
 			<div className="homeRow1 homeTopBackground">
 				<div className="contentContainer">
 					<div className="left60">
@@ -101,8 +100,7 @@ export default function LandingPage() {
 
 			<div className="homeRow3">
 				<div className="contentContainer CFgrayBackground">
-					<h2>Keep Your Senior Safe</h2>
-
+					<h2>Keep Our Seniors Safe</h2>
 					<style>
 						{" "}
 						{`.custom-checkmark-list li::before { content: '\\2713'; position: absolute; left: 0; color: #ff6699;}`}
@@ -130,7 +128,6 @@ export default function LandingPage() {
 					</ul>
 				</div>
 			</div>
-
 			<div className="homeRow5 CFblackBackground">
 				<div className="contentContainer">
 					<h2 className="text-center">Frequently asked questions</h2>

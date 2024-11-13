@@ -5,8 +5,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { getDoc, getDocs, doc, updateDoc, collection } from 'firebase/firestore';
 import TopNav from "../components/TopNav";
 import Footer from "../components/Footer";
-import PersonalInfo from '../components/menu/PersonalInfo';
-import Profile from '../components/CPListings/Profile';
+import PersonalInfo from '../components/CPListings/PersonalInfo';
 import ListingCard from '../components/CPListings/ListingCard';
 import AddAFH from '../components/AddAFH';
 
@@ -84,23 +83,11 @@ export default function CPListings() {
 
         {error && <div>{error}</div>}
 
-        <Card><PersonalInfo /></Card>
-
+        <PersonalInfo userData={userData} handleUpdate={handleUpdate}/>
         <p>&nbsp;</p>
-
-        <Profile userData={userData} handleUpdate={handleUpdate} />
-
-        <p>&nbsp;</p>
-
         {listingsData.map((data, i) => (<ListingCard userData={userData} initialListingData={data} key={i} />))}
-
-        <p>&nbsp;</p>
-
-        <AddAFH uid={currentUser.uid}/>
-
-        <p>&nbsp;</p>
-
       </div>
+      <p>&nbsp;</p>
 
       <Footer />
     </>

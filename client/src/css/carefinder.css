@@ -155,9 +155,16 @@ body#CF input, textarea {
     margin-bottom:10px;
 }
 
+body#CF .switchBtnGrp {
+  display: flex;
+  justify-content: space-between;
+}
+
+
 body#CF .homeLookup input {
     border-radius: 30px; margin-right:10px; width:50%;  padding-left:15px; padding-bottom:6px;
 }
+
 body#CF .homeLookup button {
     border-radius: 30px; padding:8px 20px 8px 20px; position:relative; top:-4px
 }

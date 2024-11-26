@@ -12,11 +12,52 @@ export default function CostOfCare({ listingInfo, setListingInfo, handleUpdate }
 	const toggleButton = (val, e) => {
 		handleChange(e);
 	}
+
+	const addService = () => {
+		const newService = document.getElementById("NewService").value;
+		if (!newService)
+			return;
+
+		let newServiceList = new Set(fullServiceList); //removes case-sensitive duplicates
+		newServiceList.add(newService);
+		setListingInfo({
+			...listingInfo,
+			costOfCare: {
+				...listingInfo.costOfCare,
+				fullServiceList: [...newServiceList]
+			}
+		});
+
+		document.getElementById("NewService").value = "";
+	}
+
 	const handleChange = (e) => {
 		let val;
-		//how to handle multi-tiered approach to this
-		//listingInfo.costOfCare.L.services??
 
+		//sample costOfCare object
+		let sampleCostOfCare = {
+			L: {
+				lowPrice: 2,
+				highPrice: 10,
+				services: ["service1", "service2", "etc."]
+			},
+			M: {
+				lowPrice: 2,
+				highPrice: 10,
+				services: ["service1", "service2", "etc."]
+			},
+			H: {
+				lowPrice: 2,
+				highPrice: 10,
+				services: ["service1", "service2", "etc."]
+			},
+			T: {
+				lowPrice: 2,
+				highPrice: 10,
+				services: ["service1", "service2", "etc."]
+			},
+			fullServiceList: ["Transportation", "Special diets", "etc."]
+		};
 
 		let name = e.target.name;
 		if (e.target.type == "checkbox") {
@@ -27,9 +68,17 @@ export default function CostOfCare({ listingInfo, setListingInfo, handleUpdate }
 		}
 		else
 			val = e.target.value;
+
+		// listingInfo.costOfCare.[careLevel]
 		setListingInfo({
 			...listingInfo,
-			[name]: val
+			costOfCare: {
+				...listingInfo.costOfCare,
+				[careLevel]: {
+					...listingInfo.costOfCare?.[careLevel],
+					[name]: val
+				}
+			}
 		});
 	}
 
@@ -60,26 +109,28 @@ export default function CostOfCare({ listingInfo, setListingInfo, handleUpdate }
 							<Col>Monthly price:</Col>
 							<Col>
 								<label>From</label>
-								<input type="text" required name="lowPrice" value={listingInfo.costOfCare?.[`${careLevel}`]?.lowPrice ?? ""} onChange={handleChange} />
+								<input type="currency" required name="lowPrice" value={listingInfo.costOfCare?.[careLevel]?.lowPrice ?? ""} onChange={handleChange} />
 							</Col>
 							<Col>
 								<label>To</label>
-								<input type="text" required name="highPrice" value={listingInfo.costOfCare?.[`${careLevel}`]?.highPrice ?? ""} onChange={handleChange} />
+								<input type="currency" required name="highPrice" value={listingInfo.costOfCare?.[careLevel]?.highPrice ?? ""} onChange={handleChange} />
 							</Col>
 						</Row>
 						<div className="small">
 							Base Price:
-							{listingInfo.costOfCare?.[`${careLevel}`]?.services.map((option, i) => (
-								<div key={i}>{option}</div>
-							))}
+							<div style={{ height: '200px', overflowY: 'auto' }}>
+								{listingInfo.costOfCare?.[`${careLevel}`]?.services?.map((option, i) => (
+									<div key={i}>{option}</div>
+								))}
+							</div>
 						</div>
 					</Card>
 				</Col>
 				<Col>
 					<h6>Select services that are included in this tier</h6>
 					<Card>
-						<Card.Body>
-							<ToggleButtonGroup type="checkbox" name="services" vertical value={listingInfo.costOfCare?.[`${careLevel}`]?.services} onChange={toggleButton}>
+						<Card.Body style={{ height: '400px', overflowY: 'auto' }}>
+							<ToggleButtonGroup type="checkbox" name="services" vertical value={listingInfo.costOfCare?.[careLevel]?.services ?? []} onChange={toggleButton}>
 								{fullServiceList.map((service, i) => (
 									<ToggleButton className={"mb-3"} id={`services-${i}`} key={i} value={service}>
 										{service}
@@ -89,11 +140,15 @@ export default function CostOfCare({ listingInfo, setListingInfo, handleUpdate }
 						</Card.Body>
 					</Card>
 					<div>
-						<input type="text" placeholder="Add service" />
-						<Button>Add</Button>
+						<input onKeyDown={(e) => { if (e.key === 'Enter') addService() }} type="text" id="NewService" placeholder="Add service" />
+						<Button onClick={addService}>Add</Button>
 					</div>
 				</Col>
 			</Row>
+			<div className={'d-inline-block'}>
+				<Button onClick={handleSave}>Save Changes</Button>
+				<Alert show={justSaved} onClose={() => setJustSaved(false)} dismissible variant={"success"}>Saved</Alert>
+			</div>
 		</>
 
 	);

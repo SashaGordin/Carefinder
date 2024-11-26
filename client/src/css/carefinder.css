@@ -155,9 +155,16 @@ body#CF input, textarea {
     margin-bottom:10px;
 }
 
+body#CF .switchBtnGrp {
+  display: flex;
+  justify-content: space-between;
+}
+
+
 body#CF .homeLookup input {
     border-radius: 30px; margin-right:10px; width:50%;  padding-left:15px; padding-bottom:6px;
 }
+
 body#CF .homeLookup button {
     border-radius: 30px; padding:8px 20px 8px 20px; position:relative; top:-4px
 }
@@ -563,7 +570,7 @@ input#clientSearch::placeholder { color: black; }
  #CF .CFPlaceholderImg img {margin:auto;}
 
 
-#CF .singleRoomCard { background:#131313; float:left; width: 40%; margin: 20px 5%; border-radius:10px; padding:20px; }
+#CF .singleRoomCard { background:#131313; width: 40%; margin: 20px 5%; border-radius:10px; padding:20px; }
 #CF .CFListingCardHeader2 { width:100%;  }
 #CF .CFListingStatus2 { float:left; width:80%; }
 #CF .CFlistingButton2 { float:left; width:20%; }

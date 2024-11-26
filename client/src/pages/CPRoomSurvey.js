@@ -1,3 +1,5 @@
+
+//DEPRECATED
 import React, { useState } from 'react';
 import { firestore } from '../firebase'; // Assuming you have firebase.js setup
 import { getDoc, doc, setDoc } from 'firebase/firestore';

@@ -86,7 +86,7 @@ export default function MedicalQuestionaire({ listingInfo, setListingInfo, handl
 					<label>Care provider accepts long term care insurance</label>
 					<Form.Switch inline name="acceptsLTCInsurance" value="1" checked={listingInfo.acceptsLTCInsurance?.length > 0 ? true : false} onChange={handleChange} />
 				</div>
-				<div className>
+				<div>
 					<label>Care provider incontinence support</label>
 					<div>
 						{incontinenceSupportOptions.map((option, i) => (
@@ -217,10 +217,9 @@ export default function MedicalQuestionaire({ listingInfo, setListingInfo, handl
 				<div>
 					<label>What type of residents do you seek to care for?</label>
 					<Row>{targetResidentOptions.map((option, i) => (
-						<Col xs={4}>
+						<Col xs={4} key={i} >
 							<Form.Check
 								name='targetResidents'
-								key={i}
 								type='checkbox'
 								value={i}
 								label={option}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 
 export default function RoomCard({ userData, roomData, listingData, handleRoomUpdate, facilityPath}) {
@@ -11,12 +11,13 @@ export default function RoomCard({ userData, roomData, listingData, handleRoomUp
   let toggleImg = isAvailable ? "toggleon.png" : "toggleoff.png";
   const defaultListingImg = "bed.png";
 
-  const editListing = () => {
-	  navigate('/room-survey', {state: {userData, roomData, listingData, facilityPath }});
-  }
+  const editRoom = () => {
+		navigate('/edit-room', { state: { userData, roomData, listingData, facilityPath } });
+	}
 
-  const toggleListing = () => {
-    handleRoomUpdate({isAvailable:!isAvailable}, roomData.roomId).then(() => {setIsAvailable(!isAvailable)});
+  const toggleListing = (e) => {
+    let val = e.target.checked;
+    handleRoomUpdate({isAvailable: val}, roomData.roomId).then(() => {setIsAvailable(val)});
   }
 
   return (
@@ -25,16 +26,10 @@ export default function RoomCard({ userData, roomData, listingData, handleRoomUp
 
       <div className="singleRoomCard">
 
-        <div className='CFListingCardHeader2'>
-
-          <div className="CFListingStatus2">
-            {listingStatus}
-            <img alt="" onClick={toggleListing} src={toggleImg}/>
-          </div>
-
-
+        <div className='CFListingCardHeader2 d-flex justify-content-between'>
+          <div className="CFListingStatus2 ">{listingStatus}</div>
+          <Form.Switch inline name="isAvailable" value="1" checked={roomData.isAvailable ?? false} onChange={toggleListing} />
           <div className="clear"></div>
-
         </div>
 
         <h5>{roomData.roomName}</h5>
@@ -43,7 +38,7 @@ export default function RoomCard({ userData, roomData, listingData, handleRoomUp
 
           <div className="CFPlaceholderImg2"><img style={{borderRadius:"10px"}} alt="" height='100px' src={(roomData.roomPhotos && roomData.roomPhotos[0]) ?? defaultListingImg}/></div>
 
-          <Button style={{marginTop:"10px"}}onClick={editListing}>Edit listing</Button>
+          <Button style={{marginTop:"10px"}}onClick={editRoom}>Edit listing</Button>
 
         </div>
 

@@ -13,6 +13,7 @@ import CPListings from '../pages/CPListings';
 import CPHomeSurvey from '../pages/CPHomeSurvey';
 import CPRoomSurvey from '../pages/CPRoomSurvey';
 import CPSelectGreeting from '../pages/CPSelectGreeting';
+import CPRoomEdit from '../pages/CPRoomEdit';
 
 import ClientDashboard from '../pages/ClientDashboard';
 import { AuthProvider } from "../contexts/AuthContext"
@@ -214,6 +215,18 @@ function App() {
                       ['provider','admin']
                     }>
                       <CPSelectGreeting />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/edit-room"
+                element={
+                  <PrivateRoute
+                    redirectPath="/signup"
+                    allowedRoles={
+                      ['provider','admin']
+                    }>
+                      <CPRoomEdit />
                   </PrivateRoute>
                 }
               />

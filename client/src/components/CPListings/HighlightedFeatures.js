@@ -5,11 +5,30 @@ import { Row, Col, Form, Button, Fade, Alert, Card, ToggleButton, ToggleButtonGr
 export default function HighlightedFeatures({ listingInfo, setListingInfo, handleUpdate }) {
 	const [justSaved, setJustSaved] = useState(false);
 
-	const features = ["Transportation", "Special diets", "Wound care", "Manicures", "Physical therapy", "House keeping", "Laundry"];
+	const defaultFeatureList = ["Transportation", "Special diets", "Wound care", "Manicures", "Physical therapy", "House keeping", "Laundry"];
+	const fullFeatureList = listingInfo.highlightedFeatures?.fullFeatureList ?? defaultFeatureList;
 
 	const toggleButton = (val, e) => {
 		handleChange(e);
 	}
+	const addService = () => {
+		const newService = document.getElementById("NewFeature").value;
+		if (!newService)
+			return;
+
+		let newFeatureList = new Set(fullFeatureList); //removes case-sensitive duplicates
+		newFeatureList.add(newService);
+		setListingInfo({
+			...listingInfo,
+			highlightedFeatures: {
+				...listingInfo.highlightedFeatures,
+				fullFeatureList: [...newFeatureList]
+			}
+		});
+
+		document.getElementById("NewFeature").value = "";
+	}
+
 	const handleChange = (e) => {
 		let val;
 		let name = e.target.name;
@@ -21,9 +40,13 @@ export default function HighlightedFeatures({ listingInfo, setListingInfo, handl
 		}
 		else
 			val = e.target.value;
+		// listingInfo.highlightedFeatures.selectedFeatures
 		setListingInfo({
 			...listingInfo,
-			[name]: val
+			highlightedFeatures: {
+				...listingInfo.highlightedFeatures,
+				[name]: val
+			}
 		});
 	}
 
@@ -40,34 +63,39 @@ export default function HighlightedFeatures({ listingInfo, setListingInfo, handl
 			<Row>
 				<Col>
 					<Card>
-							<Card.Title>
-								<h2>Highlighted features & Activities</h2>
-							</Card.Title>
+						<Card.Title>
+							<h2>Highlighted features & Activities</h2>
+						</Card.Title>
+						<div style={{ height: '400px', overflowY: 'auto' }}>
 
-							{listingInfo.features?.map((option, i) => (
-								<div key={i}>{option}</div>
-							))}
+						{listingInfo.highlightedFeatures?.selectedFeatures.map((option, i) => (
+							<div key={i}>{option}</div>
+						))}</div>
 					</Card>
 				</Col>
 				<Col>
 					<h6>Select features that your AFH has to offer</h6>
 					<Card>
-						<Card.Body>
-							<ToggleButtonGroup type="checkbox" name="features" vertical value={listingInfo.features} onChange={toggleButton}>
-								{features.map((option, i) => (
-								  <ToggleButton className={"mb-3"} id={`features-${i}`} key={i} value={option}>
-									{option}
-								  </ToggleButton>
+						<Card.Body style={{ height: '400px', overflowY: 'auto' }}>
+							<ToggleButtonGroup type="checkbox" name="selectedFeatures" vertical value={listingInfo.highlightedFeatures?.selectedFeatures} onChange={toggleButton}>
+								{fullFeatureList.map((option, i) => (
+									<ToggleButton className={"mb-3"} id={`features-${i}`} key={i} value={option}>
+										{option}
+									</ToggleButton>
 								))}
 							</ToggleButtonGroup>
 						</Card.Body>
 					</Card>
 					<div>
-					<input type="text" placeholder="Add feature" />
-					<Button>Add</Button>
-				</div>
+						<input onKeyDown={(e) => { if (e.key === 'Enter') addService() }} type="text" id="NewFeature" placeholder="Add service" />
+						<Button onClick={addService}>Add</Button>
+					</div>
 				</Col>
 			</Row>
+			<div className={'d-inline-block'}>
+				<Button onClick={handleSave}>Save Changes</Button>
+				<Alert show={justSaved} onClose={() => setJustSaved(false)} dismissible variant={"success"}>Saved</Alert>
+			</div>
 		</>
 
 	);

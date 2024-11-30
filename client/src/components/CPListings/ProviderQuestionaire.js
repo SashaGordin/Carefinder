@@ -4,7 +4,7 @@ import { Row, Col, Form, Button, Fade, Alert } from 'react-bootstrap';
 
 export default function ProviderQuestionaire({ listingInfo, setListingInfo, handleUpdate }) {
 	const [justSaved, setJustSaved] = useState(false);
-
+	const sectionId = "providerQuestionaire";
 	const licenseOptions = ["Dementia", "Developmentally disabled", "Mental health"];
 
 	const handleChange = (e) => {
@@ -12,13 +12,14 @@ export default function ProviderQuestionaire({ listingInfo, setListingInfo, hand
 		let name = e.target.name;
 		if (e.target.type == "checkbox") {
 			val = [];
-			document.querySelectorAll(`[name='${name}']:checked`).forEach((t) => {
-				val.push(t.id);
+			document.querySelectorAll(`#${sectionId} [name='${name}']:checked`).forEach((t) => {
+				val.push(parseInt(t.value)); //index into the array of options (i.e. licenseOptions)
 			});
 		}
 		else
 			val = e.target.value;
-		setListingInfo({
+		
+			setListingInfo({
 			...listingInfo,
 			[name]: val
 		});
@@ -34,7 +35,7 @@ export default function ProviderQuestionaire({ listingInfo, setListingInfo, hand
 	return (
 
 		<>
-			<div>
+			<div id={sectionId}>
 				<div>
 					<label>How is this home operated:</label>
 					<input type="text" required name="homeOperation" value={listingInfo.homeOperation ?? ""} onChange={handleChange} />
@@ -45,14 +46,14 @@ export default function ProviderQuestionaire({ listingInfo, setListingInfo, hand
 				</div>
 				<div>
 					<label>Licensed for</label>
-					{licenseOptions.map((option) => (
+					{licenseOptions.map((option, i) => (
 						<Form.Check
 							name='speciality'
-							key={option}
+							key={i}
 							type='checkbox'
-							id={option}
+							value={i}
 							label={option}
-							checked={listingInfo.speciality?.includes(option) ?? false}
+							checked={listingInfo.speciality?.includes(i) ?? false}
 							onChange={handleChange}
 						/>
 					))}
@@ -65,11 +66,11 @@ export default function ProviderQuestionaire({ listingInfo, setListingInfo, hand
 					<label>Provider statement:</label>
 					<input type="textarea" required className="small" rows="5" cols="50" name="statement" value={listingInfo.statement ?? ""} onChange={handleChange} />
 				</div>
-				<div>
+				<div className={"switchBtnGrp"}>
 					<label>Do you want to receive text notifications?</label>
 					<Form.Switch inline name="textNotifications" value="1" checked={listingInfo.textNotifications?.length > 0 ? true : false} onChange={handleChange} />
 				</div>
-				<div>
+				<div className={"switchBtnGrp"}> 
 					<label>Do you require prospective residents to be qualified to message you?</label>
 					<Form.Switch inline name="qualifiedMessagesOnly" value="1" checked={listingInfo.qualifiedMessagesOnly?.length > 0 ? true : false} onChange={handleChange} />
 				</div>

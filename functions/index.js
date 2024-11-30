@@ -21,6 +21,7 @@ const admin = require("./config/firebase-config");
 require("dotenv").config({path: ".env.local"});
 const bodyParser = require("body-parser");
 const axios = require("axios"); // Import axios
+// const functions = require("firebase-functions");
 const cors = require("cors"); // Import the cors package
 const db = admin.firestore();
 const geofire = require("geofire-common");
@@ -48,7 +49,15 @@ onInit(() => {
 
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-app.use(cors({origin: true})); // Allows all origins, you can specify specific origins if needed
+// app.use(cors({origin: true})); // Allows all origins, you can specify specific origins if needed
+
+const corsOptions = {
+  origin: "https://carefinder-4c036.web.app", // Replace with your frontend URL
+  methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed methods
+  allowedHeaders: ["Content-Type", "Authorization"], // Allow these headers
+};
+
+app.use(cors(corsOptions));
 
 // ********************************************************
 // BEGIN MONITORING MESSAGES for CHANGES /
@@ -686,6 +695,9 @@ app.post("/getAddress", async (req, res) => {
   }
 });
 
+app.options("/getAddress", cors(corsOptions)); // This will handle the preflight request
+
+
 app.post("/getCoordinates", async (req, res) => {
   const {address} = req.body;
   console.log(address);
@@ -976,10 +988,10 @@ app.post("/cancel-payment", async (req, res) => {
     res.status(500).json({error: error.message});
   }
 });
-const port = 8080;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// const port = 8080;
+// app.listen(port, () => {
+//   console.log(`Server is running on port ${port}`);
+// });
 
 exports.api = onRequest(
     {secrets: [googleMapsApiKey, stripeTestSecretKey, twilioAccountSid, twilioAuthToken]}, // Bind secrets here

@@ -1,5 +1,5 @@
 const Stripe = require("stripe");
-const admin = require("./config/firebase-config");
+const { admin, geocollection } = require("./config/firebase-config");
 require("dotenv").config({ path: ".env.local" });
 const express = require("express");
 const bodyParser = require("body-parser");
@@ -27,118 +27,126 @@ app.use(cors());
 // SENDING SMS NOTIFICATIONS to PROVIDERS (or ADMINS)
 // .....
 
-    // phone # cleanup for Twilio:
-	// format phone number in E.164 format before sending the SMS
-	//  -- adds the country code prefix (e.g., +1 for US numbers)
-	//  -- removes any non-digit characters.
-	const formatPhoneNumber = (phone) => {
-		// Assuming US phone numbers, add country code +1
-		if (!phone.startsWith('+')) {
-		return `+1${phone.replace(/\D/g, '')}`;
+// phone # cleanup for Twilio:
+// format phone number in E.164 format before sending the SMS
+//  -- adds the country code prefix (e.g., +1 for US numbers)
+//  -- removes any non-digit characters.
+const formatPhoneNumber = (phone) => {
+	// Assuming US phone numbers, add country code +1
+	if (!phone.startsWith("+")) {
+		return `+1${phone.replace(/\D/g, "")}`;
+	}
+	return phone.replace(/\D/g, "");
+};
+
+// Function to handle new messages:
+const handleNewMessage = async (doc) => {
+	try {
+		const messageData = doc.data();
+		const msgTo = messageData.msgTo;
+		const docId = doc.id;
+		console.log(`SERVER: Work w/ document ID: ${docId}`);
+
+		// ********** BEGIN VALIDATIONS **********
+
+		// Validation:  Check if msgTo is null
+		if (!msgTo) {
+			console.log(
+				"SERVER: `msgTo` is null for msgID " + docId + ". Skipping message!"
+			);
+			return;
 		}
-		return phone.replace(/\D/g, '');
-	};
 
-	// Function to handle new messages:
-	const handleNewMessage = async (doc) => {
+		// Validation:  Skip any already notified...
+		const SMSsent = messageData.msgNotified;
+		if (SMSsent == 1) {
+			console.log("SERVER: Response already sent to: ", docId);
+			return;
+		}
 
-		try {
+		// Validation:  Message recipient must be a valid user...
+		const userSnapshot = await db.collection("users").doc(msgTo).get();
+		if (!userSnapshot.exists) {
+			console.log("SERVER: User not found: ", msgTo);
+			return;
+		}
 
-			const messageData = doc.data();
-			const msgTo = messageData.msgTo;
-			const docId = doc.id;
-			console.log(`SERVER: Work w/ document ID: ${docId}`);
+		const userData = userSnapshot.data();
+		const userRole = userData.role;
 
-			// ********** BEGIN VALIDATIONS **********
+		// Validation:  Recipient cannot be a "client" role...
+		if (userRole == "client") {
+			console.log(
+				"SERVER: We are not sending notifications to role: ",
+				userRole
+			);
+			return;
+		}
 
-			// Validation:  Check if msgTo is null
-			if (!msgTo) {
-				console.log('SERVER: `msgTo` is null for msgID ' + docId + '. Skipping message!');
-				return;
-			}
+		// Validation:  Recipient needs to have phone on file...
+		let userPhone = userData.TelephoneNmbr;
+		if (!userPhone) {
+			console.log("SERVER: User phone number not found.");
+			return;
+		}
+		// Validation:  Format the phone number to E.164
+		userPhone = formatPhoneNumber(userPhone);
 
-			// Validation:  Skip any already notified...
-			const SMSsent = messageData.msgNotified;
-			if (SMSsent==1) {
-				console.log('SERVER: Response already sent to: ', docId);
-				return;
-			}
+		// Validation:  Future logic TBD -- e.g., check if user has opted out of messaging
 
-			// Validation:  Message recipient must be a valid user...
-			const userSnapshot = await db.collection('users').doc(msgTo).get();
-			if (!userSnapshot.exists) {
-				console.log('SERVER: User not found: ', msgTo);
-				return;
-			}
+		// ********** END VALIDATIONS **********
 
-			const userData = userSnapshot.data();
-			const userRole = userData.role;
+		// Set the SMS (s/b short, I guess). Best practice is to include a full URL, like so:
+		const smsMessage =
+			"You have a new message on CareFinder! Visit https://www.carefinder.com to read/respond.";
 
-			// Validation:  Recipient cannot be a "client" role...
-			if (userRole == 'client') {
-				console.log('SERVER: We are not sending notifications to role: ', userRole);
-				return;
-			}
+		// Fetch or create the Messaging Service SID
+		console.log("SERVER: FETCH TRILIO SERVICE ID...");
+		const msgSvcSID = await getMessagingServiceSid();
+		console.log(`SERVER: Using Twilio Service SID: ${msgSvcSID}`);
 
-			// Validation:  Recipient needs to have phone on file...
-			let userPhone = userData.TelephoneNmbr;
-			if (!userPhone) {
-				console.log('SERVER: User phone number not found.');
-				return;
-			}
-			// Validation:  Format the phone number to E.164
-			userPhone = formatPhoneNumber(userPhone);
-
-			// Validation:  Future logic TBD -- e.g., check if user has opted out of messaging
-
-			// ********** END VALIDATIONS **********
-
-			// Set the SMS (s/b short, I guess). Best practice is to include a full URL, like so:
-			const smsMessage = 'You have a new message on CareFinder! Visit https://www.carefinder.com to read/respond.';
-
-			// Fetch or create the Messaging Service SID
-			console.log('SERVER: FETCH TRILIO SERVICE ID...');
-			const msgSvcSID = await getMessagingServiceSid();
-			console.log(`SERVER: Using Twilio Service SID: ${msgSvcSID}`);
-
-			client.messages.create({
+		client.messages
+			.create({
 				body: smsMessage,
 				to: userPhone,
-				messagingServiceSid: msgSvcSID
+				messagingServiceSid: msgSvcSID,
 			})
 			.then(async (message) => {
-				console.log('SERVER: SMS sent to phone# '+ userPhone +', ID: ', message.sid);
+				console.log(
+					"SERVER: SMS sent to phone# " + userPhone + ", ID: ",
+					message.sid
+				);
 
 				// Update the msgNotified field to 1...
 				// I think we definitely need to do this, as sometimes Firestore initially sends ALL
 				// messages here. So, we want to skip any already-notified ones.
 				console.log(`SERVER: Updating msgNotified for document ID: ${docId}`);
-				await db.collection('messages').doc(docId).update({ msgNotified: 1 });
-				console.log('SERVER: msgNotified field updated to 1');
+				await db.collection("messages").doc(docId).update({ msgNotified: 1 });
+				console.log("SERVER: msgNotified field updated to 1");
 			})
-			.catch(error => console.error('SERVER: Error sending SMS of messageID ' + docId + ' ... ERROR: ', error));
+			.catch((error) =>
+				console.error(
+					"SERVER: Error sending SMS of messageID " + docId + " ... ERROR: ",
+					error
+				)
+			);
+	} catch (error) {
+		console.error("SERVER: Error handling new message:", error);
+	}
+};
 
-		} catch (error) {
-
-			console.error('SERVER: Error handling new message:', error);
-
+// Listen for new messages in Firestore
+db.collection("messages").onSnapshot((snapshot) => {
+	snapshot.docChanges().forEach((change) => {
+		if (change.type === "added") {
+			handleNewMessage(change.doc);
 		}
-
-	};
-
-	// Listen for new messages in Firestore
-	db.collection('messages').onSnapshot((snapshot) => {
-		snapshot.docChanges().forEach((change) => {
-			if (change.type === 'added') {
-				handleNewMessage(change.doc);
-			}
-		});
 	});
+});
 
 // END MONITORING MESSAGES for CHANGES
 // && SENDING SMS NOTIFICATIONS
 // ********************************************************
-
 
 async function updateAPIDATA() {
 	const snapshot = await admin.firestore().collection("API_AFH_DATA").get();
@@ -202,42 +210,43 @@ async function getServiceSid() {
 
 async function getMessagingServiceSid() {
 	try {
-	  const docRef = admin.firestore().collection("twilio").doc("messagingServiceSid");
-	  const doc = await docRef.get();
-	  if (doc.exists) {
-		const serviceSid = doc.data().sid;
-		// Check if the service SID is still valid by attempting to use it
-		try {
-		  await client.messaging.v1.services(serviceSid).fetch();
-		  return serviceSid; // Service SID is still valid
-		} catch (error) {
-		  console.error("Error using stored Messaging Service SID:", error);
-		  // If service SID is expired or invalid, create a new one
-		  const newService = await client.messaging.v1.services.create({
-			friendlyName: "My Messaging Service",
-		  });
-		  const newServiceSid = newService.sid;
-		  // Store new service SID in Firestore
-		  await docRef.set({ sid: newServiceSid });
-		  return newServiceSid;
+		const docRef = admin
+			.firestore()
+			.collection("twilio")
+			.doc("messagingServiceSid");
+		const doc = await docRef.get();
+		if (doc.exists) {
+			const serviceSid = doc.data().sid;
+			// Check if the service SID is still valid by attempting to use it
+			try {
+				await client.messaging.v1.services(serviceSid).fetch();
+				return serviceSid; // Service SID is still valid
+			} catch (error) {
+				console.error("Error using stored Messaging Service SID:", error);
+				// If service SID is expired or invalid, create a new one
+				const newService = await client.messaging.v1.services.create({
+					friendlyName: "My Messaging Service",
+				});
+				const newServiceSid = newService.sid;
+				// Store new service SID in Firestore
+				await docRef.set({ sid: newServiceSid });
+				return newServiceSid;
+			}
+		} else {
+			// If service SID doesn't exist, create a new one
+			const service = await client.messaging.v1.services.create({
+				friendlyName: "My Messaging Service",
+			});
+			const serviceSid = service.sid;
+			// Store service SID in Firestore
+			await docRef.set({ sid: serviceSid });
+			return serviceSid;
 		}
-	  } else {
-		// If service SID doesn't exist, create a new one
-		const service = await client.messaging.v1.services.create({
-		  friendlyName: "My Messaging Service",
-		});
-		const serviceSid = service.sid;
-		// Store service SID in Firestore
-		await docRef.set({ sid: serviceSid });
-		return serviceSid;
-	  }
 	} catch (error) {
-	  console.error("Error getting Messaging Service SID:", error);
-	  throw error;
+		console.error("Error getting Messaging Service SID:", error);
+		throw error;
 	}
-  }
-
-
+}
 
 app.post("/matchUserWithHouses", async (req, res) => {
 	// Async handler
@@ -277,7 +286,6 @@ app.post("/getProviders", async (req, res) => {
 	const centerArray = Array.isArray(center) ? center : [center.lat, center.lng];
 	const apiKey = API_KEY; // Replace with your Google Maps API key
 
-
 	try {
 		// Query the users collection for providers within the specified bounds
 		const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${centerArray[0]},${centerArray[1]}&key=${apiKey}`;
@@ -290,82 +298,91 @@ app.post("/getProviders", async (req, res) => {
 
 		if (geocodeData.results.length > 0) {
 			const addressComponents = geocodeData.results[0].address_components;
-			currentZipCode = addressComponents.find(component => component.types.includes("postal_code"))?.long_name || "";
-			cityName = addressComponents.find(component => component.types.includes("locality"))?.long_name || "";
-
+			currentZipCode =
+				addressComponents.find((component) =>
+					component.types.includes("postal_code")
+				)?.long_name || "";
+			cityName =
+				addressComponents.find((component) =>
+					component.types.includes("locality")
+				)?.long_name || "";
 
 			const bigCities = [
 				{ name: "Seattle", lat: 47.6062, lng: -122.3321 },
-				{ name: "Spokane", lat: 47.6588, lng: -117.4260 },
+				{ name: "Spokane", lat: 47.6588, lng: -117.426 },
 				{ name: "Tacoma", lat: 47.2529, lng: -122.4443 },
 				{ name: "Vancouver", lat: 45.6387, lng: -122.6615 },
 				{ name: "Bellevue", lat: 47.6101, lng: -122.2015 },
 				{ name: "Kent", lat: 47.3809, lng: -122.2348 },
-				{ name: "Everett", lat: 47.9780, lng: -122.2021 },
+				{ name: "Everett", lat: 47.978, lng: -122.2021 },
 				{ name: "Renton", lat: 47.4829, lng: -122.2171 },
 				{ name: "Spokane Valley", lat: 47.6732, lng: -117.2394 },
 				{ name: "Federal Way", lat: 47.3223, lng: -122.3126 },
 				{ name: "Yakima", lat: 46.6021, lng: -120.5059 },
-				{ name: "Kirkland", lat: 47.6769, lng: -122.2060 },
+				{ name: "Kirkland", lat: 47.6769, lng: -122.206 },
 				{ name: "Bellingham", lat: 48.7519, lng: -122.4787 },
 				{ name: "Kennewick", lat: 46.2112, lng: -119.1372 },
 				{ name: "Auburn", lat: 47.3073, lng: -122.2285 },
 				{ name: "Pasco", lat: 46.2396, lng: -119.1006 },
 				{ name: "Marysville", lat: 48.0518, lng: -122.1771 },
 				{ name: "Lakewood", lat: 47.1718, lng: -122.5185 },
-				{ name: "Redmond", lat: 47.6730, lng: -122.1215 },
+				{ name: "Redmond", lat: 47.673, lng: -122.1215 },
 				{ name: "Shoreline", lat: 47.7557, lng: -122.3415 },
 				{ name: "Richland", lat: 46.2804, lng: -119.2752 },
 				{ name: "Sammamish", lat: 47.6163, lng: -122.0356 },
 				{ name: "Burien", lat: 47.4704, lng: -122.3468 },
-				{ name: "Lynnwood", lat: 47.8279, lng: -122.3050 },
+				{ name: "Lynnwood", lat: 47.8279, lng: -122.305 },
 				{ name: "Bothell", lat: 47.7623, lng: -122.2054 },
 				{ name: "Puyallup", lat: 47.1854, lng: -122.2929 },
 				{ name: "Olympia", lat: 47.0379, lng: -122.9007 },
 				{ name: "Lacey", lat: 47.0343, lng: -122.8232 },
 				{ name: "Edmonds", lat: 47.8107, lng: -122.3774 },
 				{ name: "Bremerton", lat: 47.5673, lng: -122.6326 },
-				{ name: "Tumwater", lat: 47.0073, lng: -122.9093 }
-		];
+				{ name: "Tumwater", lat: 47.0073, lng: -122.9093 },
+			];
 			// Calculate distances and sort big cities by distance
-			nearbyBigCities = bigCities.map(city => {
+			nearbyBigCities = bigCities
+				.map((city) => {
 					const distanceInKm = geofire.distanceBetween(
-							[city.lat, city.lng],
-							centerArray
+						[city.lat, city.lng],
+						centerArray
 					);
 					return { ...city, distanceInKm };
-			}).sort((a, b) => a.distanceInKm - b.distanceInKm).slice(0, 4);
+				})
+				.sort((a, b) => a.distanceInKm - b.distanceInKm)
+				.slice(0, 4);
+		}
 
-	}
+		console.log(bounds.south, bounds.west, bounds.north, bounds.east);
 
 		const snapshot = await admin
 			.firestore()
 			.collection("users")
 			.where("role", "==", "provider")
-			.where(
-				"geolocation",
-				">=",
-				new admin.firestore.GeoPoint(bounds.south, bounds.west)
-			)
-			.where(
-				"geolocation",
-				"<=",
-				new admin.firestore.GeoPoint(bounds.north, bounds.east)
-			)
+			.where("position.lat", ">=", bounds.south)
+			.where("position.lat", "<=", bounds.north)
+			.where("position.lng", ">=", bounds.west)
+			.where("position.lng", "<=", bounds.east)
 			.get();
 
 		const providersInBounds = snapshot.docs.map((doc) => doc.data());
+		console.log("providers in bounds", providersInBounds);
+		// const results = await query.get();
+		// console.log(
+		// 	"results",
+		// 	results.docs.map((doc) => doc.data())
+		// );
 
 		// Filter providers based on distance from the center and radius
 		const filteredProviders = providersInBounds.filter((provider) => {
 			const distanceInKm = geofire.distanceBetween(
-				[provider.geolocation.latitude, provider.geolocation.longitude],
+				[provider.position.lat, provider.position.lng],
 				centerArray
 			);
 			const distanceInM = distanceInKm * 1000;
 			return distanceInM <= radius;
 		});
-
+		// console.log("filteredProviders", filteredProviders);
 
 		if (filteredProviders.length > 0) {
 			try {
@@ -383,33 +400,42 @@ app.post("/getProviders", async (req, res) => {
 							.get();
 
 						for (const listingDoc of listingsSnapshot.docs) {
-							try {
-								const roomsSnapshot = await listingDoc.ref
-									.collection("rooms")
-									.where("isAvailable", "==", true)
-									.get();
-								const roomData = roomsSnapshot.docs.map((doc) => doc.data());
-
-								if (!provider.listingsData) {
-									provider.listingsData = [];
-								}
-								provider.listingsData.push({
-									listingId: listingDoc.id,
-									roomData: roomData,
-								});
-								if (listingDoc.exists) {
-									const homePhotos = listingDoc.data().homePhotos;
-									if (homePhotos) {
-										if (!provider.homePhotos) {
-											provider.homePhotos = [];
-										}
-										provider.homePhotos.push(...homePhotos);
-									}
-								}
-							} catch (error) {
-								console.error("Error getting room data for listing:", error);
-							}
+							console.log("listingDoc", listingDoc.data());
 						}
+
+						provider.listingsData = listingsSnapshot.docs.reduce((acc, doc) => {
+							return { ...acc, ...doc.data() };
+						}, {});
+						console.log("provider.listingsData", provider.listingsData);
+
+						// for (const listingDoc of listingsSnapshot.docs) {
+						// 	try {
+						// 		const roomsSnapshot = await listingDoc.ref
+						// 			.collection("rooms")
+						// 			.where("isAvailable", "==", true)
+						// 			.get();
+						// 		const roomData = roomsSnapshot.docs.map((doc) => doc.data());
+
+						// 		if (!provider.listingsData) {
+						// 			provider.listingsData = [];
+						// 		}
+						// 		provider.listingsData.push({
+						// 			listingId: listingDoc.id,
+						// 			roomData: roomData,
+						// 		});
+						// 		if (listingDoc.exists) {
+						// 			const homePhotos = listingDoc.data().homePhotos;
+						// 			if (homePhotos) {
+						// 				if (!provider.homePhotos) {
+						// 					provider.homePhotos = [];
+						// 				}
+						// 				provider.homePhotos.push(...homePhotos);
+						// 			}
+						// 		}
+						// 	} catch (error) {
+						// 		console.error("Error getting room data for listing:", error);
+						// 	}
+						// }
 					} else {
 						console.error(
 							"User document not found for provider:",
@@ -417,7 +443,12 @@ app.post("/getProviders", async (req, res) => {
 						);
 					}
 				}
-				res.json({ providers: filteredProviders, nearbyBigCities, currentZipCode, cityName });
+				res.json({
+					providers: filteredProviders,
+					nearbyBigCities,
+					currentZipCode,
+					cityName,
+				});
 			} catch (error) {
 				console.error("Error getting providers:", error);
 				res.status(500).send("Internal Server Error");
@@ -440,7 +471,7 @@ app.post("/getProviders", async (req, res) => {
 				.get();
 			const providersInBoundsAPI = snapshotAPI.docs.map((doc) => doc.data());
 
-				console.log(centerArray, radius);
+			console.log(centerArray, radius);
 			// Filter providers from API_AFH_DATA based on distance from the center and radius
 			const filteredProvidersAPI = providersInBoundsAPI.filter((provider) => {
 				const distanceInKm = geofire.distanceBetween(
@@ -454,7 +485,12 @@ app.post("/getProviders", async (req, res) => {
 			// Combine providers from users collection and API_AFH_DATA collection
 			const allProviders = [...filteredProviders, ...filteredProvidersAPI];
 
-			res.json({ providers: allProviders, nearbyBigCities, currentZipCode, cityName });
+			res.json({
+				providers: allProviders,
+				nearbyBigCities,
+				currentZipCode,
+				cityName,
+			});
 		}
 	} catch (error) {
 		console.error("Error getting providers:", error);
@@ -965,13 +1001,13 @@ app.post("/create-provider-setup-intent", async (req, res) => {
 	console.log("Payment Method ID:", paymentMethodId);
 
 	let stripeCustomerId;
-		stripeCustomerId = await stripe.customers
-			.create({
-				// Replace with the user's email
-				name: displayName || "",
-				email: email,
-			})
-			.then((res) => res.id);
+	stripeCustomerId = await stripe.customers
+		.create({
+			// Replace with the user's email
+			name: displayName || "",
+			email: email,
+		})
+		.then((res) => res.id);
 	try {
 		const setupIntent = await stripe.setupIntents.create({
 			automatic_payment_methods: {
@@ -1035,41 +1071,38 @@ app.post("/create-subscription", async (req, res) => {
 	const { userId, priceId } = req.body;
 
 	try {
-			const userDoc = await db.collection("users").doc(userId).get();
-			const user = userDoc.data();
-			const setupIntentId = user.setupIntentId;
+		const userDoc = await db.collection("users").doc(userId).get();
+		const user = userDoc.data();
+		const setupIntentId = user.setupIntentId;
 
-			if (!setupIntentId) {
-					throw new Error("No setup intent ID found for user");
-			}
+		if (!setupIntentId) {
+			throw new Error("No setup intent ID found for user");
+		}
 
-			const setupIntent = await stripe.setupIntents.retrieve(setupIntentId);
+		const setupIntent = await stripe.setupIntents.retrieve(setupIntentId);
 
-			const subscription = await stripe.subscriptions.create({
-					customer: user.customerId,
-					items: [{ price: priceId }], // Replace with your price ID
-					default_payment_method: setupIntent.payment_method,
-					// trial_period_days: 30, // Set trial period of 30 days
-					// billing_cycle_anchor: "now", // Start billing cycle immediately after trial
-			});
+		const subscription = await stripe.subscriptions.create({
+			customer: user.customerId,
+			items: [{ price: priceId }], // Replace with your price ID
+			default_payment_method: setupIntent.payment_method,
+			// trial_period_days: 30, // Set trial period of 30 days
+			// billing_cycle_anchor: "now", // Start billing cycle immediately after trial
+		});
 
-			await db.collection('users').doc(userId).update({
-				subscriptionId: subscription.id,
-			});
+		await db.collection("users").doc(userId).update({
+			subscriptionId: subscription.id,
+		});
 
-			res.status(200).json({ message: "Success" });
+		res.status(200).json({ message: "Success" });
 	} catch (error) {
-			console.error("Error creating subscription:", error);
-			res.status(500).send({ error: error.message });
+		console.error("Error creating subscription:", error);
+		res.status(500).send({ error: error.message });
 	}
 });
-
 
 app.post("/confirm-provider-setup-intent", async (req, res) => {
 	const { setupIntentId, customerId } = req.body;
 	const setup = await stripe.setupIntents.retrieve(setupIntentId);
-
-
 
 	if (!customerId) {
 		res.status(400).json({ error: "No customer ID found for user" });
@@ -1087,7 +1120,6 @@ app.post("/confirm-provider-setup-intent", async (req, res) => {
 
 	res.status(200).json({ message: "Setup Intent confirmed successfully" });
 });
-
 
 app.post("/get-list-of-payments", async (req, res) => {
 	const userId = req.body.userId;
@@ -1124,7 +1156,8 @@ app.post("/charge-customer", async (req, res) => {
 		}
 
 		const customer = await stripe.customers.retrieve(customerId);
-		const defaultPaymentMethod = customer.invoice_settings.default_payment_method;
+		const defaultPaymentMethod =
+			customer.invoice_settings.default_payment_method;
 
 		const paymentIntent = await stripe.paymentIntents.create({
 			amount: amount, // amount in cents
@@ -1174,7 +1207,6 @@ app.post("/cancel-payment", async (req, res) => {
 		res.status(500).json({ error: error.message });
 	}
 });
-
 
 app.listen(port, () => {
 	console.log(`Server is running on port ${port} hi`);

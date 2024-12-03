@@ -12,7 +12,7 @@ import axios from "axios";
 import ProviderCard from "../components/ProviderCard";
 import { debounce } from "lodash";
 import { useLocation } from "react-router-dom";
-
+import { formatName } from "../utils";
 /**
  * TODO:  This page accepts a new param in the URL, sent here from the home page. Sample is:
  * /client-dashboard?refLookup=Seattle%2C%20WA
@@ -242,12 +242,6 @@ export default function ClientDashboard() {
 		}
 	};
 
-	function formatFacilityPOC(name) {
-		const [lastName, restName] = name.split(",");
-		const [firstName, middleInitial] = restName.split(" ");
-		return `${firstName.trim()} ${middleInitial.trim()} ${lastName.trim()}`;
-	}
-
 	const handleMapBoundsChanged = debounce(() => {
 		if (mapRef.current) {
 			const newBounds = mapRef.current.getBounds();
@@ -404,7 +398,7 @@ export default function ClientDashboard() {
 											onCloseClick={() => setSelectedMarker(null)}
 										>
 											<div style={{ color: "black" }}>
-												<h5>{formatFacilityPOC(selectedMarker.FacilityPOC)}</h5>
+												<h5>{formatName(selectedMarker.FacilityPOC)}</h5>
 												<div>{selectedMarker.LocationAddress}</div>
 												<div>{`${selectedMarker.LocationCity}, ${selectedMarker.LocationState} ${selectedMarker.LocationZipCode}`}</div>
 											</div>

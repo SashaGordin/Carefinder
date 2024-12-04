@@ -5,7 +5,7 @@
 /* CAREFINDER CSS ... */
 
 .CFpink { color:#ff6699; }
-.CFgray { color:#333333; }
+.CFgray { color:#1e1f26; }
 .CFblack { color:black; }
 .CFwhite { color:white; }
 .CForange { color:#ff9900; }
@@ -15,7 +15,7 @@
 span.CFpink, span.CForange { padding-left: 10px; padding-right:10px; }
 
 .CFpinkBackground { background:#ff6699; }
-.CFgrayBackground { background:#333333; }
+.CFgrayBackground { background:#1e1f26; }
 .CFblackBackground { background:black; }
 .CFwhiteBackground { background:white; }
 .CForangeBackground { background:#ff9900; }
@@ -63,7 +63,7 @@ span.CFpink, span.CForange { padding-left: 10px; padding-right:10px; }
   }
 
 /* NAVBAR */
-#CF .topnavigation { padding:10px; width:100%; background:#333333; }
+#CF .topnavigation { padding:10px; width:100%; background:#1e1f26; }
 #CF .topnavigation { color:white; font-weight: 700; }
 #CF .topnavigation img { width:50px; margin:0px 10px 0px 0px; }
 
@@ -98,7 +98,7 @@ body#CF button {
     border-radius: 10px;
 }
 body#CF .accordion button {
-    background:#333333;
+    background:#1e1f26;
     color:white;
     text-decoration: none;
     border:none;
@@ -124,7 +124,7 @@ body#CF button:hover {
 }
 
 body#CF button.btn-dark { background:black;}
-body#CF button.btn-dark:hover { background:#333333;}
+body#CF button.btn-dark:hover { background:#1e1f26;}
 
 body#CF button.btn-secondary { background:#181515;}
 body#CF button.btn-secondary:hover { background:#000000;}
@@ -136,11 +136,11 @@ body#CF button.btn-secondary:hover { background:#000000;}
     margin-right:auto;
 }
 
-#CF .card {  background:#333333;  color:white;  border-radius: 10px;  max-width: 500px; margin-left: auto;  margin-right: auto; }
-#CF .pcards_right .card{    background:#333333; color:white; border-radius: 10px; max-width: initial; margin-left: auto; margin-right: auto; }
-#CF .pcards_right .card button{  background: #333333; color: white; text-decoration: none; border: 1px solid white; border-radius: 10px; font-size: 90%; padding: 3px 10px 5px 10px; margin-top: 20px; float: right; }
+#CF .card {  background:#1e1f26;  color:white;  border-radius: 10px;  max-width: 500px; margin-left: auto;  margin-right: auto; }
+#CF .pcards_right .card{    background:#1e1f26; color:white; border-radius: 10px; max-width: initial; margin-left: auto; margin-right: auto; }
+#CF .pcards_right .card button{  background: #1e1f26; color: white; text-decoration: none; border: 1px solid white; border-radius: 10px; font-size: 90%; padding: 3px 10px 5px 10px; margin-top: 20px; float: right; }
 .cardPicLeft { width:50%; height: fit-content; }
-#CF .clientLProw2right .card { background:#333333; color:white; border-radius: 10px; max-width: 100%; margin-left: auto; margin-right: auto; }
+#CF .clientLProw2right .card { background:#1e1f26; color:white; border-radius: 10px; max-width: 100%; margin-left: auto; margin-right: auto; }
 #CF .CPlistings .card { max-width:800px; }
 #CF .CPlistings .utilityPage { padding:initial; }
 
@@ -161,9 +161,7 @@ body#CF .switchBtnGrp {
 }
 
 
-body#CF .homeLookup input {
-    border-radius: 30px; margin-right:10px; width:50%;  padding-left:15px; padding-bottom:6px;
-}
+body#CF .homeLookup input {  border-radius: 30px; margin-right:10px; width:50%; font-size:90%; padding:10px 0px 10px 35px; }
 
 body#CF .homeLookup button {
     border-radius: 30px; padding:8px 20px 8px 20px; position:relative; top:-4px
@@ -173,7 +171,7 @@ body#CF .homeLookup button {
 .CFdashboard { text-align:center; }
 body#CF .CFdashboard input { margin-left:10px; }
 
-.clientLProw1{ width:100%; background:#333333; }
+.clientLProw1{ width:100%; background:#1e1f26; }
 
 .clientLProw2left { width:40%; float:left; padding:15px; }
 .clientLProw2right { width:60%; float:left; padding:15px; }
@@ -196,7 +194,7 @@ body#CF button#takeSurvey { background:orange; }
 .farRight{ margin-right:0 !important; }
 
 /* CARE PROVIDER */
-.CProw1 h1, .homeRow1 h2 { font-size: 400%; font-weight: 700; }
+.CProw1 h1, .homeRow1 h2 { font-size: 300%; font-weight: 700; }
 .CProw1 p, .CProw2 p, .CProw3 p, .CProw4 p, .CProw5 p, .homeRow2 p { font-size: 175%; line-height: 125%; }
 .CProw1 .left60 { padding:30px; }
 
@@ -207,10 +205,10 @@ body#CF button#takeSurvey { background:orange; }
 
 .CProw3 .contentContainer { font-size:250%; font-weight:700; text-align:center;     padding-top: 2%; padding-bottom: 10%; }
 
-#CF .modal-content{ background: black;  border: 10px solid #333333; border-radius: 10px !important; }
+#CF .modal-content{ background: black;  border: 10px solid #1e1f26; border-radius: 10px !important; }
 #CF .modal-header { padding-top:0; padding-bottom:0; border:initial; }
 #CF .modal-title {color:white; }
-#CF .provider-card {border-radius:10px; margin:0; padding:0; }
+#CF .provider-card {border-radius:10px; margin:0; padding:0; background:red; }
 
 #CF .modal-backdrop.show {  background: black !important;  opacity: initial !important; }
 #CF button.providerModalBackButton { background:initial; }
@@ -218,6 +216,68 @@ body#CF button#takeSurvey { background:orange; }
 #CF .providerModalCardHomePics {
   width:100%; height:50%; border-radius: 10px; margin-bottom:10px; cursor: pointer;
 }
+
+
+.CF2-hamburger-popover {
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: auto;
+  width: 20%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.9); /* Dark background */
+  color: white; /* Adjust text color for contrast */
+  transform: translateX(100%); /* Start offscreen to the right */
+  transition: transform 0.3s ease; /* Smooth transition */
+  display: flex; /* Ensure it's a flex container */
+  flex-direction: column; /* Stack items vertically */
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it appears on top */
+}
+
+.CF2-hamburger-popover ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.CF2-hamburger-popover.show {
+  transform: translateX(0); /* Slide into view */
+}
+
+.CF2-hamburger-popover li {
+  margin: 15px 0;
+}
+
+.CF2-hamburger-popover button {
+  margin-top: 20px;
+}
+
+.CF2-menu-item .CF2-hamburger-popover a {
+  font-size: 20px;
+  padding: 0;
+  font-weight:initial;
+}
+
+.CF2-hamburger-popover svg {display:initial; }
+
+.CF2-hamburger-popover .centered-item {
+  text-align: center;
+  margin: 10px 0; /* Optional: Add some spacing between items */
+}
+
+
+.custom-link-terms {
+  color: #ff6699 !important;
+}
+
+.custom-link-privacy {
+  color: #ff9900 !important;
+}
+
+.triplebox{ width:30%; float:left; margin-left:1.65%; margin-right:1.65%; padding:25px; border-radius: 10px; min-height:300px; }
 
 .rubik500 {
   font-family: "Rubik", sans-serif;
@@ -359,11 +419,12 @@ body#CF ul.custom-checkmark-list{     padding-left: 30px !important;
     padding-right: 30px !important;
     font-size: 150%;}
 
+    .homeRow1 { padding-top:40px;}
 .homeRow1, .homeRow2, .homeRow3, .homeRow4, .homerow5 { margin-bottom:60px; }
 .homeRow1 p { font-size: 175%; line-height: 125%; }
 .homeRow1 .left60 { padding: 30px; }
 .homeRow2 .video-responsive { max-width:800px; margin-left:auto; margin-right:auto; }
-.homeRow3 .contentContainer { padding:40px; border-radius:50px; max-width: 750px; }
+.homeRow3 .contentContainer {   }
 .homeRow3 h2 { text-align:center; margin-bottom:20px; }
 .homeRow5 .accordion { --bs-accordion-color: initial;  --bs-accordion-bg:initial;
     --bs-accordion-border-color: initial; }
@@ -380,7 +441,10 @@ body#CF ul.custom-checkmark-list{     padding-left: 30px !important;
     height: 0.7em; /* 80% of the original size */
 }
 
+/*
 .homeTopBackground { background: url(/client/public/homeback1.jpg);     background-size: cover;   padding: 30px; }
+*/
+
 .CPhomeTopBackground { background: url(/client/public/pageback1.jpg);     background-size: cover;   padding: 30px; }
 #CF .accordion-button:focus { border-color:initial !important; box-shadow:initial !important;  }
 
@@ -418,7 +482,7 @@ div.clear {
 
 .messageWrapper {
     width:100%;
-    /*background: #333333;*/
+    /*background: #1e1f26;*/
     padding: 10px 20px;
     margin-bottom:30px;
     border-radius:10px;
@@ -503,7 +567,7 @@ float:right
 .msgThreadDateRight { text-align: right; padding-right:10px;  }
 .msgThreadDateLeft { padding-left:10px;  }
 .msgThreadSender{ text-align:left; background:#ff6699;  }
-.msgThreadRecipient{ text-align:right; background:#333333; float:right; }
+.msgThreadRecipient{ text-align:right; background:#1e1f26; float:right; }
 #CF .card-text input { margin-right:10px; }
 #CF .myAFHname button, #CF .myAFHname input { margin-left:10px; }
 body#CF .msgReplyArea input.btn.btn-primary { font-size: 100%;  margin-right: 10px; color:white; }
@@ -527,7 +591,7 @@ body#CF .msgReplyArea button.btn.btn-info {    font-size: 90%;
     height: 100%;
     width: 100%;
     position: absolute; border-radius: 10px;
-    border: 2px solid #ff6699;
+    /*border: 2px solid #ff6699;*/
   }
 
   #CFNAV {background: #1e1e1e !important;}
@@ -677,6 +741,9 @@ p.copyright { margin-top:40px; font-size:70%;}
     .CProw3 .contentContainer { padding:initial; padding:40px; margin-bottom:30px; }
     .video-responsive iframe { left: initial; height: 330px; width: 90%; position: relative; margin-left: auto; margin-right: auto; }
     #CFNAV img, #CFNAV .navbar > #CFNAV .container {display:inline !important; }
+
+    
+    .CF2-hamburger-popover {width:100%;}
 }
 
 
@@ -737,6 +804,8 @@ p.copyright { margin-top:40px; font-size:70%;}
   padding: 10px 20px;
   display: block;font-weight:bold;
 }
+
+
 
 .CF2-menu-item a:hover,
 .CF2-menu-item a:focus {

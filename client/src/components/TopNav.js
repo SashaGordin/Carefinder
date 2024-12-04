@@ -3,6 +3,7 @@ import { getDoc, doc } from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
 import { firestore } from "../firebase";
 import { useNavigate } from 'react-router-dom';
+import { FaHome, FaEnvelope, FaHeart, FaCog } from "react-icons/fa"; // Import desired icons
 
 export default function TopNav() {
   const [role, setRole] = useState("");
@@ -107,9 +108,7 @@ export default function TopNav() {
 
         {!role && (
           <ul className="CF2-menu">
-            <li className="CF2-menu-item"><a href="/client-dashboard">Find a Home</a></li>
-            <li className="CF2-menu-item"><a href="/care-provider">For AFH Providers</a></li>
-            <button onClick={() => navigate('/login')} style={{ backgroundColor: "#4CAF50", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "10px", position:'relative', top:'-5px', marginLeft:10 }}>Login</button>
+            <button onClick={() => navigate('/login')} style={{ backgroundColor: "#ffffff", color: "#ff9900", border: "none", padding: "10px 40px", cursor: "pointer", borderRadius: "30px", position:'relative', top:'3px', marginLeft:10 }}>Login</button>
           </ul>
         )}
 
@@ -125,25 +124,37 @@ export default function TopNav() {
 
         {role === "client" && (
           <ul className="CF2-menu">
-            <li className="CF2-menu-item"><a href="/client-dashboard">Browse</a></li>
-            <li className="CF2-menu-item"><a href="/msg-inbox">Inbox</a></li>
-            <li className="CF2-menu-item CF2-dropdown">
-              <a onMouseEnter={openOtherDropdown} className="CF2-dropdown-toggle" onMouseLeave={closeOtherDropdown}>Client Dashboard</a>
-              <ul className={`CF2-dropdown-menu ${otherDropdownOpen ? 'show' : ''}`}>
-                <li><a href="/client-dashboard">Client Dashboard</a></li>
-                <li><a href="/###">Edit Survey</a></li>
-              </ul>
-            </li>
 
             <li className="CF2-menu-item CF2-hamburger">
+
               <a onClick={toggleHamburgerMenu}>☰</a>
-              <ul className={`CF2-hamburger-menu ${isOpen ? 'show' : ''}`}>
-                <li><a href="/personal-info">Personal Info</a></li>
-                <li><a href="/###">Login & Security</a></li>
-                <li><a href="/###">Payment & Payout</a></li>
-                <li><a href="/###">Delete Account</a></li>
-                <button onClick={handleLogout} style={{ backgroundColor: "#F44336", width:"100%", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
-              </ul>
+              
+              <div className={`CF2-hamburger-popover ${isOpen ? 'show' : ''}`}>
+
+                <ul>
+
+                  {/* let's put a button here so people don't get trapped in this menu! */}
+                  <button onClick={toggleHamburgerMenu} style={{ position: 'absolute', top: '10px',  right: '10px',  background: 'none', border: 'none',  fontSize: '24px',  color: 'white',  cursor: 'pointer', }} >✕ </button>
+
+                  <a href="/client-dashboard"><li><FaHome style={{ marginRight: '8px', color: 'white' }} /> Schedule</li></a>
+                  <a href="/msg-inbox"><li><FaEnvelope style={{ marginRight: '8px', color: 'white' }} /> Messages</li></a>
+                  <a href="/client-dashboard"><li><FaHeart style={{ marginRight: '8px', color: 'white' }} /> Matches</li></a>
+                  
+                  <li style={{ borderBottom: '6px solid orange', margin: '35px 0', borderRadius:'9px' }}></li> 
+
+                  <a href="/personal-info"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Personal Info</li></a>
+                  <a href="/###"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Account</li></a>
+                  <a href="/###"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Billing History</li></a>
+                  <a href="/###"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Settings</li></a>
+                  <a href="/###"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Submit Feedback</li></a>
+
+                  <li onClick={handleLogout} className="centered-item" style={{ marginTop: '40px', fontWeight:'bold', fontSize: "125%", cursor:"pointer" }}>Sign out</li>
+                  <li className="centered-item"><a href="/terms-of-service" className="custom-link-terms">Terms of service</a></li>
+                  <li className="centered-item"><a href="/privacy-policy" className="custom-link-privacy">Privacy Policy</a></li>
+
+                </ul>
+                                   
+              </div>
             </li>
 
           </ul>
@@ -171,17 +182,41 @@ export default function TopNav() {
             </li>
             <li className="CF2-menu-item"><a href="/msg-inbox">Inbox</a></li>
 
+
             <li className="CF2-menu-item CF2-hamburger">
+
               <a onClick={toggleHamburgerMenu}>☰</a>
-              <ul className={`CF2-hamburger-menu ${isOpen ? 'show' : ''}`}>
-                <li><a href="/personal-info">Personal Info</a></li>
-                <li><a href="/provider-menu">Login & Security</a></li>
-                <li><a href="/provider-menu">Payment & Payout</a></li>
-                <li><a href="/provider-menu">My Profle</a></li>
-                <li><a href="/provider-menu">Delete Account</a></li>
-                <button onClick={handleLogout} style={{ backgroundColor: "#F44336", width:"100%", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
-              </ul>
+              
+              <div className={`CF2-hamburger-popover ${isOpen ? 'show' : ''}`}>
+
+                <ul>
+                  {/* let's put a button here so people don't get trapped in this menu! */}
+                  <button onClick={toggleHamburgerMenu} style={{ position: 'absolute', top: '10px',  right: '10px',  background: 'none', border: 'none',  fontSize: '24px',  color: 'white',  cursor: 'pointer', }} >✕ </button>
+
+                  <a href="/###"><li><FaHome style={{ marginRight: '8px', color: 'white' }} /> Schedule</li></a>
+                  <a href="/###"><li><FaEnvelope style={{ marginRight: '8px', color: 'white' }} /> Messages</li></a>
+                  <a href="/###"><li><FaHeart style={{ marginRight: '8px', color: 'white' }} /> Matches</li></a>
+                  
+                  <li style={{ borderBottom: '6px solid orange', margin: '35px 0', borderRadius:'9px' }}></li> 
+
+                  <a href="/personal-info"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Personal Info</li></a>
+                  <li><a href="/provider-menu">Login & Security</a></li>
+                  <li><a href="/provider-menu">Provider Menu</a></li>
+
+                  <a href="/###"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Account</li></a>
+                  <a href="/###"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Billing History</li></a>
+                  <a href="/###"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Settings</li></a>
+                  <a href="/###"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Submit Feedback</li></a>
+
+                  <li onClick={handleLogout} className="centered-item" style={{ marginTop: '40px', fontWeight:'bold', fontSize: "125%", cursor:"pointer" }}>Sign out</li>
+                  <li className="centered-item"><a href="/terms-of-service" className="custom-link-terms">Terms of service</a></li>
+                  <li className="centered-item"><a href="/privacy-policy" className="custom-link-privacy">Privacy Policy</a></li>
+
+                </ul>
+                                   
+              </div>
             </li>
+
 
           </ul>
         )}
@@ -228,13 +263,36 @@ export default function TopNav() {
 
 
             <li className="CF2-menu-item CF2-hamburger">
+
               <a onClick={toggleHamburgerMenu}>☰</a>
-              <ul className={`CF2-hamburger-menu ${isOpen ? 'show' : ''}`}>
-                <li><a href="/###">Link 1</a></li>
-                <li><a href="/###">Link 2</a></li>
-                <button onClick={handleLogout} style={{ backgroundColor: "#F44336", width:"100%", color: "white", border: "none", padding: "10px 20px", cursor: "pointer", borderRadius: "5px" }}>Logout</button>
-              </ul>
+              
+              <div className={`CF2-hamburger-popover ${isOpen ? 'show' : ''}`}>
+
+                <ul>
+                  {/* let's put a button here so people don't get trapped in this menu! */}
+                  <button onClick={toggleHamburgerMenu} style={{ position: 'absolute', top: '10px',  right: '10px',  background: 'none', border: 'none',  fontSize: '24px',  color: 'white',  cursor: 'pointer', }} >✕ </button>
+
+                  <a href="/###"><li><FaHome style={{ marginRight: '8px', color: 'white' }} /> Schedule</li></a>
+                  <a href="/###"><li><FaEnvelope style={{ marginRight: '8px', color: 'white' }} /> Messages</li></a>
+                  <a href="/###"><li><FaHeart style={{ marginRight: '8px', color: 'white' }} /> Matches</li></a>
+                  
+                  <li style={{ borderBottom: '6px solid orange', margin: '35px 0', borderRadius:'9px' }}></li> 
+
+                  <a href="/personal-info"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Personal Info</li></a>
+                  <a href="/###"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Account</li></a>
+                  <a href="/###"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Billing History</li></a>
+                  <a href="/###"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Settings</li></a>
+                  <a href="/###"><li><FaCog style={{ marginRight: '8px', color: 'white' }} /> Submit Feedback</li></a>
+
+                  <li onClick={handleLogout} className="centered-item" style={{ marginTop: '40px', fontWeight:'bold', fontSize: "125%", cursor:"pointer" }}>Sign out</li>
+                  <li className="centered-item"><a href="/terms-of-service" className="custom-link-terms">Terms of service</a></li>
+                  <li className="centered-item"><a href="/privacy-policy" className="custom-link-privacy">Privacy Policy</a></li>
+
+                </ul>
+                                   
+              </div>
             </li>
+
 
           </ul>
         )}

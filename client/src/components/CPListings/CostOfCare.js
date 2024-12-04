@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { Row, Col, Form, Button, Fade, Alert, Card, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
-
+import { careDescriptions } from '../../constants';
 
 export default function CostOfCare({ listingInfo, setListingInfo, handleUpdate }) {
 	const [justSaved, setJustSaved] = useState(false);
 	const [careLevel, setCareLevel] = useState('L');
 
-	const careDescriptions = { "L": "Supervised but can accomplish most ADL's by themselves", "M": "Medium care description", "H": "Heavy care description", "T": "Total care description" };
 	const defaultServiceList = ["Transportation", "Special diets", "Wound care", "Manicures", "Physical therapy", "House keeping", "Laundry"];
 	const fullServiceList = listingInfo.costOfCare?.fullServiceList ?? defaultServiceList;
 	const toggleButton = (val, e) => {

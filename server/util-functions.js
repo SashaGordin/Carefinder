@@ -7,3 +7,4 @@ export function formatName(name) {
     // Return the formatted name
     return `${firstName} ${lastName}`;
 }
+

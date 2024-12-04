@@ -8,3 +8,7 @@ export function formatName(name) {
     // Return the formatted name
     return `${firstName} ${lastName}`;
 }
+
+export function formatPrice(price) {
+	return price.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
+}

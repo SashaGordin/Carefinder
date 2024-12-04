@@ -7,6 +7,7 @@ import TopNav from "../components/TopNav";
 import Footer from "../components/Footer";
 import Accordion from "react-bootstrap/Accordion";
 import YoutubeEmbed from "../components/YoutubeEmbed";
+import { FaMapMarkerAlt, FaSmile, FaCheck } from 'react-icons/fa';
 
 export default function LandingPage() {
 	const [query, setQuery] = useState("");
@@ -29,25 +30,23 @@ export default function LandingPage() {
 		}
 	};
 
-	const listStyle = { listStyleType: "none", padding: 0 };
-	const listItemStyle = {
-		position: "relative",
-		paddingLeft: "40px",
-		marginBottom: "20px",
-	};
+    const iconStyle = {
+        height: '35px',
+        width: '35px',
+		marginBottom: '20px',
+    };
 
 	return (
 		<>
 			<TopNav />
 			<div className="homeRow1 homeTopBackground">
 				<div className="contentContainer">
-					<div className="left60">
+					<div className="left50">
 						<h2>
-							Adult Family Homes,<br></br>King County, WA
+							Match with local<br></br>senior care options
 						</h2>
 						<p style={{ textShadow: "2px 2px 0 black" }}>
-							The easy way to reserve a room and book care within an Adult
-							Family Home for 24/7 senior care.
+							We help you make smart decisions about senior care.
 						</p>
 
 						<div className="homeLookup">
@@ -74,7 +73,11 @@ export default function LandingPage() {
 						)}
 					</div>
 
-					<div className="right40">&nbsp;</div>
+					<div className="right50">
+
+							<img src="laptop-shot.png" />
+
+					</div>
 
 					<div className="clear"></div>
 				</div>
@@ -99,33 +102,27 @@ export default function LandingPage() {
 			</div>
 
 			<div className="homeRow3">
-				<div className="contentContainer CFgrayBackground">
-					<h2>Keep Our Seniors Safe</h2>
-					<style>
-						{" "}
-						{`.custom-checkmark-list li::before { content: '\\2713'; position: absolute; left: 0; color: #ff6699;}`}
-					</style>
-					<ul style={listStyle} className="custom-checkmark-list">
-						<li style={listItemStyle}>
-							<b>Transparent Pricing:</b> Receive clear pricing for current and
-							future levels of care.
-						</li>
-						<li style={listItemStyle}>
-							<b>Unbiased Guidance:</b> Our recommendations are based solely on
-							what's best for you and your loved ones, not on commissions or
-							incentives.
-						</li>
-						<li style={listItemStyle}>
-							<b>Personalized Matches:</b> Our advanced matching algorithm
-							connects you with care options tailored to your unique needs and
-							preferences.
-						</li>
-						<li style={listItemStyle}>
-							<b>Streamlined Experience:</b> We simplify the search process,
-							making it easy to explore homes, schedule tours, and complete
-							paperwork.
-						</li>
-					</ul>
+				<div className="contentContainer">
+
+						<div className="triplebox CFgrayBackground">
+							<FaMapMarkerAlt style={{ ...iconStyle, color: 'pink' }} />
+							<p className="h3">Skip the search</p>
+							<p>AI-driven matchmaking connects you directly to the most compatible pre-vetted care.</p>
+						</div>
+
+						<div className="triplebox CFgrayBackground">
+							<FaSmile style={{ ...iconStyle, color: 'yellow' }} />
+							<p className="h3">Stress-free zone</p>
+							<p>We streamline the entir process from matchmaking to admissions. Simply give us a call or message if you need any support along the way.</p>
+						</div>
+
+						<div className="triplebox CFgrayBackground">
+							<FaCheck style={{ ...iconStyle, color: 'orange' }} />
+							<p className="h3">Transparent & unbiased</p>
+							<p>We don't collect behind-the-scenes commissions, which means you can be confident in receiving unbiased guidance that you can trust.</p>
+						</div>
+					
+						<div className="clear"></div>
 				</div>
 			</div>
 			<div className="homeRow5 CFblackBackground">

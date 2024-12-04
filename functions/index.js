@@ -382,6 +382,7 @@ app.post("/getProviders", async (req, res) => {
         .get();
 
     const providersInBounds = snapshot.docs.map((doc) => doc.data());
+    console.log("providers in bounds", providersInBounds);
 
     // Filter providers based on distance from the center and radius
     const filteredProviders = providersInBounds.filter((provider) => {

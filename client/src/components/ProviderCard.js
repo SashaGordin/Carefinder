@@ -5,13 +5,15 @@ import PropertyPhotoModal from "./PropertyPhotoModal";
 
 const ProviderCard = ({ provider, onClick }) => {
 
-	const { FacilityName, homePhotos, listingsData } = provider;
+	const { FacilityName, listingsData } = provider;
 
 	const isReal = listingsData !== undefined;
+	const homePhotos = listingsData.homePhotos;
 
 	let roomPhotos = [];
+	console.log("listingsData", listingsData);
 
-	if (isReal) { roomPhotos = listingsData[0].roomData.map((room) => room.roomPhotos); }
+	if (isReal && listingsData.roomData) { roomPhotos = listingsData.roomData.map((room) => room.roomPhotos); }
 
 	const [showModal, setShowModal] = useState(false);
 

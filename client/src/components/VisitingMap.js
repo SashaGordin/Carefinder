@@ -57,8 +57,8 @@ export default function VisitingMap({ provider }) {
 			)}
 			<GoogleMap
 				mapContainerStyle={{
-					height: "400px",
-					width: "600px",
+					height: "300px",
+					width: "100%",
 					marginBottom: "20px",
 					borderRadius:10
 				}}

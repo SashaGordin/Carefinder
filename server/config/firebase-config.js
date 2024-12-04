@@ -1,4 +1,5 @@
 var admin = require("firebase-admin");
+const { GeoFirestore } = require("geofirestore");
 
 var serviceAccount = require("./serviceAccount.json");
 
@@ -8,4 +9,7 @@ admin.initializeApp({
   databaseURL: "https://carefinder-4c036-default-rtdb.firebaseio.com/",
 });
 
-module.exports = admin;
+const geofirestore = new GeoFirestore(admin.firestore());
+const geocollection = geofirestore.collection("users");
+
+module.exports = { admin, geofirestore, geocollection };

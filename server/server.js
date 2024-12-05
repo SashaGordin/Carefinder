@@ -399,6 +399,12 @@ app.post("/getProviders", async (req, res) => {
 							// .doc(provider.LicenseNumber)
 							.get();
 
+						const roomsSnapshot = await listingsSnapshot.docs[0].ref
+							.collection("rooms")
+							.get();
+
+						console.log("roomsSnapshot", roomsSnapshot.docs.map((doc) => doc.data()));
+
 						for (const listingDoc of listingsSnapshot.docs) {
 							console.log("listingDoc", listingDoc.data());
 						}
@@ -406,6 +412,7 @@ app.post("/getProviders", async (req, res) => {
 						provider.listingsData = listingsSnapshot.docs.reduce((acc, doc) => {
 							return { ...acc, ...doc.data() };
 						}, {});
+						provider.roomsData = roomsSnapshot.docs.map((doc) => doc.data());
 						console.log("provider.listingsData", provider.listingsData);
 
 						// for (const listingDoc of listingsSnapshot.docs) {

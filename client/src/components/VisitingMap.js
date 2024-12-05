@@ -13,6 +13,7 @@ export default function VisitingMap({ provider }) {
 
 	const handleAddressChange = (event) => {
 		setUserAddress(event.target.value);
+		console.log(event.target.value);
 	};
 
 	useEffect(() => {
@@ -39,22 +40,14 @@ export default function VisitingMap({ provider }) {
 	};
 
 	return (
-		<div>
+		<div className="flex flex-col gap-2">
 			<input
 				type="text"
 				placeholder="Enter your address"
 				value={userAddress}
 				onChange={handleAddressChange}
 			/>
-			{duration && (
-				<span>
-					Estimated travel time:{" "}
-					{Math.floor(duration / 60) > 0
-						? `${Math.floor(duration / 60)} hours `
-						: ""}
-					{Math.round(duration % 60)} minutes
-				</span>
-			)}
+
 			<GoogleMap
 				mapContainerStyle={{
 					height: "300px",
@@ -65,12 +58,24 @@ export default function VisitingMap({ provider }) {
 				center={{ lat: provider.position.lat, lng: provider.position.lng }}
 				zoom={12}
 				onLoad={(map) => setMap(map)}
+				options={{
+					disableDefaultUI: true,
+				}}
 			>
 				<Marker
 					position={{ lat: provider.position.lat, lng: provider.position.lng }}
 				/>
 				{directions && <DirectionsRenderer directions={directions} />}
 			</GoogleMap>
+			{duration && (
+				<div className="">
+					Estimated travel time:{" "}
+					{Math.floor(duration / 60) > 0
+						? `${Math.floor(duration / 60)} hours `
+						: ""}
+					{Math.round(duration % 60)} minutes
+				</div>
+			)}
 		</div>
 	);
 }

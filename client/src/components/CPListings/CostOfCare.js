@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import { Row, Col, Form, Button, Fade, Alert, Card, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
-import { careDescriptions } from '../../constants';
+import { careDescriptions, arrBaseServices, careLevelNames, defaultCOCServiceList } from '../../constants';
 
 export default function CostOfCare({ listingInfo, setListingInfo, handleUpdate }) {
 	const [justSaved, setJustSaved] = useState(false);
 	const [careLevel, setCareLevel] = useState('L');
 
-	const defaultServiceList = ["Transportation", "Special diets", "Wound care", "Manicures", "Physical therapy", "House keeping", "Laundry"];
-	const fullServiceList = listingInfo.costOfCare?.fullServiceList ?? defaultServiceList;
+	
+	const fullServiceList = listingInfo.costOfCare?.fullServiceList ?? defaultCOCServiceList;
 	const toggleButton = (val, e) => {
 		handleChange(e);
 	}
 
+
+	//if we ever allow services to be removed, we need to change to a guid based system for the values in the services ToggleButtonGroup. Right now it uses the array index for the values, which will be fine unless the array changes order or shrinks - johng
 	const addService = () => {
 		const newService = document.getElementById("NewService").value;
 		if (!newService)
@@ -62,7 +64,7 @@ export default function CostOfCare({ listingInfo, setListingInfo, handleUpdate }
 		if (e.target.type == "checkbox") {
 			val = [];
 			document.querySelectorAll(`[name='${name}']:checked`).forEach((t) => {
-				val.push(t.value);
+				val.push(parseInt(t.value));
 			});
 		}
 		else
@@ -92,7 +94,7 @@ export default function CostOfCare({ listingInfo, setListingInfo, handleUpdate }
 
 		<>
 			<Row>
-				<Col>
+				<Col xs={8}>
 					<Card>
 						<Card.Title>
 							<Form.Select name="careLevel" value={careLevel} onChange={(e) => (setCareLevel(e.target.value))}>
@@ -103,43 +105,52 @@ export default function CostOfCare({ listingInfo, setListingInfo, handleUpdate }
 							</Form.Select>
 						</Card.Title>
 
-						<div>{careDescriptions[`${careLevel}`]}</div>
-						<Row className="small">
+						<div className="small">{careDescriptions[`${careLevel}`]}</div>
+						<Row className="small flex-nowrap">
 							<Col>Monthly price:</Col>
 							<Col>
 								<label>From</label>
-								<input type="currency" required name="lowPrice" value={listingInfo.costOfCare?.[careLevel]?.lowPrice ?? ""} onChange={handleChange} />
+								<input className="w-100" type="currency" required name="lowPrice" value={listingInfo.costOfCare?.[careLevel]?.lowPrice ?? ""} onChange={handleChange} />
 							</Col>
-							<Col>
+							<Col >
 								<label>To</label>
-								<input type="currency" required name="highPrice" value={listingInfo.costOfCare?.[careLevel]?.highPrice ?? ""} onChange={handleChange} />
+								<input className="w-100" type="currency" required name="highPrice" value={listingInfo.costOfCare?.[careLevel]?.highPrice ?? ""} onChange={handleChange} />
 							</Col>
 						</Row>
 						<div className="small">
-							Base Price:
+							<b>Base services: (Included in all levels)</b>
 							<div style={{ height: '200px', overflowY: 'auto' }}>
-								{listingInfo.costOfCare?.[`${careLevel}`]?.services?.map((option, i) => (
+								{arrBaseServices.map((option, i) => (
 									<div key={i}>{option}</div>
+								))}
+							</div>
+						</div>
+						<br></br>
+						<div className="small">
+							<b>{careLevelNames[careLevel]}: (Add services to care level tier)</b>
+							<div style={{ height: '200px', overflowY: 'auto' }}>
+								{listingInfo.costOfCare?.[`${careLevel}`]?.services?.map((serviceId, i) => (
+									<div key={i}>{fullServiceList[serviceId]}</div>
 								))}
 							</div>
 						</div>
 					</Card>
 				</Col>
-				<Col>
+				<Col xs={4}>
 					<h6>Select services that are included in this tier</h6>
 					<Card>
-						<Card.Body style={{ height: '400px', overflowY: 'auto' }}>
-							<ToggleButtonGroup type="checkbox" name="services" vertical value={listingInfo.costOfCare?.[careLevel]?.services ?? []} onChange={toggleButton}>
+						<Card.Body style={{ height: '400px', overflowY: 'auto', padding: '10px', display: 'flex' }}>
+							<ToggleButtonGroup className="m-auto" type="checkbox" name="services" vertical value={listingInfo.costOfCare?.[careLevel]?.services ?? []} onChange={toggleButton}>
 								{fullServiceList.map((service, i) => (
-									<ToggleButton className={"mb-3"} id={`services-${i}`} key={i} value={service}>
+									<ToggleButton className={"mb-3"} id={`services-${i}`} key={i} value={i}>
 										{service}
 									</ToggleButton>
 								))}
 							</ToggleButtonGroup>
 						</Card.Body>
 					</Card>
-					<div>
-						<input onKeyDown={(e) => { if (e.key === 'Enter') addService() }} type="text" id="NewService" placeholder="Add service" />
+					<div className="d-flex mt-3 flex-column">
+						<input className="w-100" onKeyDown={(e) => { if (e.key === 'Enter') addService() }} type="text" id="NewService" placeholder="Add service" />
 						<Button onClick={addService}>Add</Button>
 					</div>
 				</Col>

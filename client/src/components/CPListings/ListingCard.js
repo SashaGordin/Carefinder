@@ -5,6 +5,8 @@ import FileUpload from './FileUpload';
 import ProviderQuestionaire from './ProviderQuestionaire';
 import CostOfCare from './CostOfCare';
 import HighlightedFeatures from'./HighlightedFeatures';
+import AssociatedCoCNotIncluded from'./AssociatedCoCNotIncluded.js';
+
 import MedicalQuestionaire from './MedicalQuestionaire';
 import EnrollmentAdmissions from './EnrollmentAdmissions';
 import RoomListings from './RoomListings';
@@ -15,6 +17,8 @@ import { getStorage, ref, deleteObject } from "firebase/storage";
 
 import { useAuth } from "../../contexts/AuthContext";
 import DynamicModal from '../DynamicModal';
+import ViewProfile from '../ViewProfile.js';
+
 
 export default function ListingCard({ userData, initialListingData }) {
   const navigate = useNavigate();
@@ -23,8 +27,16 @@ export default function ListingCard({ userData, initialListingData }) {
   const [showModal, setShowModal] = useState(false);
   const [modalTitle, setModalTitle] = useState("");
   const [modalBody, setModalBody] = useState("");
+	const [showProfileModal, setShowProfileModal] = useState(false);
+  const [roomsArr, setRoomsArr] = useState([]);
 
+	const handleViewProfile = () => setShowProfileModal(true);
   const storage = getStorage();
+  const providerForViewProfile = {FacilityName: listingData.facilityName,
+    listingsData: listingData, 
+    roomsData: roomsArr,
+    Speciality: listingData.speciality?.join(','),
+    LicenseNumber: listingData.licenseNumber};
 
   const { currentUser } = useAuth();
   const facilityPath = `users/${currentUser.uid}/listings/${listingData.licenseNumber}`;
@@ -120,6 +132,24 @@ export default function ListingCard({ userData, initialListingData }) {
       handleUpdate({ ...listingData, [propertyName]: newArr }).then(console.log("db reference deleted"));
   }
 
+	useEffect(() => {
+		fetchRoomData();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	const fetchRoomData = async () => {
+		const roomsSnapshot = await getDocs(collection(firestore, facilityPath, 'rooms'));
+		//get data for all rooms for this listing
+		const rooms = [];
+		roomsSnapshot.forEach((room) => {
+			const data = room.data();
+			console.log(data);
+			rooms.push(data);
+		});
+		console.log("roomsLength=" + rooms.length);
+		setRoomsArr([...rooms]);
+	};
+
   return (
 
     <>
@@ -178,18 +208,24 @@ export default function ListingCard({ userData, initialListingData }) {
                 </Accordion.Body>
               </Accordion.Item>
               <Accordion.Item eventKey="3">
+                <Accordion.Header>Associated cost of care not included</Accordion.Header>
+                <Accordion.Body>
+                  <AssociatedCoCNotIncluded listingInfo={listingData} setListingInfo={setListingData} handleUpdate={handleUpdate}/> 
+                </Accordion.Body>
+              </Accordion.Item>
+              <Accordion.Item eventKey="4">
                 <Accordion.Header>Medical questionaire</Accordion.Header>
                 <Accordion.Body>
                 <MedicalQuestionaire listingInfo={listingData} setListingInfo={setListingData} handleUpdate={handleUpdate}/> 
                 </Accordion.Body>
               </Accordion.Item>
-              <Accordion.Item eventKey="4">
+              <Accordion.Item eventKey="5">
                 <Accordion.Header>Enrollment & admissions</Accordion.Header>
                 <Accordion.Body>
                   <EnrollmentAdmissions listingInfo={listingData} setListingInfo={setListingData} handleUpdate={handleUpdate}/> 
                 </Accordion.Body>
               </Accordion.Item>
-              <Accordion.Item eventKey="5">
+              <Accordion.Item eventKey="6">
                 <Accordion.Header>My listings</Accordion.Header>
                 <Accordion.Body>
                 <RoomListings userData={userData} listingData={listingData} setListingInfo={setListingData} facilityPath={facilityPath}/> 
@@ -212,9 +248,19 @@ export default function ListingCard({ userData, initialListingData }) {
             <DynamicModal showModal={showModal} modalTitle={modalTitle} modalBody={modalBody} handleCloseModal={handleCloseModal} />
           </div>
           
-            <NavLink className="text-center">View profile</NavLink>
+          <Button className="text-xs" onClick={handleViewProfile}>
+						View profile
+					</Button>
         </Card.Body>
       </Card >
+      
+      {showProfileModal && (
+				<ViewProfile
+					provider={providerForViewProfile}
+					showModal={showProfileModal}
+					setShowModal={setShowProfileModal}
+				/>
+			)}
     </>
 
   );

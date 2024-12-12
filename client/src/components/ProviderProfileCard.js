@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Card, Button } from "react-bootstrap";
-import ViewProfile from "./ViewProfile";
+import { FaCheckCircle } from "react-icons/fa";
 
-const ProviderProfileCard = ({ provider }) => {
+const ProviderProfileCard = ({ provider, onShowProfile }) => {
+
 	const {
 		profilePicPath,
 		FacilityPOC,
@@ -10,46 +11,34 @@ const ProviderProfileCard = ({ provider }) => {
 		listingsData, // Add more fields as needed
 		Speciality,
 	} = provider;
-	console.log("adskfjslkdjf", provider);
-
-	const [showModal, setShowModal] = useState(false);
-
-	const handleShow = () => setShowModal(true);
 
 	console.log("this is the provider", provider);
 	return (
 		<>
-			<div
-				className="flex flex-row flex-1 m-0"
+			<div className="flex-row flex-1 m-0"
 				data-license-number={provider.LicenseNumber}
+				style={{borderRight:"10px solid #151414"}}
 			>
-				<img
-					className="cardPicLeft"
-					src={profilePicPath}
-					alt="Profile pic"
-					style={{ marginRight: 10, borderRadius: 10 }}
-				/>
-				<div className="flex flex-col">
+				<div className="pCardImageContainer">
+					<img
+						className="pCardPics"
+						src={profilePicPath}
+						alt="Profile pic"
+					/>
+				</div>
+
+				<div className="flex flex-col" style={{padding:10}}>
+
 					<Card.Title>{FacilityPOC}</Card.Title>
-					<div style={{ marginBottom: 5 }}>5 miles</div>
-					<Button className="text-xs" onClick={handleShow}>
-						View profile
-					</Button>
+					<div className="verified"><FaCheckCircle /> Verified Provider</div>
+					<div className="ppcButton">9 miles away
+						&nbsp;&nbsp;&nbsp;&nbsp; 
+					<a onClick={onShowProfile}>Message</a>
+					</div>
+					<div className="clear"></div>
 				</div>
 			</div>
 
-			{/*
-				*** THIS IS THE MAIN MODAL WHEN YOU CLICK ON A PROVIDER
-				--From here, you can click on a pic to get a sub-modal of the pics.
-			*/}
-
-			{showModal && (
-				<ViewProfile
-					provider={provider}
-					showModal={showModal}
-					setShowModal={setShowModal}
-				/>
-			)}
 		</>
 	);
 };

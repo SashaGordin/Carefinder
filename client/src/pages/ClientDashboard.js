@@ -458,7 +458,6 @@ export default function ClientDashboard() {
 								flex: 1,
 								maxHeight: "500px",
 								overflowY: "auto",
-								borderRadius: "15px",
 							}}
 							ref={providerListRef}
 						>

@@ -2,6 +2,7 @@ import { Card } from "react-bootstrap";
 import ProviderProfileCard from "./ProviderProfileCard";
 import React, { useState } from "react";
 import PropertyPhotoModal from "./PropertyPhotoModal";
+import ViewProfile from "./ViewProfile";
 
 const ProviderCard = ({ provider, onClick }) => {
 
@@ -15,50 +16,75 @@ const ProviderCard = ({ provider, onClick }) => {
 
 	if (isReal && listingsData.roomData) { roomPhotos = listingsData.roomData.map((room) => room.roomPhotos); }
 
-	const [showModal, setShowModal] = useState(false);
-
-	const handleImageClick = () => { setShowModal(true); };
+	const [modalType, setModalType] = useState(null); // null, 'photos', 'profile'
+	const handleOpenModal = (type) => setModalType(type);
+	const handleCloseModal = () => setModalType(null);
 
 	return (
 		<>
 			{ isReal ? (
 				<div className="Pcard">
+
+					{/*  THIS IS THE TWO-PART CARD THAT SITS TO THE RIGHT OF THE MAP */}
 					<Card>
-						<Card.Body style={{ display: "flex", flexDirection: "row", fontSize: "12px", maxHeight: "200px" }}
+						<Card.Body style={{ display: "flex", flexDirection: "row", fontSize: "12px" }}
 							onClick={() => onClick(provider)} >
-							<ProviderProfileCard provider={provider} />
-							<div style={{ display: "flex", flexDirection: "column", flex: 1, margin: "0px 0px 0px 10px"	}}	>
-								<img
-									style={{
-										maxWidth: "100%",        // Ensures the image doesn’t exceed the container width
-										width: "auto",            // Width is automatically calculated to maintain aspect ratio
-										height: "auto",           // Height is automatically calculated to maintain aspect ratio
-										maxHeight: "calc(100% - 30px)",  // Limits the height to avoid overflow
-										marginBottom: 3,          // Adds a small bottom margin
-										borderTopRightRadius: 10,         // Rounds the corners of the image
-										borderTopLeftRadius: 10,         // Rounds the corners of the image
-										display: "block",          // Ensures there’s no space below the image (removes inline-block gap)
-										cursor: "pointer"
-									}}
-									src={homePhotos[0]} alt="Profile pic" onClick={handleImageClick} />
+
+							{ /* THIS IS THE LEFT SIDE OF THE CARD (the Provider): */}
+							<ProviderProfileCard provider={provider} onShowProfile={() => handleOpenModal('profile')} />
+
+							{/* ... AND THIS IS THE RIGHT SIDE (the ROOM) */}
+							<div style={{ display: "flex", flexDirection: "column", flex: 1, margin: "0px 0px 0px 0px"	}}	>
+
+								<div className="pCardImageContainer">
+									<img
+										className="pCardPics"
+										src={homePhotos[0]} alt="Profile pic" onClick={() => handleOpenModal('photos')} />
+								</div>
+
 								<div style={{ textAlign: "center", fontWeight:"bold", paddingTop:"4px",cursor: "pointer" }}>
 									{FacilityName.length > 25 ? `${FacilityName.substring(0, 25)}...` : FacilityName}
+
+									<div className="clear"></div>
+
+									{/**  NEED TO LIST ROOM AMENITIES HERE */}
+									<p className="amenities">
+										<span className="amenity">Private room</span>
+										<span className="amenity">Private bathroom</span>
+									</p>
+
+									<p>Available room - <a onClick={() => handleOpenModal('photos')}>view here</a></p>
+									<p><a onClick={() => handleOpenModal('profile')}>Provider Profile</a></p>
+
 								</div>
+
 							</div>
 						</Card.Body>
 					</Card>
-					{showModal && (
-						<PropertyPhotoModal showModal={showModal} setShowModal={setShowModal} FacilityName={FacilityName} homePhotos={homePhotos} roomPhotos={roomPhotos} />
+
+					{modalType === 'photos' && (
+						<PropertyPhotoModal
+						showModal={modalType === 'photos'}
+						setShowModal={handleCloseModal}
+						FacilityName={FacilityName}
+						homePhotos={homePhotos}
+						roomPhotos={roomPhotos}
+						/>
 					)}
+					{modalType === 'profile' && (
+						<ViewProfile
+						provider={provider}
+						showModal={modalType === 'profile'}
+						setShowModal={handleCloseModal}
+						/>
+					)}
+
 				</div>
 			) : (
 				<Card>
 					<Card.Body style={{	display: "flex",flexDirection: "row", fontSize: "12px", maxHeight: "200px" }}
 						onClick={() => onClick(provider)} >
-						{/* <ProviderProfileCard provider={provider} /> */}
 						<div style={{ display: "flex", flexDirection: "column",	flex: 1, margin: "5px" }} >
-							{/* <img style={{ maxWidth: "100%", width: "auto", height: "auto", maxHeight: "calc(100% - 20px)" }}
-								src={homePhotos[0]} alt="Profile pic" onClick={handleImageClick}/> */}
 							<div style={{ textAlign: "center" }}>{FacilityName}</div>
 						</div>
 					</Card.Body>

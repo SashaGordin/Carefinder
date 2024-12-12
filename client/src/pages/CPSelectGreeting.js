@@ -17,7 +17,10 @@ export default function CPSelectGreeting() {
   const [userInfo, setUserInfo] = useState(userData);
   const [error, setError] = useState('');
  
-  const options = ["Hi, Thanks for connecting, if you have any questions let me know! Feel free to send a message or schedule a meet.", "Greeting 2", "Greeting 3"];
+  const defaultGreetings = ["Hi, Appreciate you reaching out. Happy to provide details about our home and services.",
+     "Hi, Glad you're interested in our care home. I'm available to answer any questions you may have.", 
+     "Hi, Thanks for reaching out! I'm happy to provide details about our home and services.",
+    "Hi, Thanks for connecting, if you have any questions let me know! Feel free to send a message or schedule a meet."];
  
   const validateInputs = () => {
     let inputElements = document.querySelectorAll("input, textarea");
@@ -73,7 +76,7 @@ export default function CPSelectGreeting() {
           <h3>Select welcoming greeting message</h3>
           <Form.Select value={userInfo.greeting ?? ""} onChange={handleChange}>
               {
-                options.map((option, i) => {
+                defaultGreetings.map((option, i) => {
                   return <option key={i} className="small" value={option} >{option}</option>
                 })
               }

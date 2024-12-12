@@ -137,8 +137,8 @@ export default function CPRoomEdit() {
               <Col>
                 <FileUpload controlId="roomPhotoUpload" handleNewFiles={handleNewPics} folderPath={folderPath} allowMultipleFiles={true} uploadLabel="Upload photos of room" uploadType="Photo" />
                 <div>
-                  <label >What is the cost of rent? (Not care)</label>
-                  <input type="text" required placeholder="Enter price" name="rentCost" value={roomInfo.rentCost ?? ""} onChange={handleChange} />
+                  <label >What is the daily cost of rent? (Not care)</label>
+                  <input type="number" step="any" required placeholder="Enter price" name="rentCost" value={roomInfo.rentCost ?? ""} onChange={handleChange} />
                 </div>
                 <div>
                   <label>Which of these apply to this room?</label>

@@ -441,6 +441,14 @@ body#CF ul.custom-checkmark-list{     padding-left: 30px !important;
     height: 0.7em; /* 80% of the original size */
 }
 
+#CF .btn-group-vertical > .btn {
+  --bs-btn-bg: #808080 !important;
+  --bs-btn-border-color: #808080 !important;
+  --bs-btn-active-bg: #ff6699;
+  --bs-btn-active-border-color: #ff6699;
+  text-align: left;
+  font-size: small;
+}
 /*
 .homeTopBackground { background: url(/client/public/homeback1.jpg);     background-size: cover;   padding: 30px; }
 */

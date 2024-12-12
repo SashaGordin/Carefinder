@@ -1,18 +1,15 @@
 import React, { useState } from 'react';
-import { Row, Col, Form, Button, Fade, Alert, Card, ToggleButton, ToggleButtonGroup } from 'react-bootstrap';
-import { defaultHighlightedFeatureList } from '../../constants';
+import { Row, Col, Form, Button, Fade, Alert, Card, ToggleButton, ToggleButtonGroup} from 'react-bootstrap';
+import { defaultNotIncludedFeatureList } from '../../constants';
 
-export default function HighlightedFeatures({ listingInfo, setListingInfo, handleUpdate }) {
+export default function AssociatedCoCNotIncluded({ listingInfo, setListingInfo, handleUpdate }) {
 	const [justSaved, setJustSaved] = useState(false);
-	const sectionId = "highlightedFeatures";
-
-	const fullFeatureList = listingInfo.highlightedFeatures?.fullFeatureList ?? defaultHighlightedFeatureList;
+	const sectionId = "associatedCoCNotIncluded";
+	const fullFeatureList = listingInfo.associatedCoCNotIncluded?.fullFeatureList ?? defaultNotIncludedFeatureList;
 
 	const toggleButton = (val, e) => {
 		handleChange(e);
 	}
-
-	//if we ever allow services to be removed, we need to change to a guid based system for the values in the services ToggleButtonGroup. Right now it uses the array index for the values, which will be fine unless the array changes order or shrinks - johng
 	const addService = () => {
 		const newService = document.getElementById(sectionId + "_NewFeature").value;
 		if (!newService)
@@ -22,8 +19,8 @@ export default function HighlightedFeatures({ listingInfo, setListingInfo, handl
 		newFeatureList.add(newService);
 		setListingInfo({
 			...listingInfo,
-			highlightedFeatures: {
-				...listingInfo.highlightedFeatures,
+			associatedCoCNotIncluded: {
+				...listingInfo.associatedCoCNotIncluded,
 				fullFeatureList: [...newFeatureList]
 			}
 		});
@@ -32,7 +29,6 @@ export default function HighlightedFeatures({ listingInfo, setListingInfo, handl
 	}
 
 	const handleChange = (e) => {
-		e.target.blur();
 		let val;
 		let name = e.target.name;
 		if (e.target.type == "checkbox") {
@@ -43,11 +39,11 @@ export default function HighlightedFeatures({ listingInfo, setListingInfo, handl
 		}
 		else
 			val = e.target.value;
-		// listingInfo.highlightedFeatures.selectedFeatures
+		// listingInfo.associatedCoCNotIncluded.selectedFeatures
 		setListingInfo({
 			...listingInfo,
-			highlightedFeatures: {
-				...listingInfo.highlightedFeatures,
+			associatedCoCNotIncluded: {
+				...listingInfo.associatedCoCNotIncluded,
 				[name]: val
 			}
 		});
@@ -68,12 +64,12 @@ export default function HighlightedFeatures({ listingInfo, setListingInfo, handl
 					<Col xs={8}>
 						<Card>
 							<Card.Title>
-								<h2>Highlighted features & Activities</h2>
+								<h2>Associated cost of care not included</h2>
 							</Card.Title>
 							<div style={{ height: '400px', overflowY: 'auto' }}>
 
-								{listingInfo.highlightedFeatures?.selectedFeatures?.map((featureId, i) => (
-									<div key={i}>{fullFeatureList[featureId]}</div>
+								{listingInfo.associatedCoCNotIncluded?.selectedFeaturesNotIncluded?.map((featureId, i) => (
+									<div className={'small'} key={i}>{fullFeatureList[featureId]}</div>
 								))}</div>
 						</Card>
 					</Col>
@@ -81,9 +77,9 @@ export default function HighlightedFeatures({ listingInfo, setListingInfo, handl
 						<h6>Select features that your AFH has to offer</h6>
 						<Card>
 							<Card.Body style={{ height: '400px', overflowY: 'auto', padding: '10px', display: 'flex' }}>
-								<ToggleButtonGroup className="m-auto" type="checkbox" name="selectedFeatures" vertical value={listingInfo.highlightedFeatures?.selectedFeatures} onChange={toggleButton}>
+								<ToggleButtonGroup className="m-auto" type="checkbox" name="selectedFeaturesNotIncluded" vertical value={listingInfo.associatedCoCNotIncluded?.selectedFeaturesNotIncluded} onChange={toggleButton}>
 									{fullFeatureList.map((option, i) => (
-										<ToggleButton className={"mb-3"} id={`features-${i}`} key={i} value={i}>
+										<ToggleButton className={"mb-3"} id={`not-included-features-${i}`} key={i} value={i}>
 											{option}
 										</ToggleButton>
 									))}
@@ -99,7 +95,7 @@ export default function HighlightedFeatures({ listingInfo, setListingInfo, handl
 				<div className={'d-inline-block'}>
 					<Button onClick={handleSave}>Save Changes</Button>
 					<Alert show={justSaved} onClose={() => setJustSaved(false)} dismissible variant={"success"}>Saved</Alert>
-				</div>
+				</div >
 			</div>
 		</>
 

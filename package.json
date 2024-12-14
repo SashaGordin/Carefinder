@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@googlemaps/js-api-loader": "^1.16.6",
+    "@heroicons/react": "^2.2.0",
     "@pmmmwh/react-refresh-webpack-plugin": "^0.5.3",
     "@react-google-maps/api": "^2.19.3",
     "@stripe/react-stripe-js": "^2.7.1",

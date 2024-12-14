@@ -279,6 +279,18 @@ app.post("/matchUserWithHouses", async (req, res) => {
 	}
 });
 
+app.post("/getSurvey", async (req, res) => {
+	const userId = req.body.userId;
+	console.log("KLKLKKL", userId);
+	const surveySnapshot = await admin
+		.firestore()
+		.collection("surveyResponses")
+		.where("userId", "==", userId)
+		.get();
+	console.log(surveySnapshot.docs.map((doc) => doc.data()));
+	res.json({ survey: surveySnapshot.docs.map((doc) => doc.data()) });
+});
+
 app.post("/getProviders", async (req, res) => {
 	const bounds = req.body.bounds;
 	const center = req.body.center;

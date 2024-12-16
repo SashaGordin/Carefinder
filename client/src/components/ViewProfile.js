@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Button, Modal } from "react-bootstrap";
 import PropertyPhotoModal from "./PropertyPhotoModal";
 import { useNavigate } from "react-router-dom";
@@ -6,6 +6,8 @@ import VisitingMap from "./VisitingMap";
 import ProviderViewProfileCard from "./ProviderViewProfileCard";
 import { formatPrice } from "../utils";
 import { careDescriptions } from "../constants";
+import axios from "axios";
+import { useAuth } from "../contexts/AuthContext";
 const ViewProfile = ({ provider, showModal, setShowModal }) => {
 	const {
 		profilePicPath,
@@ -25,11 +27,19 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 	const roomPhotos = roomsData.map((room) => room.roomPhotos);
 	const availableRooms = roomsData.filter((room) => room.isAvailable);
 	const [showImageModal, setShowImageModal] = useState(false);
+	const [roomPhotoModal, setRoomPhotoModal] = useState(false);
+	const [selectedRoomPhotos, setSelectedRoomPhotos] = useState([]);
 	const [selectedCareLevel, setSelectedCareLevel] = useState("L");
+	const [addresses, setAddresses] = useState([]);
 	const navigate = useNavigate();
 
 	const handleImageClick = () => {
 		setShowImageModal(true);
+	};
+
+	const handleRoomPhotoClick = (roomPhotos) => {
+		setSelectedRoomPhotos(roomPhotos);
+		setRoomPhotoModal(true);
 	};
 
 	// console.log("room photos", roomPhotos);
@@ -40,9 +50,26 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 		H: "High",
 		T: "Total",
 	};
-	console.log("roomsData", roomsData);
-	console.log("availableRooms", availableRooms);
+	// console.log("roomsData", roomsData);
+	// console.log("availableRooms", availableRooms);
+	console.log("provider", provider);
 
+	const { currentUser } = useAuth();
+
+	// const [survey, setSurvey] = useState([]);
+	useEffect(() => {
+		axios
+			.post(`${process.env.REACT_APP_ENDPOINT}/getSurvey`, {
+				userId: currentUser.uid,
+			})
+			.then((res) => {
+				const addressData = res.data.survey[0]?.surveyData.Address || {};
+				const addressArray = Object.values(addressData); // Convert object to array
+				setAddresses(addressArray);
+			});
+	}, []);
+
+	console.log("addresses", addresses, addresses.length);
 	const handleClose = () => setShowModal(false);
 
 	return (
@@ -56,7 +83,9 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 
 				<Modal.Body>
 					<div
-						className="flex flex-row flex-1 gap-2 mx-20 my-10"
+						className={`flex flex-row flex-1 gap-2 mx-20 my-10 ${
+							roomPhotoModal || showImageModal ? "blur-sm" : ""
+						} transition-all duration-300`}
 						data-license-number={provider.LicenseNumber}
 					>
 						{/** LEFT SIDE: */}
@@ -65,7 +94,9 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 							<div className="bg-[#1e1f26] p-3">
 								<h4>Where will you be visiting from?</h4>
 
-								<VisitingMap provider={provider} />
+								{addresses.length > 0 && (
+									<VisitingMap provider={provider} addresses={addresses} setAddresses={setAddresses} />
+								)}
 							</div>
 							{/** FACILITY NAME AND SPECIALTY AND ROOM INFO: */}
 							<div className="bg-[#1e1f26] p-3 flex flex-col gap-2">
@@ -94,6 +125,7 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 												className="h-48 object-cover"
 												alt="room 1"
 												key={room.roomName}
+												onClick={() => handleRoomPhotoClick(room.roomPhotos)}
 											/>
 											{room.roomDetails && (
 												<div className="flex flex-row gap-2">
@@ -158,7 +190,7 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 								</p>
 								<img
 									src={homePhotos[0]}
-									className="h-48 object-cover"
+									className="h-36 object-cover"
 									alt="room 1"
 								/>
 								<div className="flex flex-col gap-2">
@@ -190,7 +222,9 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 									</div>
 								</div>
 								<div className="mt-2">
-									<span className="font-bold">{careLevelMap[selectedCareLevel]} Care: </span>
+									<span className="font-bold">
+										{careLevelMap[selectedCareLevel]} Care:{" "}
+									</span>
 									<span>{careDescriptions[selectedCareLevel]}</span>
 								</div>
 								<div className="flex flex-col mt-2">
@@ -242,6 +276,33 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 					homePhotos={homePhotos}
 					roomPhotos={roomPhotos}
 				/>
+			)}
+			{roomPhotoModal && (
+				<Modal
+				show={roomPhotoModal}
+				onHide={() => setRoomPhotoModal(false)}
+				size="lg"
+				centered
+			>
+				<Modal.Body>
+					<h4 className="text-center">Room Photos</h4>
+					<div className="flex flex-wrap justify-center gap-4">
+						{selectedRoomPhotos.map((photo, index) => (
+							<img
+								key={index}
+								src={photo}
+								alt={`Room Photo ${index + 1}`}
+								className="h-48 object-cover rounded"
+							/>
+						))}
+					</div>
+				</Modal.Body>
+				<Modal.Footer>
+					<Button variant="secondary" onClick={() => setRoomPhotoModal(false)}>
+						Close
+					</Button>
+				</Modal.Footer>
+			</Modal>
 			)}
 		</>
 	);

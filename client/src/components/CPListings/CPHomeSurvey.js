@@ -51,7 +51,7 @@ export default function CPHomeSurvey() {
 
   const handleBack = () => {
     if (currentStep == 1) //go back to listings page
-		navigate("/your-listings");
+		navigate("/my-afh");
 	else
 		setCurrentStep(currentStep - 1);
   };
@@ -73,7 +73,7 @@ export default function CPHomeSurvey() {
       if (updatedListingDocSnapshot.exists()) {
         const updatedUserData = updatedListingDocSnapshot.data();
         setListingInfo(updatedUserData);
-        navigate("/your-listings");
+        navigate("/my-afh");
       } else {
         setError('User document not found after update');
       }

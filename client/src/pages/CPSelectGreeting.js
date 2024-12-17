@@ -31,13 +31,13 @@ export default function CPSelectGreeting() {
   }
 
   const handleBack = () => {
-    navigate("/your-listings");
+    navigate("/account");
   };
 
   const handleSubmit = () => {
     if (validateInputs()) {
       handleUpdate(userInfo).then(() => {
-        navigate("/your-listings");
+        handleBack();
       });
     }
   }

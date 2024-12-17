@@ -152,10 +152,10 @@ export default function TopNav() {
                 </Nav.Item>
                 <Nav.Item>
                   <Nav.Link
-                    href="/your-listings"
+                    href="/my-afh"
                     title="Your listings"
-                    onClick={() => handleNavClick("/your-listings")}
-                    style={navLinkStyle("/your-listings")}
+                    onClick={() => handleNavClick("/my-afh")}
+                    style={navLinkStyle("/my-afh")}
                   >
                     My Listings
                   </Nav.Link>
@@ -288,10 +288,10 @@ export default function TopNav() {
                     Provider Dashboard
                   </NavDropdown.Item>
                   <NavDropdown.Item
-                    href="/your-listings"
+                    href="/my-afh"
                     title="Provider Listings"
-                    onClick={() => handleNavClick("/your-listings")}
-                    style={{ color: activePage === "/your-listings" ? "white" : "#777777" }}
+                    onClick={() => handleNavClick("/my-afh")}
+                    style={{ color: activePage === "/my-afh" ? "white" : "#777777" }}
                   >
                     Provider Listings
                   </NavDropdown.Item>

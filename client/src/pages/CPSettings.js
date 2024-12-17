@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { Card } from 'react-bootstrap';
 import { firestore } from '../firebase'; // Assuming you have firebase.js setup
 import { useAuth } from "../contexts/AuthContext";
-import { getDoc, getDocs, doc, updateDoc, collection } from 'firebase/firestore';
+import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import TopNav from "../components/TopNav";
 import Footer from "../components/Footer";
-import PersonalInfo from '../components/CPListings/PersonalInfo';
-import ListingCard from '../components/CPListings/ListingCard';
-import AddAFH from '../components/AddAFH';
+import EditableField from '../components/menu/EditableField';
+import { isValidUrl } from '../utils';
+import { Card, Alert } from 'react-bootstrap';
 
-export default function CPListings() {
+export default function CPSettings() {
   const [userData, setUserData] = useState({});
   const { currentUser } = useAuth()
   const [error, setError] = useState('');
-  const [listingsData, setListingsData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,27 +19,6 @@ export default function CPListings() {
       const userDocSnapshot = await getDoc(userDocRef);
       if (userDocSnapshot.exists()) {
         const userData = userDocSnapshot.data();
-
-        const listings = [];
-        const listingsPath = userDocSnapshot.ref.path + "/listings";
-        console.log("getting docs from: " + listingsPath);
-        const listingsSnapshot = await getDocs(collection(firestore, listingsPath));
-        //get data for all listings for user
-
-        listingsSnapshot.forEach((listing) => {
-          const data = listing.data();
-          console.log(data);
-          listings.push(data);
-        });
-        if (listings.length === 0) {
-          listings.push({
-            facilityName: userData.FacilityName,
-            licenseNumber: userData.LicenseNumber,
-            listingAddress: `${userData.LocationAddress}, ${userData.LocationCity}, ${userData.LocationState} ${userData.LocationZipCode} `
-          });
-        }
-        console.log("listingsLength=" + listings.length);
-        setListingsData([...listings]);
         console.log(userData);
         setUserData(userData);
       } else {
@@ -49,7 +26,7 @@ export default function CPListings() {
       }
     };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleUpdate = async (updatedUserData) => {
@@ -72,10 +49,19 @@ export default function CPListings() {
     }
   };
 
+  const validateLink = (newValue) => {
+    if (!newValue || isValidUrl(newValue)) {
+      handleUpdate({ CalendlyLink: newValue })
+      setError('');
+    }
+    else
+      setError('Please enter a valid URL')
+  }
+
   return (
     <>
 
-      <div className="CPlistings">
+      <div className="CPSettings">
 
         <TopNav userRole="provider" />
 
@@ -83,10 +69,19 @@ export default function CPListings() {
 
         {error && <div>{error}</div>}
 
-      {listingsData.map((data, i) => (<ListingCard userData={userData} initialListingData={data} key={i} />))}
-      </div>
-      <p>&nbsp;</p>
+        <div className="contentContainer utilityPage personalInfo">
+          <Card>
+            <Card.Body>
+              <Card.Title>Settings</Card.Title>
+              {error && <Alert variant="danger">{error}</Alert>}
 
+              <EditableField title="Calendly Link" value={userData.CalendlyLink || ''} onChange={(newValue) => validateLink(newValue)} />
+              <EditableField title="Google Reviews Link" value={userData.GoogleReviewsLink || ''} onChange={(newValue) => validateLink({ email: newValue })} />
+              <div>Discord Integration (TBD)</div>
+            </Card.Body>
+          </Card>
+        </div >
+      </div>
       <Footer />
     </>
   )

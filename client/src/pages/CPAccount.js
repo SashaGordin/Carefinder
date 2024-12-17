@@ -1,19 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Card } from 'react-bootstrap';
 import { firestore } from '../firebase'; // Assuming you have firebase.js setup
 import { useAuth } from "../contexts/AuthContext";
-import { getDoc, getDocs, doc, updateDoc, collection } from 'firebase/firestore';
+import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import TopNav from "../components/TopNav";
 import Footer from "../components/Footer";
 import PersonalInfo from '../components/CPListings/PersonalInfo';
-import ListingCard from '../components/CPListings/ListingCard';
-import AddAFH from '../components/AddAFH';
 
-export default function CPListings() {
+export default function CPAccount() {
   const [userData, setUserData] = useState({});
   const { currentUser } = useAuth()
   const [error, setError] = useState('');
-  const [listingsData, setListingsData] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -21,27 +17,6 @@ export default function CPListings() {
       const userDocSnapshot = await getDoc(userDocRef);
       if (userDocSnapshot.exists()) {
         const userData = userDocSnapshot.data();
-
-        const listings = [];
-        const listingsPath = userDocSnapshot.ref.path + "/listings";
-        console.log("getting docs from: " + listingsPath);
-        const listingsSnapshot = await getDocs(collection(firestore, listingsPath));
-        //get data for all listings for user
-
-        listingsSnapshot.forEach((listing) => {
-          const data = listing.data();
-          console.log(data);
-          listings.push(data);
-        });
-        if (listings.length === 0) {
-          listings.push({
-            facilityName: userData.FacilityName,
-            licenseNumber: userData.LicenseNumber,
-            listingAddress: `${userData.LocationAddress}, ${userData.LocationCity}, ${userData.LocationState} ${userData.LocationZipCode} `
-          });
-        }
-        console.log("listingsLength=" + listings.length);
-        setListingsData([...listings]);
         console.log(userData);
         setUserData(userData);
       } else {
@@ -75,7 +50,7 @@ export default function CPListings() {
   return (
     <>
 
-      <div className="CPlistings">
+      <div className="CPAccount">
 
         <TopNav userRole="provider" />
 
@@ -83,10 +58,8 @@ export default function CPListings() {
 
         {error && <div>{error}</div>}
 
-      {listingsData.map((data, i) => (<ListingCard userData={userData} initialListingData={data} key={i} />))}
+        <PersonalInfo userData={userData} handleUpdate={handleUpdate}/>
       </div>
-      <p>&nbsp;</p>
-
       <Footer />
     </>
   )

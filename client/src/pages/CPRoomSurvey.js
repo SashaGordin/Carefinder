@@ -47,7 +47,7 @@ export default function CPRoomSurvey() {
 
   const handleBack = () => {
     if (currentStep === 1) //go back to listings page
-		navigate("/your-listings");
+		navigate("/my-afh");
 	else
 		setCurrentStep(currentStep - 1);
   };
@@ -59,7 +59,7 @@ export default function CPRoomSurvey() {
   }
 
   const handleDone = () => {
-    navigate("/your-listings");
+    navigate("/my-afh");
   }
 
 

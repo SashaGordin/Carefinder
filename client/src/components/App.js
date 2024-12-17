@@ -42,6 +42,9 @@ import ReserveRoom from '../pages/Reservation/ReserveRoom';
 import ReservationResponse from '../pages/Reservation/ReservationResponse';
 import ReservationConfirmation from '../pages/Reservation/ReservationConfirmation';
 import ReservationDenial from '../pages/Reservation/ReservationDenial';
+import CPAccount from '../pages/CPAccount';
+import CPSettings from '../pages/CPSettings';
+import SubmitFeedback from '../pages/SubmitFeedback';
 
 
 function App() {
@@ -171,7 +174,7 @@ function App() {
                 }
               />
               <Route
-                path="/your-listings"
+                path="/my-afh"
                 element={
                   <PrivateRoute
                     redirectPath="/signup"
@@ -182,27 +185,39 @@ function App() {
                   </PrivateRoute>
                 }
               />
-              <Route
-                path="/home-survey"
+                   <Route
+                path="/account"
                 element={
                   <PrivateRoute
                     redirectPath="/signup"
                     allowedRoles={
                       ['provider','admin']
                     }>
-                      <CPHomeSurvey />
+                      <CPAccount />
                   </PrivateRoute>
                 }
               />
               <Route
-                path="/room-survey"
+                path="/settings"
                 element={
                   <PrivateRoute
                     redirectPath="/signup"
                     allowedRoles={
                       ['provider','admin']
                     }>
-                      <CPRoomSurvey />
+                      <CPSettings />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/feedback"
+                element={
+                  <PrivateRoute
+                    redirectPath="/signup"
+                    allowedRoles={
+                      ['provider','admin']
+                    }>
+                      <SubmitFeedback />
                   </PrivateRoute>
                 }
               />

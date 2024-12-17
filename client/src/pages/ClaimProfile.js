@@ -37,7 +37,7 @@ export default function ClaimProfile() {
 	const handleFinish = () => {
 		if (addAFH) {
 			addAFHToExistingUser().then(() => {
-				navigate("/your-listings");
+				navigate("/my-afh");
 			});
 		} else {
       console.log('providerInfo: ', providerInfo);

@@ -53,14 +53,14 @@ export default function CPHomeSurvey() {
 
   const handleBack = () => {
     if (currentStep === 1) //go back to listings page
-		navigate("/your-listings");
+		navigate("/my-afh");
 	else
 		setCurrentStep(currentStep - 1);
   };
 
   const handleSubmit = () => {
     handleUpdate(listingInfo).then(() => {
-       navigate("/your-listings");
+       navigate("/my-afh");
     });
   }
 

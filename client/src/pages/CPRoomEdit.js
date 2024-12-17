@@ -118,7 +118,7 @@ export default function CPRoomEdit() {
 
 
   const goToListings = () => {
-    navigate("/your-listings");
+    navigate("/my-afh");
   }
 
 

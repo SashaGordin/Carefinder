@@ -14,6 +14,8 @@ import { debounce } from "lodash";
 import { useLocation } from "react-router-dom";
 import { formatName } from "../utils";
 import mapStyles from "../mapStyles.json";
+import SurveyModal from "../components/SurveyModal";
+import { useAuth } from "../contexts/AuthContext";
 /**
  * TODO:  This page accepts a new param in the URL, sent here from the home page. Sample is:
  * /client-dashboard?refLookup=Seattle%2C%20WA
@@ -42,7 +44,9 @@ export default function ClientDashboard() {
 	const [city, setCity] = useState(null);
 	const [nearbyBigCities, setNearbyBigCities] = useState([]);
 	const [errorMessage, setErrorMessage] = useState("");
-
+	const [surveyModalOpen, setSurveyModalOpen] = useState(false);
+	const [hasSurvey, setHasSurvey] = useState(false);
+	const { currentUser } = useAuth();
 
 
 	let delayDuration = 500;
@@ -114,20 +118,40 @@ export default function ClientDashboard() {
 		styles: mapStyles,
 	};
 
-	const pinkMarkerIcon = "https://maps.google.com/mapfiles/ms/icons/pink-dot.png";
-	// const mutedMarkerIcon = "https://maps.google.com/mapfiles/ms/icons/ltblue-dot.png"; // Use a lighter color for muted effect
+	const pinkMarkerIcon = {
+		url: "selected_map_icon.png",
+		scaledSize: {
+			width: 50,
+			height: 50,
+		},
+	};
 
 	const mutedMarkerIcon = {
-		path: "M0-48c-9.941 0-18 8.059-18 18s18 30 18 30 18-12 18-30-8.059-18-18-18zm0 24c-2.209 0-4-1.791-4-4s1.791-4 4-4 4 1.791 4 4-1.791 4-4 4z", // Default pin shape
-		fillColor: "#FF69B4",  // Pink color
-		fillOpacity: 1,
-		strokeColor: "#FFFFFF",  // White stroke to give it contrast
-		// strokeWeight: 2,
-		scale: .5,  // Adjust the size of the marker
+		url: "non_selected_icon.png",
+		scaledSize: {
+			width: 30,
+			height: 30,
+		},
 	};
+
 
 	const radiusRef = useRef(3200);
 	const zoomRef = useRef(13);
+
+	useEffect(() => {
+		axios
+			.post(`${process.env.REACT_APP_ENDPOINT}/getSurvey`, {
+				userId: currentUser.uid,
+			})
+			.then((res) => {
+				if (res.data.survey.length > 0) {
+					setHasSurvey(true);
+				}
+			})
+			.catch((err) => {
+				console.log("Error getting survey", err);
+			});
+	}, []);
 
 	const handleMapLoad = (map) => {
 		mapRef.current = map; // Store the map instance in the ref
@@ -147,6 +171,10 @@ export default function ClientDashboard() {
 	}, []);
 
 	const handleSearch = async (refQuery) => {
+		if (!hasSurvey) {
+			setSurveyModalOpen(true);
+			return;
+		}
 		let query;
 		if (refQuery) {
 			query = refQuery.trim();
@@ -404,12 +432,13 @@ export default function ClientDashboard() {
 												key={provider.id}
 												position={provider.position}
 												onClick={() => handleMarkerClick(provider)}
+												className="h-20 w-20"
 												icon={
 													selectedMarker === provider ? pinkMarkerIcon : mutedMarkerIcon
 												}
 											/>
 										))}
-									{selectedMarker && (
+									{/* {selectedMarker && (
 										<InfoWindowF
 											position={selectedMarker.position}
 											onCloseClick={() => setSelectedMarker(null)}
@@ -420,7 +449,7 @@ export default function ClientDashboard() {
 												<div>{`${selectedMarker.LocationCity}, ${selectedMarker.LocationState} ${selectedMarker.LocationZipCode}`}</div>
 											</div>
 										</InfoWindowF>
-									)}
+									)} */}
 								</GoogleMap>
 							) : (
 								<div>Loading ...</div>
@@ -467,6 +496,8 @@ export default function ClientDashboard() {
 										key={provider.LicenseNumber}
 										provider={provider}
 										onClick={() => handleProviderSelect(provider)}
+										hasSurvey={hasSurvey}
+										setSurveyModalOpen={setSurveyModalOpen}
 									/>
 								))
 							) : (
@@ -476,6 +507,7 @@ export default function ClientDashboard() {
 					</div>
 				</div>
 			</div>
+			<SurveyModal showModal={surveyModalOpen} handleCloseModal={() => setSurveyModalOpen(false)} />
 			<Footer />
 		</>
 	);

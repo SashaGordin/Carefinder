@@ -4,8 +4,7 @@ import React, { useState } from "react";
 import PropertyPhotoModal from "./PropertyPhotoModal";
 import ViewProfile from "./ViewProfile";
 
-const ProviderCard = ({ provider, onClick }) => {
-
+const ProviderCard = ({ provider, onClick, hasSurvey, setSurveyModalOpen }) => {
 	const { FacilityName, listingsData } = provider;
 
 	const isReal = listingsData !== undefined;
@@ -31,7 +30,7 @@ const ProviderCard = ({ provider, onClick }) => {
 							onClick={() => onClick(provider)} >
 
 							{ /* THIS IS THE LEFT SIDE OF THE CARD (the Provider): */}
-							<ProviderProfileCard provider={provider} onShowProfile={() => handleOpenModal('profile')} />
+							<ProviderProfileCard provider={provider} onShowProfile={() => handleOpenModal('profile')} hasSurvey={hasSurvey} setSurveyModalOpen={setSurveyModalOpen} />
 
 							{/* ... AND THIS IS THE RIGHT SIDE (the ROOM) */}
 							<div style={{ display: "flex", flexDirection: "column", flex: 1, margin: "0px 0px 0px 0px"	}}	>

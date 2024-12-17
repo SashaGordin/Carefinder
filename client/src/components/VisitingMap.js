@@ -1,11 +1,12 @@
-import { GoogleMap, Marker, DirectionsRenderer } from "@react-google-maps/api";
+import { GoogleMap, Marker, Polyline } from "@react-google-maps/api";
 import React, { useState, useEffect } from "react";
 
 export default function VisitingMap({ provider, addresses, setAddresses }) {
-	const [directions, setDirections] = useState([]);
+	const [routes, setRoutes] = useState([]);
 	const [map, setMap] = useState(null);
 	const [markers, setMarkers] = useState([]);
-	const [newAddress, setNewAddress] = useState(""); // State to store the new address input
+	const [newAddress, setNewAddress] = useState("");
+	const [selectedRouteIndex, setSelectedRouteIndex] = useState(null);
 
 	// Function to geocode an address and return lat/lng
 	const geocodeAddress = async (address) => {
@@ -27,10 +28,10 @@ export default function VisitingMap({ provider, addresses, setAddresses }) {
 		const initializeMarkers = async () => {
 			if (addresses?.length > 0) {
 				const initialMarkers = await Promise.all(
-					addresses.map(async (address) => {
+					addresses.map(async (address, index) => {
 						try {
 							const coords = await geocodeAddress(address);
-							return { ...coords, label: address };
+							return { ...coords, label: index.toString() };
 						} catch (error) {
 							console.error(error);
 							return null;
@@ -42,16 +43,16 @@ export default function VisitingMap({ provider, addresses, setAddresses }) {
 		};
 
 		initializeMarkers();
-	}, [addresses]); // Dependencies: addresses
+	}, [addresses]);
 
 	// Calculate route for each address to the provider
 	const calculateRoutes = async () => {
 		const directionsService = new window.google.maps.DirectionsService();
-		const allDirections = await Promise.all(
+		const allRoutes = await Promise.all(
 			addresses.map(async (address) => {
 				try {
 					const { lat, lng } = await geocodeAddress(address);
-					const results = await directionsService.route({
+					const result = await directionsService.route({
 						origin: { lat, lng },
 						destination: {
 							lat: provider.position.lat,
@@ -59,15 +60,15 @@ export default function VisitingMap({ provider, addresses, setAddresses }) {
 						},
 						travelMode: window.google.maps.TravelMode.DRIVING,
 					});
-					return results;
+					return result.routes[0];
 				} catch (error) {
 					console.error(`Error calculating route for ${address}:`, error);
 					return null;
 				}
 			})
 		);
-		// Filter out null results
-		setDirections(allDirections.filter((route) => route !== null));
+		setRoutes(allRoutes.filter((route) => route !== null));
+		setSelectedRouteIndex(null);
 	};
 
 	// Re-run the route calculation if addresses or provider position change
@@ -75,15 +76,20 @@ export default function VisitingMap({ provider, addresses, setAddresses }) {
 		if (addresses?.length > 0) {
 			calculateRoutes();
 		}
-	}, [addresses, provider.position]); // Dependencies: addresses and provider.position
+	}, [addresses, provider.position]);
 
 	// Handle new address input
 	const handleAddressSubmit = (event) => {
 		event.preventDefault();
 		if (newAddress) {
-			setAddresses([...addresses, newAddress]); // Add the new address to the list
-			setNewAddress(""); // Clear the input field
+			setAddresses([...addresses, newAddress]);
+			setNewAddress("");
 		}
+	};
+
+	// Handle selecting a route on click
+	const handleRouteClick = (index) => {
+		setSelectedRouteIndex(index);
 	};
 
 	return (
@@ -120,18 +126,38 @@ export default function VisitingMap({ provider, addresses, setAddresses }) {
 				<Marker
 					position={{ lat: provider.position.lat, lng: provider.position.lng }}
 					label="Provider"
+					key="provider"
 				/>
 
 				{/* Mark the user's addresses */}
 				{markers.map((marker, index) => (
-					<Marker key={index} position={marker} label={marker.label} />
+					<Marker key={index} position={marker} label={marker.label} onClick={() => handleRouteClick(index)} />
 				))}
 
-				{/* Render routes for each address */}
-				{directions.map((direction, index) => (
-					<DirectionsRenderer key={index} directions={direction} />
+				{/* Render polylines for each route */}
+				{routes.map((route, index) => (
+					<Polyline
+						key={index}
+						path={route.overview_path}
+						options={{
+							strokeColor: selectedRouteIndex === index ? "#0000FF" : "#C71585",
+							strokeOpacity: selectedRouteIndex === index ? 1.0 : 0.5,
+							strokeWeight: selectedRouteIndex === index ? 6 : 4,
+						}}
+						onClick={() => handleRouteClick(index)}
+					/>
 				))}
+
+				{/* Display selected route duration */}
 			</GoogleMap>
+			{selectedRouteIndex !== null && routes[selectedRouteIndex] && (
+				<div className="text-center bg-white p-2 rounded shadow-md text-black">
+					<p>
+						<strong>Duration:</strong>{" "}
+						{routes[selectedRouteIndex].legs[0].duration.text}
+					</p>
+				</div>
+			)}
 		</div>
 	);
 }

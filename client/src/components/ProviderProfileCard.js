@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Card, Button } from "react-bootstrap";
 import { FaCheckCircle } from "react-icons/fa";
 
-const ProviderProfileCard = ({ provider, onShowProfile }) => {
+const ProviderProfileCard = ({ provider, onShowProfile, hasSurvey, setSurveyModalOpen }) => {
 
 	const {
 		profilePicPath,
@@ -11,6 +11,14 @@ const ProviderProfileCard = ({ provider, onShowProfile }) => {
 		listingsData, // Add more fields as needed
 		Speciality,
 	} = provider;
+
+	const handleShowProfile = () => {
+		if (hasSurvey) {
+			onShowProfile();
+		} else {
+			setSurveyModalOpen(true);
+		}
+	}
 
 	console.log("this is the provider", provider);
 	return (
@@ -32,8 +40,8 @@ const ProviderProfileCard = ({ provider, onShowProfile }) => {
 					<Card.Title>{FacilityPOC}</Card.Title>
 					<div className="verified"><FaCheckCircle /> Verified Provider</div>
 					<div className="ppcButton">9 miles away
-						&nbsp;&nbsp;&nbsp;&nbsp; 
-					<a onClick={onShowProfile}>Message</a>
+						&nbsp;&nbsp;&nbsp;&nbsp;
+					<a onClick={handleShowProfile}>Message</a>
 					</div>
 					<div className="clear"></div>
 				</div>

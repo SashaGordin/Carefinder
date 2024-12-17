@@ -281,14 +281,17 @@ app.post("/matchUserWithHouses", async (req, res) => {
 
 app.post("/getSurvey", async (req, res) => {
 	const userId = req.body.userId;
-	console.log("KLKLKKL", userId);
 	const surveySnapshot = await admin
 		.firestore()
 		.collection("surveyResponses")
 		.where("userId", "==", userId)
 		.get();
-	console.log(surveySnapshot.docs.map((doc) => doc.data()));
-	res.json({ survey: surveySnapshot.docs.map((doc) => doc.data()) });
+
+	if (surveySnapshot.docs.length > 0) {
+		res.json({ survey: surveySnapshot.docs.map((doc) => doc.data()) });
+	} else {
+		res.status(404).json({ error: "Survey not found" });
+	}
 });
 
 app.post("/getProviders", async (req, res) => {

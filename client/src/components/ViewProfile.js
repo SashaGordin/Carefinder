@@ -66,6 +66,9 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 				const addressData = res.data.survey[0]?.surveyData.Address || {};
 				const addressArray = Object.values(addressData); // Convert object to array
 				setAddresses(addressArray);
+			})
+			.catch((err) => {
+				console.log("Error getting survey", err);
 			});
 	}, []);
 

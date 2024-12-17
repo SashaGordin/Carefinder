@@ -470,8 +470,8 @@ const Survey = () => {
 			{/* IF INDEX is 0, we run a welcome / splash page... */}
 			{currentQuestionIndex === 0 ? (
 				<>
-					<div className="flex flex-row">
-						<div className="bg-[#1e1e1e] flex flex-col text-center align-center justify-center p-10">
+					<div className="flex flex-row max-h-[calc(100vh-4rem)]">
+						<div className="bg-[#1e1e1e] flex flex-1 flex-col text-center align-center justify-center p-10">
 							<h1>Tell Us About Your Senior</h1>
 							<p>
 								In this step, we will get to know your senior, circumstances,
@@ -485,8 +485,8 @@ const Survey = () => {
 								Start
 							</Button>
 						</div>
-						<div className="w-full h-screen">
-							<img src="senior.jpg" alt="Senior" />
+						<div className="flex-1">
+							<img className="object-cover h-full w-full opacity-50" src="suvery-photo.jpg" alt="Senior" />
 						</div>
 					</div>
 				</>

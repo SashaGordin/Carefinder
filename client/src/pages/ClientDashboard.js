@@ -48,7 +48,6 @@ export default function ClientDashboard() {
 	const [hasSurvey, setHasSurvey] = useState(false);
 	const { currentUser } = useAuth();
 
-
 	let delayDuration = 500;
 
 	const location = useLocation();
@@ -116,6 +115,7 @@ export default function ClientDashboard() {
 	const mapOptions = {
 		minZoom: 12,
 		styles: mapStyles,
+		disableDefaultUI: true,
 	};
 
 	const pinkMarkerIcon = {
@@ -133,7 +133,6 @@ export default function ClientDashboard() {
 			height: 30,
 		},
 	};
-
 
 	const radiusRef = useRef(3200);
 	const zoomRef = useRef(13);
@@ -210,8 +209,9 @@ export default function ClientDashboard() {
 			}
 		} else {
 			// If the query doesn't contain a valid zipcode or city, prompt the user to enter a valid input
-			setErrorMessage("Please enter a valid city and state (City, State) or a valid 5-digit zipcode.");
-
+			setErrorMessage(
+				"Please enter a valid city and state (City, State) or a valid 5-digit zipcode."
+			);
 		}
 	};
 
@@ -389,17 +389,17 @@ export default function ClientDashboard() {
 			</div>
 
 			{errorMessage && (
-      <div
-        style={{
-          color: "red",
-          marginTop: "10px",
-          textAlign: "center",
-          width: "100%",
-        }}
-      >
-        {errorMessage}
-      </div>
-    )}
+				<div
+					style={{
+						color: "red",
+						marginTop: "10px",
+						textAlign: "center",
+						width: "100%",
+					}}
+				>
+					{errorMessage}
+				</div>
+			)}
 
 			<div className="CFblackBackground">
 				<div className="contentContainer" style={{ padding: "20px" }}>
@@ -434,28 +434,65 @@ export default function ClientDashboard() {
 												onClick={() => handleMarkerClick(provider)}
 												className="h-20 w-20"
 												icon={
-													selectedMarker === provider ? pinkMarkerIcon : mutedMarkerIcon
+													selectedMarker === provider
+														? pinkMarkerIcon
+														: mutedMarkerIcon
 												}
 											/>
 										))}
-									{/* {selectedMarker && (
+									{selectedMarker && (
 										<InfoWindowF
 											position={selectedMarker.position}
 											onCloseClick={() => setSelectedMarker(null)}
 										>
-											<div style={{ color: "black" }}>
-												<h5>{formatName(selectedMarker.FacilityPOC)}</h5>
-												<div>{selectedMarker.LocationAddress}</div>
-												<div>{`${selectedMarker.LocationCity}, ${selectedMarker.LocationState} ${selectedMarker.LocationZipCode}`}</div>
+											<div className="relative text-black flex flex-col max-w-[15rem]">
+												{/* Image Container with Close Button */}
+												<div className="relative w-full">
+													<img
+														src={selectedMarker.listingsData.homePhotos[0]}
+														alt="Home Photo"
+														className="w-full h-32 object-cover"
+													/>
+													{/* Close Button positioned absolutely */}
+													<button
+														className="absolute top-2 right-2  hover:bg-white  bg-transparent rounded-full p-1 shadow-md text-black"
+														onClick={() => setSelectedMarker(null)}
+													>
+														✕
+													</button>
+												</div>
+
+												{/* Content Section */}
+												<div className="p-2">
+													<h5 className="font-semibold">
+														{selectedMarker.FacilityName}
+													</h5>
+													<div>{selectedMarker.LocationAddress}</div>
+													<div>{`${selectedMarker.LocationCity}, ${selectedMarker.LocationState} ${selectedMarker.LocationZipCode}`}</div>
+													<div className="mt-2 text-center">
+														{
+															selectedMarker.roomsData.filter(
+																(room) => room.isAvailable
+															).length
+														}{" "}
+														rooms available
+													</div>
+												</div>
 											</div>
 										</InfoWindowF>
-									)} */}
+									)}
 								</GoogleMap>
 							) : (
 								<div>Loading ...</div>
 							)}
 							<div>
-								<h6 style={{ textAlign: "left", marginTop:"4px", marginBottom:"2px" }}>
+								<h6
+									style={{
+										textAlign: "left",
+										marginTop: "4px",
+										marginBottom: "2px",
+									}}
+								>
 									Neighboring cities near {zip}
 								</h6>
 								<ul
@@ -463,7 +500,7 @@ export default function ClientDashboard() {
 										display: "flex",
 										gap: "20px",
 										justifyContent: "left",
-										paddingLeft:0
+										paddingLeft: 0,
 									}}
 								>
 									{nearbyBigCities &&
@@ -471,7 +508,11 @@ export default function ClientDashboard() {
 											<li
 												key={city.name}
 												onClick={() => panToCity(city)}
-												style={{ listStyle: "none", textAlign: "left", cursor: "pointer" }}
+												style={{
+													listStyle: "none",
+													textAlign: "left",
+													cursor: "pointer",
+												}}
 											>
 												{/* <img src={city.image} alt={city.name} style={{ width: "50px", height: '50px', objectFit: "cover", borderRadius: "5px", margin: '0 auto' }} /> */}
 												<div>{city.name}</div>
@@ -507,7 +548,10 @@ export default function ClientDashboard() {
 					</div>
 				</div>
 			</div>
-			<SurveyModal showModal={surveyModalOpen} handleCloseModal={() => setSurveyModalOpen(false)} />
+			<SurveyModal
+				showModal={surveyModalOpen}
+				handleCloseModal={() => setSurveyModalOpen(false)}
+			/>
 			<Footer />
 		</>
 	);

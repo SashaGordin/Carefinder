@@ -9,6 +9,7 @@ import Listings from './CPListings/Listings';
 import PersonalInfo from './menu/PersonalInfo';
 import Profile from './CPListings/Profile';
 import ListingCard from './CPListings/ListingCard';
+import axios from 'axios';
 
 export default function CPListings() {
   const [userData, setUserData] = useState({});
@@ -54,18 +55,11 @@ export default function CPListings() {
 
   const handleUpdate = async (updatedUserData) => {
     try {
-      const userDocRef = doc(firestore, 'users', currentUser.uid);
-      await updateDoc(userDocRef, updatedUserData);
-      console.log('User data updated successfully');
-
+      const newUserData = await axios.post(`${process.env.REACT_APP_ENDPOINT}/updateUserData`, { updatedUserData, currentUser });
       // Re-fetch user data after update
-      const updatedUserDocSnapshot = await getDoc(userDocRef);
-      if (updatedUserDocSnapshot.exists()) {
-        const updatedUserData = updatedUserDocSnapshot.data();
-        setUserData(updatedUserData);
-      } else {
-        setError('User document not found after update');
-      }
+
+      setUserData(newUserData);
+
     } catch (error) {
       setError('Error updating user data: ' + error.message);
     }

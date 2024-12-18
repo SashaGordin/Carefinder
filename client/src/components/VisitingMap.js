@@ -103,7 +103,7 @@ export default function VisitingMap({ provider, addresses, setAddresses }) {
 					placeholder="Enter new address"
 					className="border p-2"
 				/>
-				<button type="submit" className="bg-blue-500 text-white p-2 rounded">
+				<button type="submit" className="bg-blue-500 text-white p-2 mb-2 rounded">
 					Add Address
 				</button>
 			</form>

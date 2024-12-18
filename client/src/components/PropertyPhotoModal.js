@@ -11,12 +11,12 @@ export default function PropertyPhotoModal({
 	console.log(homePhotos, roomPhotos);
 	return (
 		<Modal
-			className="text-black"
+			className="text-white"
 			show={showModal}
 			onHide={() => setShowModal(false)}
 		>
 			<Modal.Header>
-				<Modal.Title>{FacilityName}</Modal.Title>
+				<Modal.Title className="mb-4">{FacilityName}</Modal.Title>
 				<Button variant="link" onClick={() => setShowModal(false)} className="ms-auto">
 				<span aria-hidden="true">&times;</span>
 				</Button>

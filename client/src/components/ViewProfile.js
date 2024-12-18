@@ -98,7 +98,11 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 								<h4>Where will you be visiting from?</h4>
 
 								{addresses.length > 0 && (
-									<VisitingMap provider={provider} addresses={addresses} setAddresses={setAddresses} />
+									<VisitingMap
+										provider={provider}
+										addresses={addresses}
+										setAddresses={setAddresses}
+									/>
 								)}
 							</div>
 							{/** FACILITY NAME AND SPECIALTY AND ROOM INFO: */}
@@ -128,15 +132,20 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 												className="h-48 object-cover"
 												alt="room 1"
 												key={room.roomName}
-												onClick={() => handleRoomPhotoClick(room.roomPhotos)}
+												onClick={() => handleImageClick()}
 											/>
 											{room.roomDetails && (
-												<div className="flex flex-row gap-2">
-													<span className="bg-gray-700 rounded-md p-2">
+												<div className="text-xs">
+													<div className=" flex flex-row gap-2 rounded-md p-2">
 														{room.roomDetails.map((detail) => (
-															<div key={detail}>{detail}</div>
+															<div
+																className="bg-[#6F6F6F] rounded-md p-2"
+																key={detail}
+															>
+																{detail}
+															</div>
 														))}
-													</span>
+													</div>
 												</div>
 											)}
 										</>
@@ -149,6 +158,7 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 										className="h-48 object-cover"
 										alt="room 1"
 										key={photo}
+										onClick={() => handleImageClick()}
 									/>
 								))}
 							</div>
@@ -195,6 +205,7 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 									src={homePhotos[0]}
 									className="h-36 object-cover"
 									alt="room 1"
+									onClick={() => handleImageClick()}
 								/>
 								<div className="flex flex-col gap-2">
 									<div className="flex flex-row justify-between">
@@ -280,33 +291,36 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
 					roomPhotos={roomPhotos}
 				/>
 			)}
-			{roomPhotoModal && (
+			{/* {roomPhotoModal && (
 				<Modal
-				show={roomPhotoModal}
-				onHide={() => setRoomPhotoModal(false)}
-				size="lg"
-				centered
-			>
-				<Modal.Body>
-					<h4 className="text-center">Room Photos</h4>
-					<div className="flex flex-wrap justify-center gap-4">
-						{selectedRoomPhotos.map((photo, index) => (
-							<img
-								key={index}
-								src={photo}
-								alt={`Room Photo ${index + 1}`}
-								className="h-48 object-cover rounded"
-							/>
-						))}
-					</div>
-				</Modal.Body>
-				<Modal.Footer>
-					<Button variant="secondary" onClick={() => setRoomPhotoModal(false)}>
-						Close
-					</Button>
-				</Modal.Footer>
-			</Modal>
-			)}
+					show={roomPhotoModal}
+					onHide={() => setRoomPhotoModal(false)}
+					size="lg"
+					centered
+				>
+					<Modal.Body>
+						<h4 className="text-center">Room Photos</h4>
+						<div className="flex flex-wrap justify-center gap-4">
+							{selectedRoomPhotos.map((photo, index) => (
+								<img
+									key={index}
+									src={photo}
+									alt={`Room Photo ${index + 1}`}
+									className="h-48 object-cover rounded"
+								/>
+							))}
+						</div>
+					</Modal.Body>
+					<Modal.Footer>
+						<Button
+							variant="secondary"
+							onClick={() => setRoomPhotoModal(false)}
+						>
+							Close
+						</Button>
+					</Modal.Footer>
+				</Modal>
+			)} */}
 		</>
 	);
 };

@@ -4,6 +4,16 @@
 
 /* CAREFINDER CSS ... */
 
+.gm-style-iw button {
+  @apply hidden;
+}
+
+/* Arbitrary Targeting */
+[class*="gm-style-iw"] button {
+  display: none !important;
+}
+
+
 .CFpink { color:#ff6699; }
 .CFgray { color:#1e1f26; }
 .CFblack { color:black; }
@@ -122,9 +132,9 @@ p.amenities { margin-top:20px;}
 #CF .Pcard .card-body { padding:0px; }
 
 .pCardImageContainer {
-  align-items: center; 
+  align-items: center;
   height: 175px;
-  overflow: hidden; 
+  overflow: hidden;
 }
 .pCardPics {max-width: 100%;
   width: 100%;
@@ -461,7 +471,7 @@ body#CF ul.custom-checkmark-list{     padding-left: 30px !important;
     height: 0.7em; /* 80% of the original size */
 }
 .verified svg {display:initial; position:relative; top:-1px; margin: 10px 6px 10px 0;}
-.verified {color:rgb(164, 145, 232);} 
+.verified {color:rgb(164, 145, 232);}
 
 #CF .btn-group-vertical > .btn {
   --bs-btn-bg: #808080 !important;
@@ -772,7 +782,7 @@ p.copyright { margin-top:40px; font-size:70%;}
     .video-responsive iframe { left: initial; height: 330px; width: 90%; position: relative; margin-left: auto; margin-right: auto; }
     #CFNAV img, #CFNAV .navbar > #CFNAV .container {display:inline !important; }
 
-    
+
     .CF2-hamburger-popover {width:100%;}
 }
 

@@ -7,6 +7,8 @@ const axios = require("axios"); // Import axios
 const cors = require("cors"); // Import the cors package
 const db = admin.firestore();
 const geofire = require("geofire-common");
+const { doc, updateDoc, getDoc } = require("firebase/firestore");
+const { firestore } = require("./config/firebase-config");
 
 const stripe = new Stripe(process.env.STRIPE_TEST_SECRET_KEY);
 
@@ -248,6 +250,20 @@ async function getMessagingServiceSid() {
 	}
 }
 
+app.post("/updateUserData", async (req, res) => {
+	try {
+		const updatedUserData = req.body.updatedUserData;
+		const currentUser = req.body.currentUser;
+		const userDocRef = admin.firestore().collection("users").doc(currentUser.uid);
+		await userDocRef.update(updatedUserData);
+		const updatedUserDocSnapshot = await userDocRef.get();
+		console.log("updatedUserDocSnapshot", updatedUserDocSnapshot.data());
+		res.json({ updatedUserData: updatedUserDocSnapshot.data() });
+	} catch (error) {
+		console.error("Error updating user data:", error);
+	}
+});
+
 app.post("/matchUserWithHouses", async (req, res) => {
 	// Async handler
 	try {
@@ -418,7 +434,10 @@ app.post("/getProviders", async (req, res) => {
 							.collection("rooms")
 							.get();
 
-						console.log("roomsSnapshot", roomsSnapshot.docs.map((doc) => doc.data()));
+						console.log(
+							"roomsSnapshot",
+							roomsSnapshot.docs.map((doc) => doc.data())
+						);
 
 						for (const listingDoc of listingsSnapshot.docs) {
 							console.log("listingDoc", listingDoc.data());

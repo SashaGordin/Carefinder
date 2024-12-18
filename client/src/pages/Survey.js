@@ -210,7 +210,11 @@ const Survey = () => {
 			qtype: "upload",
 			assessment: answers["Current_Assessment"],
 			label: "Assessment",
+			isVideo: false,
+			question: "Upload assessment",
 			description:
+				"This will allow you to share you assessment with care providers whom you choose to share it with. Care providers must review an assessment in order to provide future residents with a proper estimate.",
+			description2:
 				"Please note: You're information is safe. The assessment is sent to selected care providers for review in order to provide a tailored quote. Your private information is safe.",
 		},
 		{
@@ -237,6 +241,14 @@ const Survey = () => {
 			connecting with these investors to explore potential solutions for your real estate needs?`,
 			skipLogic: (answers) => answers["Payment_Method"] !== "Private pay",
 			doubleBack: true,
+		},
+		{
+			qtype: "upload",
+			question: "Upload video",
+			label: "Video_Intro",
+			isVideo: true,
+			description:
+				"Support us in ushering a new era of transparency. Attach a 30-60 second video of your senior. This will be shared, along with your assessment, with providers you select to share it with.",
 		},
 		// {
 		// 	qtype: "radio",
@@ -299,7 +311,7 @@ const Survey = () => {
 				nextIndex++;
 			}
 
-			if (nextIndex - 1 < questions.length) {
+			if (nextIndex <= questions.length) {
 				setCurrentQuestionIndex(nextIndex);
 			} else {
 				const surveyResponsesRef = firestore.collection("surveyResponses");
@@ -356,113 +368,110 @@ const Survey = () => {
 	};
 
 	const renderQuestionComponent = () => {
-    const currentQuestion = questions[currentQuestionIndex - 1];
+		const currentQuestion = questions[currentQuestionIndex - 1];
 
-    if (!currentQuestion) return null;
+		if (!currentQuestion) return null;
 
-    const commonProps = {
-      currentQuestionIndex,
-      totalQuestions: questions.length,
-      onNext: handleNextQuestion,
-      onBack: handleBack,
-    };
+		const commonProps = {
+			currentQuestionIndex,
+			totalQuestions: questions.length,
+			onNext: handleNextQuestion,
+			onBack: handleBack,
+		};
 
-    switch (currentQuestion.qtype) {
-      case "radio":
-        return (
-          <SurveyQuestionRadio
-            {...commonProps}
-            question={currentQuestion.question}
-            options={currentQuestion.options}
-            description={currentQuestion.description}
-            onSelect={handleAnswerSelect}
-            descriptions={currentQuestion.descriptions}
-            doubleBack={currentQuestion.doubleBack}
-            tripleBack={currentQuestion.tripleBack}
-          />
-        );
+		switch (currentQuestion.qtype) {
+			case "radio":
+				return (
+					<SurveyQuestionRadio
+						{...commonProps}
+						question={currentQuestion.question}
+						options={currentQuestion.options}
+						description={currentQuestion.description}
+						onSelect={handleAnswerSelect}
+						descriptions={currentQuestion.descriptions}
+						doubleBack={currentQuestion.doubleBack}
+						tripleBack={currentQuestion.tripleBack}
+					/>
+				);
 
-      case "informational":
-        return (
-          <SurveyInformational
-            {...commonProps}
-            title={currentQuestion.title}
-            handleAnswerSelect={handleAnswerSelect}
-          />
-        );
+			case "informational":
+				return (
+					<SurveyInformational
+						{...commonProps}
+						title={currentQuestion.title}
+						handleAnswerSelect={handleAnswerSelect}
+					/>
+				);
 
-      case "MedicaidNoAssessment":
-        return <SurveyMedicaidNoAssessment />;
+			case "MedicaidNoAssessment":
+				return <SurveyMedicaidNoAssessment />;
 
-      case "address":
-        return (
-          <SurveyAddress
-            {...commonProps}
-            question={currentQuestion.question}
-            onSelect={handleAnswerSelect}
-          />
-        );
+			case "address":
+				return (
+					<SurveyAddress
+						{...commonProps}
+						question={currentQuestion.question}
+						onSelect={handleAnswerSelect}
+					/>
+				);
 
-      case "checkboxes":
-        return (
-          <SurveyQuestionCheckboxes
-            {...commonProps}
-            question={currentQuestion.question}
-            options={currentQuestion.options}
-            questionTitles={currentQuestion.question_titles}
-            onSelect={handleAnswerSelect}
-          />
-        );
+			case "checkboxes":
+				return (
+					<SurveyQuestionCheckboxes
+						{...commonProps}
+						question={currentQuestion.question}
+						options={currentQuestion.options}
+						questionTitles={currentQuestion.question_titles}
+						onSelect={handleAnswerSelect}
+					/>
+				);
 
-      case "text":
-        return (
-          <SurveyQuestionText
-            {...commonProps}
-            question={currentQuestion.question}
-            options={currentQuestion.options}
-            description={currentQuestion.description}
-            onSelect={handleAnswerSelect}
-          />
-        );
+			case "text":
+				return (
+					<SurveyQuestionText
+						{...commonProps}
+						question={currentQuestion.question}
+						options={currentQuestion.options}
+						description={currentQuestion.description}
+						onSelect={handleAnswerSelect}
+					/>
+				);
 
-      case "upload":
-        return (
-          <SurveyUpload
-            {...commonProps}
-            assessment={answers["Current_Assessment"]}
-            description={currentQuestion.description}
-          />
-        );
+			case "upload":
+				return (
+					<SurveyUpload
+						{...commonProps}
+						assessment={answers["Current_Assessment"]}
+						description={currentQuestion.description}
+						question={currentQuestion.question}
+						description2={currentQuestion.description2}
+						isVideo={currentQuestion.isVideo}
+					/>
+				);
 
-      case "meets":
-        return (
-          <div className="text-center">
-            <h2>Schedule Virtual Assessment</h2>
-            <p>
-              Please select a day and time that you and your senior are able to be
-              in the same room and conduct a 45-minute assessment via Google
-              Meets. Assessments are conducted by a Washington state registered
-              nurse.
-            </p>
-          </div>
-        );
+			case "meets":
+				return (
+					<div className="text-center">
+						<h2>Schedule Virtual Assessment</h2>
+						<p>
+							Please select a day and time that you and your senior are able to
+							be in the same room and conduct a 45-minute assessment via Google
+							Meets. Assessments are conducted by a Washington state registered
+							nurse.
+						</p>
+					</div>
+				);
 
-      case "final":
-        return <SurveyFinal {...commonProps} />;
+			case "final":
+				return <SurveyFinal {...commonProps} />;
 
-      case "info":
-        return (
-          <SurveyInfo
-            {...commonProps}
-            onSelect={handleAnswerSelect}
-          />
-        );
+			case "info":
+				return <SurveyInfo {...commonProps} onSelect={handleAnswerSelect} />;
 
-      default:
-        return null;
-    }
-  };
-
+			default:
+				return null;
+		}
+	};
 
 	return (
 		<div className="w-full h-screen flex flex-col">
@@ -486,7 +495,11 @@ const Survey = () => {
 							</Button>
 						</div>
 						<div className="flex-1">
-							<img className="object-cover h-full w-full opacity-50" src="suvery-photo.jpg" alt="Senior" />
+							<img
+								className="object-cover h-full w-full opacity-50"
+								src="suvery-photo.jpg"
+								alt="Senior"
+							/>
 						</div>
 					</div>
 				</>

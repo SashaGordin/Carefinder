@@ -34,8 +34,10 @@ const EditableField = ({ title, value, onChange }) => {
       )}
       {isEditing ? (
         <>
-        <button onClick={handleSave}>Save</button>&nbsp;
-        <button className="cancelButton" onClick={handleCancel}>Cancel</button>
+          <button onClick={handleSave}>Save</button>&nbsp;
+          <button className="cancelButton" onClick={handleCancel}>
+            Cancel
+          </button>
         </>
       ) : (
         <button onClick={handleEdit}>Edit</button>

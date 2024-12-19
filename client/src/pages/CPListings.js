@@ -1,17 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { Card } from 'react-bootstrap';
 import { firestore } from '../firebase'; // Assuming you have firebase.js setup
-import { useAuth } from "../contexts/AuthContext";
-import { getDoc, getDocs, doc, updateDoc, collection } from 'firebase/firestore';
-import TopNav from "../components/TopNav";
-import Footer from "../components/Footer";
+import { useAuth } from '../contexts/AuthContext';
+import {
+  getDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  collection,
+} from 'firebase/firestore';
+import TopNav from '../components/TopNav';
+import Footer from '../components/Footer';
 import PersonalInfo from '../components/CPListings/PersonalInfo';
 import ListingCard from '../components/CPListings/ListingCard';
 import AddAFH from '../components/AddAFH';
 
 export default function CPListings() {
   const [userData, setUserData] = useState({});
-  const { currentUser } = useAuth()
+  const { currentUser } = useAuth();
   const [error, setError] = useState('');
   const [listingsData, setListingsData] = useState([]);
 
@@ -23,9 +29,11 @@ export default function CPListings() {
         const userData = userDocSnapshot.data();
 
         const listings = [];
-        const listingsPath = userDocSnapshot.ref.path + "/listings";
-        console.log("getting docs from: " + listingsPath);
-        const listingsSnapshot = await getDocs(collection(firestore, listingsPath));
+        const listingsPath = userDocSnapshot.ref.path + '/listings';
+        console.log('getting docs from: ' + listingsPath);
+        const listingsSnapshot = await getDocs(
+          collection(firestore, listingsPath)
+        );
         //get data for all listings for user
 
         listingsSnapshot.forEach((listing) => {
@@ -37,10 +45,10 @@ export default function CPListings() {
           listings.push({
             facilityName: userData.FacilityName,
             licenseNumber: userData.LicenseNumber,
-            listingAddress: `${userData.LocationAddress}, ${userData.LocationCity}, ${userData.LocationState} ${userData.LocationZipCode} `
+            listingAddress: `${userData.LocationAddress}, ${userData.LocationCity}, ${userData.LocationState} ${userData.LocationZipCode} `,
           });
         }
-        console.log("listingsLength=" + listings.length);
+        console.log('listingsLength=' + listings.length);
         setListingsData([...listings]);
         console.log(userData);
         setUserData(userData);
@@ -49,11 +57,10 @@ export default function CPListings() {
       }
     };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   const handleUpdate = async (updatedUserData) => {
-
     try {
       const userDocRef = doc(firestore, 'users', currentUser.uid);
       await updateDoc(userDocRef, updatedUserData);
@@ -74,20 +81,20 @@ export default function CPListings() {
 
   return (
     <>
-
       <div className="CPlistings">
-
         <TopNav userRole="provider" />
 
         <p>&nbsp;</p>
 
         {error && <div>{error}</div>}
 
-      {listingsData.map((data, i) => (<ListingCard userData={userData} initialListingData={data} key={i} />))}
+        {listingsData.map((data, i) => (
+          <ListingCard userData={userData} initialListingData={data} key={i} />
+        ))}
       </div>
       <p>&nbsp;</p>
 
       <Footer />
     </>
-  )
-};
+  );
+}

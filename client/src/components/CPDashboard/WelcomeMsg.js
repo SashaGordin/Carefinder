@@ -6,20 +6,18 @@ export default function WelcomeMsg(props) {
   and YOU to the best of our abilities.  Give us some feedback to be entered into our monthly sweepstakes giveaway!`;
 
   return (
-
     <>
-     <div className="providerDashboardCard">
-
+      <div className="providerDashboardCard">
         <Card>
-        <Card.Body>
-          <Card.Title className="text-left"><h2>Hey {props.providerName},</h2></Card.Title>
-          <Card.Text className="text-left mx-2">{defaultText}</Card.Text>
-          <Button>Feedback</Button>
-        </Card.Body>
+          <Card.Body>
+            <Card.Title className="text-left">
+              <h2>Hey {props.providerName},</h2>
+            </Card.Title>
+            <Card.Text className="text-left mx-2">{defaultText}</Card.Text>
+            <Button>Feedback</Button>
+          </Card.Body>
         </Card>
-
       </div>
     </>
-
   );
 }

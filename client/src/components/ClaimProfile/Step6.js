@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Button, Card, Form } from "react-bootstrap";
+import React, { useState } from 'react';
+import { Button, Card, Form } from 'react-bootstrap';
 
 export default function Step6({ onNext, onBack }) {
   const [agreed, setAgreed] = useState(false);
@@ -27,11 +27,7 @@ export default function Step6({ onNext, onBack }) {
             </Form>
           </Card.Text>
 
-          <Button
-            onClick={onNext}
-            variant="primary"
-            disabled={!agreed}
-          >
+          <Button onClick={onNext} variant="primary" disabled={!agreed}>
             Confirm
           </Button>
           <Button onClick={onBack}>Back</Button>

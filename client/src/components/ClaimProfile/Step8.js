@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Card } from "react-bootstrap";
+import React from 'react';
+import { Button, Card } from 'react-bootstrap';
 
 export default function Step8({ onNext, onBack }) {
   // const [agreed, setAgreed] = useState(false);
@@ -15,7 +15,8 @@ export default function Step8({ onNext, onBack }) {
           <Card.Title>We need a card on file</Card.Title>
 
           <Card.Text>
-            You won't be charged until you have landed a resident who stays more than 30 days. In order to proceed we will need a valid card on file.
+            You won't be charged until you have landed a resident who stays more
+            than 30 days. In order to proceed we will need a valid card on file.
           </Card.Text>
 
           <Button

@@ -1,27 +1,27 @@
 import React, { useRef, useState } from 'react';
 import { Form, Button, Card, Alert } from 'react-bootstrap';
-import { useAuth } from "../contexts/AuthContext"
+import { useAuth } from '../contexts/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
-import TopNav from "./TopNav";
-import Footer from "./Footer";
+import TopNav from './TopNav';
+import Footer from './Footer';
 
 export default function ProviderLogin() {
   const emailRef = useRef();
   const passwordRef = useRef();
-  const { login } = useAuth()
+  const { login } = useAuth();
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
       setError('');
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
       navigate('/');
-    } catch(error) {
+    } catch (error) {
       setError('Failed to log in');
       console.log(error);
     }
@@ -30,12 +30,11 @@ export default function ProviderLogin() {
 
   return (
     <>
-    <TopNav />
-    <div className="contentContainer utilityPage">
-
+      <TopNav />
+      <div className="contentContainer utilityPage">
         <Card>
           <Card.Body>
-            <h2 className ="text-center mb-4">Provider Log In</h2>
+            <h2 className="text-center mb-4">Provider Log In</h2>
             {error && <Alert variant="danger">{error}</Alert>}
             <Form onSubmit={handleSubmit}>
               <Form.Group id="email">
@@ -46,7 +45,9 @@ export default function ProviderLogin() {
                 <Form.Label>Password</Form.Label>
                 <Form.Control type="password" ref={passwordRef} required />
               </Form.Group>
-              <Button disabled={loading} className="w-100" type="submit">Log In</Button>
+              <Button disabled={loading} className="w-100" type="submit">
+                Log In
+              </Button>
             </Form>
             <div className="w-100 text-center mt-3">
               <Link to="/forgot-password">Forgot Password?</Link>
@@ -56,9 +57,8 @@ export default function ProviderLogin() {
         <div className="w-100 text-center mt-2">
           Need an account? <Link to="/signup">Sign Up</Link>
         </div>
-
       </div>
       <Footer />
     </>
-  )
+  );
 }

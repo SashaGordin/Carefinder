@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../../firebase'; // Assuming you have firebase.js setup
 import EditableField from './EditableField';
-import { useAuth } from "../../contexts/AuthContext"
+import { useAuth } from '../../contexts/AuthContext';
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
 import { Alert } from 'react-bootstrap';
 
 import { Card } from 'react-bootstrap';
 
-
 const PersonalInfoPage = () => {
   const [userData, setUserData] = useState({});
-  const { currentUser } = useAuth()
+  const { currentUser } = useAuth();
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -26,7 +25,7 @@ const PersonalInfoPage = () => {
       }
     };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   const handleUpdate = async (updatedUserData) => {
@@ -55,28 +54,39 @@ const PersonalInfoPage = () => {
       {*/}
 
       <div className="contentContainer utilityPage personalInfo">
-      <Card>
-            <Card.Body>
-                <Card.Title>Personal Information</Card.Title>
-                {error && <Alert variant="danger">{error}</Alert>}
+        <Card>
+          <Card.Body>
+            <Card.Title>Personal Information</Card.Title>
+            {error && <Alert variant="danger">{error}</Alert>}
 
-                <Card.Text>
+            <Card.Text>
+              <EditableField
+                title="Provider Name"
+                value={userData.FacilityPOC || ''}
+                onChange={(newValue) => handleUpdate({ FacilityPOC: newValue })}
+              />
 
-                  <EditableField title="Provider Name" value={userData.FacilityPOC || ''} onChange={(newValue) => handleUpdate({ FacilityPOC: newValue })} />
+              <EditableField
+                title="Email Address"
+                value={userData.email || ''}
+                onChange={(newValue) => handleUpdate({ email: newValue })}
+              />
 
-                  <EditableField title="Email Address" value={userData.email || ''} onChange={(newValue) => handleUpdate({ email: newValue })} />
-
-                  <EditableField title="Phone Number" value={userData.TelephoneNmbr || ''} onChange={(newValue) => handleUpdate({ TelephoneNmbr: newValue })} />
-
-                </Card.Text>
-            </Card.Body>
-      </Card>
+              <EditableField
+                title="Phone Number"
+                value={userData.TelephoneNmbr || ''}
+                onChange={(newValue) =>
+                  handleUpdate({ TelephoneNmbr: newValue })
+                }
+              />
+            </Card.Text>
+          </Card.Body>
+        </Card>
       </div>
 
       {/*}
       <Footer />
     {*/}
-
     </>
   );
 };

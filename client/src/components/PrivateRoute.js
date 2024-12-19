@@ -4,7 +4,11 @@ import { useAuth } from '../contexts/AuthContext';
 import { getDoc, doc } from 'firebase/firestore';
 import { firestore } from '../firebase';
 
-export default function PrivateRoute({ allowedRoles, redirectPath = "/", children }) {
+export default function PrivateRoute({
+  allowedRoles,
+  redirectPath = '/',
+  children,
+}) {
   const { currentUser } = useAuth();
   const [loading, setLoading] = useState(true);
   const [userRole, setUserRole] = useState(null);
@@ -39,7 +43,7 @@ export default function PrivateRoute({ allowedRoles, redirectPath = "/", childre
   if (!currentUser.emailVerified) {
     // Redirect to login if user is not verified
     return <Navigate to="/verify-email" />;
-  } 
+  }
 
   if (loading) {
     // Render loading state while fetching user role

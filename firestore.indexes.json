@@ -1,24 +1,36 @@
 {
   "indexes": [
     {
-      "collectionGroup": "messages",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "msgThreadID", "order": "ASCENDING" },
-        { "fieldPath": "msgDate", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "users",
-      "queryScope": "COLLECTION",
+      "collectionId": "users",
       "fields": [
         { "fieldPath": "role", "order": "ASCENDING" },
         { "fieldPath": "geolocation", "order": "ASCENDING" }
       ]
     },
     {
-      "collectionGroup": "messages",
-      "queryScope": "COLLECTION",
+      "collectionId": "users",
+      "fields": [
+        { "fieldPath": "role", "order": "ASCENDING" },
+        { "fieldPath": "position.lat", "order": "ASCENDING" },
+        { "fieldPath": "position.lng", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionId": "users",
+      "fields": [
+        { "fieldPath": "role", "order": "ASCENDING" },
+        { "fieldPath": "g.geohash", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionId": "messages",
+      "fields": [
+        { "fieldPath": "msgThreadID", "order": "ASCENDING" },
+        { "fieldPath": "msgDate", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionId": "messages",
       "fields": [
         { "fieldPath": "msgTo", "order": "ASCENDING" },
         { "fieldPath": "msgStatus", "order": "ASCENDING" },

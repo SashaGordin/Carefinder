@@ -1,8 +1,7 @@
-import React, {useState} from 'react';
-import { useAuth } from "../contexts/AuthContext";
+import React, { useState } from 'react';
+import { useAuth } from '../contexts/AuthContext';
 import { getDoc, setDoc, doc, Timestamp } from 'firebase/firestore';
 import { firestore } from '../firebase';
-
 
 // ********************************************************
 // NO USED ANYMORE -- SWITCH TO MsgTemplateMVP component.
@@ -40,166 +39,196 @@ import { firestore } from '../firebase';
 // M4: new Date('March 3, 2024 12:23:08').getTime() -- 1709497388000.
 // M5: new Date('March 2, 2024 10:32:44').getTime() -- 1709404364000.
 
-export default function MsgTemplate({passData, hasArchives}) {
+export default function MsgTemplate({ passData, hasArchives }) {
+  console.log(passData);
+  console.log('Archives?: ' + hasArchives);
 
-    console.log(passData);
-    console.log('Archives?: '+hasArchives);
+  function toggleHideByID(targetID) {
+    var toggleTarget = document.getElementById(targetID);
+    if (toggleTarget.style.display === 'none') {
+      toggleTarget.style.display = 'block';
+    } else {
+      toggleTarget.style.display = 'none';
+    }
+    //return;
+  }
 
-    function toggleHideByID(targetID) {
-        var toggleTarget = document.getElementById(targetID);
-        if (toggleTarget.style.display === "none") {
-            toggleTarget.style.display = "block";
-        } else {
-            toggleTarget.style.display = "none";
-        }
-        //return;
+  function toggleHideByClass(targetClass) {
+    var elementArray = document.getElementsByClassName(targetClass);
+    // returns array, so...
+    for (let i = 0; i < elementArray.length; i++) {
+      if (elementArray[i].style.display === 'none') {
+        elementArray[i].style.display = 'block';
+      } else {
+        elementArray[i].style.display = 'none';
+      }
+    }
+  }
+
+  function toggleMessages(targetID) {
+    //console.log( "TARGET: " + targetID );
+    var bID = 'briefMsg' + targetID;
+    //console.log( "BRIEF: " + bID );
+    var toggleTarget = document.getElementById(bID);
+
+    if (toggleTarget.style.display == 'block') {
+      toggleTarget.style.display = 'none';
+    } else {
+      toggleTarget.style.display = 'block';
     }
 
-    function toggleHideByClass(targetClass) {
-        var elementArray = document.getElementsByClassName(targetClass);
-        // returns array, so...
-        for (let i=0; i<elementArray.length; i++) {
-            if (elementArray[i].style.display === "none") {
-                elementArray[i].style.display = "block";
-            } else {
-                elementArray[i].style.display = "none";
-            }
-        }
+    var fID = 'fullMsg' + targetID;
+    //console.log( "FULL: " + fID );
+    var toggleTarget = document.getElementById(fID);
+    if (toggleTarget.style.display === 'none') {
+      toggleTarget.style.display = 'block';
+    } else {
+      toggleTarget.style.display = 'none';
     }
 
-    function toggleMessages(targetID){
-        //console.log( "TARGET: " + targetID );
-        var bID = 'briefMsg' + targetID;
-        //console.log( "BRIEF: " + bID );
-        var toggleTarget = document.getElementById(bID);
+    return;
+  }
 
-        if ( toggleTarget.style.display == "block" ) {
-            toggleTarget.style.display = "none";
-        } else {
-            toggleTarget.style.display = "block";
-        }
+  function getMessageWrapperClass(theStatus) {
+    // replaces <div className="messageWrapper"> below
+    if (theStatus === 1) {
+      return 'messageWrapper messageRead';
+    }
+    if (theStatus === 2) {
+      return 'messageWrapper messageArchived';
+    }
+    return 'messageWrapper';
+  }
 
+  const changeMessageStatus = async (targetMessageID, targetFieldValue) => {
+    console.log(
+      'Set `messages` (id ' +
+        targetMessageID +
+        ') `msgStatus` to: ' +
+        targetFieldValue
+    );
 
-        var fID = 'fullMsg' + targetID;
-        //console.log( "FULL: " + fID );
-        var toggleTarget = document.getElementById(fID);
-        if (toggleTarget.style.display === "none") {
-            toggleTarget.style.display = "block";
-        } else {
-            toggleTarget.style.display = "none";
-        }
+    const dbCollection = firestore.collection('messages').doc(targetMessageID);
 
-         return;
+    const response = await dbCollection.update({ msgStatus: targetFieldValue });
+
+    console.log(response);
+
+    window.location.reload();
+  };
+
+  const changeMessageResponseSentStatus = async (
+    targetMessageID,
+    targetFieldValue
+  ) => {
+    console.log(
+      'Set `messages` (id ' +
+        targetMessageID +
+        ') `msgResponseSent` to: ' +
+        targetFieldValue
+    );
+
+    const dbCollection = firestore.collection('messages').doc(targetMessageID);
+
+    const response = await dbCollection.update({
+      msgResponseSent: targetFieldValue,
+    });
+
+    console.log(response);
+  };
+
+  const sendReply = async (
+    sendingTo,
+    sendingFrom,
+    originalMessageID,
+    messageThreadID
+  ) => {
+    // text field is marked w/ a reply ID using "reply" and the Msg ID...
+    let replyID = 'reply' + originalMessageID;
+    let replyText = document.getElementById(replyID).value;
+    if (!replyText) {
+      alert(
+        'We cannot send this message, as no text was present. Please make sure to write a message. Thanks! :-)'
+      );
+      return;
     }
 
-    function getMessageWrapperClass (theStatus){
-        // replaces <div className="messageWrapper"> below
-        if (theStatus === 1) {
-            return 'messageWrapper messageRead';
-        }
-        if (theStatus === 2) {
-            return 'messageWrapper messageArchived';
-        }
-        return 'messageWrapper';
-    }
+    console.log(
+      'SENDING REPLY:  TO: ' +
+        sendingTo +
+        ', FROM: ' +
+        sendingFrom +
+        ', TXT: ' +
+        replyText +
+        ', THREAD: ' +
+        messageThreadID +
+        ')'
+    );
 
-    const changeMessageStatus = async(targetMessageID, targetFieldValue) => {
+    const dbCollection = firestore.collection('messages');
+    const response = await dbCollection.add({
+      msgDate: Timestamp.now(),
+      msgTo: sendingTo,
+      msgFrom: sendingFrom,
+      msgText: replyText,
+      msgThreadID: messageThreadID,
+      msgNotified: 0,
+      msgStatus: 0,
+      msgParentID: originalMessageID,
+      msgResponseSent: 0,
+    });
 
-        console.log('Set `messages` (id '+ targetMessageID + ') `msgStatus` to: ' + targetFieldValue );
+    console.log(response);
 
-        const dbCollection = firestore.collection('messages').doc(targetMessageID);
+    // mark on the original message that it was responded to:
+    changeMessageResponseSentStatus(originalMessageID, 1);
 
-        const response = await dbCollection.update( {'msgStatus':targetFieldValue} );
+    // also mark this original message as read:
+    changeMessageStatus(originalMessageID, 1);
+    console.log('MARKED message as READ, also. Kthx.');
 
-        console.log(response);
+    // I guess just refresh. Can we do this w/out a reload? No biggie if not...
+    window.location.reload();
+  };
 
-        window.location.reload();
-    }
+  return (
+    <>
+      {hasArchives ? (
+        <>
+          <div className="msgTopControls">
+            <span onClick={() => toggleHideByClass('messageArchived')}>
+              👀 Show/Hide Archived
+            </span>
+          </div>
+        </>
+      ) : (
+        <></>
+      )}
 
-    const changeMessageResponseSentStatus = async(targetMessageID, targetFieldValue) => {
+      {passData.map((thisMsg) => (
+        <div
+          className={getMessageWrapperClass(thisMsg['m_ST'])}
+          style={{ display: 'block' }}
+        >
+          <div className="msgAlertLeft">
+            <img className="msgAvatar" src="defaultavatar.jpg" alt="" />
+          </div>
 
-        console.log('Set `messages` (id '+ targetMessageID + ') `msgResponseSent` to: ' + targetFieldValue );
+          <div className="msgAlertMiddle">
+            <p className="msgFrom">
+              You received a message from
+              {' ' + thisMsg['m_RO'] + ' ' + thisMsg['m_DN']}
+            </p>
 
-        const dbCollection = firestore.collection('messages').doc(targetMessageID);
-
-        const response = await dbCollection.update( {'msgResponseSent':targetFieldValue} );
-
-        console.log(response);
-
-    }
-
-    const sendReply = async(sendingTo, sendingFrom, originalMessageID, messageThreadID) => {
-
-        // text field is marked w/ a reply ID using "reply" and the Msg ID...
-        let replyID = 'reply' + originalMessageID;
-        let replyText = document.getElementById(replyID).value;
-        if (!replyText) {
-            alert('We cannot send this message, as no text was present. Please make sure to write a message. Thanks! :-)');
-            return;
-        }
-
-        console.log('SENDING REPLY:  TO: ' + sendingTo + ', FROM: ' + sendingFrom + ', TXT: ' + replyText + ', THREAD: ' + messageThreadID + ')');
-
-        const dbCollection = firestore.collection('messages');
-        const response = await dbCollection.add({
-            msgDate : Timestamp.now(),
-            msgTo : sendingTo,
-            msgFrom : sendingFrom,
-            msgText : replyText,
-            msgThreadID : messageThreadID,
-            msgNotified : 0,
-            msgStatus : 0,
-            msgParentID : originalMessageID,
-            msgResponseSent : 0
-        });
-
-        console.log(response);
-
-        // mark on the original message that it was responded to:
-        changeMessageResponseSentStatus(originalMessageID, 1);
-
-        // also mark this original message as read:
-        changeMessageStatus(originalMessageID, 1);
-        console.log('MARKED message as READ, also. Kthx.');
-
-        // I guess just refresh. Can we do this w/out a reload? No biggie if not...
-        window.location.reload();
-    }
-
-    return (
-
-      <>
-
-        { hasArchives ?
-            <>
-            <div className='msgTopControls'><span onClick={()=> toggleHideByClass('messageArchived')}>👀 Show/Hide Archived</span></div>
-            </> : <></>
-        }
-
-        {passData.map( thisMsg => (
-
-                <div className={ getMessageWrapperClass(thisMsg['m_ST']) } style={{display:"block"}}>
-
-                <div className="msgAlertLeft">
-                    <img className='msgAvatar' src='defaultavatar.jpg' alt='' />
-                </div>
-
-                <div className="msgAlertMiddle">
-
-                    <p className="msgFrom">
-                        You received a message from
-                            { ' ' + thisMsg['m_RO'] + ' ' + thisMsg['m_DN'] }
-                    </p>
-
-                    { /* }
+            {/* }
                     <p className="msgDate">
                         <b>DATE:</b> <span className="CForange"> {thisMsg['m_DA']} </span>
                     </p>
-                    { */ }
+                    { */}
 
-                    <div className="clear"></div>
+            <div className="clear"></div>
 
-                { /* }
+            {/* }
                     { ( thisMsg['m_TXbExists'] == 1 ) ?
                         <>
                             <div id={'briefMsg'+thisMsg['m_ID']} style={{display:"block"}}>
@@ -219,45 +248,66 @@ export default function MsgTemplate({passData, hasArchives}) {
                             </div>
                         </>
                     }
-                { */ }
+                { */}
 
-                    { ( thisMsg['m_RS'] == 1 ) ?
-                        <>
-                            <p className="msgResponseInfo">(✅ You responded.)</p>
-                        </> :
-                        <>
-                            <p className="msgResponseInfo">(⭕ You haven't responded).</p>
-                        </>
+            {thisMsg['m_RS'] == 1 ? (
+              <>
+                <p className="msgResponseInfo">(✅ You responded.)</p>
+              </>
+            ) : (
+              <>
+                <p className="msgResponseInfo">(⭕ You haven't responded).</p>
+              </>
+            )}
+          </div>
 
-                    }
+          <div className="msgAlertRight">
+            <p className="msgActions">
+              <a href="###" onClick={() => toggleHideByID(thisMsg['m_ID'])}>
+                📝
+              </a>
+            </p>
+          </div>
 
-                </div>
+          <div className="clear"></div>
 
+          <div
+            className="msgReplyArea"
+            id={thisMsg['m_ID']}
+            style={{ display: 'none' }}
+          >
+            <div id={'fullMsg' + thisMsg['m_ID']}>
+              <p className="msgText msgFull">{thisMsg['m_TX']}</p>
+            </div>
 
-                <div className="msgAlertRight">
+            <textarea
+              autoFocus
+              placeholder="Write here..."
+              id={'reply' + thisMsg['m_ID']}
+            ></textarea>
 
-                    <p className="msgActions">
+            <input
+              value="SEND"
+              onClick={() =>
+                sendReply(
+                  thisMsg['m_FR'],
+                  thisMsg['m_TO'],
+                  thisMsg['m_ID'],
+                  thisMsg['m_TH']
+                )
+              }
+              name="B1"
+              className="btn btn-primary"
+            ></input>
+            <button
+              className="btn btn-info"
+              onClick={() => toggleHideByID(thisMsg['m_ID'])}
+            >
+              CANCEL
+            </button>
 
-                    <a href="###" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>📝</a>
-
-                    </p>
-                </div>
-
-                <div className="clear"></div>
-
-                <div className="msgReplyArea" id={thisMsg['m_ID']} style={{display:"none"}}>
-
-                    <div id={'fullMsg'+thisMsg['m_ID']}>
-                        <p className="msgText msgFull">{thisMsg['m_TX']}</p>
-                    </div>
-
-                    <textarea autoFocus placeholder="Write here..." id={'reply'+thisMsg['m_ID']}></textarea>
-
-                    <input value="SEND" onClick={() => sendReply(thisMsg['m_FR'], thisMsg['m_TO'], thisMsg['m_ID'], thisMsg['m_TH'])} name="B1" className="btn btn-primary"></input>
-                    <button className="btn btn-info" onClick={()=> toggleHideByID(thisMsg['m_ID'])}>CANCEL</button>
-
-                    <br></br>
-                        { /* }
+            <br></br>
+            {/* }
                         { ( thisMsg['m_TXbExists'] == 1 ) &&
                             <>
                                 <a href="###" onClick={()=> toggleMessages(thisMsg['m_ID'])}>👀 Show/Hide Full Message</a>
@@ -279,37 +329,44 @@ export default function MsgTemplate({passData, hasArchives}) {
                             </>
                         }
 
-                    { */ }
+                    { */}
 
-                        { (thisMsg['m_ST'] == 1) &&
-                            <>
-                                <a href="###" onClick={()=> changeMessageStatus(thisMsg['m_ID'], 0)}>✅ Keep as new</a>
-                                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-                            </>
-                        }
+            {thisMsg['m_ST'] == 1 && (
+              <>
+                <a
+                  href="###"
+                  onClick={() => changeMessageStatus(thisMsg['m_ID'], 0)}
+                >
+                  ✅ Keep as new
+                </a>
+                &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+              </>
+            )}
 
-                        { ( ( thisMsg['m_ST'] == 0 ) || ( thisMsg['m_ST'] == 1 ) ) &&
-                            <>
-                                <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 2)}>🗑️ Archive</a>
-                            </>
-                        }
+            {(thisMsg['m_ST'] == 0 || thisMsg['m_ST'] == 1) && (
+              <>
+                <a
+                  href="###"
+                  onClick={() => changeMessageStatus(thisMsg['m_ID'], 2)}
+                >
+                  🗑️ Archive
+                </a>
+              </>
+            )}
 
-                        { (thisMsg['m_ST'] == 2) &&
-                            <>
-                                <a href="###"onClick={()=> changeMessageStatus(thisMsg['m_ID'], 1)}>🗑️ Unarchive</a>
-                            </>
-                        }
-                </div>
-
-
-
-            </div>
-
-        ))}
-
-      </>
-
-    );
-
+            {thisMsg['m_ST'] == 2 && (
+              <>
+                <a
+                  href="###"
+                  onClick={() => changeMessageStatus(thisMsg['m_ID'], 1)}
+                >
+                  🗑️ Unarchive
+                </a>
+              </>
+            )}
+          </div>
+        </div>
+      ))}
+    </>
+  );
 }
-

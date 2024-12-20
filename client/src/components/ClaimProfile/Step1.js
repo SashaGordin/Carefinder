@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Card } from 'react-bootstrap';
 import axios from 'axios';
 
 export default function Step1({ onNext, setProviderInfo }) {
   const [providerNumber, setProviderNumber] = useState('');
+  const [error, setError] = useState(null);
   //const [providerInfo, setProviderInfo] = useState(null);
 
   const handleFetchProviderInfo = () => {
@@ -21,21 +22,22 @@ export default function Step1({ onNext, setProviderInfo }) {
           response.data.providerInfo[0].TelephoneNmbr
         );
 
-        axios
-          .post(`${process.env.REACT_APP_ENDPOINT}/sendConfirmationText`, {
-            phone: response.data.providerInfo[0].TelephoneNmbr,
-          })
-          .then((response) => {
-            console.log('Confirmation text sent successfully.');
-          })
-          .catch((error) => {
-            console.error('Error sending confirmation text >>> :', error);
-          });
+        // axios
+        //   .post(`${process.env.REACT_APP_ENDPOINT}/sendConfirmationText`, {
+        //     phone: response.data.providerInfo[0].TelephoneNmbr,
+        //   })
+        //   .then((response) => {
+        //     console.log('Confirmation text sent successfully.');
+        //   })
+        //   .catch((error) => {
+        //     console.error('Error sending confirmation text >>> :', error);
+        //   });
 
         onNext();
       })
       .catch((error) => {
         console.error('Error:', error);
+        setError('Error fetching provider information. Please try again.');
       });
   };
 
@@ -43,13 +45,16 @@ export default function Step1({ onNext, setProviderInfo }) {
     <>
       <Card className="claimProfileCard">
         <Card.Body>
-          <Card.Title>Step 1: Enter Provider Number</Card.Title>
+          <Card.Title>Search AFH</Card.Title>
           <Card.Text>
+            <p>Enter your AFH provider number to proceed</p>
             <input
               type="text"
+              placeholder="Enter AFH number"
               value={providerNumber}
               onChange={(e) => setProviderNumber(e.target.value)}
             />
+            {error && <div className="text-danger">{error}</div>}
           </Card.Text>
           <Button onClick={handleFetchProviderInfo}>Next</Button>
         </Card.Body>

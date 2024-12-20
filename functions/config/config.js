@@ -14,14 +14,15 @@ const config = {
   },
 
   async initStripe() {
-    // eslint-disable-next-line max-len
-    const stripeKey = await stripeTestSecretKey.value(); // Access secret at runtime
+    // Access the secret only at runtime
+    const stripeKey = await stripeTestSecretKey.value();
     return require('stripe')(stripeKey);
   },
 
   async initTwilio() {
-    const sid = await twilioAccountSid.value(); // Access secret at runtime
-    const token = await twilioAuthToken.value(); // Access secret at runtime
+    // Access the secrets only at runtime
+    const sid = await twilioAccountSid.value();
+    const token = await twilioAuthToken.value();
     return require('twilio')(sid, token);
   },
 };

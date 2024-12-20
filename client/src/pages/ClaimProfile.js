@@ -73,26 +73,26 @@ export default function ClaimProfile() {
         {currentStep === 1 && (
           <Step1 onNext={handleNext} setProviderInfo={setProviderInfo} />
         )}
-        {currentStep === 2 && (
+        {/* {currentStep === 2 && (
           <Step2
             onNext={handleNext}
             onBack={handleBack}
             providerInfo={providerInfo}
           />
-        )}
-        {currentStep === 3 && (
+        )} */}
+        {currentStep === 2 && (
           <Step3
             onNext={handleNext}
             onBack={handleBack}
             providerInfo={providerInfo}
           />
         )}
-        {currentStep === 4 && <Step4 onNext={handleNext} onBack={handleBack} />}
-        {currentStep === 5 && <Step5 onNext={handleNext} onBack={handleBack} />}
-        {currentStep === 6 && <Step6 onNext={handleNext} onBack={handleBack} />}
-        {currentStep === 7 && <Step7 onNext={handleNext} onBack={handleBack} />}
-        {currentStep === 8 && <Step8 onNext={handleNext} onBack={handleBack} />}
-        {currentStep === 9 && (
+        {currentStep === 3 && <Step4 onNext={handleNext} onBack={handleBack} />}
+        {currentStep === 4 && <Step5 onNext={handleNext} onBack={handleBack} />}
+        {currentStep === 5 && <Step6 onNext={handleNext} onBack={handleBack} />}
+        {currentStep === 6 && <Step7 onNext={handleNext} onBack={handleBack} />}
+        {currentStep === 7 && <Step8 onNext={handleNext} onBack={handleBack} />}
+        {currentStep === 8 && (
           <PaymentInformation
             onFinish={handleFinish}
             onBack={handleBack}

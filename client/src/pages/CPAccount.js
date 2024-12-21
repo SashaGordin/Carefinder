@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../firebase'; // Assuming you have firebase.js setup
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from '../contexts/AuthContext';
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
-import TopNav from "../components/TopNav";
-import Footer from "../components/Footer";
+import TopNav from '../components/TopNav';
+import Footer from '../components/Footer';
 import PersonalInfo from '../components/CPListings/PersonalInfo';
 
 export default function CPAccount() {
   const [userData, setUserData] = useState({});
-  const { currentUser } = useAuth()
+  const { currentUser } = useAuth();
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -24,11 +24,10 @@ export default function CPAccount() {
       }
     };
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   const handleUpdate = async (updatedUserData) => {
-
     try {
       const userDocRef = doc(firestore, 'users', currentUser.uid);
       await updateDoc(userDocRef, updatedUserData);
@@ -49,18 +48,16 @@ export default function CPAccount() {
 
   return (
     <>
-
       <div className="CPAccount">
-
         <TopNav userRole="provider" />
 
         <p>&nbsp;</p>
 
         {error && <div>{error}</div>}
 
-        <PersonalInfo userData={userData} handleUpdate={handleUpdate}/>
+        <PersonalInfo userData={userData} handleUpdate={handleUpdate} />
       </div>
       <Footer />
     </>
-  )
-};
+  );
+}

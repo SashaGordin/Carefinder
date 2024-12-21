@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { firestore } from '../firebase'; // Assuming you have firebase.js setup
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from '../contexts/AuthContext';
 import { getDoc, doc, updateDoc } from 'firebase/firestore';
-import TopNav from "../components/TopNav";
-import Footer from "../components/Footer";
+import TopNav from '../components/TopNav';
+import Footer from '../components/Footer';
 import EditableField from '../components/menu/EditableField';
 import { isValidUrl } from '../utils';
 import { Card, Alert } from 'react-bootstrap';
 
 export default function CPSettings() {
   const [userData, setUserData] = useState({});
-  const { currentUser } = useAuth()
+  const { currentUser } = useAuth();
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -26,11 +26,10 @@ export default function CPSettings() {
       }
     };
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, []);
 
   const handleUpdate = async (updatedUserData) => {
-
     try {
       const userDocRef = doc(firestore, 'users', currentUser.uid);
       await updateDoc(userDocRef, updatedUserData);
@@ -51,18 +50,14 @@ export default function CPSettings() {
 
   const validateLink = (newValue) => {
     if (!newValue || isValidUrl(newValue)) {
-      handleUpdate({ CalendlyLink: newValue })
+      handleUpdate({ CalendlyLink: newValue });
       setError('');
-    }
-    else
-      setError('Please enter a valid URL')
-  }
+    } else setError('Please enter a valid URL');
+  };
 
   return (
     <>
-
       <div className="CPSettings">
-
         <TopNav userRole="provider" />
 
         <p>&nbsp;</p>
@@ -75,14 +70,22 @@ export default function CPSettings() {
               <Card.Title>Settings</Card.Title>
               {error && <Alert variant="danger">{error}</Alert>}
 
-              <EditableField title="Calendly Link" value={userData.CalendlyLink || ''} onChange={(newValue) => validateLink(newValue)} />
-              <EditableField title="Google Reviews Link" value={userData.GoogleReviewsLink || ''} onChange={(newValue) => validateLink({ email: newValue })} />
+              <EditableField
+                title="Calendly Link"
+                value={userData.CalendlyLink || ''}
+                onChange={(newValue) => validateLink(newValue)}
+              />
+              <EditableField
+                title="Google Reviews Link"
+                value={userData.GoogleReviewsLink || ''}
+                onChange={(newValue) => validateLink({ email: newValue })}
+              />
               <div>Discord Integration (TBD)</div>
             </Card.Body>
           </Card>
-        </div >
+        </div>
       </div>
       <Footer />
     </>
-  )
-};
+  );
+}

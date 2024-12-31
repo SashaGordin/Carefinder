@@ -30,7 +30,7 @@ const EditableField = ({ title, value, onChange }) => {
           onChange={(e) => setEditedValue(e.target.value)}
         />
       ) : (
-        <span>{value}</span>
+        <span className="dbValue">{value}</span>
       )}
       {isEditing ? (
         <>
@@ -40,7 +40,10 @@ const EditableField = ({ title, value, onChange }) => {
           </button>
         </>
       ) : (
-        <button onClick={handleEdit}>Edit</button>
+        <>
+          <div className="clear"></div>
+          <button onClick={handleEdit}>Edit</button>
+        </>
       )}
     </div>
   );

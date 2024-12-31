@@ -152,7 +152,6 @@ export default function TopNav() {
                     style={{
                       position: 'absolute',
                       top: '10px',
-                      right: '10px',
                       background: 'none',
                       border: 'none',
                       fontSize: '24px',
@@ -284,7 +283,6 @@ export default function TopNav() {
                     style={{
                       position: 'absolute',
                       top: '10px',
-                      right: '10px',
                       background: 'none',
                       border: 'none',
                       fontSize: '24px',
@@ -488,7 +486,6 @@ export default function TopNav() {
                     style={{
                       position: 'absolute',
                       top: '10px',
-                      right: '10px',
                       background: 'none',
                       border: 'none',
                       fontSize: '24px',

@@ -102,7 +102,7 @@ export default function LandingPage() {
       <div className="homeRow3">
         <div className="contentContainer">
           <div className="triplebox CFgrayBackground">
-            <FaMapMarkerAlt style={{ ...iconStyle, color: 'pink' }} />
+            <FaMapMarkerAlt style={{ ...iconStyle, color: '#ff6699' }} />
             <p className="h3">Skip the search</p>
             <p>
               AI-driven matchmaking connects you directly to the most compatible

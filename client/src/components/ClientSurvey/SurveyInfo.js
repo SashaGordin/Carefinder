@@ -141,16 +141,17 @@ const SurveyInfo = ({
   const inputStyle = {
     padding: '8px',
     fontSize: '16px',
-    borderRadius: '4px',
+    borderRadius: '10px',
     border: '1px solid #ccc',
     width: '100%',
+    minWidth: '120px',
     boxSizing: 'border-box',
   };
 
   return (
     <>
-      <div className="flex flex-col items-center gap-4 justify-center pt-4">
-        <div className="bg-[#1e1e1e] w-[30rem] py-8 px-10 rounded-lg">
+      <div className="flex flex-col items-center gap-4 justify-center pt-4 h-[calc(100vh-15rem)]">
+        <div className="bg-[#1e1e1e] w-[32rem] py-8 px-10 rounded-lg">
           <div className="w-[20rem]">
             <h2>Personal Info</h2>
             <form onSubmit={handleSubmit}>
@@ -230,7 +231,7 @@ const SurveyInfo = ({
                       onChange={(e) => handleChange(e, 'personalInfo')}
                       style={inputStyle}
                     >
-                      <option value="">Select an option</option>
+                      <option value="">Select an option:</option>
                       <option value="Not_POA">Not a Power of Attorney</option>
                       <optgroup label="Powers of Attorney (POA)">
                         <option value="general">
@@ -310,7 +311,7 @@ const SurveyInfo = ({
                 <h2 className="text-white mt-4">Senior Info</h2>
                 <div>
                   <label htmlFor="seniorName" className="text-white text-sm">
-                    Name & Last Name
+                    First & Last Name
                   </label>
                   <div>
                     <input
@@ -362,7 +363,7 @@ const SurveyInfo = ({
                         onChange={(e) => handleChange(e, 'seniorInfo')}
                         style={inputStyle}
                       >
-                        <option value="">Select an option</option>
+                        <option value="">Select:</option>
                         <option value="male">Male</option>
                         <option value="female">Female</option>
                       </select>

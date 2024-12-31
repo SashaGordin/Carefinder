@@ -48,30 +48,27 @@ const SurveyAddress = ({
     <>
       <div className="text-center max-w-[50rem] mx-auto items-center h-[calc(100vh-15rem)] flex flex-col justify-center">
         <h2 className="mb-4">{question}</h2>
-        <p className="text-left">
-          This allows us to calculate the travel distance from visitors homes to
-          care options. Only input visitors who are local to the state who will
-          be visiting. (One is required)
-        </p>
+        {/* prettier-ignore */}
+        <p className="text-left">This allows us to calculate the travel distance from visitors' homes to care options. Only input visitors who are local to the state who will be visiting. (One address is required, but you may enter up to three different addresses.)</p>
         <div className="flex flex-col justify-center p-2 rounded-md max-w-[30rem] mx-auto text-black gap-3">
           {error && <div className="text-danger">{error}</div>}
           <input
             type="text"
-            placeholder="Enter address"
+            placeholder="Enter an entire address"
             value={address}
             onChange={handleAddressChange}
             autoComplete="street-address"
           />
           <input
             type="text"
-            placeholder="Enter address"
+            placeholder="Enter an entire address"
             value={address2}
             onChange={handleAddress2Change}
             autoComplete="street-address"
           />
           <input
             type="text"
-            placeholder="Enter address"
+            placeholder="Enter an entire address"
             value={address3}
             onChange={handleAddress3Change}
             autoComplete="street-address"

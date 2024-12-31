@@ -168,191 +168,195 @@ export default function ListingCard({ userData, initialListingData }) {
 
   return (
     <>
-      <Card>
-        <Card.Body>
-          <Card.Title>
-            <h2>My AFH:</h2>
-          </Card.Title>
-          <h2>{listingData.facilityName}</h2>
-          {error && <div className="alert alert-danger">{error}</div>}
-          <div className="myAFHname">
-            <div>License Number: {listingData.licenseNumber}</div>
-            <div className="row">
-              <div className="col-8">AFH name: {listingData.facilityName}</div>
-              <div className="col-4">
-                Year licensed: {listingData.licenseYear}
+      <div className="myAFHcard">
+        <Card>
+          <Card.Body>
+            <Card.Title>
+              <h2>My AFH:</h2>
+            </Card.Title>
+            <h2>{listingData.facilityName}</h2>
+            {error && <div className="alert alert-danger">{error}</div>}
+            <div className="myAFHname">
+              <div>License Number: {listingData.licenseNumber}</div>
+              <div className="row">
+                <div className="col-8">
+                  AFH name: {listingData.facilityName}
+                </div>
+                <div className="col-4">
+                  Year licensed: {listingData.licenseYear}
+                </div>
+              </div>
+              <div>Home Location: {listingData.listingAddress}</div>
+            </div>
+            <hr />
+            <div>
+              <div className="mb-3">
+                <h4>Upload home photos</h4>
+                <FileUpload
+                  controlId="homePhotos"
+                  handleNewFiles={handleNewPics}
+                  folderPath={folderPath}
+                  uploadType="Photo"
+                  allowMultipleFiles={true}
+                />
+              </div>
+              <div className="row">
+                {listingData?.homePhotos &&
+                  listingData.homePhotos.map((path, i) => (
+                    <div key={i} className="col-4">
+                      <Image src={path} />
+                      <Button
+                        onClick={() => {
+                          deletePhoto(path, 'homePhotos');
+                        }}
+                        className="text-danger"
+                      >
+                        X
+                      </Button>
+                    </div>
+                  ))}
               </div>
             </div>
-            <div>Home Location: {listingData.listingAddress}</div>
-          </div>
-          <hr />
-          <div>
+            <hr />
+            {/*    <div>
+              <h4>Complete home survey</h4>
+              <Button onClick={gotoHomeSurvey}>Take survey</Button>
+            </div>
+            <hr />*/}
             <div className="mb-3">
-              <h4>Upload home photos</h4>
+              <Accordion>
+                <Accordion.Item eventKey="0">
+                  <Accordion.Header>Provider Questionaire</Accordion.Header>
+                  <Accordion.Body>
+                    <ProviderQuestionaire
+                      listingInfo={listingData}
+                      setListingInfo={setListingData}
+                      handleUpdate={handleUpdate}
+                    />
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="1">
+                  <Accordion.Header>Estimated cost of care</Accordion.Header>
+                  <Accordion.Body>
+                    <CostOfCare
+                      listingInfo={listingData}
+                      setListingInfo={setListingData}
+                      handleUpdate={handleUpdate}
+                    />
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="2">
+                  <Accordion.Header>Highlighted features</Accordion.Header>
+                  <Accordion.Body>
+                    <HighlightedFeatures
+                      listingInfo={listingData}
+                      setListingInfo={setListingData}
+                      handleUpdate={handleUpdate}
+                    />
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="3">
+                  <Accordion.Header>
+                    Associated cost of care not included
+                  </Accordion.Header>
+                  <Accordion.Body>
+                    <AssociatedCoCNotIncluded
+                      listingInfo={listingData}
+                      setListingInfo={setListingData}
+                      handleUpdate={handleUpdate}
+                    />
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="4">
+                  <Accordion.Header>Medical questionaire</Accordion.Header>
+                  <Accordion.Body>
+                    <MedicalQuestionaire
+                      listingInfo={listingData}
+                      setListingInfo={setListingData}
+                      handleUpdate={handleUpdate}
+                    />
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="5">
+                  <Accordion.Header>Enrollment & admissions</Accordion.Header>
+                  <Accordion.Body>
+                    <EnrollmentAdmissions
+                      listingInfo={listingData}
+                      setListingInfo={setListingData}
+                      handleUpdate={handleUpdate}
+                    />
+                  </Accordion.Body>
+                </Accordion.Item>
+                <Accordion.Item eventKey="6">
+                  <Accordion.Header>My listings</Accordion.Header>
+                  <Accordion.Body>
+                    <RoomListings
+                      userData={userData}
+                      listingData={listingData}
+                      setListingInfo={setListingData}
+                      facilityPath={facilityPath}
+                    />
+                  </Accordion.Body>
+                </Accordion.Item>
+              </Accordion>
+            </div>
+            <div className="d-none">
+              <h4>
+                Upload facility contract, house rules, and other client facing
+                documents
+              </h4>
               <FileUpload
-                controlId="homePhotos"
-                handleNewFiles={handleNewPics}
+                controlId="homeDocs"
+                handleNewFiles={handleNewDocs}
                 folderPath={folderPath}
-                uploadType="Photo"
+                uploadType="Document"
                 allowMultipleFiles={true}
               />
-            </div>
-            <div className="row">
-              {listingData?.homePhotos &&
-                listingData.homePhotos.map((path, i) => (
-                  <div key={i} className="col-4">
-                    <Image src={path} />
+              {listingData?.homeDocs &&
+                listingData.homeDocs.map((file, i) => (
+                  <div key={i}>
+                    {/* eslint-disable-next-line*/}
+                    <a
+                      role="button"
+                      onClick={() => {
+                        showDocModal(file);
+                      }}
+                    >
+                      {file.name}
+                    </a>
                     <Button
                       onClick={() => {
-                        deletePhoto(path, 'homePhotos');
+                        deleteDoc(file);
                       }}
                       className="text-danger"
                     >
                       X
                     </Button>
+                    <br></br>
                   </div>
                 ))}
+              <DynamicModal
+                showModal={showModal}
+                modalTitle={modalTitle}
+                modalBody={modalBody}
+                handleCloseModal={handleCloseModal}
+              />
             </div>
-          </div>
-          <hr />
-          {/*    <div>
-            <h4>Complete home survey</h4>
-            <Button onClick={gotoHomeSurvey}>Take survey</Button>
-          </div>
-          <hr />*/}
-          <div className="mb-3">
-            <Accordion>
-              <Accordion.Item eventKey="0">
-                <Accordion.Header>Provider Questionaire</Accordion.Header>
-                <Accordion.Body>
-                  <ProviderQuestionaire
-                    listingInfo={listingData}
-                    setListingInfo={setListingData}
-                    handleUpdate={handleUpdate}
-                  />
-                </Accordion.Body>
-              </Accordion.Item>
-              <Accordion.Item eventKey="1">
-                <Accordion.Header>Estimated cost of care</Accordion.Header>
-                <Accordion.Body>
-                  <CostOfCare
-                    listingInfo={listingData}
-                    setListingInfo={setListingData}
-                    handleUpdate={handleUpdate}
-                  />
-                </Accordion.Body>
-              </Accordion.Item>
-              <Accordion.Item eventKey="2">
-                <Accordion.Header>Highlighted features</Accordion.Header>
-                <Accordion.Body>
-                  <HighlightedFeatures
-                    listingInfo={listingData}
-                    setListingInfo={setListingData}
-                    handleUpdate={handleUpdate}
-                  />
-                </Accordion.Body>
-              </Accordion.Item>
-              <Accordion.Item eventKey="3">
-                <Accordion.Header>
-                  Associated cost of care not included
-                </Accordion.Header>
-                <Accordion.Body>
-                  <AssociatedCoCNotIncluded
-                    listingInfo={listingData}
-                    setListingInfo={setListingData}
-                    handleUpdate={handleUpdate}
-                  />
-                </Accordion.Body>
-              </Accordion.Item>
-              <Accordion.Item eventKey="4">
-                <Accordion.Header>Medical questionaire</Accordion.Header>
-                <Accordion.Body>
-                  <MedicalQuestionaire
-                    listingInfo={listingData}
-                    setListingInfo={setListingData}
-                    handleUpdate={handleUpdate}
-                  />
-                </Accordion.Body>
-              </Accordion.Item>
-              <Accordion.Item eventKey="5">
-                <Accordion.Header>Enrollment & admissions</Accordion.Header>
-                <Accordion.Body>
-                  <EnrollmentAdmissions
-                    listingInfo={listingData}
-                    setListingInfo={setListingData}
-                    handleUpdate={handleUpdate}
-                  />
-                </Accordion.Body>
-              </Accordion.Item>
-              <Accordion.Item eventKey="6">
-                <Accordion.Header>My listings</Accordion.Header>
-                <Accordion.Body>
-                  <RoomListings
-                    userData={userData}
-                    listingData={listingData}
-                    setListingInfo={setListingData}
-                    facilityPath={facilityPath}
-                  />
-                </Accordion.Body>
-              </Accordion.Item>
-            </Accordion>
-          </div>
-          <div className="d-none">
-            <h4>
-              Upload facility contract, house rules, and other client facing
-              documents
-            </h4>
-            <FileUpload
-              controlId="homeDocs"
-              handleNewFiles={handleNewDocs}
-              folderPath={folderPath}
-              uploadType="Document"
-              allowMultipleFiles={true}
-            />
-            {listingData?.homeDocs &&
-              listingData.homeDocs.map((file, i) => (
-                <div key={i}>
-                  {/* eslint-disable-next-line*/}
-                  <a
-                    role="button"
-                    onClick={() => {
-                      showDocModal(file);
-                    }}
-                  >
-                    {file.name}
-                  </a>
-                  <Button
-                    onClick={() => {
-                      deleteDoc(file);
-                    }}
-                    className="text-danger"
-                  >
-                    X
-                  </Button>
-                  <br></br>
-                </div>
-              ))}
-            <DynamicModal
-              showModal={showModal}
-              modalTitle={modalTitle}
-              modalBody={modalBody}
-              handleCloseModal={handleCloseModal}
-            />
-          </div>
 
-          <Button className="text-xs" onClick={handleViewProfile}>
-            View profile
-          </Button>
-        </Card.Body>
-      </Card>
+            <Button className="text-xs" onClick={handleViewProfile}>
+              View profile
+            </Button>
+          </Card.Body>
+        </Card>
 
-      {showProfileModal && (
-        <ViewProfile
-          provider={providerForViewProfile}
-          showModal={showProfileModal}
-          setShowModal={setShowProfileModal}
-        />
-      )}
+        {showProfileModal && (
+          <ViewProfile
+            provider={providerForViewProfile}
+            showModal={showProfileModal}
+            setShowModal={setShowProfileModal}
+          />
+        )}
+      </div>
     </>
   );
 }

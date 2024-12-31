@@ -4,7 +4,7 @@ import React from 'react';
 const SurveyFinal = ({ currentQuestionIndex, totalQuestions }) => {
   const navigate = useNavigate();
   return (
-    <div className="flex flex-col items-center h-screen">
+    <div className="flex flex-col items-center justify-center min-h-screen -mt-20">
       <img className="w-1/6" src="thumb.gif" alt="thumb" />
       <h1>Congratulations! You have matches!</h1>
       <p>Thank you for your patience. You can now reveiw your matches.</p>

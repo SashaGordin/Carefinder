@@ -107,12 +107,19 @@ span.CForange {
   display: table-cell;
 }
 
+#CF .bg-pink-500 {background:#ff6699;}
+
 #CF .homeRow3 .checkBoxList p {
   margin: 0;
   font-size: 110%;
   display: table-cell;
 }
 
+#CF .clientSurvey button { background:#1e1e1e; }
+#CF .clientSurvey button:hover { background:#ff6699; }
+#CF .clientSurvey button.selected { background: #ff6699; }
+
+#CF p.surveyIntro { width:50%; margin-left: auto; margin-right:auto;}
 /* NAVBAR */
 #CF .topnavigation {
   padding: 10px;
@@ -212,7 +219,6 @@ body#CF .providerButton button {
 }
 
 .welcomeProviderPage {
-  background: url(/client/public/pageback1.jpg);
   padding: 40px;
 }
 
@@ -231,6 +237,8 @@ p.amenities {
   margin-right: 10px;
 }
 
+.personalInfo button { padding:0px 10px 0px 10px; margin:5px 0px 15px 10px !important; }
+.personalInfo .dbValue { color:#ff9900; font-weight:bold; }
 #CF .card-body {
   padding: 50px;
   border-radius: 0px;
@@ -241,6 +249,7 @@ p.amenities {
 #CF .Pcard .card-body {
   padding: 0px;
 }
+
 
 .pCardImageContainer {
   align-items: center;
@@ -338,7 +347,7 @@ textarea {
   border-radius: 10px;
   font-size: 120%;
   padding: 5px 10px;
-  color: blue;
+  color: black;
   border: none;
   filter: drop-shadow(2px 3px 0px #000000);
   margin-bottom: 10px;
@@ -513,7 +522,7 @@ body#CF button#takeSurvey {
   left: auto;
   width: 20%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.9); /* Dark background */
+  background-color: rgba(0, 0, 0, 1); /* Dark background */
   color: white; /* Adjust text color for contrast */
   transform: translateX(100%); /* Start offscreen to the right */
   transition: transform 0.3s ease; /* Smooth transition */
@@ -522,6 +531,7 @@ body#CF button#takeSurvey {
   justify-content: center;
   align-items: center;
   z-index: 1000; /* Ensure it appears on top */
+  border-left: 4px solid #1e1e1e;
 }
 
 .CF2-hamburger-popover ul {
@@ -776,6 +786,16 @@ body#CF .homeRow5 button {
   background: black;
   border: initial;
   color: white;
+}
+
+#CF .accordion-item {
+  background: #1e1f26;
+  border: initial;
+  color: white;
+}
+
+#CF .myAFHcard input:not([type="checkbox"]) {
+  margin-left: 10px;
 }
 
 body#CF .CProw5 button,
@@ -1413,6 +1433,10 @@ p.copyright {
 }
 
 @media (max-width: 768px) {
+
+
+  .CF2-logo-container img {display:none;}
+
   .messagesDesktopUX {
     display: none;
   }

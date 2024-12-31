@@ -55,7 +55,7 @@ const PersonalInfoPage = ({ userData, handleUpdate }) => {
             <Row>
               <Col>
                 <EditableField
-                  title="Provider Name (As is on license)"
+                  title="Provider Name (as is on license)"
                   value={userData.FacilityPOC || ''}
                   onChange={(newValue) =>
                     handleUpdate({ FacilityPOC: newValue })

@@ -61,7 +61,9 @@ const SurveyQuestionRadio = ({
               {options.map((option) => (
                 <>
                   <Button
-                    className="py-2 min-h-[3rem]"
+                    className={`py-2 min-h-[3rem] ${
+                      selectedOption === option ? 'selected' : ''
+                    }`}
                     variant="primary"
                     onClick={() => handleOptionClick(option)}
                   >
@@ -86,7 +88,9 @@ const SurveyQuestionRadio = ({
             {options.map((option) => (
               <>
                 <Button
-                  className="py-2"
+                  className={`py-2 min-h-[3rem] ${
+                    selectedOption === option ? 'selected' : ''
+                  }`}
                   variant="primary"
                   onClick={() => handleOptionClick(option)}
                 >

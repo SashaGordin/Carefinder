@@ -17,6 +17,7 @@ module.exports = {
     'no-unused-vars': ['warn'],
     'no-console': 'warn',
     quotes: ['off'],
+    "prettier/prettier": ["error", { "endOfLine": "auto" }]
   },
   overrides: [
     {

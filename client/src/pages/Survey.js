@@ -140,7 +140,7 @@ const Survey = () => {
     {
       qtype: 'radio',
       question: 'How soon do you require care?',
-      options: ['Urgent', 'Few days', 'Few week', 'Few month', 'This year'],
+      options: ['Urgent', 'Few days', 'Few weeks', 'Few months', 'This year'],
       label: 'Urgency',
     },
     {
@@ -474,15 +474,14 @@ const Survey = () => {
   };
 
   return (
-    <div className="w-full h-screen flex flex-col">
-      <TopNav />
+    <div className="w-full h-screen flex flex-col clientSurvey">
       {/* IF INDEX is 0, we run a welcome / splash page... */}
       {currentQuestionIndex === 0 ? (
         <>
           <div className="flex flex-row max-h-[calc(100vh-4rem)]">
-            <div className="bg-[#1e1e1e] flex flex-1 flex-col text-center align-center justify-center p-10">
+            <div className="flex flex-1 flex-col text-center align-center justify-center p-10">
               <h1>Tell Us About Your Senior</h1>
-              <p>
+              <p className="surveyIntro">
                 In this step, we will get to know your senior, circumstances,
                 requirements, wants, and needs. Let's get started!
               </p>

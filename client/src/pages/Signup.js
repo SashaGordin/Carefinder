@@ -155,10 +155,12 @@ export default function Signup() {
         }
       }
 
-      await setDoc(userDocRef, userData);
-      navigate('/verify-email');
-    } catch (error) {
-      console.log(error);
+      try {
+        await setDoc(userDocRef, userData);
+        navigate('/verify-email');
+      } catch (error) {
+        console.log(error);
+      }
 
       if (error.code === 'auth/weak-password') {
         setError('Password should be at least 6 characters');

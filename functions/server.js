@@ -19,8 +19,8 @@ const Middleware = require('./middleware/index');
 const config = require('./config/config');
 const functions = require('firebase-functions');
 const db = config.initFirebase();
-const stripe = config.initStripe();
-const twilioClient = config.initTwilio();
+// const stripe = config.initStripe();
+// const twilioClient = config.initTwilio();
 
 const googleMapsApiKey = defineSecret('GOOGLE_MAPS_API_KEY');
 
@@ -47,6 +47,7 @@ const port = 3001 || 8080; // Choose a port for your server\
 
 // Function to handle new messages:
 const handleNewMessage = async (doc) => {
+  const twilioClient = await config.initTwilio();
   try {
     const messageData = doc.data();
     const msgTo = messageData.msgTo;
@@ -173,6 +174,7 @@ async function updateAPIDATA() {
 // updateAPIDATA();
 
 async function getServiceSid() {
+  const twilioClient = await config.initTwilio();
   try {
     const docRef = db.collection('twilio').doc('serviceSid');
     const doc = await docRef.get();
@@ -210,6 +212,7 @@ async function getServiceSid() {
 }
 
 async function getMessagingServiceSid() {
+  const twilioClient = await config.initTwilio();
   try {
     const docRef = db.collection('twilio').doc('messagingServiceSid');
     const doc = await docRef.get();
@@ -663,6 +666,7 @@ const debugNumber = process.env.DEBUG_PHONE_NUMBER;
 const debugMode = process.env.DEBUG_MODE;
 
 app.post('/sendConfirmationText', async (req, res) => {
+  const twilioClient = await config.initTwilio();
   const { phone } = req.body;
   console.log(phone);
   const numericPhoneNumber = phone.replace(/\D/g, '');
@@ -688,6 +692,7 @@ app.post('/sendConfirmationText', async (req, res) => {
 });
 
 app.post('/verifyConfirmationCode', async (req, res) => {
+  const twilioClient = await config.initTwilio();
   const { phoneNumber, code } = req.body;
   const numericPhoneNumber = phoneNumber.replace(/\D/g, '');
 
@@ -942,6 +947,8 @@ app.post('/getCoordinates', async (req, res) => {
 app.post('/create-reservation', async (req, res) => {
   try {
     // Create a PaymentIntent on Stripe with the capture_method set to manual
+    const stripe = await config.initStripe();
+
     const paymentIntent = await stripe.paymentIntents.create({
       amount: 1500, // Replace with the actual deposit amount
       currency: 'usd', // Replace with the desired currency
@@ -957,6 +964,7 @@ app.post('/create-reservation', async (req, res) => {
 });
 
 app.post('/create-setup-intent', async (req, res) => {
+  const stripe = await config.initStripe();
   console.log('create-setup-intent endpoint hit');
   const { paymentMethodId, userId } = req.body;
   console.log('Payment Method ID:', paymentMethodId);
@@ -1006,7 +1014,8 @@ app.post('/create-setup-intent', async (req, res) => {
 });
 
 app.post('/create-provider-setup-intent', async (req, res) => {
-  console.log('create-setup-intent endpoint hit');
+  const stripe = await config.initStripe();
+  console.log('create-setup-intent endpoint hit', stripe);
   const { paymentMethodId, displayName, email } = req.body;
   console.log('Payment Method ID:', paymentMethodId);
 
@@ -1044,6 +1053,7 @@ app.post('/create-provider-setup-intent', async (req, res) => {
 });
 
 app.post('/confirm-setup-intent', async (req, res) => {
+  const stripe = await config.initStripe();
   const { setupIntentId, userId } = req.body;
   const setup = await stripe.setupIntents.retrieve(setupIntentId);
 
@@ -1077,6 +1087,7 @@ app.post('/confirm-setup-intent', async (req, res) => {
 });
 
 app.post('/create-subscription', async (req, res) => {
+  const stripe = await config.initStripe();
   const { userId, priceId } = req.body;
 
   try {
@@ -1110,6 +1121,7 @@ app.post('/create-subscription', async (req, res) => {
 });
 
 app.post('/confirm-provider-setup-intent', async (req, res) => {
+  const stripe = await config.initStripe();
   const { setupIntentId, customerId } = req.body;
   const setup = await stripe.setupIntents.retrieve(setupIntentId);
 
@@ -1131,6 +1143,7 @@ app.post('/confirm-provider-setup-intent', async (req, res) => {
 });
 
 app.post('/get-list-of-payments', async (req, res) => {
+  const stripe = await config.initStripe();
   const userId = req.body.userId;
   const userDoc = await db.collection('users').doc(userId).get();
   const stripeCustomerId = userDoc.data().stripeCustomerId;
@@ -1153,6 +1166,7 @@ app.post('/get-list-of-payments', async (req, res) => {
 });
 
 app.post('/charge-customer', async (req, res) => {
+  const stripe = await config.initStripe();
   const { amount, currency, userId } = req.body;
 
   try {
@@ -1188,6 +1202,7 @@ app.post('/charge-customer', async (req, res) => {
 });
 
 app.post('/capture-payment', async (req, res) => {
+  const stripe = await config.initStripe();
   try {
     const { paymentIntentId } = req.body;
 
@@ -1203,6 +1218,7 @@ app.post('/capture-payment', async (req, res) => {
 });
 
 app.post('/cancel-payment', async (req, res) => {
+  const stripe = await config.initStripe();
   try {
     const { paymentIntentId } = req.body;
 

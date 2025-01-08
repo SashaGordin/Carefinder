@@ -321,6 +321,7 @@ const Survey = () => {
           currentUser.uid
         );
         const userSnapshot = await getDocs(userQuery);
+        console.log('userSnapshot', userSnapshot.docs.length, currentUser.uid);
         if (currentUser && userSnapshot.docs.length === 0) {
           await firestore.collection('surveyResponses').add({
             userId: currentUser.uid,

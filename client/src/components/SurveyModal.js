@@ -10,9 +10,12 @@ const SurveyModal = ({ showModal, handleCloseModal }) => {
       <Modal.Body>
         <div className="flex flex-col text-center gap-3 pb-2 items-center justify-center">
           <div className="text-2xl font-bold">
-            Complete the survey to find the most compatible matches.
+            Complete survey to send messages.
           </div>
-          <div className="text-lg">Save time, with real-time results.</div>
+          <div className="text-lg">
+            Sorry for the inconvenience, users must be qualified to message
+            providers.
+          </div>
           <Link
             to="/survey"
             className="bg-[#FFA500] text-white px-4 py-2 rounded-md"

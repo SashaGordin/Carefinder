@@ -7,7 +7,7 @@ import ViewProfile from './ViewProfile';
 const ProviderCard = ({ provider, onClick, hasSurvey, setSurveyModalOpen }) => {
   const { FacilityName, listingsData } = provider;
 
-  const isReal = listingsData !== undefined;
+  const isReal = Object.keys(listingsData).length > 0;
   const homePhotos = listingsData.homePhotos;
 
   let roomPhotos = [];
@@ -55,7 +55,7 @@ const ProviderCard = ({ provider, onClick, hasSurvey, setSurveyModalOpen }) => {
                 <div className="pCardImageContainer">
                   <img
                     className="pCardPics"
-                    src={homePhotos[0]}
+                    src={homePhotos[0] || 'https://placehold.co/600x400'}
                     alt="Profile pic"
                     onClick={() => handleOpenModal('photos')}
                   />

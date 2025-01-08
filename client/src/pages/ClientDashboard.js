@@ -143,7 +143,9 @@ export default function ClientDashboard() {
         userId: currentUser.uid,
       })
       .then((res) => {
+        console.log('res', res);
         if (res.data.survey.length > 0) {
+          console.log('res.data.survey', res.data.survey);
           setHasSurvey(true);
         }
       })
@@ -170,10 +172,6 @@ export default function ClientDashboard() {
   }, []);
 
   const handleSearch = async (refQuery) => {
-    if (!hasSurvey) {
-      setSurveyModalOpen(true);
-      return;
-    }
     let query;
     if (refQuery) {
       query = refQuery.trim();
@@ -322,6 +320,8 @@ export default function ClientDashboard() {
     setSelectedMarker(marker);
     scrollToProvider(marker.LicenseNumber);
   };
+
+  console.log('providers', providers);
 
   return (
     <>

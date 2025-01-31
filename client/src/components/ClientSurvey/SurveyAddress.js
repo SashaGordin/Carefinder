@@ -46,7 +46,7 @@ const SurveyAddress = ({
 
   return (
     <>
-      <div className="text-center max-w-[50rem] mx-auto items-center h-[calc(100vh-15rem)] flex flex-col justify-center">
+      <div className="text-center max-w-[50rem] mx-auto items-center h-full flex flex-col justify-center">
         <h2 className="mb-4">{question}</h2>
         {/* prettier-ignore */}
         <p className="text-left">This allows us to calculate the travel distance from visitors' homes to care options. Only input visitors who are local to the state who will be visiting. (One address is required, but you may enter up to three different addresses.)</p>

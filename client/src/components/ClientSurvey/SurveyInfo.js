@@ -150,7 +150,7 @@ const SurveyInfo = ({
 
   return (
     <>
-      <div className="flex flex-col items-center gap-4 justify-center pt-4 h-[calc(100vh-15rem)]">
+      <div className="flex flex-col items-center gap-4 justify-center pt-4 h-full">
         <div className="bg-[#1e1e1e] w-[32rem] py-8 px-10 rounded-lg">
           <div className="w-[20rem]">
             <h2>Personal Info</h2>

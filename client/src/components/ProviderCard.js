@@ -55,7 +55,7 @@ const ProviderCard = ({ provider, onClick, hasSurvey, setSurveyModalOpen }) => {
                 <div className="pCardImageContainer">
                   <img
                     className="pCardPics"
-                    src={homePhotos[0] || 'https://placehold.co/600x400'}
+                    src={roomPhotos[0] || 'https://placehold.co/600x400'}
                     alt="Profile pic"
                     onClick={() => handleOpenModal('photos')}
                   />

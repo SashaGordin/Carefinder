@@ -314,204 +314,253 @@ app.post('/getSurvey', async (req, res) => {
   }
 });
 
+app.get('/getPlacesAutocomplete', async (req, res) => {
+  const searchQuery = req.query.searchQuery;
+  // const apiKey = await googleMapsApiKey.value();
+  const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+  try {
+    const geocodeUrl = `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${searchQuery}&key=${apiKey}`;
+    const geocodeResponse = await axios.get(geocodeUrl);
+    const geocodeData = geocodeResponse.data;
+    res.json({ places: geocodeData });
+  } catch (error) {
+    console.error('Error getting places autocomplete:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+const generateCacheKey = (centerArray, zoomLevel) => {
+  const threshold = 0.0001; // Precision threshold for bounds
+
+  const latDiff = Math.round(centerArray[0] / threshold) * threshold;
+  const lngDiff = Math.round(centerArray[1] / threshold) * threshold;
+
+  // Get the current timestamp and round it to the nearest 5-minute mark (300 seconds)
+  const timestamp = Math.floor(Date.now() / 1000); // Current timestamp in seconds
+  const cacheTTL = 60 * 5; // Cache expires after 5 minutes
+  const roundedTimestamp = timestamp - (timestamp % cacheTTL); // Round to 5-minute intervals
+
+  // Create cache key combining rounded latitude, longitude, zoom level, and timestamp
+  return `${latDiff},${lngDiff},${zoomLevel},${roundedTimestamp}`;
+};
+
+// Inside your map handler:
+const geocodeCache = new Map(); // Key: lat,lng | Value: { cityName, zipCode }
+
 app.post('/getProviders', async (req, res) => {
+  console.log('hit getProviders');
   const bounds = req.body.bounds;
   const center = req.body.center;
   const radius = req.body.radius;
   const centerArray = Array.isArray(center) ? center : [center.lat, center.lng];
-  const apiKey = await googleMapsApiKey.value();
+  // const apiKey = await googleMapsApiKey.value();
+  const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+  const cacheKey = generateCacheKey(centerArray, req.body.zoomLevel);
+  let currentZipCode = '';
+  let cityName = '';
 
-  try {
-    // Query the users collection for providers within the specified bounds
-    const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${centerArray[0]},${centerArray[1]}&key=${apiKey}`;
-    const geocodeResponse = await axios.get(geocodeUrl);
-    const geocodeData = geocodeResponse.data;
+  console.log('cacheKey', cacheKey);
+  console.log('Existing Keys in Cache:', [...geocodeCache.keys()]);
 
-    let currentZipCode = '';
-    let cityName = '';
-    let nearbyBigCities = [];
+  if (geocodeCache.has(cacheKey)) {
+    // Use cached data if available
+    ({ cityName, currentZipCode } = geocodeCache.get(cacheKey));
+    console.log('cached data', cityName, currentZipCode);
+  } else {
+    geocodeCache.set(cacheKey, { cityName, currentZipCode });
+    try {
+      console.log('no cached data');
+      // Query the users collection for providers within the specified bounds
+      const geocodeUrl = `https://maps.googleapis.com/maps/api/geocode/json?latlng=${centerArray[0]},${centerArray[1]}&key=${apiKey}`;
+      const geocodeResponse = await axios.get(geocodeUrl);
+      const geocodeData = geocodeResponse.data;
 
-    if (geocodeData.results.length > 0) {
-      const addressComponents = geocodeData.results[0].address_components;
-      currentZipCode =
-        addressComponents.find((component) =>
-          component.types.includes('postal_code')
-        ).long_name || '';
-      cityName =
-        addressComponents.find((component) =>
-          component.types.includes('locality')
-        ).long_name || '';
+      let nearbyBigCities = [];
 
-      console.log('cityName', cityName);
-      console.log('currentZipCode', currentZipCode);
+      if (geocodeData.results.length > 0) {
+        const addressComponents = geocodeData.results[0].address_components;
+        currentZipCode =
+          addressComponents.find((component) =>
+            component.types.includes('postal_code')
+          ).long_name || '';
+        cityName =
+          addressComponents.find((component) =>
+            component.types.includes('locality')
+          ).long_name || '';
 
-      const bigCities = [
-        { name: 'Seattle', lat: 47.6062, lng: -122.3321 },
-        { name: 'Spokane', lat: 47.6588, lng: -117.426 },
-        { name: 'Tacoma', lat: 47.2529, lng: -122.4443 },
-        { name: 'Vancouver', lat: 45.6387, lng: -122.6615 },
-        { name: 'Bellevue', lat: 47.6101, lng: -122.2015 },
-        { name: 'Kent', lat: 47.3809, lng: -122.2348 },
-        { name: 'Everett', lat: 47.978, lng: -122.2021 },
-        { name: 'Renton', lat: 47.4829, lng: -122.2171 },
-        { name: 'Spokane Valley', lat: 47.6732, lng: -117.2394 },
-        { name: 'Federal Way', lat: 47.3223, lng: -122.3126 },
-        { name: 'Yakima', lat: 46.6021, lng: -120.5059 },
-        { name: 'Kirkland', lat: 47.6769, lng: -122.206 },
-        { name: 'Bellingham', lat: 48.7519, lng: -122.4787 },
-        { name: 'Kennewick', lat: 46.2112, lng: -119.1372 },
-        { name: 'Auburn', lat: 47.3073, lng: -122.2285 },
-        { name: 'Pasco', lat: 46.2396, lng: -119.1006 },
-        { name: 'Marysville', lat: 48.0518, lng: -122.1771 },
-        { name: 'Lakewood', lat: 47.1718, lng: -122.5185 },
-        { name: 'Redmond', lat: 47.673, lng: -122.1215 },
-        { name: 'Shoreline', lat: 47.7557, lng: -122.3415 },
-        { name: 'Richland', lat: 46.2804, lng: -119.2752 },
-        { name: 'Sammamish', lat: 47.6163, lng: -122.0356 },
-        { name: 'Burien', lat: 47.4704, lng: -122.3468 },
-        { name: 'Lynnwood', lat: 47.8279, lng: -122.305 },
-        { name: 'Bothell', lat: 47.7623, lng: -122.2054 },
-        { name: 'Puyallup', lat: 47.1854, lng: -122.2929 },
-        { name: 'Olympia', lat: 47.0379, lng: -122.9007 },
-        { name: 'Lacey', lat: 47.0343, lng: -122.8232 },
-        { name: 'Edmonds', lat: 47.8107, lng: -122.3774 },
-        { name: 'Bremerton', lat: 47.5673, lng: -122.6326 },
-        { name: 'Tumwater', lat: 47.0073, lng: -122.9093 },
-      ];
-      // Calculate distances and sort big cities by distance
-      nearbyBigCities = bigCities
-        .map((city) => {
-          const distanceInKm = geofire.distanceBetween(
-            [city.lat, city.lng],
-            centerArray
-          );
-          return { ...city, distanceInKm };
-        })
-        .sort((a, b) => a.distanceInKm - b.distanceInKm)
-        .slice(0, 4);
-    }
-
-    console.log(bounds.south, bounds.west, bounds.north, bounds.east);
-
-    const snapshot = await db
-      .collection('users')
-      .where('role', '==', 'provider')
-      .where('position.lat', '>=', bounds.south)
-      .where('position.lat', '<=', bounds.north)
-      .where('position.lng', '>=', bounds.west)
-      .where('position.lng', '<=', bounds.east)
-      .get();
-
-    const providersInBounds = snapshot.docs.map((doc) => doc.data());
-    console.log('providers in bounds', providersInBounds);
-    // const results = await query.get();
-    // console.log(
-    // "results",
-    // results.docs.map((doc) => doc.data())
-    // );
-
-    // Filter providers based on distance from the center and radius
-    const filteredProviders = providersInBounds.filter((provider) => {
-      const distanceInKm = geofire.distanceBetween(
-        [provider.position.lat, provider.position.lng],
-        centerArray
-      );
-      const distanceInM = distanceInKm * 1000;
-      return distanceInM <= radius;
-    });
-    // console.log("filteredProviders", filteredProviders);
-
-    if (filteredProviders.length > 0) {
-      try {
-        for (const provider of filteredProviders) {
-          const userSnapshot = await db
-            .collection('users')
-            .doc(provider.userId)
-            .get();
-
-          if (userSnapshot.exists) {
-            const listingsSnapshot = await userSnapshot.ref
-              .collection('listings')
-              // .doc(provider.LicenseNumber)
-              .get();
-
-            if (listingsSnapshot.docs.length > 0) {
-              const roomsSnapshot = await listingsSnapshot.docs[0].ref
-                .collection('rooms')
-                .get();
-              provider.roomsData = roomsSnapshot.docs.map((doc) => doc.data());
-            } else {
-              provider.roomsData = [];
-            }
-
-            for (const listingDoc of listingsSnapshot.docs) {
-              console.log('listingDoc', listingDoc.data());
-            }
-
-            provider.listingsData = listingsSnapshot.docs.reduce((acc, doc) => {
-              return { ...acc, ...doc.data() };
-            }, {});
-            console.log('provider.listingsData', provider.listingsData);
-          } else {
-            console.error(
-              'User document not found for provider:',
-              provider.userId
+        const bigCities = [
+          { name: 'Seattle', lat: 47.6062, lng: -122.3321 },
+          { name: 'Spokane', lat: 47.6588, lng: -117.426 },
+          { name: 'Tacoma', lat: 47.2529, lng: -122.4443 },
+          { name: 'Vancouver', lat: 45.6387, lng: -122.6615 },
+          { name: 'Bellevue', lat: 47.6101, lng: -122.2015 },
+          { name: 'Kent', lat: 47.3809, lng: -122.2348 },
+          { name: 'Everett', lat: 47.978, lng: -122.2021 },
+          { name: 'Renton', lat: 47.4829, lng: -122.2171 },
+          { name: 'Spokane Valley', lat: 47.6732, lng: -117.2394 },
+          { name: 'Federal Way', lat: 47.3223, lng: -122.3126 },
+          { name: 'Yakima', lat: 46.6021, lng: -120.5059 },
+          { name: 'Kirkland', lat: 47.6769, lng: -122.206 },
+          { name: 'Bellingham', lat: 48.7519, lng: -122.4787 },
+          { name: 'Kennewick', lat: 46.2112, lng: -119.1372 },
+          { name: 'Auburn', lat: 47.3073, lng: -122.2285 },
+          { name: 'Pasco', lat: 46.2396, lng: -119.1006 },
+          { name: 'Marysville', lat: 48.0518, lng: -122.1771 },
+          { name: 'Lakewood', lat: 47.1718, lng: -122.5185 },
+          { name: 'Redmond', lat: 47.673, lng: -122.1215 },
+          { name: 'Shoreline', lat: 47.7557, lng: -122.3415 },
+          { name: 'Richland', lat: 46.2804, lng: -119.2752 },
+          { name: 'Sammamish', lat: 47.6163, lng: -122.0356 },
+          { name: 'Burien', lat: 47.4704, lng: -122.3468 },
+          { name: 'Lynnwood', lat: 47.8279, lng: -122.305 },
+          { name: 'Bothell', lat: 47.7623, lng: -122.2054 },
+          { name: 'Puyallup', lat: 47.1854, lng: -122.2929 },
+          { name: 'Olympia', lat: 47.0379, lng: -122.9007 },
+          { name: 'Lacey', lat: 47.0343, lng: -122.8232 },
+          { name: 'Edmonds', lat: 47.8107, lng: -122.3774 },
+          { name: 'Bremerton', lat: 47.5673, lng: -122.6326 },
+          { name: 'Tumwater', lat: 47.0073, lng: -122.9093 },
+        ];
+        // Calculate distances and sort big cities by distance
+        nearbyBigCities = bigCities
+          .map((city) => {
+            const distanceInKm = geofire.distanceBetween(
+              [city.lat, city.lng],
+              centerArray
             );
-          }
-        }
-        res.json({
-          providers: filteredProviders,
-          nearbyBigCities,
-          currentZipCode,
-          cityName,
-        });
-      } catch (error) {
-        console.error('Error getting providers:', error);
-        res.status(500).send('Internal Server Error');
+            return { ...city, distanceInKm };
+          })
+          .sort((a, b) => a.distanceInKm - b.distanceInKm)
+          .slice(0, 4);
       }
-    } else {
-      // eslint-disable-next-line max-len
-      // If there are no providers from the users collection, query the API_AFH_DATA collection
-      const snapshotAPI = await db
-        .collection('API_AFH_DATA')
-        .where(
-          'geolocation',
-          '>=',
-          new admin.firestore.GeoPoint(bounds.south, bounds.west)
-        )
-        .where(
-          'geolocation',
-          '<=',
-          new admin.firestore.GeoPoint(bounds.north, bounds.east)
-        )
-        .get();
-      const providersInBoundsAPI = snapshotAPI.docs.map((doc) => doc.data());
 
-      console.log(centerArray, radius);
-      // eslint-disable-next-line max-len
-      // Filter providers from API_AFH_DATA based on distance from the center and radius
-      const filteredProvidersAPI = providersInBoundsAPI.filter((provider) => {
+      console.log(bounds.south, bounds.west, bounds.north, bounds.east);
+
+      const snapshot = await db
+        .collection('users')
+        .where('role', '==', 'provider')
+        .where('position.lat', '>=', bounds.south)
+        .where('position.lat', '<=', bounds.north)
+        .where('position.lng', '>=', bounds.west)
+        .where('position.lng', '<=', bounds.east)
+        .get();
+
+      const providersInBounds = snapshot.docs.map((doc) => doc.data());
+      // console.log('providers in bounds', providersInBounds);
+      // const results = await query.get();
+      // console.log(
+      // "results",
+      // results.docs.map((doc) => doc.data())
+      // );
+
+      // Filter providers based on distance from the center and radius
+      const filteredProviders = providersInBounds.filter((provider) => {
         const distanceInKm = geofire.distanceBetween(
-          [provider.geolocation.latitude, provider.geolocation.longitude],
+          [provider.position.lat, provider.position.lng],
           centerArray
         );
         const distanceInM = distanceInKm * 1000;
         return distanceInM <= radius;
       });
+      // console.log("filteredProviders", filteredProviders);
 
-      // Combine providers from users collection and API_AFH_DATA collection
-      const allProviders = [...filteredProviders, ...filteredProvidersAPI];
+      if (filteredProviders.length > 0) {
+        try {
+          for (const provider of filteredProviders) {
+            const userSnapshot = await db
+              .collection('users')
+              .doc(provider.userId)
+              .get();
 
-      res.json({
-        providers: allProviders,
-        nearbyBigCities,
-        currentZipCode,
-        cityName,
-      });
+            if (userSnapshot.exists) {
+              const listingsSnapshot = await userSnapshot.ref
+                .collection('listings')
+                // .doc(provider.LicenseNumber)
+                .get();
+
+              if (listingsSnapshot.docs.length > 0) {
+                const roomsSnapshot = await listingsSnapshot.docs[0].ref
+                  .collection('rooms')
+                  .get();
+                provider.roomsData = roomsSnapshot.docs.map((doc) =>
+                  doc.data()
+                );
+              } else {
+                provider.roomsData = [];
+              }
+
+              // for (const listingDoc of listingsSnapshot.docs) {
+              //   console.log('listingDoc', listingDoc.data());
+              // }
+
+              provider.listingsData = listingsSnapshot.docs.reduce(
+                (acc, doc) => {
+                  return { ...acc, ...doc.data() };
+                },
+                {}
+              );
+              // console.log('provider.listingsData', provider.listingsData);
+            } else {
+              console.error(
+                'User document not found for provider:',
+                provider.userId
+              );
+            }
+          }
+          res.json({
+            providers: filteredProviders,
+            nearbyBigCities,
+            currentZipCode,
+            cityName,
+          });
+        } catch (error) {
+          console.error('Error getting providers:', error);
+          res.status(500).send('Internal Server Error');
+        }
+      } else {
+        // eslint-disable-next-line max-len
+        // If there are no providers from the users collection, query the API_AFH_DATA collection
+        const snapshotAPI = await db
+          .collection('API_AFH_DATA')
+          .where(
+            'geolocation',
+            '>=',
+            new admin.firestore.GeoPoint(bounds.south, bounds.west)
+          )
+          .where(
+            'geolocation',
+            '<=',
+            new admin.firestore.GeoPoint(bounds.north, bounds.east)
+          )
+          .get();
+        const providersInBoundsAPI = snapshotAPI.docs.map((doc) => doc.data());
+
+        console.log(centerArray, radius);
+        // eslint-disable-next-line max-len
+        // Filter providers from API_AFH_DATA based on distance from the center and radius
+        const filteredProvidersAPI = providersInBoundsAPI.filter((provider) => {
+          const distanceInKm = geofire.distanceBetween(
+            [provider.geolocation.latitude, provider.geolocation.longitude],
+            centerArray
+          );
+          const distanceInM = distanceInKm * 1000;
+          return distanceInM <= radius;
+        });
+
+        // Combine providers from users collection and API_AFH_DATA collection
+        const allProviders = [...filteredProviders, ...filteredProvidersAPI];
+
+        res.json({
+          providers: allProviders,
+          nearbyBigCities,
+          currentZipCode,
+          cityName,
+        });
+      }
+    } catch (error) {
+      console.error('Error getting providers:', error);
+      res.status(500).send('Internal Server Error');
     }
-  } catch (error) {
-    console.error('Error getting providers:', error);
-    res.status(500).send('Internal Server Error');
   }
 });
 
@@ -722,14 +771,15 @@ app.post('/verifyConfirmationCode', async (req, res) => {
 // geocoding address
 async function geocodeAddress(address) {
   try {
-    const apiKey = googleMapsApiKey.value(); // Replace with your Google Maps API key
+    // const apiKey = googleMapsApiKey.value(); // Replace with your Google Maps API key
+    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
     const encodedAddress = encodeURIComponent(address);
-    console.log('address in geofunc', address);
+    // console.log('address in geofunc', address);
     const response = await axios.get(
       `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}&key=${apiKey}`
     );
     const data = response.data;
-    console.log('this the data', data);
+    // console.log('this the data', data);
     // console.log(data.results);
 
     if (data.results && data.results.length > 0) {

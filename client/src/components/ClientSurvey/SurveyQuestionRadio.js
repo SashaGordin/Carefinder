@@ -51,7 +51,7 @@ const SurveyQuestionRadio = ({
 
   return (
     <>
-      <div className="text-center items-center h-[calc(100vh-15rem)] max-w-[50rem] mx-auto flex flex-col justify-center">
+      <div className="text-center items-center h-full max-w-[50rem] mx-auto flex flex-col justify-center">
         {error && <div className="text-danger">{error}</div>}
         <h1 className="mb-4">{question}</h1>
         {description && <p>{description}</p>}

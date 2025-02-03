@@ -8,8 +8,8 @@ import { formatName } from '../utils';
 import mapStyles from '../mapStyles.json';
 import SurveyModal from '../components/SurveyModal';
 import { useAuth } from '../contexts/AuthContext';
-import ClientDashboardSearchBar from '../components/ClientDashboardSearchBar';
-import ClientDashboardMap from '../components/ClientDashboardMap';
+import ClientDashboardSearchBar from '../components/ClientDashboard/ClientDashboardSearchBar';
+import ClientDashboardMap from '../components/ClientDashboard/ClientDashboardMap';
 
 export default function ClientDashboard() {
   const [searchQuery, setSearchQuery] = useState('');

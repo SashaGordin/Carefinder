@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Card, Button, Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import PropertyPhotoModal from './PropertyPhotoModal';
 import { useNavigate } from 'react-router-dom';
 import VisitingMap from './VisitingMap';
 import ProviderViewProfileCard from './ProviderViewProfileCard';
-import { formatPrice } from '../utils';
-import { careDescriptions } from '../constants';
+import { formatPrice } from '../../utils';
+import { careDescriptions } from '../../constants';
 import axios from 'axios';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../../contexts/AuthContext';
 const ViewProfile = ({ provider, showModal, setShowModal }) => {
   const {
     profilePicPath,

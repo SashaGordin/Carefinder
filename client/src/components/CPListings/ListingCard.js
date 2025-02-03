@@ -17,7 +17,7 @@ import { getStorage, ref, deleteObject } from 'firebase/storage';
 
 import { useAuth } from '../../contexts/AuthContext';
 import DynamicModal from '../DynamicModal';
-import ViewProfile from '../ViewProfile.js';
+import ViewProfile from '../ClientDashboard/ViewProfile.js';
 
 export default function ListingCard({ userData, initialListingData }) {
   const navigate = useNavigate();

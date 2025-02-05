@@ -16,7 +16,7 @@ export default function Step4({ onNext, onBack }) {
               </span>
               List your Adult Family Home (AFH) with us and make it visible to
               all seniors seeking care at absolutely no cost. Your membership
-              subscription will be activated once you\'ve welcomed your first
+              subscription will be activated once you've welcomed your first
               private pay resident.
             </div>
             <div style={{ marginBottom: '10px' }}>

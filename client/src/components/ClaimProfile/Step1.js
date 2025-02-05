@@ -47,8 +47,10 @@ export default function Step1({ onNext, setProviderInfo }) {
         <Card.Body>
           <Card.Title>Search AFH</Card.Title>
           <Card.Text>
-            <p>Enter your AFH provider number to proceed</p>
+            Enter your AFH provider number to proceed
+            <br />
             <input
+              className="mt-2"
               type="text"
               placeholder="Enter AFH number"
               value={providerNumber}

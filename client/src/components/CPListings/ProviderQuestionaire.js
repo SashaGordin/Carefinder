@@ -6,7 +6,6 @@ export default function ProviderQuestionaire({
   setListingInfo,
   handleUpdate,
 }) {
-  const [justSaved, setJustSaved] = useState(false);
   const sectionId = 'providerQuestionaire';
   const licenseOptions = [
     'Dementia',
@@ -14,7 +13,7 @@ export default function ProviderQuestionaire({
     'Mental health',
   ];
 
-  const handleChange = (e) => {
+  const getUpdatedListingData = (e) => {
     let val;
     let name = e.target.name;
     if (e.target.type == 'checkbox') {
@@ -25,18 +24,27 @@ export default function ProviderQuestionaire({
           val.push(parseInt(t.value)); //index into the array of options (i.e. licenseOptions)
         });
     } else val = e.target.value;
-
-    setListingInfo({
+    return {
       ...listingInfo,
       [name]: val,
-    });
+    };
   };
 
-  const handleSave = () => {
-    handleUpdate(listingInfo).then(() => {
-      setJustSaved(true);
-      console.log('success');
-    });
+  const handleChange = (e) => {
+    e.target.hasChanged = true;
+    if (e.target.type != 'text') handleSave(e);
+    const updatedListingData = getUpdatedListingData(e);
+    setListingInfo(updatedListingData);
+  };
+
+  const handleSave = (e) => {
+    if (e.target.hasChanged) {
+      e.target.hasChanged = false;
+      const updatedListingData = getUpdatedListingData(e);
+      handleUpdate(updatedListingData).then(() => {
+        console.log('success');
+      });
+    }
   };
 
   return (
@@ -50,6 +58,7 @@ export default function ProviderQuestionaire({
             name="homeOperation"
             value={listingInfo.homeOperation ?? ''}
             onChange={handleChange}
+            onBlur={handleSave}
           />
         </div>
         <div>
@@ -60,6 +69,7 @@ export default function ProviderQuestionaire({
             name="credentials"
             value={listingInfo.credentials ?? ''}
             onChange={handleChange}
+            onBlur={handleSave}
           />
         </div>
         <div>
@@ -84,6 +94,7 @@ export default function ProviderQuestionaire({
             name="contracts"
             value={listingInfo.contracts ?? ''}
             onChange={handleChange}
+            onBlur={handleSave}
           />
         </div>
         <div>
@@ -97,6 +108,7 @@ export default function ProviderQuestionaire({
             name="statement"
             value={listingInfo.statement ?? ''}
             onChange={handleChange}
+            onBlur={handleSave}
           />
         </div>
         <div className={'switchBtnGrp'}>
@@ -131,6 +143,7 @@ export default function ProviderQuestionaire({
             name="serviceDisclosureLink"
             value={listingInfo.serviceDisclosureLink ?? ''}
             onChange={handleChange}
+            onBlur={handleSave}
           />
         </div>
         <div>
@@ -141,6 +154,7 @@ export default function ProviderQuestionaire({
             name="inspectionLink"
             value={listingInfo.inspectionLink ?? ''}
             onChange={handleChange}
+            onBlur={handleSave}
           />
         </div>
         <Row>
@@ -175,6 +189,7 @@ export default function ProviderQuestionaire({
             name="languages"
             value={listingInfo.languages ?? ''}
             onChange={handleChange}
+            onBlur={handleSave}
           />
         </div>
         <div>
@@ -185,6 +200,7 @@ export default function ProviderQuestionaire({
             name="demographics"
             value={listingInfo.demographics ?? ''}
             onChange={handleChange}
+            onBlur={handleSave}
           />
         </div>
         <div>
@@ -195,6 +211,7 @@ export default function ProviderQuestionaire({
             name="staffingRatio"
             value={listingInfo.staffingRatio ?? ''}
             onChange={handleChange}
+            onBlur={handleSave}
           />
         </div>
         <div>
@@ -205,6 +222,7 @@ export default function ProviderQuestionaire({
             name="financialBoundaries"
             value={listingInfo.financialBoundaries ?? ''}
             onChange={handleChange}
+            onBlur={handleSave}
           />
         </div>
         <div>
@@ -215,19 +233,12 @@ export default function ProviderQuestionaire({
             name="depletedFundsPolicy"
             value={listingInfo.depletedFundsPolicy ?? ''}
             onChange={handleChange}
+            onBlur={handleSave}
           />
         </div>
       </div>
       <div className={'d-inline-block'}>
         <Button onClick={handleSave}>Save</Button>
-        <Alert
-          show={justSaved}
-          onClose={() => setJustSaved(false)}
-          dismissible
-          variant={'success'}
-        >
-          Saved
-        </Alert>
       </div>
     </>
   );

@@ -313,6 +313,12 @@ export default function TopNav() {
                       My AFH
                     </li>
                   </a>
+                  <a href="/my-afh-old">
+                    <li>
+                      <FaHome style={{ marginRight: '8px', color: 'white' }} />{' '}
+                      My AFH OLD
+                    </li>
+                  </a>
                   <a href="/###">
                     <li>
                       <FaHeart style={{ marginRight: '8px', color: 'gray' }} />{' '}

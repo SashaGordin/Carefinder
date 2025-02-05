@@ -515,6 +515,25 @@ body#CF button#takeSurvey {
   cursor: pointer;
 }
 
+#CF .floatingAlert {
+  position:fixed;
+  left:50%;
+  transform: translate(-50%, 0);
+  top:50%;
+  z-index:1;
+  display:none;
+}
+
+#CF .fade-out {
+  animation: fade-out 2s ease-out .5s forwards;
+  display:block;
+}
+
+@keyframes fade-out {
+  0% {opacity: 1;}
+  100% {opacity: 0;} 
+} 
+
 .CF2-hamburger-popover {
   position: fixed;
   top: 0;

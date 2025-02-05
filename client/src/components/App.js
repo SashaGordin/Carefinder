@@ -8,7 +8,7 @@ import ForgotPassword from '../pages/ForgotPassword';
 import Survey from '../pages/Survey';
 import CPLandingPage from '../pages/CPLandingPage';
 import ClaimProfile from '../pages/ClaimProfile';
-import CPDashboard from '../pages/CPDashboard';
+import CPDashboard from '../pages/CPDashboard_Claude';
 import CPListings from '../pages/CPListings';
 import CPSelectGreeting from '../pages/CPSelectGreeting';
 import CPRoomEdit from '../pages/CPRoomEdit';
@@ -43,6 +43,8 @@ import ReservationDenial from '../pages/Reservation/ReservationDenial';
 import CPAccount from '../pages/CPAccount';
 import CPSettings from '../pages/CPSettings';
 import SubmitFeedback from '../pages/SubmitFeedback';
+import MyAFH from '../pages/CPMyAFH';
+import AFHPage from './CPMyAFH/CPAFHPage';
 
 function App() {
   return (
@@ -178,7 +180,29 @@ function App() {
                 redirectPath="/signup"
                 allowedRoles={['provider', 'admin']}
               >
+                <MyAFH />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/my-afh-old"
+            element={
+              <PrivateRoute
+                redirectPath="/signup"
+                allowedRoles={['provider', 'admin']}
+              >
                 <CPListings />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/afh-page"
+            element={
+              <PrivateRoute
+                redirectPath="/signup"
+                allowedRoles={['provider', 'admin']}
+              >
+                <AFHPage />
               </PrivateRoute>
             }
           />

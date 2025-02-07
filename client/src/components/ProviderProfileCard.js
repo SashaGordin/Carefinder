@@ -17,20 +17,20 @@ const ProviderProfileCard = ({
   } = provider;
 
   const handleShowProfile = () => {
-    if (hasSurvey) {
+    onShowProfile();
+    /*if (hasSurvey) {
       onShowProfile();
     } else {
       setSurveyModalOpen(true);
-    }
+    }*/
   };
 
-  console.log('this is the provider', provider);
+  console.log('PROVIDERPROFILECARD: provider', provider);
   return (
     <>
       <div
-        className="flex-row flex-1 m-0"
+        className="flex-row flex-1 m-0 pCardBacks pCardLeftSide"
         data-license-number={provider.LicenseNumber}
-        style={{ borderRight: '10px solid #151414' }}
       >
         <div className="pCardImageContainer">
           <img className="pCardPics" src={profilePicPath} alt="Profile pic" />
@@ -42,8 +42,11 @@ const ProviderProfileCard = ({
             <FaCheckCircle /> Verified Provider
           </div>
           <div className="ppcButton">
-            9 miles away &nbsp;&nbsp;&nbsp;&nbsp;
-            <a onClick={handleShowProfile}>Message</a>
+            <div className="ppsDistance">9 miles away</div>
+            <div className="ppsMsgButton">
+              <a onClick={handleShowProfile}>Message</a>
+            </div>
+            <div className="clear"></div>
           </div>
           <div className="clear"></div>
         </div>

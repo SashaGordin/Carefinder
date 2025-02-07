@@ -722,7 +722,9 @@ app.post('/verifyConfirmationCode', async (req, res) => {
 // geocoding address
 async function geocodeAddress(address) {
   try {
-    const apiKey = googleMapsApiKey.value(); // Replace with your Google Maps API key
+    // const apiKey = googleMapsApiKey.value(); // Replace with your Google Maps API key
+    const apiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+    console.log('API KEY', apiKey);
     const encodedAddress = encodeURIComponent(address);
     console.log('address in geofunc', address);
     const response = await axios.get(
@@ -730,6 +732,7 @@ async function geocodeAddress(address) {
     );
     const data = response.data;
     console.log('this the data', data);
+
     // console.log(data.results);
 
     if (data.results && data.results.length > 0) {

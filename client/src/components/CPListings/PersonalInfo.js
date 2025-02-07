@@ -71,6 +71,7 @@ const PersonalInfoPage = ({ userData, handleUpdate }) => {
                 <FileUpload
                   controlId="profileVidUpload"
                   handleNewFiles={handleNewProfileVid}
+                  folderPath={folderPath}
                   uploadLabel="Video introduction"
                   uploadType="Video"
                 />

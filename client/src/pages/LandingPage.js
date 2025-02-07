@@ -44,7 +44,7 @@ export default function LandingPage() {
               Match with local<br></br>senior care options
             </h2>
             <p style={{ textShadow: '2px 2px 0 black' }}>
-              We help you make smart decisions about senior care.
+              We help you make smart decisions<br></br>about senior care.
             </p>
 
             <div className="homeLookup">
@@ -114,7 +114,7 @@ export default function LandingPage() {
             <FaSmile style={{ ...iconStyle, color: 'yellow' }} />
             <p className="h3">Stress-free zone</p>
             <p>
-              We streamline the entir process from matchmaking to admissions.
+              We streamline the entire process from matchmaking to admissions.
               Simply give us a call or message if you need any support along the
               way.
             </p>

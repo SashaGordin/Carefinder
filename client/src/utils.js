@@ -1,12 +1,25 @@
 export function formatName(name) {
-  console.log(name);
-  const [lastName, rest] = name.split(',').map((part) => part.trim());
+  if (!name) {
+    return 'UTILS formatName() Error: No name passed to this funciton.'; // or return 'N/A' or whatever
+  }
 
-  // Extract the first and middle initials
-  const [firstName] = rest.split(' ');
+  console.log('UTILS Formatting name:', name);
 
-  // Return the formatted name
-  return `${firstName} ${lastName}`;
+  try {
+    const [lastName, rest] = name.split(',').map((part) => part.trim());
+
+    // Check if rest exists before splitting
+    if (!rest) {
+      return lastName; // Return just the lastName if there's no rest
+    }
+
+    const [firstName] = rest.split(' ');
+
+    return `${firstName} ${lastName}`;
+  } catch (error) {
+    console.error('UTILS Error formatting name:', error, 'Input:', name);
+    return name; // Return original name if formatting fails
+  }
 }
 
 export function formatPrice(price) {

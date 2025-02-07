@@ -63,30 +63,32 @@ export default function MedicalQuestionaire({
 
   return (
     <>
-      <div id={sectionId}>
+      <div className="providerFormMed" id={sectionId}>
         <div>
           <label>
             Provider accepts patients with the following Covid 19 infections
           </label>
-          {covidInfectionOptions.map((option, i) => (
-            <Form.Check
-              name="covidInfectionsAccepted"
-              key={i}
-              type="checkbox"
-              value={i}
-              label={option}
-              checked={
-                listingInfo.covidInfectionsAccepted?.includes(i) ?? false
-              }
-              onChange={handleChange}
-            />
-          ))}
+          <div className="formChecks">
+            {covidInfectionOptions.map((option, i) => (
+              <Form.Check
+                name="covidInfectionsAccepted"
+                key={i}
+                type="checkbox"
+                value={i}
+                label={option}
+                checked={
+                  listingInfo.covidInfectionsAccepted?.includes(i) ?? false
+                }
+                onChange={handleChange}
+              />
+            ))}
+          </div>
         </div>
         <div>
           <label>
             Provider accepts patients with the following Covid 19 immunities
           </label>
-          <div>
+          <div className="formChecks">
             {covidImmunityOptions.map((option, i) => (
               <Form.Check
                 inline
@@ -136,7 +138,9 @@ export default function MedicalQuestionaire({
           />
         </div>
         <div className={'switchBtnGrp'}>
-          <label>Care provider accepts long term care insurance</label>
+          <label>
+            Care provider accepts<br></br> long term care insurance
+          </label>
           <Form.Switch
             inline
             name="acceptsLTCInsurance"
@@ -147,7 +151,7 @@ export default function MedicalQuestionaire({
         </div>
         <div>
           <label>Care provider incontinence support</label>
-          <div>
+          <div className="formChecks">
             {incontinenceSupportOptions.map((option, i) => (
               <Form.Check
                 inline
@@ -194,7 +198,9 @@ export default function MedicalQuestionaire({
           />
         </div>
         <div className={'switchBtnGrp'}>
-          <label>Allows private pay to become medicaid within 12 months</label>
+          <label>
+            Allows private pay to become medicaid<br></br>within 12 months
+          </label>
           <Form.Switch
             inline
             name="privatePayToMedicaid"
@@ -207,7 +213,7 @@ export default function MedicalQuestionaire({
         </div>
         <div>
           <label>Care provider accepts:</label>
-          <div>
+          <div className="formChecks">
             {mentalHealthOptions.map((option, i) => (
               <Form.Check
                 inline
@@ -239,7 +245,7 @@ export default function MedicalQuestionaire({
         </div>
         <div>
           <label>Care provider accepts:</label>
-          <div>
+          <div className="formChecks">
             {genderOptions.map((option, i) => (
               <Form.Check
                 inline
@@ -265,7 +271,9 @@ export default function MedicalQuestionaire({
           />
         </div>
         <div className={'switchBtnGrp'}>
-          <label>Care provider can provide non-insulin diabetes care</label>
+          <label>
+            Care provider can provide<br></br>non-insulin diabetes care
+          </label>
           <Form.Switch
             inline
             name="nonInsulinDiabetesCare"
@@ -392,7 +400,7 @@ export default function MedicalQuestionaire({
         </div>
         <div className={'switchBtnGrp'}>
           <label>
-            Care provider accepts patients on psychoactive medications
+            Care provider accepts patients on<br></br>psychoactive medications
           </label>
           <Form.Switch
             inline
@@ -432,13 +440,16 @@ export default function MedicalQuestionaire({
           </Row>
         </div>
       </div>
-      <div className={'d-inline-block'}>
-        <Button onClick={handleSave}>Save</Button>
+      <div>
+        <Button className="formSave" onClick={handleSave}>
+          ✨ Save This Section
+        </Button>
         <Alert
           show={justSaved}
           onClose={() => setJustSaved(false)}
           dismissible
           variant={'success'}
+          className="formAlert"
         >
           Saved
         </Alert>

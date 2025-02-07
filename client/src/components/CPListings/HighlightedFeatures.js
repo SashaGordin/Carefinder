@@ -137,13 +137,16 @@ export default function HighlightedFeatures({
             </div>
           </Col>
         </Row>
-        <div className={'d-inline-block'}>
-          <Button onClick={handleSave}>Save Changes</Button>
+        <div>
+          <Button className="formSave" onClick={handleSave}>
+            ✨ Save This Section
+          </Button>
           <Alert
             show={justSaved}
             onClose={() => setJustSaved(false)}
             dismissible
             variant={'success'}
+            className="formAlert"
           >
             Saved
           </Alert>

@@ -41,11 +41,11 @@ export default function ProviderQuestionaire({
 
   return (
     <>
-      <div id={sectionId}>
+      <div className="providerFormP1" id={sectionId}>
         <div>
           <label>How is this home operated:</label>
-          <input
-            type="text"
+          <textarea
+            className="providerQuestionBlock"
             required
             name="homeOperation"
             value={listingInfo.homeOperation ?? ''}
@@ -53,9 +53,9 @@ export default function ProviderQuestionaire({
           />
         </div>
         <div>
-          <label>Provider credentials</label>
-          <input
-            type="text"
+          <label>Provider credentials:</label>
+          <textarea
+            className="providerQuestionBlock"
             required
             name="credentials"
             value={listingInfo.credentials ?? ''}
@@ -64,22 +64,24 @@ export default function ProviderQuestionaire({
         </div>
         <div>
           <label>Licensed for</label>
-          {licenseOptions.map((option, i) => (
-            <Form.Check
-              name="speciality"
-              key={i}
-              type="checkbox"
-              value={i}
-              label={option}
-              checked={listingInfo.speciality?.includes(i) ?? false}
-              onChange={handleChange}
-            />
-          ))}
+          <div className="formChecks">
+            {licenseOptions.map((option, i) => (
+              <Form.Check
+                name="speciality"
+                key={i}
+                type="checkbox"
+                value={i}
+                label={option}
+                checked={listingInfo.speciality?.includes(i) ?? false}
+                onChange={handleChange}
+              />
+            ))}
+          </div>
         </div>
         <div>
-          <label>Select contracts</label>
-          <input
-            type="text"
+          <label>Select contracts:</label>
+          <textarea
+            className="providerQuestionBlock"
             required
             name="contracts"
             value={listingInfo.contracts ?? ''}
@@ -88,12 +90,9 @@ export default function ProviderQuestionaire({
         </div>
         <div>
           <label>Provider statement:</label>
-          <input
-            type="textarea"
+          <textarea
+            className="providerQuestionBlock"
             required
-            className="small"
-            rows="5"
-            cols="50"
             name="statement"
             value={listingInfo.statement ?? ''}
             onChange={handleChange}
@@ -123,9 +122,10 @@ export default function ProviderQuestionaire({
             onChange={handleChange}
           />
         </div>
-        <div>
+        <div className="margintop20">
           <label>Link to disclosure of services:</label>
           <input
+            className="providerQuestionLine"
             type="text"
             required
             name="serviceDisclosureLink"
@@ -133,9 +133,10 @@ export default function ProviderQuestionaire({
             onChange={handleChange}
           />
         </div>
-        <div>
+        <div className="margintop20">
           <label>Link to latest inspection:</label>
           <input
+            className="providerQuestionLine"
             type="text"
             required
             name="inspectionLink"
@@ -147,6 +148,7 @@ export default function ProviderQuestionaire({
           <Col>
             <label>Do you have any pets in the home?</label>
             <Form.Select
+              className="providerQuestionLine"
               name="petsInHome"
               value={listingInfo.petsInHome ?? 'N'}
               onChange={handleChange}
@@ -158,6 +160,7 @@ export default function ProviderQuestionaire({
           <Col>
             <label>Do you accept pets into the home?</label>
             <Form.Select
+              className="providerQuestionLine"
               name="petsAccepted"
               value={listingInfo.petsAccepted ?? 'N'}
               onChange={handleChange}
@@ -170,6 +173,7 @@ export default function ProviderQuestionaire({
         <div>
           <label>Do you or staff speak any languages other than english</label>
           <input
+            className="providerQuestionLine"
             type="text"
             required
             name="languages"
@@ -180,6 +184,7 @@ export default function ProviderQuestionaire({
         <div>
           <label>What is the current resident demographic?</label>
           <input
+            className="providerQuestionLine"
             type="text"
             required
             name="demographics"
@@ -190,6 +195,7 @@ export default function ProviderQuestionaire({
         <div>
           <label>What is the staffing ratio?</label>
           <input
+            className="providerQuestionLine"
             type="text"
             required
             name="staffingRatio"
@@ -199,8 +205,8 @@ export default function ProviderQuestionaire({
         </div>
         <div>
           <label>Set boundaries for financial spend down</label>
-          <input
-            type="text"
+          <textarea
+            className="providerQuestionBlock"
             required
             name="financialBoundaries"
             value={listingInfo.financialBoundaries ?? ''}
@@ -209,8 +215,8 @@ export default function ProviderQuestionaire({
         </div>
         <div>
           <label>Policy for depleted funds</label>
-          <input
-            type="text"
+          <textarea
+            className="providerQuestionBlock"
             required
             name="depletedFundsPolicy"
             value={listingInfo.depletedFundsPolicy ?? ''}
@@ -218,13 +224,16 @@ export default function ProviderQuestionaire({
           />
         </div>
       </div>
-      <div className={'d-inline-block'}>
-        <Button onClick={handleSave}>Save</Button>
+      <div>
+        <Button className="formSave" onClick={handleSave}>
+          ✨ Save This Section
+        </Button>
         <Alert
           show={justSaved}
           onClose={() => setJustSaved(false)}
           dismissible
           variant={'success'}
+          className="formAlert"
         >
           Saved
         </Alert>

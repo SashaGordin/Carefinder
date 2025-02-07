@@ -11,7 +11,7 @@ const ProviderCard = ({ provider, onClick, hasSurvey, setSurveyModalOpen }) => {
   const homePhotos = listingsData.homePhotos;
 
   let roomPhotos = [];
-  console.log('listingsData', listingsData);
+  console.log('PROVIDERCARD listingsData', listingsData);
 
   if (isReal && listingsData.roomData) {
     roomPhotos = listingsData.roomData.map((room) => room.roomPhotos);
@@ -44,14 +44,7 @@ const ProviderCard = ({ provider, onClick, hasSurvey, setSurveyModalOpen }) => {
               />
 
               {/* ... AND THIS IS THE RIGHT SIDE (the ROOM) */}
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  flex: 1,
-                  margin: '0px 0px 0px 0px',
-                }}
-              >
+              <div className="pcardRightSide">
                 <div className="pCardImageContainer">
                   <img
                     className="pCardPics"
@@ -82,12 +75,13 @@ const ProviderCard = ({ provider, onClick, hasSurvey, setSurveyModalOpen }) => {
                   </p>
 
                   <p>
-                    Available room -{' '}
-                    <a onClick={() => handleOpenModal('photos')}>view here</a>
+                    <a onClick={() => handleOpenModal('photos')}>
+                      View Available Room
+                    </a>
                   </p>
-                  <p>
+                  <p className="vProfileLink">
                     <a onClick={() => handleOpenModal('profile')}>
-                      Provider Profile
+                      View Profile
                     </a>
                   </p>
                 </div>

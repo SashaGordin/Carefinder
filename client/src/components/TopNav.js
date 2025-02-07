@@ -19,6 +19,8 @@ export default function TopNav() {
       if (userRole) {
         setRole(userRole);
         setLoading(false);
+        console.log('TOPNAV: currentUser ', currentUser.uid);
+        console.log('TOPNAV: currentUser role ', userRole);
       } else {
         try {
           const userDocRef = doc(firestore, 'users', currentUser.uid);

@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import PropertyPhotoModal from './PropertyPhotoModal';
 import ViewProfile from './ViewProfile';
 
-const ProviderCard = ({ provider, onClick, hasSurvey, setSurveyModalOpen }) => {
+const ProviderCard = ({ provider, onClick, showModal, setShowModal }) => {
   const { FacilityName, listingsData } = provider;
 
   const isReal = Object.keys(listingsData).length > 0;
@@ -39,8 +39,8 @@ const ProviderCard = ({ provider, onClick, hasSurvey, setSurveyModalOpen }) => {
               <ProviderProfileCard
                 provider={provider}
                 onShowProfile={() => handleOpenModal('profile')}
-                hasSurvey={hasSurvey}
-                setSurveyModalOpen={setSurveyModalOpen}
+                showModal={showModal}
+                setShowModal={setShowModal}
               />
 
               {/* ... AND THIS IS THE RIGHT SIDE (the ROOM) */}
@@ -55,7 +55,7 @@ const ProviderCard = ({ provider, onClick, hasSurvey, setSurveyModalOpen }) => {
                 <div className="pCardImageContainer">
                   <img
                     className="pCardPics"
-                    src={homePhotos[0] || 'https://placehold.co/600x400'}
+                    src={roomPhotos[0] || 'https://placehold.co/600x400'}
                     alt="Profile pic"
                     onClick={() => handleOpenModal('photos')}
                   />

@@ -31,7 +31,7 @@ const SurveyQuestionText = ({
 
   return (
     <>
-      <div className="text-center h-[calc(100vh-15rem)] flex flex-col justify-center">
+      <div className="text-center h-full flex flex-col justify-center">
         <h1>{question}</h1>
         <p className="max-w-[45rem] mx-auto mb-10">{description}</p>
         <p>

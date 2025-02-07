@@ -60,7 +60,7 @@ const SurveyQuestionCheckboxes = ({
 
   return (
     <>
-      <div className="text-center items-center h-[calc(100vh-15rem)] flex flex-col justify-center">
+      <div className="text-center items-center h-full flex flex-col justify-center">
         <h1>{question}</h1>
         {questionTitles.map((title, index) => (
           <>

@@ -114,7 +114,7 @@ const SurveyUpload = ({
   return (
     <>
       {assessment === 'Yes' || isVideo ? (
-        <div className="text-center items-center h-[calc(100vh-15rem)] max-w-[50rem] mx-auto flex flex-col justify-center">
+        <div className="text-center items-center h-full max-w-[50rem] mx-auto flex flex-col justify-center">
           <h2>{question}</h2>
           <p className="max-w-[45rem] mx-auto text-left">{description}</p>
           <p className="max-w-[45rem] mx-auto text-left mb-10">
@@ -134,7 +134,7 @@ const SurveyUpload = ({
           )}
         </div>
       ) : (
-        <div className="text-center items-center h-[calc(100vh-15rem)] max-w-[50rem] mx-auto flex flex-col justify-center">
+        <div className="text-center items-center h-[100vh] max-w-[50rem] mx-auto flex flex-col justify-center">
           <h2 className="mt-4">Schedule virtual assessment</h2>
           <p className="max-w-[45rem] mx-auto text-left mb-10">
             Please select a day and time that you and your senior are able to be

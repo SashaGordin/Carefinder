@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
-import { formatName } from '../utils';
+import { formatName } from '../../utils';
 const ProviderViewProfileCard = ({ provider }) => {
   console.log('profile pic path', provider.profilePicPath);
   return (

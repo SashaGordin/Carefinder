@@ -5,8 +5,8 @@ import { FaCheckCircle } from 'react-icons/fa';
 const ProviderProfileCard = ({
   provider,
   onShowProfile,
-  hasSurvey,
-  setSurveyModalOpen,
+  showModal,
+  setShowModal,
 }) => {
   const {
     profilePicPath,
@@ -17,10 +17,10 @@ const ProviderProfileCard = ({
   } = provider;
 
   const handleShowProfile = () => {
-    if (hasSurvey) {
+    if (showModal) {
       onShowProfile();
     } else {
-      setSurveyModalOpen(true);
+      setShowModal(true);
     }
   };
 

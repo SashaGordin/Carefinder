@@ -47,11 +47,10 @@ export default function MsgTemplateMVP({ passData, hasArchives }) {
     setUserRole(role);
   }, []);
 
-  console.log('NOW IN... MsgTemplateMVP');
-  console.log('USER ROLE IS: ', userRole);
-  console.log('MsgTemplateMVP Iteration: ' + pageIteration);
-  // console.log(passData);
-  console.log('MsgTemplateMVP, Archives?: ' + hasArchives);
+  console.log('MSGTEMPLATEMVP: NOW IN... MsgTemplateMVP');
+  console.log('MSGTEMPLATEMVP: NUSER ROLE IS: ', userRole);
+  console.log('MSGTEMPLATEMVP: NMsgTemplateMVP Iteration: ' + pageIteration);
+  console.log('MSGTEMPLATEMVP: NMsgTemplateMVP, Archives?: ' + hasArchives);
 
   const [avatarURLs, setAvatarURLs] = useState(null);
 

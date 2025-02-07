@@ -18,8 +18,8 @@ import { firestore } from '../firebase';
  *  */
 
 function MsgThread({ threadID, pageIteration }) {
-  console.log('NOW IN... MsgThread');
-  console.log('MsgThread Iteration: ' + pageIteration);
+  console.log('MSGTHREAD: NOW IN... MsgThread');
+  console.log('MSGTHREAD: MsgThread Iteration: ' + pageIteration);
 
   const [entireThread, setEntireThread] = useState([]);
   const { currentUser } = useAuth();

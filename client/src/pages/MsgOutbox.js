@@ -45,6 +45,8 @@ const MsgOutbox = () => {
 
   const [senderAssessmentFile, setSenderAssessmentFile] = useState('');
 
+  const [recipientProfilePic, setRecipientProfilePic] = useState('cflogo.png');
+
   // define possible/supported message types
   const possibleMessageTypes = ['quote', 'meet', 'text', 'tour'];
   // while "text" is valid here, it's really just for default behavior.
@@ -56,11 +58,13 @@ const MsgOutbox = () => {
 
     const checkRecipientExists = async () => {
       try {
+        // STEP 1:  SEE IF THE RECIPIENT EXISTS
         const recipientDoc = await firestore.collection('users').doc(ref).get();
 
+        // STEP 2:  IF SO...
         if (recipientDoc.exists) {
           const recipientDocData = recipientDoc.data();
-
+          // DO THEY HAVE A "displayName" that is not blank?
           if (
             Object.prototype.hasOwnProperty.call(
               recipientDocData,
@@ -68,11 +72,50 @@ const MsgOutbox = () => {
             ) &&
             recipientDocData.displayName.trim() !== ''
           ) {
+            // YES? Then set it to THAT
             setRecipientDisplayName(recipientDocData.displayName);
-            console.log('Recipient is:' + recipientDocData.displayName);
+            console.log(
+              'MSGOUTBOX: Recipient is:' + recipientDocData.displayName
+            );
           }
+          // ********************* TODO BEGIN:
+          // DO THEY HAVE A "FacilityPOC"?
+          if (
+            Object.prototype.hasOwnProperty.call(
+              recipientDocData,
+              'FacilityPOC'
+            ) &&
+            recipientDocData.FacilityPOC.trim() !== ''
+          ) {
+            // YES? Then set it to THAT
+            setRecipientDisplayName(recipientDocData.FacilityPOC);
+            console.log(
+              'MSGOUTBOX: Recipient is:' + recipientDocData.FacilityPOC
+            );
+          }
+          // YES? Then setRecipientDisplayName(recipientDocData.FacilityPOC);
+          // *** TODO END *********************
+
+          // ********************* TODO BEGIN:
+          // DO THEY HAVE A "profilePicPath"?
+          if (
+            Object.prototype.hasOwnProperty.call(
+              recipientDocData,
+              'profilePicPath'
+            ) &&
+            recipientDocData.profilePicPath.trim() !== ''
+          ) {
+            // YES? Then set it to THAT
+            setRecipientProfilePic(recipientDocData.profilePicPath);
+            console.log(
+              'MSGOUTBOX: Recipient PIC is:' + recipientDocData.profilePicPath
+            );
+          }
+          // YES? Then setRecipientDisplayName(recipientDocData.FacilityPOC);
+          // *** TODO END *********************
+
           setRecipientID(ref);
-          console.log('Recipient ID:' + ref);
+          console.log('MSGOUTBOX: Recipient ID:' + ref);
 
           // NEW lookup to see if the sender has 'assessmentPDFfileName'
           try {
@@ -277,8 +320,28 @@ const MsgOutbox = () => {
 
         {!messageSent && (
           <>
+            <div className="preSendMessageArea">
+              <img class="outboxProfilePic" src={recipientProfilePic} />
+              <p>
+                You are now connected with{' '}
+                <span className="CForange">{recipientDisplayName}</span>{' '}
+                (Verified Provider).
+              </p>
+              <div className="clear"></div>
+              <p>
+                Hi, thanks for connecting. If you hav any questions, let me
+                know! Feel free to send a message below or click to schedule a
+                meeting, schedule a tour, or get a quote.
+              </p>
+              <p className="preSendLinks">
+                <a href="###TO-CALENDLY-MEETING-FLOW">Schedule Meeting</a>
+                <a href="###TO-CALENDLY-MEETING-FLOW">Schedule Tour</a>
+                <a href="###TO-REQUEST-QUOTE-FLOW">Request quote</a>
+              </p>
+            </div>
+
             <h1>
-              Send a {messageTypeDisplay} to{' '}
+              Send a {messageTypeDisplay} to
               <span className="CForange">{recipientDisplayName}</span>:
             </h1>
 

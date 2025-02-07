@@ -30,7 +30,7 @@ export default function CPListings() {
 
         const listings = [];
         const listingsPath = userDocSnapshot.ref.path + '/listings';
-        console.log('getting docs from: ' + listingsPath);
+        console.log('CPLISTINGS getting docs from: ' + listingsPath);
         const listingsSnapshot = await getDocs(
           collection(firestore, listingsPath)
         );
@@ -38,7 +38,7 @@ export default function CPListings() {
 
         listingsSnapshot.forEach((listing) => {
           const data = listing.data();
-          console.log(data);
+          console.log('CPLISTINGS data', data);
           listings.push(data);
         });
         if (listings.length === 0) {
@@ -48,9 +48,9 @@ export default function CPListings() {
             listingAddress: `${userData.LocationAddress}, ${userData.LocationCity}, ${userData.LocationState} ${userData.LocationZipCode} `,
           });
         }
-        console.log('listingsLength=' + listings.length);
+        console.log('CPLISTINGS listingsLength=' + listings.length);
         setListingsData([...listings]);
-        console.log(userData);
+        console.log('CPLISTINGS userdata', userData);
         setUserData(userData);
       } else {
         setError('User document not found');
@@ -64,7 +64,7 @@ export default function CPListings() {
     try {
       const userDocRef = doc(firestore, 'users', currentUser.uid);
       await updateDoc(userDocRef, updatedUserData);
-      console.log('User data updated successfully');
+      console.log('CPLISTINGS: User data updated successfully');
 
       // Re-fetch user data after update
       const updatedUserDocSnapshot = await getDoc(userDocRef);

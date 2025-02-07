@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import { Card, Button, Modal } from 'react-bootstrap';
 import { formatName } from '../utils';
 const ProviderViewProfileCard = ({ provider }) => {
-  console.log('profile pic path', provider.profilePicPath);
+  console.log('PROVIDERVIEWPROFILECARD provider: ', provider);
+  console.log(
+    'PROVIDERVIEWPROFILECARD profilePicPath',
+    provider.profilePicPath
+  );
   return (
     <div className="bg-[#1e1f26] rounded-md overflow-hidden">
       <div className="w-full">

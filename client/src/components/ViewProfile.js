@@ -9,6 +9,8 @@ import { careDescriptions } from '../constants';
 import axios from 'axios';
 import { useAuth } from '../contexts/AuthContext';
 const ViewProfile = ({ provider, showModal, setShowModal }) => {
+  console.log('VIEWPROFILE : ViewProfile received provider:', provider);
+
   const {
     profilePicPath,
     FacilityPOC,
@@ -18,6 +20,12 @@ const ViewProfile = ({ provider, showModal, setShowModal }) => {
     Speciality,
     LicenseNumber,
   } = provider;
+
+  console.log({
+    'VIEWPROFILE 2:  profilePicPath': profilePicPath,
+    'VIEWPROFILE 3:  FacilityPOC': FacilityPOC,
+    'VIEWPROFILE 4:  Full provider': provider,
+  });
 
   const { costOfCare, highlightedFeatures } = listingsData;
   const homePhotos = listingsData.homePhotos;

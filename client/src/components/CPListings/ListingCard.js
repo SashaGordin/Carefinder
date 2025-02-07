@@ -31,7 +31,14 @@ export default function ListingCard({ userData, initialListingData }) {
 
   const handleViewProfile = () => setShowProfileModal(true);
   const storage = getStorage();
+
+  console.log('LISTINGCARD: listingdata: ', listingData);
+  console.log('LISTINGCARD: userData: ', userData);
+
   const providerForViewProfile = {
+    FacilityID: userData.userId, // This is actually the PROVIDER's userID
+    FacilityPOC: userData.FacilityPOC, // This is actually the PROVIDER's FacilityPOC
+    profilePicPath: userData.profilePicPath, // This is actually the PROVIDER's profilePicPath
     FacilityName: listingData.facilityName,
     listingsData: listingData,
     roomsData: roomsArr,

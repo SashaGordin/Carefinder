@@ -208,14 +208,19 @@ body#CF .providerButton button {
   border: 1px solid white;
   padding: 5px 10px 5px 10px;
 }
-
-.ppcButton a {
+.vProfileLink{text-align: right; padding-right:16px;
+}
+.vProfileLink a { color:#ff9900 !important; font-weight:normal;}
+.ppcButton .ppsMsgButton a {
   background: #ff6699;
   color: white !important;
-  padding: 0px 10px 2px 10px;
+  padding: 2px 20px 4px 20px;
   border-radius: 20px;
-  font-weight: bold;
+  font-weight: normal;
   cursor: pointer;
+  font-size: 125%;
+  float: right;position: relative;
+  right: 8px;
 }
 
 .welcomeProviderPage {
@@ -250,11 +255,66 @@ p.amenities {
   padding: 0px;
 }
 
+#CF .providerQuestionBlock{ display:block;
+width:100%; margin:6px 0px 20px 0px !important; height:150px; }
 
+#CF .providerFormP1 .formChecks,#CF .providerFormMed .formChecks  {
+  margin-left:40px; margin-bottom:20px;
+}
+#CF .margintop20 {
+  margin-top:20px;
+}
+
+body#CF .accordion button.formSave {
+  color:black;
+  background:yellow !important;
+  width:100% !important;
+}
+body#CF .accordion button.formSave:hover {
+  color: white !important;
+  background: green !important;
+}
+body#CF .formAlert {
+  background:green; color:white;
+  margin-top:20px; 
+}
+
+#CF .providerQuestionLine{ display:block;
+  width:100%; margin:6px 0px 20px 0px !important; }
+
+.outboxProfilePic {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%; /* Makes it a circle */
+  object-fit: cover; /* Ensures the image fills the circle without distortion */
+  display: block; /* Prevents inline spacing issues */
+  float:left;
+  margin-right:20px; 
+  margin-bottom:20px; 
+}
+.preSendLinks{ text-align: center;}
+.preSendLinks a { margin-left:20px; margin-right:20px;}
+
+.outboxNoteLinks {text-align:center; }
+.outboxNoteLinks a { margin-left:20px; margin-right:20px; }
+.preSendMessageArea{ border: 1px white solid; padding:20px;width:90%;  border-radius: 10px; margin-top:20px; margin-bottom:20px; font-size:180%;}
+.pCardBacks {background:black; border:1px solid white; }
+#CF .pCardLeftSide{
+  margin-right: 10px !important;
+}
+.pcardRightSide {
+display: flex;
+flex-direction: column;
+flex: 1;
+margin: 0;
+border: 1px solid white;
+background:black;
+}
 .pCardImageContainer {
   align-items: center;
   height: 175px;
   overflow: hidden;
+  background:#ff6699;
 }
 .pCardPics {
   max-width: 100%;
@@ -369,8 +429,6 @@ body#CF .homeLookup input {
 body#CF .homeLookup button {
   border-radius: 30px;
   padding: 8px 20px 8px 20px;
-  position: relative;
-  top: -4px;
 }
 
 /* LANDINGPAGE.JS */
@@ -479,7 +537,7 @@ body#CF button#takeSurvey {
 
 #CF .modal-content {
   background: black;
-  border: 10px solid #1e1f26;
+  border: 1px solid white;
   border-radius: 10px !important;
 }
 #CF .modal-header {

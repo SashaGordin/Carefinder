@@ -25,17 +25,26 @@ export default function CPListings() {
 
   useEffect(() => {
     const fetchData = async () => {
+      if (!currentUser) {
+        setError("CPLISTINGS: User not authenticated");
+        return;
+      }
       const userDocRef = doc(firestore, 'users', currentUser.uid);
       const userDocSnapshot = await getDoc(userDocRef);
       if (userDocSnapshot.exists()) {
         const userData = userDocSnapshot.data();
-
+        console.log('CPLISTINGS userData: ',userData);
         const listings = [];
-        const listingsPath = userDocSnapshot.ref.path + '/listings';
-        console.log('getting docs from: ' + listingsPath);
+
+        /*const listingsPath = userDocSnapshot.ref.path + '/listings';
+        console.log('CPLISTINGS getting docs from: ' + listingsPath);
         const listingsSnapshot = await getDocs(
           collection(firestore, listingsPath)
         );
+        */
+       // trying this instead of above:
+        const listingsSnapshot = await getDocs(collection(userDocRef, 'listings'));
+
         //get data for all listings for user
 
         listingsSnapshot.forEach((listing) => {

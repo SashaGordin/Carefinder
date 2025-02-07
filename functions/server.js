@@ -298,16 +298,29 @@ app.post('/matchUserWithHouses', async (req, res) => {
   }
 });
 
+app.post('/sendSurvey', async (req, res) => {
+  const userId = req.body.userId;
+  const surveyResponses = req.body.surveyResponses;
+  const { acceptedTerms, ...surveyData } = surveyResponses;
+  try {
+    await db.collection('users').doc(userId).update({
+      surveyData,
+      submittedForm: true,
+    });
+    res.status(200).json({ message: 'Survey sent successfully' });
+  } catch (error) {
+    console.error('Error sending survey:', error);
+    res.status(500).json({ error: 'Error sending survey' });
+  }
+});
+
 app.post('/getSurvey', async (req, res) => {
   const userId = req.body.userId;
   console.log('hit survey');
   try {
-    const surveySnapshot = await db
-      .collection('surveyResponses')
-      .where('userId', '==', userId)
-      .get();
-
-    res.json({ survey: surveySnapshot.docs.map((doc) => doc.data()) });
+    const userSnapshot = await db.collection('users').doc(userId).get();
+    const userData = userSnapshot.data();
+    res.status(200).json({ submittedForm: userData.submittedForm });
   } catch (error) {
     console.error('Error getting survey:', error);
     res.status(404).json({ error: 'Survey not found' });

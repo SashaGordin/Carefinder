@@ -10,6 +10,7 @@ import SurveyModal from '../components/SurveyModal';
 import { useAuth } from '../contexts/AuthContext';
 import ClientDashboardSearchBar from '../components/ClientDashboard/ClientDashboardSearchBar';
 import ClientDashboardMap from '../components/ClientDashboard/ClientDashboardMap';
+import ClientDashboardModal from '../components/ClientDashboard/ClientDashboardModal';
 
 export default function ClientDashboard() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -25,7 +26,7 @@ export default function ClientDashboard() {
   const [nearbyBigCities, setNearbyBigCities] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [surveyModalOpen, setSurveyModalOpen] = useState(false);
-  const [hasSurvey, setHasSurvey] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const { currentUser } = useAuth();
   const navigate = useNavigate();
   let delayDuration = 500;
@@ -111,9 +112,8 @@ export default function ClientDashboard() {
       })
       .then((res) => {
         console.log('res', res);
-        if (res.data.survey.length > 0) {
-          console.log('res.data.survey', res.data.survey);
-          setHasSurvey(true);
+        if (res.data.submittedForm) {
+          setShowModal(true);
         }
       })
       .catch((err) => {
@@ -133,14 +133,6 @@ export default function ClientDashboard() {
     }
     // eslint-disable-next-line
   }, []);
-
-  const handleFindMatches = () => {
-    if (hasSurvey) {
-      handleSearch();
-    } else {
-      navigate('/survey');
-    }
-  };
 
   const handleSearch = async (refQuery) => {
     let query;
@@ -235,6 +227,8 @@ export default function ClientDashboard() {
     }
   }, [isBoundsChanging, mapBounds]);
 
+  console.log('showModal', showModal);
+
   return (
     <>
       <TopNav />
@@ -242,7 +236,6 @@ export default function ClientDashboard() {
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
         handleSearch={handleSearch}
-        handleFindMatches={handleFindMatches}
         errorMessage={errorMessage}
       />
 
@@ -256,17 +249,21 @@ export default function ClientDashboard() {
         startingPosition={startingPosition}
         handleMapBoundsChanged={handleMapBoundsChanged}
         nearbyBigCities={nearbyBigCities}
-        hasSurvey={hasSurvey}
-        setSurveyModalOpen={setSurveyModalOpen}
+        showModal={showModal}
+        setShowModal={setShowModal}
         mapRef={mapRef}
         boundsRef={boundsRef}
         radiusRef={radiusRef}
         mapStyles={mapStyles}
         getProvidersFromBounds={getProvidersFromBounds}
       />
-      <SurveyModal
+      {/* <SurveyModal
         showModal={surveyModalOpen}
         handleCloseModal={() => setSurveyModalOpen(false)}
+      /> */}
+      <ClientDashboardModal
+        show={showModal}
+        onHide={() => setShowModal(false)}
       />
       <Footer />
     </>

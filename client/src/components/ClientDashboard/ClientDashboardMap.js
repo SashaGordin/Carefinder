@@ -12,8 +12,8 @@ const ClientDashboardMap = ({
   startingPosition,
   handleMapBoundsChanged,
   nearbyBigCities,
-  hasSurvey,
-  setSurveyModalOpen,
+  showModal,
+  setShowModal,
   mapRef,
   boundsRef,
   radiusRef,
@@ -247,8 +247,8 @@ const ClientDashboardMap = ({
                   key={provider.LicenseNumber}
                   provider={provider}
                   onClick={() => handleProviderSelect(provider)}
-                  hasSurvey={hasSurvey}
-                  setSurveyModalOpen={setSurveyModalOpen}
+                  showModal={showModal}
+                  setShowModal={setShowModal}
                 />
               ))
             ) : (

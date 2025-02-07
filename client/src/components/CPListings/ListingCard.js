@@ -75,12 +75,17 @@ export default function ListingCard({ userData, initialListingData }) {
       if (updatedListingDocSnapshot.exists()) {
         const updatedUserData = updatedListingDocSnapshot.data();
         setListingData(updatedUserData);
+        flashSavedMsg();
       } else {
         setError('Listing document not found after update');
       }
     } catch (error) {
       setError('Error updating listing data: ' + error.message);
     }
+  };
+  const alert = document.getElementById('savedMsg');
+  const flashSavedMsg = () => {
+    alert.classList.add('fade-out');
   };
 
   const showDocModal = (file) => {
@@ -218,11 +223,6 @@ export default function ListingCard({ userData, initialListingData }) {
               </div>
             </div>
             <hr />
-            {/*    <div>
-              <h4>Complete home survey</h4>
-              <Button onClick={gotoHomeSurvey}>Take survey</Button>
-            </div>
-            <hr />*/}
             <div className="mb-3">
               <Accordion>
                 <Accordion.Item eventKey="0">
